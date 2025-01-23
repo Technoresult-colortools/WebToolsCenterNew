@@ -35,8 +35,9 @@ export function FavoritesList({ userId }: FavoritesListProps) {
         if (!response.ok) throw new Error('Failed to fetch favorites');
         const data = await response.json();
         setFavorites(data);
+         // eslint-disable-next-line @typescript-eslint/no-explicit-any
       } catch (err: any) {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+       
         setError(err.message);
       } finally {
         setIsLoading(false);

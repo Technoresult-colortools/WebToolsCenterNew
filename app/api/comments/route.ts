@@ -58,7 +58,7 @@ export async function POST(request: Request) {
 
 
     return NextResponse.json(comment);
-  } catch (error) {
+  } catch {
     // Improved error logging
     return NextResponse.json(
       { error: 'Internal server error' },
@@ -92,7 +92,7 @@ export async function GET(request: Request) {
     });
 
     return NextResponse.json(comments);
-  } catch (error) {
+  } catch {
 
     return NextResponse.json(
       { error: 'Internal server error' },
