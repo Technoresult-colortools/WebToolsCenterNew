@@ -4,7 +4,7 @@ import React, { useState, useCallback } from 'react';
 import { Card, CardBody, Button, Select, SelectItem, Textarea } from "@nextui-org/react";
 import Image from 'next/image'
 import Link from 'next/link'
-import { Copy, Download, Info, Lightbulb, BookOpen, RefreshCw, Undo2, Space, Slice, RefreshCcw, Type, Trash2, AlignJustify, SplitSquareHorizontal, Scissors, Zap, ZapIcon, Calculator, Clock } from 'lucide-react';
+import { Copy, Download, Info, Lightbulb, BookOpen, RefreshCw, Undo2, Space, Slice, RefreshCcw, Type, Trash2, AlignJustify, SplitSquareHorizontal, Scissors, ZapIcon, Calculator, Clock } from 'lucide-react';
 import { toast } from 'react-hot-toast';
 import ToolLayout from '@/components/ToolLayout';
 

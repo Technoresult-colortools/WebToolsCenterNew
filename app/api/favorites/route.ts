@@ -1,8 +1,7 @@
-//app/api/favoites/route.ts
-//app/api/favorites/route.ts
 import { NextResponse } from 'next/server'
 import { getSession } from '@auth0/nextjs-auth0'
 import { prisma } from '@/lib/prisma'
+import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library'
 
 export async function POST(req: Request) {
   try {
@@ -40,15 +39,16 @@ export async function POST(req: Request) {
         }
       })
       return NextResponse.json(favorite)
-    } catch (error: any) {
+    } catch (error) {
       // Handle error when trying to create a duplicate favorite
-      if (error.code === 'P2002') {
+      if (error instanceof PrismaClientKnownRequestError && error.code === 'P2002') {
         return NextResponse.json({ error: 'Already in favorites' }, { status: 400 })
       }
       throw error
     }
 
-  } catch (error: any) {
+  } catch (error) {
+    console.error(error)
     return NextResponse.json({ error: 'Server error' }, { status: 500 })
   }
 }
@@ -83,24 +83,25 @@ export async function DELETE(req: Request) {
 
     return NextResponse.json({ success: true })
   } catch (error) {
+    console.error(error)
     return NextResponse.json({ error: 'Server error' }, { status: 500 })
   }
 }
 
-export async function GET(req: Request) {
+export async function GET() {
   try {
-    const session = await getSession();
+    const session = await getSession()
     if (!session?.user) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
     // Find the user by auth0Id
     const user = await prisma.user.findUnique({
       where: { auth0Id: session.user.sub! },
-    });
+    })
 
     if (!user) {
-      return NextResponse.json({ error: 'User not found' }, { status: 404 });
+      return NextResponse.json({ error: 'User not found' }, { status: 404 })
     }
 
     // Fetch favorites with tool details
@@ -118,10 +119,11 @@ export async function GET(req: Request) {
           },
         },
       },
-    });
+    })
 
-    return NextResponse.json(favorites);
+    return NextResponse.json(favorites)
   } catch (error) {
-    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
+    console.error(error)
+    return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
   }
 }

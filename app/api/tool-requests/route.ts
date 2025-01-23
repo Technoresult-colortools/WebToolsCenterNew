@@ -3,7 +3,7 @@ import { NextResponse } from 'next/server';
 import { getSession } from '@auth0/nextjs-auth0';
 import prisma from '@/lib/prisma';
 
-export async function GET(req: Request) {
+export async function GET() {
   try {
     const session = await getSession();
     
@@ -30,7 +30,7 @@ export async function GET(req: Request) {
     });
 
     return NextResponse.json(toolRequests);
-  } catch (error) {
+  } catch {
     return NextResponse.json(
       { error: 'Failed to fetch tool requests' },
       { status: 500 }
@@ -71,7 +71,7 @@ export async function POST(req: Request) {
     });
 
     return NextResponse.json(toolRequest);
-  } catch (error) {
+  } catch {
     return NextResponse.json(
       { error: 'Failed to create tool request' },
       { status: 500 }

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Card, CardBody, Link, Button, Divider } from "@nextui-org/react";
+import { Link, Button, Divider } from "@nextui-org/react";
 import NextLink from 'next/link';
 import { categories } from '@/data/tools';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';

@@ -10,19 +10,6 @@ import { DashboardComments } from '@/components/DashboardComments';
 import { DashboardBugReports } from '@/components/DashboardBugReports';
 import { DashboardToolRequests } from '@/components/DashboardToolRequests';
 
-// Placeholder components for new sections
-
-
-const ToolRequests = () => (
-  <div className="p-4 min-h-[300px] flex items-center justify-center">
-    <div className="text-center">
-      <PlusCircle className="w-12 h-12 text-default-300 mx-auto mb-4" />
-      <p className="text-default-500 text-lg">Tool request feature is coming soon</p>
-      <p className="text-default-400 text-sm mt-2">Request new tools and features</p>
-    </div>
-  </div>
-);
-
 export default function DashboardPage() {
   const { user, isLoading, error } = useUser();
 

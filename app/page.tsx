@@ -104,7 +104,7 @@ export default function HomePage() {
       {/* Tools Grid */}
       <main className="flex-grow py-12 max-w-7xl mx-auto px-4">
         {(activeCategory === 'All' ? categories : categories.filter(cat => cat.name === activeCategory))
-          .map((category, index) => {
+          .map((category,) => {
             const categoryTools = allTools.filter(tool => 
               activeCategory === 'All' 
                 ? tool.category === category.name

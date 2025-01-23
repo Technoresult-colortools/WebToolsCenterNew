@@ -38,7 +38,7 @@ export async function GET(req: Request) {
 
     // Return true if the user has this tool in their favorites
     return NextResponse.json({ isFavorite: user.favorites.length > 0 })
-  } catch (error) {
+  } catch {
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
   }
 }

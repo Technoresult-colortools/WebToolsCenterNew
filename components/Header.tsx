@@ -16,14 +16,13 @@ import {
   DropdownTrigger,
   DropdownMenu,
   DropdownItem,
-  Avatar,
-  User
+  Avatar
 } from "@nextui-org/react";
 import { usePathname, useRouter } from 'next/navigation';
 import NextLink from 'next/link';
 import { ThemeToggle } from './ThemeToggle';
 import { categories, allTools } from '@/data/tools';
-import { Search, ChevronDown, X, Heart, LogOut, UserIcon, Mail } from 'lucide-react';
+import { Search, ChevronDown, X, LogOut, UserIcon } from 'lucide-react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useTheme } from '@/providers/theme-provider';
 import { useUser } from '@auth0/nextjs-auth0/client';
@@ -35,7 +34,7 @@ export default function Header() {
   const searchRef = useRef<HTMLDivElement>(null);
   const pathname = usePathname();
   const router = useRouter();
-  const { theme } = useTheme();
+  const { } = useTheme();
   const { user, isLoading } = useUser();
 
 

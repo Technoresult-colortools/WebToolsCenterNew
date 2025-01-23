@@ -21,7 +21,7 @@ export function FavoritesList({ userId }: FavoritesListProps) {
   const [favorites, setFavorites] = useState<Favorite[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [removingId, setRemovingId] = useState<string | null>(null);
+  const [, setRemovingId] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchFavorites = async () => {
@@ -36,10 +36,12 @@ export function FavoritesList({ userId }: FavoritesListProps) {
         const data = await response.json();
         setFavorites(data);
       } catch (err: any) {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         setError(err.message);
       } finally {
         setIsLoading(false);
       }
+      
     };
 
     const handleFavoritesUpdate = () => {
