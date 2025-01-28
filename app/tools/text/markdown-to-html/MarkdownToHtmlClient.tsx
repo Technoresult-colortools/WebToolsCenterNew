@@ -61,23 +61,26 @@ marked.use({
           "+-": "±",
         };
 
-        // Ensure the type of token.text is a valid key of emojiMap
-        if (emojiMap[token.text as keyof typeof emojiMap]) {
-          return `<span class="emoji">${emojiMap[token.text as keyof typeof emojiMap]}</span>`;
-        }
 
-        // If it's not in emojiMap, try using node-emoji to find an emoji
-        const emojiText = token.text.replace(/:/g, "");
-        const emojiChar = emoji.get(emojiText);
-        return emojiChar ? `<span class="emoji">${emojiChar}</span>` : token.raw;
+          // Ensure the type of token.text is a valid key of emojiMap
+          if (emojiMap[token.text as keyof typeof emojiMap]) {
+            return `<span class="emoji">${emojiMap[token.text as keyof typeof emojiMap]}</span>`;
+          }
+  
+          // If it's not in emojiMap, try using node-emoji to find an emoji
+          const emojiText = token.text.replace(/:/g, "");
+          const emojiChar = emoji.get(emojiText);
+          return emojiChar ? `<span class="emoji">${emojiChar}</span>` : token.raw;
+        },
       },
-    },
-  ],
-  gfm: true,
-  breaks: true,
-  headerIds: true,
-  mangle: false,
-});
+    ],
+  })
+  
+  // Configure marked options separately
+  marked.setOptions({
+    gfm: true,
+    breaks: true,
+  });
 
 export default function MarkdownConverter() {
   const [markdown, setMarkdown] = useState("")
