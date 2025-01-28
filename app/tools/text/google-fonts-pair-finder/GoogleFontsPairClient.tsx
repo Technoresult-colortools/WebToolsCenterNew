@@ -231,143 +231,137 @@ const GoogleFontsPairFinder: React.FC = () => {
     toast.success("The CSS has been copied to your clipboard.")
   }
 
-  const FontControls: React.FC<{ isHeading: boolean }> = useCallback(
-    ({ isHeading }) => {
-      const font = isHeading ? headingFont : bodyFont
-      const setFont = isHeading ? setHeadingFont : setBodyFont
-      const handleShuffle = isHeading ? handleShuffleHeading : handleShuffleBody
-      const filteredFonts = isHeading ? filteredHeadingFonts : filteredBodyFonts
-      const [isDetailsOpen, setIsDetailsOpen] = useState(false)
-
-      return (
-        <div className="space-y-4">
-          <div className="flex items-center justify-between">
-            <label className="text-default-700">{isHeading ? "Heading" : "Body"} Font Family</label>
-            <div className="flex space-x-2">
-              <Button onClick={handleShuffle} size="sm" color="primary" startContent={<Shuffle size={18} />}>
-                Shuffle
-              </Button>
-              <Button
-                onClick={() => setIsDetailsOpen(true)}
-                size="sm"
-                color="secondary"
-                startContent={<Settings size={18} />}
-              >
-                Details
-              </Button>
-            </div>
+  const FontControls: React.FC<{ isHeading: boolean }> = ({ isHeading }) => {
+    const font = isHeading ? headingFont : bodyFont;
+    const setFont = isHeading ? setHeadingFont : setBodyFont;
+    const handleShuffle = isHeading ? handleShuffleHeading : handleShuffleBody;
+    const filteredFonts = isHeading ? filteredHeadingFonts : filteredBodyFonts;
+    const [isDetailsOpen, setIsDetailsOpen] = useState(false);
+  
+    return (
+      <div className="space-y-4">
+        <div className="flex items-center justify-between">
+          <label className="text-default-700">{isHeading ? "Heading" : "Body"} Font Family</label>
+          <div className="flex space-x-2">
+            <Button
+              onClick={handleShuffle}
+              size="sm"
+              color="primary"
+              startContent={<Shuffle size={18} />}
+            >
+              Shuffle
+            </Button>
+            <Button
+              onClick={() => setIsDetailsOpen(true)}
+              size="sm"
+              color="secondary"
+              startContent={<Settings size={18} />}
+            >
+              Details
+            </Button>
           </div>
-          <Autocomplete
-            label="Font Family"
-            defaultSelectedKey={font.family}
-            onSelectionChange={(key) => {
-              if (key) {
-                setFont({ ...font, family: key as string })
-              }
-            }}
-            className="max-w-xs"
+        </div>
+        <Autocomplete
+          label="Font Family"
+          defaultSelectedKey={font.family}
+          onSelectionChange={(key) => {
+            if (key) {
+              setFont({ ...font, family: key as string });
+            }
+          }}
+          className="max-w-xs"
+          variant="bordered"
+        >
+          {filteredFonts.map((font) => (
+            <AutocompleteItem key={font.family} value={font.family} className="text-default-700">
+              {font.family}
+            </AutocompleteItem>
+          ))}
+        </Autocomplete>
+        <div>
+          <label className="text-default-700">Font Size</label>
+          <Select
+            label="Font Size"
+            selectedKeys={[font.size.toString()]}
+            onSelectionChange={(keys) =>
+              setFont({ ...font, size: Number.parseInt(Array.from(keys)[0] as string) })
+            }
             variant="bordered"
           >
-            {filteredFonts.map((font) => (
-              <AutocompleteItem key={font.family} value={font.family} className="text-default-700" >
-                {font.family}
-              </AutocompleteItem>
+            {fontSizeOptions.map((option) => (
+              <SelectItem key={option.value} value={option.value.toString()} className="text-default-700">
+                {option.label}
+              </SelectItem>
             ))}
-          </Autocomplete>
-          <div>
-            <label className="text-default-700">Font Size</label>
-            <Select
-              label="Font Size"
-              selectedKeys={[font.size.toString()]}
-              onSelectionChange={(keys) => setFont({ ...font, size: Number.parseInt(Array.from(keys)[0] as string) })}
-              variant="bordered"
-            >
-              {fontSizeOptions.map((option) => (
-                <SelectItem key={option.value} value={option.value.toString()} className="text-default-700">
-                  {option.label}
-                </SelectItem>
-              ))}
-            </Select>
-          </div>
-          <div>
-            <label className="text-default-700">Font Weight</label>
-            <Select
-              label="Font Weight"
-              selectedKeys={[font.weight]}
-              onSelectionChange={(keys) => setFont({ ...font, weight: Array.from(keys)[0] as string })}
-              variant="bordered"
-            >
-              {fonts
-                .find((f) => f.family === font.family)
-                ?.variants?.map((variant) => (
-                  <SelectItem key={variant} value={variant} className="text-default-700">
-                    {variant}
-                  </SelectItem>
-                )) || []}
-            </Select>
-          </div>
-          <div>
-            <label className="text-default-700">Line Height</label>
-            <Select
-              label="Line Height"
-              selectedKeys={[font.lineHeight.toString()]}
-              onSelectionChange={(keys) =>
-                setFont({ ...font, lineHeight: Number.parseFloat(Array.from(keys)[0] as string) })
-              }
-              variant="bordered"
-            >
-              {[1, 1.2, 1.4, 1.6, 1.8, 2].map((value) => (
-                <SelectItem key={value} value={value.toString()} className="text-default-700">
-                  {value.toFixed(1)}
-                </SelectItem>
-              ))}
-            </Select>
-          </div>
-          <div>
-            <label className="text-default-700">Letter Spacing</label>
-            <Select
-                label="Letter Spacing"
-                selectedKeys={[font.letterSpacing.toString()]}
-                defaultSelectedKeys={["0"]}
-                onSelectionChange={(keys) => {
-                const value = Array.from(keys)[0] as string;
-                setFont({ ...font, letterSpacing: Number.parseFloat(value) });
-                }}
-                variant="bordered"
-            >
-                {[-2, -1, -0.5, 0, 0.5, 1, 2].map((value) => (
-                <SelectItem 
-                    key={value.toString()}
-                    value={value.toString()}
-                    className="text-default-700"
-                >
-                    {value.toFixed(1)}
-                </SelectItem>
-                ))}
-            </Select>
-            </div>
-          <FontDetails
-            isOpen={isDetailsOpen}
-            onClose={() => setIsDetailsOpen(false)}
-            font={font}
-            setFont={setFont}
-            isHeading={isHeading}
-            fonts={fonts}
-          />
+          </Select>
         </div>
-      )
-    },
-    [
-      fonts,
-      headingFont,
-      bodyFont,
-      loadingFonts,
-      filteredHeadingFonts,
-      filteredBodyFonts,
-      handleShuffleHeading,
-      handleShuffleBody,
-    ],
-  )
+        <div>
+          <label className="text-default-700">Font Weight</label>
+          <Select
+            label="Font Weight"
+            selectedKeys={[font.weight]}
+            onSelectionChange={(keys) =>
+              setFont({ ...font, weight: Array.from(keys)[0] as string })
+            }
+            variant="bordered"
+          >
+            {fonts
+              .find((f) => f.family === font.family)
+              ?.variants?.map((variant) => (
+                <SelectItem key={variant} value={variant} className="text-default-700">
+                  {variant}
+                </SelectItem>
+              )) || []}
+          </Select>
+        </div>
+        <div>
+          <label className="text-default-700">Line Height</label>
+          <Select
+            label="Line Height"
+            selectedKeys={[font.lineHeight.toString()]}
+            onSelectionChange={(keys) =>
+              setFont({ ...font, lineHeight: Number.parseFloat(Array.from(keys)[0] as string) })
+            }
+            variant="bordered"
+          >
+            {[1, 1.2, 1.4, 1.6, 1.8, 2].map((value) => (
+              <SelectItem key={value} value={value.toString()} className="text-default-700">
+                {value.toFixed(1)}
+              </SelectItem>
+            ))}
+          </Select>
+        </div>
+        <div>
+          <label className="text-default-700">Letter Spacing</label>
+          <Select
+            label="Letter Spacing"
+            selectedKeys={[font.letterSpacing.toString()]}
+            defaultSelectedKeys={["0"]}
+            onSelectionChange={(keys) => {
+              const value = Array.from(keys)[0] as string;
+              setFont({ ...font, letterSpacing: Number.parseFloat(value) });
+            }}
+            variant="bordered"
+          >
+            {[-2, -1, -0.5, 0, 0.5, 1, 2].map((value) => (
+              <SelectItem key={value.toString()} value={value.toString()} className="text-default-700">
+                {value.toFixed(1)}
+              </SelectItem>
+            ))}
+          </Select>
+        </div>
+        <FontDetails
+          isOpen={isDetailsOpen}
+          onClose={() => setIsDetailsOpen(false)}
+          font={font}
+          setFont={setFont}
+          isHeading={isHeading}
+          fonts={fonts}
+        />
+      </div>
+    );
+  };
+  
 
   FontControls.displayName = "FontControls"
 
@@ -568,8 +562,7 @@ const GoogleFontsPairFinder: React.FC = () => {
   FontFilters.displayName = "FontFilters"
 
   const ShowFontsPair: React.FC = () => {
-    const headingWeights = fonts.find((f) => f.family === headingFont.family)?.variants || []
-    const bodyWeights = fonts.find((f) => f.family === bodyFont.family)?.variants || []
+
 
     const [selectedHeadingWeights, setSelectedHeadingWeights] = useState<string[]>([headingFont.weight])
     const [selectedBodyWeights, setSelectedBodyWeights] = useState<string[]>([bodyFont.weight])

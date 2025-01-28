@@ -30,7 +30,7 @@ import {
 import ToolLayout from "@/components/ToolLayout"
 import Image from "next/image"
 import { ShareButton } from "@/components/ShareButton"
-import Link from "next/link"
+
 
 interface DisplayMetrics {
   physicalWidth: number

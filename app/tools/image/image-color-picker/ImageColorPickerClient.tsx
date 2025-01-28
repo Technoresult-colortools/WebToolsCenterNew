@@ -223,8 +223,8 @@ export default function ImageColorPicker() {
 
         imageContainerRef.current!.addEventListener("click", handleImageClick)
       }
-    } catch (error) {
-      toast("Failed to pick color")
+    } catch {
+      toast.error("Failed to pick color")
     } finally {
       setIsImageEyeDropperActive(false)
     }

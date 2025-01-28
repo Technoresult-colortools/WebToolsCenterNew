@@ -50,8 +50,8 @@ export default function BarCodeGenerator() {
         displayValue: showText,
       })
       setSvgData(canvas.toDataURL("image/png"))
-    } catch (error) {
-      toast("Error generating barcode. Please check your input.")
+    } catch {
+      toast.error("Error generating barcode. Please check your input.")
     }
   }
 
