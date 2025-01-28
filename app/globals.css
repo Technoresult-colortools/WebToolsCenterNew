@@ -16,6 +16,7 @@
   }
 }
 
+
 body {
   color: rgb(var(--foreground-rgb));
   background: linear-gradient(
@@ -27,3 +28,34 @@ body {
       
 }
 
+:root {
+  --scrollbar-width: 8px;
+  --scrollbar-thumb-color: var(--nextui-colors-accents7);
+  --scrollbar-thumb-hover-color: var(--nextui-colors-accents8);
+  --scrollbar-track-color: transparent;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --scrollbar-thumb-color: var(--nextui-colors-accents5);
+    --scrollbar-thumb-hover-color: var(--nextui-colors-accents6);
+    --scrollbar-track-color: transparent;
+  }
+}
+
+body::-webkit-scrollbar {
+  width: var(--scrollbar-width);
+}
+
+body::-webkit-scrollbar-track {
+  background: var(--scrollbar-track-color);
+}
+
+body::-webkit-scrollbar-thumb {
+  background-color: var(--scrollbar-thumb-color);
+  border-radius: 4px;
+}
+
+body::-webkit-scrollbar-thumb:hover {
+  background-color: var(--scrollbar-thumb-hover-color);
+}

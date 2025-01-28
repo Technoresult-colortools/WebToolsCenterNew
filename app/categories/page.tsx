@@ -77,7 +77,7 @@ export default function ToolsPage() {
         }`}>
           <div className="relative">
             <h1 className="text-5xl md:text-7xl font-bold text-foreground mb-6 tracking-tight">
-              Our<span className="text-primary">Tools</span>
+              Our<span className="text-primary"> Tools</span>
               <span className="inline-block ml-3">
                 <Wrench className="w-12 h-12 text-primary animate-spin-slow opacity-75" />
               </span>

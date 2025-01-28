@@ -249,7 +249,7 @@ export default function LetterCounter() {
 
             <h2 id="how-to-use" className="text-2xl font-semibold text-default-700 mb-4 mt-8 flex items-center">
               <BookOpen className="w-6 h-6 mr-2" />
-              How to Use the Letter Counter
+              How to Use the Letter Counter?
             </h2>
             <ol className="list-decimal list-inside space-y-2 text-default-600">
               <li>Enter or paste your text into the input box. You can input up to 5000 characters.</li>

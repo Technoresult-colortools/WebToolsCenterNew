@@ -361,7 +361,7 @@ export default function CaseConverter() {
 
               <h2 id="how-to-use" className="text-lg md:text-xl lg:text-2xl font-semibold text-default-700 mb-4 mt-8 flex items-center">
                 <BookOpen className="w-6 h-6 mr-2" />
-                How to Use the Case Converter
+                How to Use the Case Converter?
               </h2>
               <p className="text-sm md:text-base text-default-600 mb-4">
                 Using our Case Converter is as easy as 1-2-3. Here's a quick guide to get you started:

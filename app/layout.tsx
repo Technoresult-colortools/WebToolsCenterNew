@@ -4,6 +4,7 @@ import { Inter } from 'next/font/google';
 import Providers from './providers';
 import { ThemeProvider } from '@/providers/theme-provider';
 import { UserProvider } from '@auth0/nextjs-auth0/client';
+import { CookieBanner } from '@/components/CookieBanner';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -22,7 +23,8 @@ export default function RootLayout({
       <body className={inter.className} suppressHydrationWarning>
         <ThemeProvider>
           <UserProvider>
-            <Providers>{children}</Providers>
+            <Providers>{children}<CookieBanner />
+            </Providers>
           </UserProvider>
         </ThemeProvider>
       </body>

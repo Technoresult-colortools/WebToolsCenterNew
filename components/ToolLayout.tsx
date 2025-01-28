@@ -12,6 +12,7 @@ import { useRouter } from 'next/navigation'
 import toast from 'react-hot-toast'
 import CommentSection from '@/components/CommentSection'
 import { useUser } from '@auth0/nextjs-auth0/client'
+import CompactShare from '@/components/CompactShare';
 
 interface ToolLayoutProps {
   children: React.ReactNode
@@ -24,6 +25,7 @@ export default function ToolLayout({ children, title, description, toolId }: Too
   const [isModalOpen, setIsModalOpen] = useState(false)
   const { user } = useUser()
   const router = useRouter()
+  const [isShareOpen, setIsShareOpen] = useState(false);
 
   const handleReportClick = () => {
     if (!user) {
@@ -76,24 +78,11 @@ export default function ToolLayout({ children, title, description, toolId }: Too
                 
                 <div className="flex items-center gap-2 self-end md:self-center">
                   <ButtonGroup size="sm" variant="flat">
-                    <Tooltip 
-                      content="Share Tool"
-                      className="bg-content2 dark:bg-content2 text-foreground dark:text-foreground"
-                    >
-                      <Button 
-                        isIconOnly
-                        variant="flat"
-                        onClick={() => {
-                          navigator.clipboard.writeText(window.location.href)
-                          toast.success('Link copied to clipboard!', {
-                            className: '!bg-content1 !dark:bg-content1 !text-foreground !dark:text-foreground'
-                          })
-                        }}
-                        className="bg-default-100 hover:bg-default-200 dark:bg-default-100/20 dark:hover:bg-default-200/30"
-                      >
-                        <Share2 className="h-4 w-4 text-default-500 dark:text-default-400" />
-                      </Button>
-                    </Tooltip>
+                    <CompactShare
+                      toolName={title}
+                      isOpen={isShareOpen}
+                      onOpenChange={() => setIsShareOpen(!isShareOpen)}
+                    />
                     <Tooltip content="Add to Favorites" className="bg-content2 dark:bg-content2 text-foreground dark:text-foreground">
                       <div>
                         <FavoriteButton toolId={toolId} />

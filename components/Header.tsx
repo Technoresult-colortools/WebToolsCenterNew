@@ -202,17 +202,17 @@ export default function Header() {
 
           <DropdownMenu
             aria-label="Categories"
-            className="w-[340px]"
+            className="w-[260px]" // Reduced from w-[340px]
             itemClasses={{
-              base: "gap-4",
-              title: "text-default-700 font-medium",
-              description: "text-default-500",
+              base: "gap-2", // Reduced from gap-4
+              title: "text-default-700 font-medium text-sm", // Added text-sm
+              description: "text-default-500 text-xs", // Added text-xs
             }}
           >
             {categories.map((category) => (
               <DropdownItem
                 key={category.name}
-                className="data-[hover=true]:bg-default-100"
+                className="data-[hover=true]:bg-default-100 py-2" // Added py-2 for slight padding reduction
               >
                 <Link
                   as={NextLink}
@@ -223,8 +223,8 @@ export default function Header() {
                     <FontAwesomeIcon icon={category.icon} className="text-primary" />
                   </div>
                   <div>
-                    <div className="font-medium">{category.name}</div>
-                    <div className="text-default-500 text-sm">
+                    <div className="font-medium text-sm">{category.name}</div>
+                    <div className="text-default-500 text-xs">
                       {`${allTools.filter((tool) => tool.category === category.name).length} tools`}
                     </div>
                   </div>
@@ -383,16 +383,18 @@ export default function Header() {
           </NavbarMenuItem>
         )}
 
-        <NavbarMenuItem>
-          <Link
-            href="/api/auth/logout"
-            size="lg"
-            className="text-danger w-full"
-          >
-            <LogOut className="w-4 h-4 mr-2" />
-            Log Out
-          </Link>
-        </NavbarMenuItem>
+          {user ? (
+            <NavbarMenuItem>
+              <Link
+                href="/api/auth/logout"
+                size="lg"
+                className="text-danger w-full"
+              >
+                <LogOut className="w-4 h-4 mr-2" />
+                Log Out
+              </Link>
+            </NavbarMenuItem>
+          ) : null}
         
       </NavbarMenu>
     </Navbar>
