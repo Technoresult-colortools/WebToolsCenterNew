@@ -47,7 +47,6 @@ marked.use({
         }
       },
       renderer(token) {
-        // Define the emoji map with type for text
         const emojiMap: { [key: string]: string } = {
           "8-)": "😎",
           "(c)": "©",
@@ -61,26 +60,23 @@ marked.use({
           "+-": "±",
         };
 
+        if (emojiMap[token.text as keyof typeof emojiMap]) {
+          return `<span class="emoji">${emojiMap[token.text as keyof typeof emojiMap]}</span>`;
+        }
 
-          // Ensure the type of token.text is a valid key of emojiMap
-          if (emojiMap[token.text as keyof typeof emojiMap]) {
-            return `<span class="emoji">${emojiMap[token.text as keyof typeof emojiMap]}</span>`;
-          }
-  
-          // If it's not in emojiMap, try using node-emoji to find an emoji
-          const emojiText = token.text.replace(/:/g, "");
-          const emojiChar = emoji.get(emojiText);
-          return emojiChar ? `<span class="emoji">${emojiChar}</span>` : token.raw;
-        },
+        const emojiText = token.text.replace(/:/g, "");
+        const emojiChar = emoji.get(emojiText);
+        return emojiChar ? `<span class="emoji">${emojiChar}</span>` : token.raw;
       },
-    ],
-  })
-  
-  // Configure marked options separately
-  marked.setOptions({
-    gfm: true,
-    breaks: true,
-  });
+    },
+  ],
+})
+
+marked.setOptions({
+  gfm: true,
+  breaks: true,
+});
+
 
 export default function MarkdownConverter() {
   const [markdown, setMarkdown] = useState("")
@@ -161,7 +157,7 @@ ${sanitized}
 </html>`
   }
 
-  const convertToHtml = useCallback((inputMarkdown: string) => {
+  const convertToHtml = useCallback(async (inputMarkdown: string) => {
     if (!inputMarkdown.trim()) {
       setHtml("")
       setError("")
@@ -172,8 +168,8 @@ ${sanitized}
     setError("")
 
     try {
-      const html = marked.parse(inputMarkdown)
-      const sanitizedHtml = DOMPurify.sanitize(html, {
+      const parsedHtml = await marked.parse(inputMarkdown)
+      const sanitizedHtml = DOMPurify.sanitize(parsedHtml, {
         ADD_TAGS: ["iframe", "span"],
         ADD_ATTR: ["allow", "allowfullscreen", "frameborder", "scrolling", "class"],
       })
@@ -271,7 +267,7 @@ ${sanitized}
       description="Convert Markdown to clean, properly formatted HTML"
       toolId="678f382926f06f912191bc88"
     >
-      <div className="flex flex-col gap-4">
+            <div className="flex flex-col gap-4">
         <Card className="bg-default-50">
           <CardBody className="p-4">
             <div className="flex items-center mb-4">
@@ -351,7 +347,6 @@ ${sanitized}
                 onPress={handleCopy}
                 isDisabled={!html || isConverting}
                 startContent={<Copy size={18} />}
-            
               >
                 Copy
               </Button>
@@ -360,7 +355,6 @@ ${sanitized}
                 onPress={handleDownload}
                 isDisabled={!html || isConverting}
                 startContent={<Download size={18} />}
-
               >
                 Download
               </Button>
@@ -369,7 +363,6 @@ ${sanitized}
                 onPress={handleClear}
                 isDisabled={isConverting}
                 startContent={<RefreshCw size={18} />}
-     
               >
                 Clear
               </Button>
@@ -378,7 +371,6 @@ ${sanitized}
                 onPress={handleShowPreview}
                 isDisabled={!html || isConverting}
                 startContent={<Eye size={18} />}
-
               >
                 Preview
               </Button>
