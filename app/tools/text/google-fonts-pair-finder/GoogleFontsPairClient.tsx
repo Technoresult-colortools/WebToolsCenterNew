@@ -88,7 +88,7 @@ const GoogleFontsPairFinder: React.FC = () => {
   const [bodyFont, setBodyFont] = useState<FontSettings>(initialBodyFont)
   const [activeTab, setActiveTab] = useState<"profile" | "article" | "card">("profile")
   const [fonts, setFonts] = useState<Font[]>([])
-  const [loadingFonts, setLoadingFonts] = useState(false)
+  const [, setLoadingFonts] = useState(false)
   const [headingCategories, setHeadingCategories] = useState<FontCategory[]>(["serif", "sans-serif"])
   const [bodyCategories, setBodyCategories] = useState<FontCategory[]>(["serif", "sans-serif"])
   const [headingPopularity, setHeadingPopularity] = useState("all")
