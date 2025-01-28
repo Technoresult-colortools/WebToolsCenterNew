@@ -3,13 +3,12 @@
 import React, { useState } from 'react'
 import { Button, ButtonGroup, Tooltip, Modal, ModalContent, ModalHeader, ModalBody, ModalFooter } from "@nextui-org/react"
 import { Toaster } from 'react-hot-toast'
-import { Bug, Share2, LogIn, AlertTriangle } from 'lucide-react'
+import { Bug,  LogIn, AlertTriangle } from 'lucide-react'
 import Header from '@/components/Header'
 import Footer from '@/components/Footer'
 import Sidebar from '@/components/sidebarTools'
 import FavoriteButton from '@/components/FavoriteButton'
 import { useRouter } from 'next/navigation'
-import toast from 'react-hot-toast'
 import CommentSection from '@/components/CommentSection'
 import { useUser } from '@auth0/nextjs-auth0/client'
 import CompactShare from '@/components/CompactShare';

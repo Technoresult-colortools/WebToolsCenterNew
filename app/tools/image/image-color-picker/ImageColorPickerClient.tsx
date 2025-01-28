@@ -6,7 +6,6 @@ import {
   Button,
   Card,
   CardBody,
-  CardHeader,
   Dropdown,
   DropdownTrigger,
   DropdownMenu,
@@ -225,7 +224,7 @@ export default function ImageColorPicker() {
         imageContainerRef.current!.addEventListener("click", handleImageClick)
       }
     } catch (error) {
-      toast.error("Failed to pick color")
+      toast("Failed to pick color")
     } finally {
       setIsImageEyeDropperActive(false)
     }

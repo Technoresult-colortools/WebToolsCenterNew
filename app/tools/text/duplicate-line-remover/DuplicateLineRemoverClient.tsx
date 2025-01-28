@@ -11,7 +11,6 @@ import {
   Info,
   Lightbulb,
   BookOpen,
-  ArrowRightLeft,
   Settings,
   FileDown,
   FileUp,

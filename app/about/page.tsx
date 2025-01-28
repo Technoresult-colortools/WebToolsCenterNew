@@ -3,7 +3,6 @@
 import React, { useState, useEffect } from "react"
 import { Card, CardBody, Button } from "@nextui-org/react"
 import {
-  ChevronRight,
   Star,
   Command,
   Wrench,
@@ -17,8 +16,6 @@ import {
   Cpu,
   Clock,
 } from "lucide-react"
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { faCode } from "@fortawesome/free-solid-svg-icons"
 import Link from "next/link"
 import Header from "@/components/Header"
 import Footer from "@/components/Footer"
@@ -41,11 +38,6 @@ const features = [
   },
 ]
 
-const stats = [
-  { label: "Active Users", value: 50000, color: "success" },
-  { label: "Tools Available", value: 80, color: "primary" },
-  { label: "Countries Reached", value: 120, color: "secondary" },
-]
 
 export default function AboutUs() {
   const [isVisible, setIsVisible] = useState(false)

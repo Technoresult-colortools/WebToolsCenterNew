@@ -188,7 +188,7 @@ export default function ImageAverageColorFinder() {
     const padding = 40 * scale // Padding around the entire palette
     const colorHeight = 120 * scale // Height of each color block
     const hexHeight = 40 * scale // Height for hex code section
-    const totalColors = averageColor ? dominantColors.length + 1 : 0
+
     
     // Calculate dimensions with padding
     canvas.width = (800 * scale) + (padding * 2)

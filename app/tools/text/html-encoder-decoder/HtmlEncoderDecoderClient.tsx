@@ -183,7 +183,7 @@ export default function HTMLEncoderDecoder() {
         }
       }
 
-      let result = Array.from(input).map(encodeChar).join("")
+      const result = Array.from(input).map(encodeChar).join("")
       return preserveNewlines ? result : result.replace(/\n/g, "")
     },
     [encodingType, encodeQuotes, preserveNewlines, encodeNonASCII]
@@ -238,7 +238,7 @@ export default function HTMLEncoderDecoder() {
       const clipboardText = await navigator.clipboard.readText()
       setText(clipboardText)
       toast.success("Text pasted from clipboard!")
-    } catch (err) {
+    } catch {
       toast.error("Failed to read from clipboard")
     }
   }, [])

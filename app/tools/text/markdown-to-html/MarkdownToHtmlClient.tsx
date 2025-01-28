@@ -217,7 +217,7 @@ ${sanitized}
       document.body.removeChild(a)
       URL.revokeObjectURL(url)
       toast.success("HTML file downloaded")
-    } catch (error) {
+    } catch {
       toast.error("Failed to download HTML")
     }
   }

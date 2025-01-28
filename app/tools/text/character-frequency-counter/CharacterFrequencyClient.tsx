@@ -4,7 +4,7 @@ import React, { useState, useCallback } from "react"
 import { Card, CardBody, Button, Textarea, Tooltip, Select, SelectItem, Checkbox, Input } from "@nextui-org/react"
 import Image from "next/image"
 import Link from "next/link"
-import { Copy, Download, RefreshCw, BarChart, Info, Lightbulb, BookOpen, Settings, Filter } from "lucide-react"
+import { Copy, Download, RefreshCw, BarChart, Info, Lightbulb, BookOpen, Filter } from "lucide-react"
 import { toast } from "react-hot-toast"
 import ToolLayout from "@/components/ToolLayout"
 

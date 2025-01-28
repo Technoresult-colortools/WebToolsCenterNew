@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Modal, ModalContent, ModalHeader, ModalBody, Button, ButtonGroup, Tooltip, Tabs, Tab } from "@nextui-org/react";
+import { Modal, ModalContent, ModalHeader, ModalBody, Button,  Tooltip, Tabs, Tab } from "@nextui-org/react";
 import { Share2, Facebook, Twitter, Linkedin, Mail, Copy, ExternalLink } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { motion } from 'framer-motion';
@@ -116,7 +116,7 @@ const CompactShare = ({ toolName, isOpen, onOpenChange }: CompactShareProps) => 
         }}
       >
         <ModalContent>
-          {(onClose) => (
+          {() => (
             <>
               <ModalHeader className="flex flex-col gap-1">
                 <div className="flex items-center gap-2">
