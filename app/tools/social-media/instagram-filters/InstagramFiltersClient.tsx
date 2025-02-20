@@ -25,6 +25,7 @@ import {
 import ToolLayout from "@/components/ToolLayout"
 import NextImage from "next/image"
 
+
 type ScrollDirection = 'left' | 'right';
 
 const filters = [
@@ -147,7 +148,7 @@ export default function InstagramFilters() {
       }
       reader.readAsDataURL(blob)
       toast.success("Image loaded successfully!")
-    } catch (error) {
+    } catch {
       toast.error("Failed to load image from URL")
     }
   }
@@ -305,7 +306,7 @@ export default function InstagramFilters() {
               >
                 <X className="w-6 h-6" />
               </Button>
-              <img
+              <NextImage
                 src={image || "/placeholder.svg"}
                 alt="Fullscreen preview"
                 className="w-full h-full object-contain"
@@ -367,7 +368,7 @@ export default function InstagramFilters() {
               onClick={() => setFilter(filterName)}
             >
               <div className="w-24">
-                <img
+                <NextImage
                   src={image || "/placeholder.svg"}
                   alt={filterName}
                   className="w-24 h-24 object-cover rounded-lg"
@@ -418,7 +419,7 @@ export default function InstagramFilters() {
                       height: `${(100 * zoom) / 100}%`,
                     }}
                   >
-                    <img
+                    <NextImage
                       ref={imageRef}
                       src={image || "/placeholder.svg"}
                       alt="Uploaded"

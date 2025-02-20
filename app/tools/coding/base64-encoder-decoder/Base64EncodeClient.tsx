@@ -1,7 +1,7 @@
 "use client"
 
 import type React from "react"
-import { useState, useEffect, useRef } from "react"
+import { useState, useEffect, useRef, useCallback } from "react"
 import { Input, Button, Textarea, Card, CardBody, Tabs, Tab, Select, SelectItem } from "@nextui-org/react"
 import {
   FileLock,
@@ -17,7 +17,7 @@ import {
   Eye,
   EyeOff,
 } from "lucide-react"
-import { toast, Toaster } from "react-hot-toast"
+import { toast,} from "react-hot-toast"
 import ToolLayout from "@/components/ToolLayout"
 import Image from "next/image"
 import Link from "next/link"
@@ -35,27 +35,27 @@ export default function Base64EncoderDecoder() {
   const [showPreview, setShowPreview] = useState(false)
   const fileInputRef = useRef<HTMLInputElement>(null)
 
-  const handleEncode = () => {
+  const handleEncode = useCallback(() => {
     try {
-      const encoder = new TextEncoder()
-      const data = encoder.encode(inputText)
-      const encoded = btoa(String.fromCharCode.apply(null, Array.from(data)))
-      setOutputText(encoded)
-    } catch (error) {
-      toast.error(`Error encoding text. Make sure it's valid ${encoding}.`)
+      const encoder = new TextEncoder();
+      const data = encoder.encode(inputText);
+      const encoded = btoa(String.fromCharCode.apply(null, Array.from(data)));
+      setOutputText(encoded);
+    } catch {
+      toast.error(`Error encoding text. Make sure it's valid ${encoding}.`);
     }
-  }
+  }, [inputText, encoding]);
 
-  const handleDecode = () => {
+  const handleDecode = useCallback(() => {
     try {
-      const decoded = atob(inputText)
-      const decoder = new TextDecoder(encoding)
-      const decodedText = decoder.decode(new Uint8Array([...decoded].map((char) => char.charCodeAt(0))))
-      setOutputText(decodedText)
-    } catch (error) {
-      toast.error("Error decoding text. Make sure it's valid Base64.")
+      const decoded = atob(inputText);
+      const decoder = new TextDecoder(encoding);
+      const decodedText = decoder.decode(new Uint8Array([...decoded].map((char) => char.charCodeAt(0))));
+      setOutputText(decodedText);
+    } catch {
+      toast.error("Error decoding text. Make sure it's valid Base64.");
     }
-  }
+  }, [inputText, encoding]);
 
   const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0]
@@ -87,7 +87,7 @@ export default function Base64EncoderDecoder() {
               setOutputText(decoded)
               setActiveTab("decode")
               toast.success("Base64 file decoded successfully!")
-            } catch (err) {
+            } catch {
               toast.error("Error decoding Base64 content. Invalid Base64 format.")
             }
           } else {
@@ -134,11 +134,11 @@ export default function Base64EncoderDecoder() {
 
   useEffect(() => {
     if (activeTab === "encode") {
-      handleEncode()
+      handleEncode();
     } else {
-      handleDecode()
+      handleDecode();
     }
-  }, [inputText, activeTab, encoding]) // Added encoding to dependencies
+  }, [inputText, activeTab, encoding, handleEncode, handleDecode]); // Now safe Added encoding to dependencies
 
   return (
     <ToolLayout

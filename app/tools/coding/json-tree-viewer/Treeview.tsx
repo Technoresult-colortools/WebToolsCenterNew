@@ -272,7 +272,7 @@ const TreeView: React.FC<TreeViewProps> = ({
                 const newValue = JSON.parse(editState.value);
                 onEdit(path, newValue);
                 setEditState(null);
-              } catch (err) {
+              } catch {
                 toast.error('Invalid JSON value');
               }
             }}
@@ -382,7 +382,7 @@ const TreeView: React.FC<TreeViewProps> = ({
             <div className="ml-4">
               {isArray ? (
                 groupArraysAfterLength && value.length > groupArraysAfterLength ? (
-                  createArrayGroups(value).map((group, index) => {
+                  createArrayGroups(value).map((group) => {
                     const groupKey = `${pathString}-${group.start}-${group.end}`;
                     const isGroupExpanded = expandedGroups.has(groupKey);
 
@@ -466,7 +466,7 @@ const TreeView: React.FC<TreeViewProps> = ({
                         const newValue = JSON.parse(addState.value);
                         onAdd(path, addState.key, newValue);
                         setAddState(null);
-                      } catch (err) {
+                      } catch {
                         toast.error('Invalid JSON value');
                       }
                     }}

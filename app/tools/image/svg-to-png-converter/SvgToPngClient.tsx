@@ -59,7 +59,7 @@ const qualityOptions = [
     const [showBackground, setShowBackground] = useState<boolean>(true)
     const [isLoading, setIsLoading] = useState<boolean>(false)
     const [error, setError] = useState<string | null>(null)
-    const [svgDimensions, setSvgDimensions] = useState({ width: 0, height: 0 })
+    const [,setSvgDimensions] = useState({ width: 0, height: 0 })
     const [exportSize, setExportSize] = useState<string>("custom")
     const [customWidth, setCustomWidth] = useState<number>(0)
     const [customHeight, setCustomHeight] = useState<number>(0)
@@ -136,7 +136,7 @@ const qualityOptions = [
             }
 
             // Get quality scale factor
-            const qualityScale = qualityOptions.find(opt => opt.key === quality)?.scale || 1.5
+  
 
             // Set canvas size based on target dimensions and quality
             canvas.width = targetWidth
@@ -175,7 +175,7 @@ const qualityOptions = [
               const pngDataUrl = canvas.toDataURL('image/png', compressionQuality)
               setPngUrl(pngDataUrl)
               toast.success('SVG converted to PNG successfully!')
-            } catch (e) {
+            } catch {
               setError('Failed to generate PNG. The image might be tainted by cross-origin data.')
               toast.error('Conversion failed. Please try uploading the SVG file directly.')
             }
@@ -189,34 +189,14 @@ const qualityOptions = [
         setIsLoading(false)
       }
       img.src = 'data:image/svg+xml;base64,' + btoa(svgText)
-    } catch (e) {
+    } catch {
       setError('Failed to fetch or process the SVG. It might be due to CORS restrictions.')
       toast.error('Failed to process SVG. Try uploading the file directly.')
       setIsLoading(false)
     }
   }, [svgUrl, backgroundColor, showBackground, exportSize, customWidth, customHeight, quality])
 
-  const qualitySelector = (
-    <div className="w-full">
-      <p className="mb-2">Quality</p>
-      <Dropdown>
-        <DropdownTrigger>
-          <Button variant="bordered" endContent={<ChevronDown />} className="w-full">
-            {qualityOptions.find((option) => option.key === quality)?.name || "Select quality"}
-          </Button>
-        </DropdownTrigger>
-        <DropdownMenu
-          aria-label="Quality options"
-          onAction={(key) => setQuality(key as string)}
-          selectedKeys={[quality]}
-        >
-          {qualityOptions.map((option) => (
-            <DropdownItem key={option.key} >{option.name} </DropdownItem>
-          ))}
-        </DropdownMenu>
-      </Dropdown>
-    </div>
-  )
+  
 
   const handleDownload = () => {
     if (pngUrl) {

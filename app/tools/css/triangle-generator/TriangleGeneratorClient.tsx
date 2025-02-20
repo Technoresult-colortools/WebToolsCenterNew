@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { Card, CardBody, Button, Input, Slider, Tabs, Tab, Select, SelectItem, Textarea, ModalContent, Modal } from "@nextui-org/react"
+import { Card, CardBody, Button, Input, Slider, Tabs, Tab, Select, SelectItem, ModalContent, Modal } from "@nextui-org/react"
 import Image from "next/image"
 import { Copy, Download, Info, Lightbulb, BookOpen, RefreshCw, Maximize2, X, Sliders, Palette } from "lucide-react"
 import { toast } from "react-hot-toast"

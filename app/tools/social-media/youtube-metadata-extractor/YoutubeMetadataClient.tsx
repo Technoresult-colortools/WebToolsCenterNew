@@ -107,7 +107,7 @@ export default function YouTubeMetadataExtractor() {
       } else {
         setError("No data found for this video")
       }
-    } catch (err) {
+    } catch {
       setError("Failed to fetch video metadata. Please try again.")
     }
 

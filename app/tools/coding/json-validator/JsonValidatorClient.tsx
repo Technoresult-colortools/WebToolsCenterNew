@@ -95,7 +95,7 @@ export default function JsonValidator() {
       })
 
       toast.success("JSON minified successfully!")
-    } catch (error) {
+    } catch {
       toast.error("Invalid JSON. Please fix errors before minifying.")
     }
   }, [jsonInput])

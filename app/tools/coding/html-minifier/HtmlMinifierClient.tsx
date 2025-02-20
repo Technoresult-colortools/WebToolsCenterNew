@@ -3,8 +3,8 @@
 import type React from "react"
 import { useState, useRef, useEffect } from "react"
 import { Button, Card, CardBody, Input, Switch, Textarea, Tabs, Tab, Slider } from "@nextui-org/react"
-import { toast, Toaster } from "react-hot-toast"
-import { Upload, Copy, RefreshCw, Download, Zap, Info, Settings, BookOpen, Lightbulb, Eye, EyeOff } from "lucide-react"
+import { toast } from "react-hot-toast"
+import { Upload, Copy, RefreshCw, Download, Zap, Info, Settings, BookOpen, Lightbulb } from "lucide-react"
 import ToolLayout from "@/components/ToolLayout"
 import Image from "next/image"
 
@@ -192,21 +192,6 @@ export default function HTMLMinifier() {
     document.body.removeChild(a)
     URL.revokeObjectURL(url)
     toast.success("Minified HTML downloaded!")
-  }
-
-  const handleDrop = (e: React.DragEvent) => {
-    e.preventDefault()
-    const file = e.dataTransfer.files[0]
-    if (file) {
-      const input = fileInputRef.current
-      if (input) {
-        const dataTransfer = new DataTransfer()
-        dataTransfer.items.add(file)
-        input.files = dataTransfer.files
-        const event = { target: input } as React.ChangeEvent<HTMLInputElement>
-        handleFileUpload(event)
-      }
-    }
   }
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {

@@ -2,8 +2,8 @@
 
 import type React from "react"
 import { useState, useRef } from "react"
-import { Button, Card, CardBody, Input, Switch, Textarea, Tabs, Tab, Slider } from "@nextui-org/react"
-import { toast, Toaster } from "react-hot-toast"
+import { Button, Card, CardBody, Input,  Textarea, Tabs, Tab} from "@nextui-org/react"
+import { toast } from "react-hot-toast"
 import { Upload, Copy, RefreshCw, Download, Zap, Info, Settings, BookOpen, Lightbulb } from "lucide-react"
 import ToolLayout from "@/components/ToolLayout"
 import Image from "next/image"

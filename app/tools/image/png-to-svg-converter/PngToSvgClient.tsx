@@ -10,11 +10,6 @@ import {
   Info,
   BookOpen,
   Lightbulb,
-  Scissors,
-  SlidersHorizontal,
-  Eye,
-  RefreshCw,
-  Smartphone,
   Lock,
   RefreshCcw,
 } from "lucide-react";

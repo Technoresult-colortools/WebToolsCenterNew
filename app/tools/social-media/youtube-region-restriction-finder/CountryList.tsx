@@ -1,7 +1,7 @@
 'use client'
 import React from 'react';
 import { Card, CardBody, Chip, ScrollShadow, Tooltip } from "@nextui-org/react";
-import { Check, X, Clock } from 'lucide-react';
+import { Check, X } from 'lucide-react';
 
 interface CountryListProps {
   availability: {

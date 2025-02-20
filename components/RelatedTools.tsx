@@ -1,5 +1,5 @@
 import React from 'react';
-import { Card, CardBody, Button } from "@nextui-org/react";
+import { Card, CardBody } from "@nextui-org/react";
 import Link from 'next/link';
 import { Tool, allTools } from '@/data/tools';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -10,7 +10,7 @@ interface RelatedToolsProps {
   maxTools?: number;
 }
 
-const RelatedTools = ({ toolId, toolName, maxTools = 3 }: RelatedToolsProps) => {
+const RelatedTools = ({ toolName, maxTools = 3 }: RelatedToolsProps) => {
   const currentTool = allTools.find(tool => 
     tool.name.toLowerCase() === toolName.toLowerCase()
   );

@@ -120,7 +120,7 @@ export default function YouTubeRegionRestrictionFinder() {
             available: data.items && data.items.length > 0,
             lastChecked: new Date().toISOString(),
           }
-        } catch (err) {
+        } catch {
           availabilityData[country.code] = {
             available: false,
             lastChecked: new Date().toISOString(),
@@ -137,7 +137,7 @@ export default function YouTubeRegionRestrictionFinder() {
       localStorage.setItem("searchHistory", JSON.stringify(newHistory))
 
       toast.success("Region availability checked successfully!")
-    } catch (err) {
+    } catch {
       setError("Failed to check region availability. Please try again.")
     }
 

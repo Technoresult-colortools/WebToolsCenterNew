@@ -108,7 +108,7 @@ export default function JavaScriptMinifier() {
     try {
       await navigator.clipboard.writeText(text)
       toast.success("Copied to clipboard!")
-    } catch (error) {
+    } catch {
       toast.error("Failed to copy to clipboard")
     }
   }
@@ -188,7 +188,7 @@ export default function JavaScriptMinifier() {
       document.body.removeChild(a)
       URL.revokeObjectURL(url)
       toast.success("Download started!")
-    } catch (error) {
+    } catch {
       toast.error("Failed to download file")
     }
   }

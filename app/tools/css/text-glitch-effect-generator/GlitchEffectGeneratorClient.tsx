@@ -12,12 +12,9 @@ import {
   Tab,
   Card,
   CardBody,
-  CardHeader,
   Modal,
   ModalContent,
-  ModalHeader,
-  ModalBody,
-  ModalFooter,
+
 } from "@nextui-org/react"
 import { toast, } from "react-hot-toast"
 import {

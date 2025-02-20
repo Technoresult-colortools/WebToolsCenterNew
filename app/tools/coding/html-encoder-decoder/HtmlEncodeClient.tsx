@@ -4,7 +4,7 @@ import type React from "react"
 import { useState, useRef } from "react"
 import { Input, Button, Textarea, Card, CardBody, Tabs, Tab, Switch } from "@nextui-org/react"
 import { FileLock, FileLock2, Upload, Copy, RefreshCw, Check, Info, BookOpen, Lightbulb, Zap } from "lucide-react"
-import { toast, Toaster } from "react-hot-toast"
+import { toast } from "react-hot-toast"
 import ToolLayout from "@/components/ToolLayout"
 import Image from "next/image"
 import Link from "next/link"
@@ -48,7 +48,7 @@ export default function HTMLEncoderDecoder() {
       const result = activeTab === "encode" ? encodeHTML(inputText) : decodeHTML(inputText)
       setOutputText(result)
       toast.success(`HTML ${activeTab}d successfully!`)
-    } catch (error) {
+    } catch {
       toast.error(`Error ${activeTab}ing HTML. Please check your input.`)
     }
   }

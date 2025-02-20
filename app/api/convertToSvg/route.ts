@@ -44,7 +44,6 @@ export async function POST(req: NextRequest) {
 
   const colorReduction = formData.get('colorReduction') as string || '16';
   const smoothing = Number(formData.get('smoothing')) || 0;
-  const conversionMethod = formData.get('conversionMethod') as string || 'default';
 
   // Convert File to Buffer
   const arrayBuffer = await file.arrayBuffer();

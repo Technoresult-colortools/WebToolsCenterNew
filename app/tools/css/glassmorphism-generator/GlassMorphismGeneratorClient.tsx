@@ -2,10 +2,9 @@
 
 import React, { useState, useRef, useEffect } from 'react'
 import { Button, Card, CardBody, Input, Select, SelectItem, Slider, Switch, Textarea } from "@nextui-org/react"
-import { Toaster, toast } from 'react-hot-toast'
+import { toast } from 'react-hot-toast'
 import { RefreshCw, Copy, Download, Info, BookOpen, Lightbulb } from 'lucide-react'
 import ToolLayout from '@/components/ToolLayout'
-import NextImage from 'next/image'
 import Image from 'next/image'
 
 type GlassShape = 'rectangle' | 'circle' | 'custom'

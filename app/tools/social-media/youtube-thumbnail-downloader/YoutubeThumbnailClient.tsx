@@ -1,6 +1,6 @@
 'use client'
 import React, { useState, useRef, useEffect } from 'react';
-import { Card, CardBody, Button, Input, Select, SelectItem, Textarea } from "@nextui-org/react";
+import { Card, CardBody, Button, Input, Select, SelectItem } from "@nextui-org/react";
 import { Search, RefreshCw, AlertCircle, ImageIcon, Clock, Info, Lightbulb, BookOpen, Share2, Download, Clipboard, Check, Youtube, Trash2 } from 'lucide-react';
 import { toast } from 'react-hot-toast';
 import ToolLayout from '@/components/ToolLayout';
@@ -66,7 +66,7 @@ const ThumbnailGrid = ({ thumbnails }: { thumbnails: ThumbnailQuality[] }) => {
       document.body.removeChild(link);
       URL.revokeObjectURL(blobUrl);
       toast.success(`Thumbnail downloaded as ${downloadFormat.toUpperCase()}!`);
-    } catch (error) {
+    } catch {
       toast.error('Failed to download thumbnail');
     }
   };
@@ -91,7 +91,7 @@ const ThumbnailGrid = ({ thumbnails }: { thumbnails: ThumbnailQuality[] }) => {
           <Card key={index} className="bg-default-50">
             <CardBody className="p-4">
               <div className="mb-4">
-                <img
+                <Image
                   src={thumb.url}
                   alt={`Thumbnail ${thumb.width}x${thumb.height}`}
                   className="w-full h-auto rounded-lg"
@@ -157,7 +157,7 @@ export default function YouTubeThumbnailDownloader() {
       setThumbnails(thumbnailData);
       updateSearchHistory(videoUrl);
       toast.success('Thumbnails fetched successfully!');
-    } catch (err) {
+    } catch {
       setError('Failed to fetch thumbnails. Please try again.');
     }
 

@@ -207,5 +207,5 @@ export const glitchEffects = {
       75% { transform: translateY(${intensity}px) skew(${intensity * 0.5}deg); }
       100% { transform: translateY(0); }
     }`,
-  'custom': (text: string, color1: string, color2: string, intensity: number, speed: number) => ''
+  'custom': () => ''
 };

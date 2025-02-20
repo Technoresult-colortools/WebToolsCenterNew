@@ -38,7 +38,6 @@ import {
   Tab,
   Textarea,
   Chip,
-  Progress,
   ButtonGroup,
   Divider
 } from "@nextui-org/react"

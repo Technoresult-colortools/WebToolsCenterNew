@@ -3,8 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { Card, CardBody, Button, Select, SelectItem, Textarea, Switch } from "@nextui-org/react";
 import Image from 'next/image';
-import Link from 'next/link';
-import { RefreshCw, Download, Info, BookOpen, Lightbulb, Code, Eye, Edit, Trash, Plus, Paintbrush } from 'lucide-react';
+import { RefreshCw, Download, Info, BookOpen, Lightbulb, Code, Eye, Edit } from 'lucide-react';
 import { Toaster } from 'react-hot-toast';
 import TreeView from './Treeview';
 import ToolLayout from '@/components/ToolLayout';
@@ -25,7 +24,8 @@ type JsonValue = string | number | boolean | null | JsonObject | JsonArray;
 interface JsonObject {
   [key: string]: JsonValue;
 }
-interface JsonArray extends Array<JsonValue> {}
+type JsonArray = JsonValue[];
+
 
 const themes: Record<string, Theme> = {
     'monokai': {

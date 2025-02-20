@@ -4,7 +4,7 @@ import type React from "react"
 import { useState, useRef, useCallback, useEffect } from "react"
 import { Button, Card, CardBody, CardHeader, Input, Radio, RadioGroup, Select, SelectItem, Slider } from "@nextui-org/react"
 import NextImage from "next/image"
-import { Toaster, toast } from "react-hot-toast"
+import { toast } from "react-hot-toast"
 import {
   Upload,
   Download,
@@ -20,6 +20,7 @@ import {
   Loader2,
 } from "lucide-react"
 import ToolLayout from "@/components/ToolLayout"
+
 
 type CensorType = "blur" | "pixelate" | "black"
 type ImageFormat = "image/jpeg" | "image/png" | "image/webp"
@@ -246,7 +247,7 @@ const PhotoCensor: React.FC = () => {
           resolve()
         }, 0)
       })
-    } catch (error) {
+    } catch{
       toast.error("Failed to apply censoring effect")
     } finally {
       setIsProcessing(false)
@@ -371,7 +372,7 @@ const PhotoCensor: React.FC = () => {
                       </div>
                     </div>
                   )}
-                  <img
+                  <NextImage
                     ref={imageRef}
                     src={image || "/placeholder.svg"}
                     alt="Uploaded image"

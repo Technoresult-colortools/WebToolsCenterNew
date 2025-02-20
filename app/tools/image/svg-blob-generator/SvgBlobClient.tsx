@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import { Card, CardBody, Button, Input,  Slider, Dropdown, DropdownTrigger, DropdownMenu, DropdownItem, Switch } from "@nextui-org/react";
-import { Download, Code, Info, BookOpen, Lightbulb, Sliders, Palette, FileImage,  Eye, ShuffleIcon, Shuffle, ImageIcon } from "lucide-react";
+import { Download, Code, Info, BookOpen, Lightbulb, Sliders, Palette, FileImage,  Eye, ShuffleIcon, ImageIcon } from "lucide-react";
 import { toast } from "react-hot-toast";
 import ToolLayout from "@/components/ToolLayout";
 import NextImage from "next/image"

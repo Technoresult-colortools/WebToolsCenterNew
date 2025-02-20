@@ -2,9 +2,9 @@
 
 import type React from "react"
 import { useState, useRef } from "react"
-import { Button, Card, CardBody, CardHeader, Input, Switch, Textarea, Tabs, Tab } from "@nextui-org/react"
-import { toast, Toaster } from "react-hot-toast"
-import { FileMinus, Copy, RefreshCw, Download, Upload, Info, BookOpen, Lightbulb, Zap, FileCode, Trash2, FileText } from "lucide-react"
+import { Button, Card, CardBody,  Input, Switch, Textarea, Tabs, Tab } from "@nextui-org/react"
+import { toast } from "react-hot-toast"
+import { FileMinus, Copy, Download, Upload, Info, BookOpen, Lightbulb, Zap, FileCode, Trash2, FileText } from "lucide-react"
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter"
 import { atomDark } from "react-syntax-highlighter/dist/esm/styles/prism"
 import prettier from "prettier/standalone"
