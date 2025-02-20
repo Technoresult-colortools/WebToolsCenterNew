@@ -67,7 +67,7 @@ export interface Category {
   name: string
   icon: IconDefinition
   gradient: string
-  iconColor: string
+
 }
 
 export interface ToolPageProps {
@@ -78,44 +78,44 @@ export const categories: Category[] = [
   {
     name: "Text",
     icon: faFont,
-    gradient: "from-blue-500 to-cyan-500",
-    iconColor: "text-blue-500 dark:text-blue-400",
+    gradient: ""
+
   },
   {
     name: "Image",
     icon: faImage,
-    gradient: "from-purple-500 to-pink-500",
-    iconColor: "text-purple-500 dark:text-purple-400",
+    gradient: "",
+
   },
   {
     name: "CSS",
     icon: faPalette,
-    gradient: "from-green-500 to-emerald-500",
-    iconColor: "text-green-500 dark:text-green-400",
+    gradient: "",
+
   },
   {
     name: "Coding",
     icon: faCode,
-    gradient: "from-orange-500 to-red-500",
-    iconColor: "text-orange-500 dark:text-orange-400",
+    gradient: "",
+
   },
   {
     name: "Color",
     icon: faDroplet,
-    gradient: "from-violet-500 to-purple-500",
-    iconColor: "text-violet-500 dark:text-violet-400",
+    gradient: "",
+
   },
   {
     name: "Social Media",
     icon: faShare,
-    gradient: "from-pink-500 to-rose-500",
-    iconColor: "text-pink-500 dark:text-pink-400",
+    gradient: "",
+  
   },
   {
     name: "Misc",
     icon: faWrench,
-    gradient: "from-cyan-500 to-blue-500",
-    iconColor: "text-cyan-500 dark:text-cyan-400",
+    gradient: "",
+
   },
 ]
 
@@ -339,6 +339,14 @@ export const allTools: Tool[] = [
     description: "Convert images to Base64 format.",
     iconColor: "text-purple-600 dark:text-purple-500",
   },
+  {
+    name: "Base64 to Image Converter",
+    category: "Image",
+    href: "/tools/image/base64-to-image-converter",
+    icon: faFileCode,
+    description: "Convert Base64 to Image format.",
+    iconColor: "text-purple-600 dark:text-purple-500",
+  },
 
 // CSS Tools
 {
@@ -382,9 +390,9 @@ export const allTools: Tool[] = [
   iconColor: "text-green-900 dark:text-green-800",
 },
 {
-  name: "CSS Text Tools Glitch Effect Generator",
+  name: "CSS Text Glitch Effect Generator",
   category: "CSS",
-  href: "/tools/css/Text Tools-glitch-effect-generator",
+  href: "/tools/css/text-glitch-effect-generator",
   icon: faGlide,
   description: "Generate glitch Text Tools effects with CSS.",
   iconColor: "text-green-500 dark:text-green-400",
@@ -827,7 +835,8 @@ export const allTools: Tool[] = [
   description: 'Apply filters to Instagram images.',
   iconColor: 'text-pink-500 dark:text-pink-400',
 },
-{
+
+/*{
   name: 'Instagram Post Generator',
   category: 'Social Media',
   href: '/tools/social-media/instagram-post-generator',
@@ -858,7 +867,7 @@ export const allTools: Tool[] = [
   icon: faTwitter,
   description: 'Convert tweets to images for social media.',
   iconColor: 'text-blue-600 dark:text-blue-500',
-},
+},*/
 {
   name: 'YouTube Thumbnail Downloader',
   category: 'Social Media',

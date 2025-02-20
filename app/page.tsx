@@ -60,17 +60,17 @@ export default function HomePage() {
         <div className={`max-w-7xl mx-auto text-center transform transition-all duration-1000 ${
           isVisible ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'
         }`}>
-          <div className="relative">
-            <h1 className="text-5xl md:text-7xl font-bold text-foreground mb-6 tracking-tight">
+          <div className="relative text-center px-4">
+            <h1 className="text-4xl sm:text-5xl md:text-7xl font-bold text-foreground mb-4 sm:mb-6 tracking-tight leading-tight">
               Web<span className="text-primary">Tools</span>Center
-              <span className="inline-block ml-3">
-              <Cog className="w-12 h-12 text-primary animate-spin-slow opacity-75" />
+              <span className="inline-block ml-2 sm:ml-3 align-middle">
+                <Cog className="w-8 h-8 sm:w-12 sm:h-12 text-primary animate-spin-slow opacity-75" />
               </span>
             </h1>
-          </div>
-          <p className="text-xl text-default-500 mb-12 max-w-2xl mx-auto leading-relaxed">
-            Your all-in-one platform for web development tools. Create, convert, and transform with ease.
-          </p>
+            <p className="text-lg sm:text-xl text-default-500 mb-8 sm:mb-12 max-w-xl sm:max-w-2xl mx-auto leading-relaxed">
+              Your all-in-one platform for web development tools. Create, convert, and transform with ease.
+            </p>
+           </div>
 
           {/* Category Pills */}
           <div className="flex flex-wrap gap-2 justify-center max-w-4xl mx-auto p-2 rounded-2xl bg-content1/50 backdrop-blur-md">

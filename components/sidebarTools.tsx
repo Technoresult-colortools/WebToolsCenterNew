@@ -59,10 +59,11 @@ export default function SidebarTools() {
 
       {/* Header */}
       <div className="p-6">
-        <h2 className="text-2xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent flex items-center gap-2">
-          Explore Tools
-          <Cog className="w-5 h-5 text-primary animate-spin-slow" />
-        </h2>
+      <h2 className="text-2xl font-bold text-primary flex items-center gap-2">
+        Explore Tools
+        <Cog className="w-5 h-5 text-primary animate-spin-slow" />
+      </h2>
+
         <p className="text-default-500 text-sm mt-1">Find the perfect tool for your needs</p>
       </div>
 
@@ -94,7 +95,7 @@ export default function SidebarTools() {
                     >
                       <FontAwesomeIcon
                         icon={category.icon as IconDefinition}
-                        className={`w-5 h-5 ${category.iconColor}`}
+                        className={`w-5 h-5 ${category}`}
                         style={{ color: 'currentColor' }}
                       />
                     </div>

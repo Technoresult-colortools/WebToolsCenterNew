@@ -12,6 +12,7 @@ import { useRouter } from 'next/navigation'
 import CommentSection from '@/components/CommentSection'
 import { useUser } from '@auth0/nextjs-auth0/client'
 import CompactShare from '@/components/CompactShare';
+import RelatedTools from '@/components/RelatedTools'
 
 interface ToolLayoutProps {
   children: React.ReactNode
@@ -67,9 +68,10 @@ export default function ToolLayout({ children, title, description, toolId }: Too
             <div className="mb-8 md:mb-12">
               <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
                 <div className="flex-1">
-                  <h1 className="text-3xl sm:text-4xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
-                    {title}
-                  </h1>
+                <h1 className="text-3xl sm:text-4xl font-bold text-primary">
+                  {title}
+                </h1>
+
                   <p className="text-default-500 dark:text-default-400 text-sm sm:text-base mt-2 max-w-2xl">
                     {description}
                   </p>
@@ -110,6 +112,12 @@ export default function ToolLayout({ children, title, description, toolId }: Too
             <div className="bg-content1/50 dark:bg-default-50 backdrop-blur-sm rounded-xl p-6 mb-8">
               {children}
             </div>
+            {/* Add the RelatedTools component here */}
+            <RelatedTools 
+              toolId={toolId} 
+              toolName={title}  // Pass the title as toolName
+              maxTools={3} 
+            />
             <div className="mt-8">
               <CommentSection toolId={toolId} />
             </div>
