@@ -72,10 +72,10 @@ export default function WhiteSpaceRemover() {
 
   return (
     <ToolLayout
-      title="White Space Remover"
+      title="Whitespace Remover"
       description="Clean up text by removing unwanted white spaces"
       toolId="678f382826f06f912191bc80"
-    >
+    >f
       <div className="flex flex-col gap-8">
         <Card className="bg-default-50 dark:bg-default-100">
           <CardBody className="p-6">

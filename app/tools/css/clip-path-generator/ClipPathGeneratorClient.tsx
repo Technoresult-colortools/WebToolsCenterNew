@@ -18,7 +18,6 @@ import {
   Plus,
   X,
   Shapes,
-  FileText,
   Code,
   RotateCcw,
 } from "lucide-react"
@@ -413,7 +412,7 @@ export default function ClipPathGenerator() {
     <ToolLayout
       title="CSS Clip Path Generator"
       description="Create and customize clip-path shapes for your web designs"
-      toolId="css-clip-path-generator"
+      toolId="678f382b26f06f912191bc97"
     >
       <div className="flex flex-col gap-8">
         <Card className="bg-default-50 dark:bg-default-100">
@@ -679,7 +678,7 @@ export default function ClipPathGenerator() {
             </div>
             <div className="bg-default-200 dark:bg-default-100 rounded-lg p-4 font-mono text-sm">
               <div className="flex flex-col gap-2">
-                <div className="text-primary">/* Generated Clip Path CSS */</div>
+              <div className="text-primary">{/* Generated Clip Path CSS */}</div>
                 <div>.element {"{"}</div>
                 <div className="ml-4 text-success">clip-path: {clipPath};</div>
                 <div className="ml-4 text-success">-webkit-clip-path: {clipPath};</div>

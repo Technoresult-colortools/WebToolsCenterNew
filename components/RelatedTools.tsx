@@ -21,14 +21,11 @@ const RelatedTools = ({ toolName, maxTools = 3 }: RelatedToolsProps) => {
   }
 
   const getRelatedTools = (): Tool[] => {
-    // Get tools from the same category
     const sameCategory = allTools.filter(tool => 
       tool.name !== currentTool.name && 
       tool.category === currentTool.category
     );
 
-    // If we don't have enough tools from the same category,
-    // add tools from other categories that might be related
     if (sameCategory.length < maxTools) {
       const otherTools = allTools.filter(tool =>
         tool.name !== currentTool.name &&
@@ -37,7 +34,6 @@ const RelatedTools = ({ toolName, maxTools = 3 }: RelatedToolsProps) => {
          currentTool.description.toLowerCase().includes(tool.name.toLowerCase()))
       );
 
-      // Sort tools by name for consistency
       const combinedTools = [...sameCategory, ...otherTools]
         .sort((a, b) => a.name.localeCompare(b.name))
         .slice(0, maxTools);
@@ -45,7 +41,6 @@ const RelatedTools = ({ toolName, maxTools = 3 }: RelatedToolsProps) => {
       return combinedTools;
     }
 
-    // Sort by name and take first maxTools items instead of random selection
     return sameCategory
       .sort((a, b) => a.name.localeCompare(b.name))
       .slice(0, maxTools);
@@ -58,7 +53,7 @@ const RelatedTools = ({ toolName, maxTools = 3 }: RelatedToolsProps) => {
   }
 
   return (
-    <div className="mt-8 max-w-4xl mx-auto">
+    <div className="mt-8 max-w-4xl mx-auto px-4">
       <h3 className="text-2xl font-semibold mb-6 bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
         Related Tools
       </h3>
@@ -67,30 +62,30 @@ const RelatedTools = ({ toolName, maxTools = 3 }: RelatedToolsProps) => {
           <Link 
             key={tool.href} 
             href={tool.href}
-            className="no-underline"
+            className="no-underline group"
           >
             <Card 
-              className="hover:scale-105 transition-transform duration-200 cursor-pointer h-full bg-content1"
+              className="h-full bg-content1 group-hover:shadow-lg transition-all duration-300 transform group-hover:-translate-y-1"
               isPressable
             >
-              <CardBody className="p-4">
+              <CardBody className="p-6 flex flex-col h-full">
                 <div className="flex items-start gap-4">
-                    <div className="p-2 rounded-md bg-primary/20 dark:bg-primary/30">
+                  <div className="p-3 rounded-xl bg-primary/10 group-hover:bg-primary/20 transition-colors duration-300">
                     <FontAwesomeIcon 
-                        icon={tool.icon} 
-                        className="h-5 w-5 text-primary"
+                      icon={tool.icon} 
+                      className="h-6 w-6 text-primary group-hover:scale-110 transition-transform duration-300"
                     />
-                    </div>
-                    <div>
-                    <h3 className="font-medium text-default-700">{tool.name}</h3>
-                    <p className="text-sm text-default-500 line-clamp-2 mt-1">
-                        {tool.description}
+                  </div>
+                  <div className="flex-1 min-h-[120px]">
+                    <h3 className="font-semibold text-lg text-default-700 mb-2 group-hover:text-primary transition-colors duration-300">
+                      {tool.name}
+                    </h3>
+                    <p className="text-sm text-default-500 line-clamp-3">
+                      {tool.description}
                     </p>
-                    </div>
+                  </div>
                 </div>
-                </CardBody>
-
-
+              </CardBody>
             </Card>
           </Link>
         ))}

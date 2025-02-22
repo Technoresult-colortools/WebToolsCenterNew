@@ -23,18 +23,6 @@ interface FlexItem {
   color: string
 }
 
-const tooltips: Record<string, string> = {
-  flexDirection: "Defines the direction of the main axis along which flex items are placed.",
-  justifyContent: "Aligns flex items along the main axis of the flex container.",
-  alignItems: "Aligns flex items along the cross axis of the flex container.",
-  flexWrap: "Controls whether flex items are forced onto a single line or can wrap onto multiple lines.",
-  alignContent: "Aligns a flex container's lines within when there is extra space in the cross-axis.",
-  flexGrow: "Specifies how much a flex item can grow relative to other items.",
-  flexShrink: "Specifies how much a flex item can shrink relative to other items.",
-  flexBasis: "Specifies the initial main size of a flex item.",
-  alignSelf: "Allows the default alignment to be overridden for individual flex items.",
-  order: "Controls the order in which flex items appear in the flex container.",
-}
 
 export default function FlexboxGenerator() {
   const [flexDirection, setFlexDirection] = useState<FlexDirection>("row")
@@ -151,7 +139,7 @@ export default function FlexboxGenerator() {
     <ToolLayout
       title="CSS Flexbox Generator"
       description="Create, visualize, and customize flexible layouts using CSS Flexbox with precision and ease"
-      toolId=""
+      toolId="678f382c26f06f912191bca0"
     >
 
     <div className="flex flex-col gap-8">
@@ -323,11 +311,11 @@ export default function FlexboxGenerator() {
                     id={setting.label}
                     variant="bordered"
                     selectedKeys={[setting.value]}
-                    onChange={(e) => setting.setter(e.target.value as any)}
+                    onChange={(e) => setting.setter(e.target.value as any)} // eslint-disable-next-line @typescript-eslint/no-explicit-any
                     className="w-full"
                     >
                     {setting.options.map((option) => (
-                        <SelectItem key={option} value={option}>
+                        <SelectItem key={option} value={option} className="text-default-700">
                         {option}
                         </SelectItem>
                     ))}

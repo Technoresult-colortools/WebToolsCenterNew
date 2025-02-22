@@ -289,7 +289,7 @@ export default function TextGlitchEffectGenerator() {
     <ToolLayout
       title="CSS Text Glitch Effect Generator"
       description="Create eye-catching, customizable glitchy text effects using CSS with advanced options and features"
-      toolId=""
+      toolId="678f382b26f06f912191bc9c"
     >
      <div className="flex flex-col gap-8">  
 

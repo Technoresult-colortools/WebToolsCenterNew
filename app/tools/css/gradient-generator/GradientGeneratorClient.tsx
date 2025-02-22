@@ -191,7 +191,7 @@ export default function ModernGradientGenerator() {
     <ToolLayout
       title="CSS Gradient Generator"
       description="Create beautiful, customizable gradients using CSS with advanced options and features"
-      toolId=""
+      toolId="678f382c26f06f912191bca1"
     >
       <div className="flex flex-col gap-8">
         {/* Preview Card */}

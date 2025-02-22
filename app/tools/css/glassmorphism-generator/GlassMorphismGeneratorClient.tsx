@@ -120,7 +120,7 @@ const GlassmorphismGenerator = () => {
         <ToolLayout
           title="CSS Glassmorphism Generator"
           description="Create stunning glass-like UI elements with advanced customization options"
-          toolId="css-glassmorphism-generator"
+          toolId="678f382b26f06f912191bc9b"
         >
           <div className="flex flex-col gap-8">
             <Card className="bg-default-50 dark:bg-default-100">

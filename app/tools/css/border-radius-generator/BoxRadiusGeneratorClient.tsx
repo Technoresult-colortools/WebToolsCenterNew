@@ -189,7 +189,7 @@ export default function EnhancedBorderRadiusGenerator() {
     <ToolLayout
       title="CSS Border Radius Generator"
       description="Create visually appealing and modern UI elements by customizing the corner radii and border properties of boxes"
-      toolId="enhanced-border-radius-generator"
+      toolId="678f382c26f06f912191bc9f"
     >
       <div className="flex flex-col gap-8">
         <Card className="bg-default-50 dark:bg-default-100">

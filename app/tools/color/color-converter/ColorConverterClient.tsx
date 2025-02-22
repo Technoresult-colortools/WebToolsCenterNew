@@ -132,18 +132,6 @@ const ColorConverter: React.FC = () => {
     return { h: Math.round(h! * 360), s: Math.round(s * 100), v: Math.round(v * 100) }
   }
 
-  const hsvToRgb = (h: number, s: number, v: number): { r: number; g: number; b: number } => {
-    s /= 100
-    v /= 100
-    const k = (n: number) => (n + h / 60) % 6
-    const f = (n: number) => v * (1 - s * Math.max(0, Math.min(k(n), 4 - k(n), 1)))
-    return {
-      r: Math.round(255 * f(5)),
-      g: Math.round(255 * f(3)),
-      b: Math.round(255 * f(1)),
-    }
-  }
-
   const handleHexChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newHex = e.target.value
     if (/^#[0-9A-F]{6}$/i.test(newHex)) {

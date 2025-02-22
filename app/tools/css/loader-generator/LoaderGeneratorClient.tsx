@@ -223,7 +223,7 @@ export default function LoaderGenerator() {
 
 
   return (
-    <ToolLayout title="CSS Loader Generator" description="Create customizable CSS loaders for your web projects" toolId="">
+    <ToolLayout title="CSS Loader Generator" description="Create customizable CSS loaders for your web projects" toolId="678f382b26f06f912191bc98">
       <Toaster position="top-right" />
 
       <div className="flex flex-col gap-8">

@@ -2,7 +2,7 @@
 
 import { type ReactElement } from "react"
 import { useState, useEffect, useRef } from "react"
-import { Card, CardBody, Button, Select, SelectItem, Input, Switch, CardHeader, Slider } from "@nextui-org/react"
+import { Card, CardBody, Button, Select, SelectItem, Input, Switch, Slider } from "@nextui-org/react"
 import Image from "next/image"
 import { Copy, RefreshCw, Info, BookOpen, Lightbulb, PlayCircle, PauseCircle, Upload } from "lucide-react"
 import { toast } from "react-hot-toast"
@@ -242,7 +242,7 @@ type Presets = {
         <ToolLayout
           title="CSS Cubic Bezier Generator"
           description="Create smooth, custom easing functions for your CSS animations with precision and ease"
-          toolId="css-cubic-bezier-generator"
+          toolId="678f382b26f06f912191bc9a"
         >
           <div className="flex flex-col gap-8">
             <Card className="bg-default-50 dark:bg-default-100">

@@ -268,7 +268,7 @@ export default function PatternGenerator() {
     <ToolLayout
       title="CSS Background Pattern Generator"
       description="Create beautiful, customizable CSS patterns with advanced options and features"
-      toolId="pattern-generator"
+      toolId="678f382b26f06f912191bc99"
     >
       <div className="space-y-6">
         {/* Top section - Preview and Settings side by side */}

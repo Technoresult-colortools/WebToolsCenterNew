@@ -49,7 +49,7 @@ export default function URLEncoderDecoder() {
       });
 
       setOutputText(encodedLines.join(preserveLineBreaks ? '\n' : ''));
-    } catch (error) {
+    } catch {
       toast.error('Error encoding URL. Please check your input.');
     }
   }, [inputText, encodeMode, autoTrim, preserveLineBreaks]);
@@ -72,7 +72,7 @@ export default function URLEncoderDecoder() {
       });
 
       setOutputText(decodedLines.join(preserveLineBreaks ? '\n' : ''));
-    } catch (error) {
+    } catch {
       toast.error('Error decoding URL. Please check your input.');
     }
   }, [inputText, decodeMode, autoTrim, preserveLineBreaks]);

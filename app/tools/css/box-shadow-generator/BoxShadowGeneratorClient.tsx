@@ -11,7 +11,6 @@ import {
   Tab,
   Select,
   SelectItem,
-  Textarea,
   Switch,
   Modal,
   ModalContent,
@@ -319,7 +318,7 @@ const DEFAULT_VALUES = {
     <ToolLayout
       title="CSS Box Shadow Generator"
       description="Create and customize complex CSS box shadows with precision and ease"
-      toolId="css-box-shadow-generator"
+      toolId="678f382c26f06f912191bc9e"
     >
       <div className="flex flex-col gap-8">
         <Card className="bg-default-50 dark:bg-default-100">

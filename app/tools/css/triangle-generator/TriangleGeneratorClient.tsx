@@ -238,7 +238,7 @@ export default function CSSTriangleGenerator() {
     <ToolLayout
       title="CSS Triangle Generator"
       description="Create customizable CSS triangles with advanced options and features"
-      toolId="css-triangle-generator"
+      toolId="678f382b26f06f912191bc9d"
     >
       <div className="flex flex-col gap-8">
         <Card className="bg-default-50 dark:bg-default-100">
