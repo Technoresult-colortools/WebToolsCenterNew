@@ -14,7 +14,7 @@ import {
 
 } from "@nextui-org/react"
 import { Toaster, toast } from 'react-hot-toast'
-import { BookOpen, Copy, Info, Lightbulb, RefreshCw, Download, Eye, EyeOff, AlertTriangle, Shield, Settings, RefreshCcw, Upload } from 'lucide-react'
+import { BookOpen, Copy, Info, Lightbulb, Download, Eye, EyeOff, AlertTriangle, Shield, Settings, RefreshCcw, Upload } from 'lucide-react'
 import ToolLayout from '@/components/ToolLayout'
 import Image from 'next/image'
 
@@ -52,7 +52,6 @@ export default function URLSlugCreator() {
   const [preserveNumbers, setPreserveNumbers] = useState(true)
   const [transliteration, setTransliteration] = useState('none')
   const [showPassword, setShowPassword] = useState(false)
-  const [isFullscreen, setIsFullscreen] = useState(false)
 
   const stopWords = ['a', 'an', 'the', 'and', 'or', 'but', 'in', 'on', 'at', 'to', 'for', 'of', 'with', 'by']
 

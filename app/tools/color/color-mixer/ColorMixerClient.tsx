@@ -190,10 +190,6 @@ export default function ColorMixer() {
     toast.success("Popular color mix applied")
   }
 
-  const toggleFullscreen = () => {
-    setIsModalOpen(!isModalOpen)
-  }
-
   useEffect(() => {
     handleMixColors()
   }, [handleMixColors])

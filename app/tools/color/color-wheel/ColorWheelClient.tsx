@@ -166,14 +166,8 @@ export default function ColorWheel() {
   useEffect(() => {
     if (wheelRef.current) {
       const initialColor = "#ff4444"
-      const { h, s } = hexToHSL(initialColor)
-      const angles = selectedHarmony.angles
       
       // Set initial positions based on harmony angles
-      const initialColors = [
-        initialColor,
-        ...angles.map(angle => hslToHex((h + angle + 360) % 360, s, lightness))
-      ]
       
       setBaseColor(initialColor)
       setCustomColor(initialColor)

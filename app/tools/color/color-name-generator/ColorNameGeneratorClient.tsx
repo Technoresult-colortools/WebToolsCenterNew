@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react"
 import { Copy, Info, BookOpen, Lightbulb, AlertCircle, Palette } from "lucide-react"
-import { Button, Card, CardBody, Input, Tabs, Tab, Divider } from "@nextui-org/react"
+import { Button, Card, CardBody, Input, Tabs, Tab } from "@nextui-org/react"
 import ToolLayout from "@/components/ToolLayout"
 import { toast } from "react-hot-toast"
 import NextImage from "next/image"
@@ -138,7 +138,7 @@ export default function ColorNameGenerator() {
       setColorInfo(info)
       setColorValue(info.hex)
       setColorFormat('hex')
-    } catch (error) {
+    } catch {
       setError('Invalid color format. Please check your input.')
     }
   }

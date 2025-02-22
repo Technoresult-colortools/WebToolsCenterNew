@@ -5,7 +5,6 @@ import {
   Button,
   Card,
   CardBody,
-  CardHeader,
   Input,
   Switch,
   Textarea,
@@ -15,7 +14,7 @@ import {
   SelectItem,
   Tooltip,
 } from "@nextui-org/react"
-import { toast, Toaster } from "react-hot-toast"
+import { toast } from "react-hot-toast"
 import {
   Key,
   Lock,
@@ -213,7 +212,7 @@ export default function JWTEncoderDecoder() {
     try {
       await navigator.clipboard.writeText(text)
       toast.success("Copied to clipboard!")
-    } catch (error) {
+    } catch {
       toast.error("Failed to copy to clipboard")
     }
   }

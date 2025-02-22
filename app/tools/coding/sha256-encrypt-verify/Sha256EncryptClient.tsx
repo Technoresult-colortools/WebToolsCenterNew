@@ -11,7 +11,6 @@ import {
   Upload,
   Download,
   CheckCircle2,
-  Clipboard,
   Info,
   BookOpen,
   Lightbulb,
@@ -34,18 +33,25 @@ const encodingOptions = [
 ] as const
 
 type Encoding = (typeof encodingOptions)[number]["value"]
+type Preset = {
+  input: string
+  encoding: "utf8" | "ascii" | "base64"
+  iterations: number
+  salt: string
+}
+
 
 export default function SHA256Tool() {
   const [input, setInput] = useState("")
   const [output, setOutput] = useState("")
   const [compareHash, setCompareHash] = useState("")
-  const [fileName, setFileName] = useState("")
+  const [, setFileName] = useState("")
   const [autoUpdate, setAutoUpdate] = useState(false)
   const [caseSensitive, setCaseSensitive] = useState(false)
   const [encoding, setEncoding] = useState<Encoding>("utf8")
   const [iterations, setIterations] = useState(1)
   const [salt, setSalt] = useState("")
-  const [presets, setPresets] = useState<Record<string, any>>({})
+  const [presets, setPresets] = useState<Record<string, Preset>>({})
   const [selectedPreset, setSelectedPreset] = useState("")
   const fileInputRef = useRef<HTMLInputElement>(null)
 
@@ -72,7 +78,7 @@ export default function SHA256Tool() {
       const generatedHash = hash.digest("hex")
       setOutput(generatedHash)
       toast.success("SHA-256 hash generated successfully!")
-    } catch (error) {
+    } catch {
       toast.error("Error generating SHA-256 hash. Please check your input and encoding.")
     }
   }, [input, encoding, iterations, salt])

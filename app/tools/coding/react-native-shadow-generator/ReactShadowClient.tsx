@@ -2,7 +2,7 @@
 
 import { useState } from "react"
 import { Button, Card, CardBody, Input, Slider, Tabs, Tab, Link } from "@nextui-org/react"
-import { Toaster, toast } from "react-hot-toast"
+import {  toast } from "react-hot-toast"
 import {
   Smartphone,
   Copy,
@@ -32,7 +32,6 @@ export default function ReactNativeShadowGenerator() {
   const [androidBackgroundColor, setAndroidBackgroundColor] = useState("#FFFFFF")
   const [activeTab, setActiveTab] = useState("ios")
   const [previewBackground, setPreviewBackground] = useState("#F0F0F0")
-  const [isInfoModalOpen, setIsInfoModalOpen] = useState(false)
 
   const getShadowStyle = () => {
     if (activeTab === "android") {

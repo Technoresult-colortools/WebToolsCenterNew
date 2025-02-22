@@ -15,7 +15,7 @@ import {
   SelectItem,
   Slider,
 } from "@nextui-org/react"
-import { toast, Toaster } from "react-hot-toast"
+import { toast } from "react-hot-toast"
 import {
   Hash,
   Copy,
@@ -23,7 +23,6 @@ import {
   Upload,
   Download,
   CheckCircle2,
-  Clipboard,
   Info,
   BookOpen,
   Lightbulb,
@@ -37,6 +36,14 @@ import crypto from "crypto"
 import ToolLayout from "@/components/ToolLayout"
 import Image from "next/image"
 
+type Preset = {
+  input: string
+  encoding: "utf8" | "ascii" | "base64"
+  iterations: number
+  salt: string
+}
+
+
 export default function SHA512EncryptVerify() {
   const [input, setInput] = useState("")
   const [output, setOutput] = useState("")
@@ -47,7 +54,7 @@ export default function SHA512EncryptVerify() {
   const [encoding, setEncoding] = useState<"utf8" | "ascii" | "base64">("utf8")
   const [iterations, setIterations] = useState(1)
   const [salt, setSalt] = useState("")
-  const [presets, setPresets] = useState<Record<string, any>>({})
+  const [presets, setPresets] = useState<Record<string, Preset>>({})
   const [selectedPreset, setSelectedPreset] = useState("")
   const fileInputRef = useRef<HTMLInputElement>(null)
 

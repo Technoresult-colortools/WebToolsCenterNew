@@ -11,7 +11,6 @@ import {
   Upload,
   Download,
   CheckCircle2,
-  Clipboard,
   Info,
   BookOpen,
   Lightbulb,

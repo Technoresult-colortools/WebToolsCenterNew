@@ -100,7 +100,6 @@ export default function ColorShadesGenerator() {
   const [selectedShade, setSelectedShade] = useState<Shade | null>(null)
   const [error, setError] = useState<string>("")
   const [shadeType, setShadeType] = useState<"tint" | "shade" | "both">("both")
-  const [isModalOpen, setIsModalOpen] = useState(false)
 
   const generateShades = useCallback((hex: string, count: number, type: "tint" | "shade" | "both"): Shade[] => {
     const [r, g, b] = colorConversions.hexToRgb(hex)

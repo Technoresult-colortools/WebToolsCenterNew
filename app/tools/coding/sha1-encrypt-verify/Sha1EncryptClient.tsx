@@ -35,13 +35,13 @@ export default function SHA1Tool() {
   const [input, setInput] = useState("")
   const [output, setOutput] = useState("")
   const [compareHash, setCompareHash] = useState("")
-  const [fileName, setFileName] = useState("")
+  const [, setFileName] = useState("")
   const [autoUpdate, setAutoUpdate] = useState(false)
   const [caseSensitive, setCaseSensitive] = useState(false)
   const [encoding, setEncoding] = useState("UTF-8")
   const [iterations, setIterations] = useState(1)
   const [salt, setSalt] = useState("")
-  const [presets, setPresets] = useState<Record<string, any>>({})
+  const [presets, setPresets] = useState<Record<string, unknown>>({})
   const [selectedPreset, setSelectedPreset] = useState("")
   const fileInputRef = useRef<HTMLInputElement>(null)
 
@@ -59,7 +59,7 @@ export default function SHA1Tool() {
       }
       setOutput(hash.digest("hex"))
       toast.success("SHA-1 hash generated successfully!")
-    } catch (error) {
+    } catch {
       toast.error("Error generating SHA-1 hash. Please check your input.")
     }
   }, [input, encoding, iterations, salt])

@@ -165,13 +165,6 @@ const ColorConverter: React.FC = () => {
     updateAllFormats(newHex)
   }
 
-  const handleHsvChange = (color: "h" | "s" | "v", value: number) => {
-    const newHsv = { ...hsv, [color]: value }
-    const rgbValue = hsvToRgb(newHsv.h, newHsv.s, newHsv.v)
-    const newHex = rgbToHex(rgbValue.r, rgbValue.g, rgbValue.b)
-    updateAllFormats(newHex)
-  }
-
   const handleRgbaChange = (color: "r" | "g" | "b" | "a", value: number) => {
     const newRgba = { ...rgba, [color]: value }
     setRgba(newRgba)

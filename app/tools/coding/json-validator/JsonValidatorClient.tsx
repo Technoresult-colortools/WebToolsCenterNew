@@ -102,34 +102,33 @@ export default function JsonValidator() {
 
   const beautifyJson = useCallback(() => {
     try {
-      const parsedJson = JSON.parse(jsonInput);
-      
+      const parsedJson: unknown = JSON.parse(jsonInput);
+  
       // Define the replacer function with correct TypeScript types
-      const replacer = sortKeys ? 
-        (function(_key: string, value: any) {
-          // For objects, ensure keys are sorted
-          if (value && typeof value === 'object' && !Array.isArray(value)) {
-            return Object.keys(value)
-              .sort()
-              .reduce((sorted: Record<string, any>, key) => {
-                sorted[key] = value[key];
-                return sorted;
-              }, {});
-          }
-          return value;
-        } as (this: any, key: string, value: any) => any)
-        : undefined; // Use undefined instead of null
+      const replacer = sortKeys
+        ? (function (_key: string, value: unknown) {
+            if (value && typeof value === "object" && !Array.isArray(value)) {
+              return Object.keys(value as Record<string, unknown>)
+                .sort()
+                .reduce<Record<string, unknown>>((sorted, key) => {
+                  sorted[key] = (value as Record<string, unknown>)[key];
+                  return sorted;
+                }, {});
+            }
+            return value;
+          } as (this: unknown, key: string, value: unknown) => unknown)
+        : undefined;
   
       const formatted = JSON.stringify(parsedJson, replacer, indentSize);
       setFormattedJson(formatted);
       setActiveTab("formatted");
       setMinificationDetails(null);
       toast.success("JSON beautified successfully!");
-    } catch (error) {
+    } catch {
       toast.error("Invalid JSON. Please fix errors before beautifying.");
     }
   }, [jsonInput, sortKeys, indentSize]);
-
+  
   const downloadJson = useCallback(() => {
     const blob = new Blob([formattedJson], { type: "application/json" })
     const url = URL.createObjectURL(blob)

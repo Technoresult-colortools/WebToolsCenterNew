@@ -132,36 +132,6 @@ export default function ColorPaletteGenerator() {
     }
     reader.readAsDataURL(file)
   }
-  const handleDownloadPalette = () => {
-    return (
-      <div className="flex gap-2 p-4 border-t border-default-200">
-        <Button 
-          onClick={handlePngDownload}
-          color="primary"
-          variant="flat"
-          startContent={<Download className="h-4 w-4" />}
-        >
-          Download PNG
-        </Button>
-        <Button
-          onClick={handleCssDownload}
-          color="secondary"
-          variant="flat"
-          startContent={<Download className="h-4 w-4" />}
-        >
-          Download CSS
-        </Button>
-        <Button
-          onClick={handleScssDownload}
-          color="success"
-          variant="flat"
-          startContent={<Download className="h-4 w-4" />}
-        >
-          Download SCSS
-        </Button>
-      </div>
-    )
-  }
   
   // Separate download handler functions
   const handlePngDownload = () => {
