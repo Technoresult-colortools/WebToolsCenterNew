@@ -294,7 +294,7 @@ export default function ClipPathGenerator() {
   const [useCustomBackground, setUseCustomBackground] = useState(false)
   const [customBackgroundUrl, setCustomBackgroundUrl] = useState('')
   const [opacity, setOpacity] = useState(100)
-  const [outsideColor, setOutsidecolor] = useState('#ffffff')
+  const [, setOutsidecolor] = useState('#ffffff')
   const [width, setWidth] = useState(100)
   const [height, setHeight] = useState(100)
   const previewRef = useRef<HTMLDivElement>(null)

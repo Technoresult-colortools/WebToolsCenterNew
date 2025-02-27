@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useCallback, useEffect } from 'react';
-import { Card, CardBody, Button, Select, SelectItem, Input, Textarea } from "@nextui-org/react";
+import { Card, CardBody, Button, Select, SelectItem, Input } from "@nextui-org/react";
 import { Copy, Download, RefreshCw, Undo2, Shuffle, Eye, EyeOff, Code } from 'lucide-react';
 import { toast } from 'react-hot-toast';
 import ToolLayout from '@/components/ToolLayout';

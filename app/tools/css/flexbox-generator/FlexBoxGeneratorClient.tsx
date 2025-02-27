@@ -311,7 +311,8 @@ export default function FlexboxGenerator() {
                     id={setting.label}
                     variant="bordered"
                     selectedKeys={[setting.value]}
-                    onChange={(e) => setting.setter(e.target.value as any)} // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    onChange={(e) => setting.setter(e.target.value as any)} 
                     className="w-full"
                     >
                     {setting.options.map((option) => (

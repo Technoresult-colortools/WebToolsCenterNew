@@ -58,7 +58,6 @@ export default function AdvancedPasswordGenerator() {
   const [excludedChars, setExcludedChars] = useState("")
   const [passwordCount, setPasswordCount] = useState(1)
   const [isGenerating, setIsGenerating] = useState(false)
-  const animationRef = useRef(null)
 
   const generatePassword = useCallback(() => {
     try {

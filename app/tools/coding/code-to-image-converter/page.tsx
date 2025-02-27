@@ -186,17 +186,6 @@ if (!UNSPLASH_ACCESS_KEY) {
   throw new Error("Missing NEXT_PUBLIC_UNSPLASH_ACCESS_KEY environment variable")
 }
 
-// Define the correct html2canvas options type
-interface ExtendedHtml2CanvasOptions {
-  scale?: number
-  logging?: boolean
-  useCORS?: boolean
-  allowTaint?: boolean
-  backgroundColor?: string | null
-  windowWidth?: number
-  windowHeight?: number
-  onclone?: (clonedDoc: Document) => void
-}
 
 export default function CodeToImageConverter() {
   // State
@@ -210,7 +199,7 @@ export default function CodeToImageConverter() {
   const [customBackgroundImage, setCustomBackgroundImage] = useState("")
   const [selectedPadding, setSelectedPadding] = useState("32")
   const [fileName, setFileName] = useState("example.js")
-  const [customFileName, setCustomFileName] = useState("")
+  const [, setCustomFileName] = useState("")
   const [isDarkMode, setIsDarkMode] = useState(true)
   const [showLineNumbers, setShowLineNumbers] = useState(true)
   const [isFullScreen, setIsFullScreen] = useState(false)
@@ -219,8 +208,8 @@ export default function CodeToImageConverter() {
   const [highlighter, setHighlighter] = useState<shiki.Highlighter | null>(null)
   const [isHighlighterLoading, setIsHighlighterLoading] = useState(true)
   const [selectedExportFormat, setSelectedExportFormat] = useState("png")
-  const [uploadedImage, setUploadedImage] = useState<string | null>(null)
-  const [cssBackground, setCssBackground] = useState("")
+  const [, setUploadedImage] = useState<string | null>(null)
+  const [, setCssBackground] = useState("")
 
   // New state for added features
   const [selectedFont, setSelectedFont] = useState("source-code-pro")
@@ -433,6 +422,7 @@ export default function CodeToImageConverter() {
       wrapper.style.pointerEvents = "none";
   
       Array.from(styles).forEach((property) => {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         (clone.style as any)[property] = styles.getPropertyValue(property);
       });
   
@@ -566,6 +556,7 @@ export default function CodeToImageConverter() {
       wrapper.style.pointerEvents = "none";
   
       Array.from(styles).forEach((property) => {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         (clone.style as any)[property] = styles.getPropertyValue(property);
       });
   

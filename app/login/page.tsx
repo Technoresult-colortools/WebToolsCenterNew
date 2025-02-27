@@ -8,14 +8,13 @@ import { Cog, } from 'lucide-react';
 import { useUser } from '@auth0/nextjs-auth0/client';
 import { toast } from 'react-hot-toast';
 import { ThemeToggle } from '@/components/ThemeToggle';
-import { useTheme } from '@/providers/theme-provider';
+
 
 export default function LoginPage() {
   const [isVisible, setIsVisible] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
   const { user } = useUser();
-  const { theme } = useTheme();
 
   useEffect(() => {
     setIsVisible(true);

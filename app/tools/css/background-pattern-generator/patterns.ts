@@ -55,7 +55,7 @@ interface Pattern {
       value: "stripes",
       label: "Diagonal Stripes",
       supportsLineWidth: true,
-      generateCSS: (patternColor, backgroundColor, patternSize, lineWidth = 2) => {
+      generateCSS: (patternColor, backgroundColor, patternSize = 2) => {
         return {
           backgroundImage: `
             linear-gradient(
@@ -111,7 +111,7 @@ interface Pattern {
       value: "zigzag",
       label: "Zigzag Pattern",
       supportsLineWidth: true,
-      generateCSS: (patternColor, backgroundColor, patternSize, lineWidth = 2) => {
+      generateCSS: (patternColor, backgroundColor, patternSize = 2) => {
         return {
           backgroundImage: `
             linear-gradient(135deg, ${patternColor} 25%, transparent 25%) 0 ${patternSize / 2}px,
@@ -155,7 +155,7 @@ interface Pattern {
       value: "honeycomb",
       label: "Honeycomb",
       supportsLineWidth: true,
-      generateCSS: (patternColor, backgroundColor, patternSize, lineWidth = 2) => {
+      generateCSS: (patternColor, backgroundColor, patternSize = 2) => {
         return {
           backgroundImage: `
             radial-gradient(circle farthest-side at 0% 50%, ${backgroundColor} 23.5%, ${patternColor} 0),
