@@ -8,8 +8,8 @@ import { FileMinus, Copy, Download, Upload, Info, BookOpen, Lightbulb, Zap, File
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter"
 import { atomDark } from "react-syntax-highlighter/dist/esm/styles/prism"
 import prettier from "prettier/standalone"
-import * as parserBabel from "prettier/plugins/babel"
-import * as estree from "prettier/plugins/estree"
+import parserBabel from "prettier/plugins/babel"
+import estree from "prettier/plugins/estree"
 import ToolLayout from "@/components/ToolLayout"
 import Image from "next/image"
 
