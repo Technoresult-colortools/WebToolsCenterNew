@@ -197,7 +197,7 @@ export default function CharacterFrequencyCounter() {
 
         <Card className="bg-default-50 dark:bg-default-100">
           <CardBody className="p-6">
-            <div className="rounded-xl p-2 md:p-4 max-w-4xl mx-auto">
+            <div className="rounded-xl p-2 md:p-4 max-w-6xl mx-auto">
               <h2 className="text-xl md:text-2xl font-semibold text-default-700 mb-4 flex items-center">
                 <Info className="w-6 h-6 mr-2" />
                 What is the Character Frequency Counter?

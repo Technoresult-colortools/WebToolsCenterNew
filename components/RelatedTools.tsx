@@ -34,11 +34,9 @@ const RelatedTools = ({ toolName, maxTools = 3 }: RelatedToolsProps) => {
          currentTool.description.toLowerCase().includes(tool.name.toLowerCase()))
       );
 
-      const combinedTools = [...sameCategory, ...otherTools]
+      return [...sameCategory, ...otherTools]
         .sort((a, b) => a.name.localeCompare(b.name))
         .slice(0, maxTools);
-
-      return combinedTools;
     }
 
     return sameCategory
@@ -53,37 +51,37 @@ const RelatedTools = ({ toolName, maxTools = 3 }: RelatedToolsProps) => {
   }
 
   return (
-    <div className="mt-8 max-w-4xl mx-auto px-4">
+    <div className="mt-8 w-full px-4">
       <h3 className="text-2xl font-semibold mb-6 bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
         Related Tools
       </h3>
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         {relatedTools.map((tool) => (
           <Link 
             key={tool.href} 
             href={tool.href}
-            className="no-underline group"
+            className="w-full h-full no-underline group"
           >
             <Card 
-              className="h-full bg-content1 group-hover:shadow-lg transition-all duration-300 transform group-hover:-translate-y-1"
+              className="w-full h-full bg-content1 group-hover:shadow-lg transition-all duration-300 transform group-hover:-translate-y-1"
               isPressable
             >
-              <CardBody className="p-6 flex flex-col h-full">
-                <div className="flex items-start gap-4">
-                  <div className="p-3 rounded-xl bg-primary/10 group-hover:bg-primary/20 transition-colors duration-300">
-                    <FontAwesomeIcon 
-                      icon={tool.icon} 
-                      className="h-6 w-6 text-primary group-hover:scale-110 transition-transform duration-300"
-                    />
-                  </div>
-                  <div className="flex-1 min-h-[120px]">
-                    <h3 className="font-semibold text-lg text-default-700 mb-2 group-hover:text-primary transition-colors duration-300">
+              <CardBody className="p-4">
+                <div className="flex flex-col h-full min-h-[120px]">
+                  <div className="flex items-center gap-3 mb-3">
+                    <div className="flex-shrink-0 p-3 rounded-xl bg-primary/10 group-hover:bg-primary/20 transition-colors duration-300">
+                      <FontAwesomeIcon 
+                        icon={tool.icon} 
+                        className="h-6 w-6 text-primary group-hover:scale-110 transition-transform duration-300"
+                      />
+                    </div>
+                    <h3 className="font-semibold text-lg text-default-700 group-hover:text-primary transition-colors duration-300">
                       {tool.name}
                     </h3>
-                    <p className="text-sm text-default-500 line-clamp-3">
-                      {tool.description}
-                    </p>
                   </div>
+                  <p className="text-sm text-default-500 flex-grow">
+                    {tool.description}
+                  </p>
                 </div>
               </CardBody>
             </Card>

@@ -85,7 +85,7 @@ export default function CommentSection({
 
   if (isLoading) {
     return (
-      <div className="mt-8 max-w-4xl mx-auto">
+      <div className="mt-8 max-w-6xl mx-auto">
         <h3 className="text-2xl font-semibold mb-6">Comments</h3>
         <Card>
           <CardBody>
@@ -99,7 +99,7 @@ export default function CommentSection({
   }
 
   return (
-    <div className="mt-8 max-w-4xl mx-auto">
+    <div className="mt-8 max-w-6xl mx-auto">
       <h3 className="text-2xl font-semibold mb-6 bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">Comments</h3>
       
       {user ? (

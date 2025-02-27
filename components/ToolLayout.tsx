@@ -64,7 +64,7 @@ export default function ToolLayout({ children, title, description, toolId }: Too
         </aside>
 
         <main className="flex-grow w-full overflow-y-auto px-4 py-12 relative">
-          <div className="max-w-4xl mx-auto">
+          <div className="max-w-5xl mx-auto">
             <div className="mb-8 md:mb-12">
               <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
                 <div className="flex-1">

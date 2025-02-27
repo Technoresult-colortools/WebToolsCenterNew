@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useState, useCallback, useEffect } from "react"
+import React, { useState, useCallback, useEffect, useRef } from "react"
 import {
   Card,
   CardBody,
@@ -32,7 +32,6 @@ import { toast } from "react-hot-toast"
 import ToolLayout from "@/components/ToolLayout"
 import Image from "next/image"
 
-
 const CHAR_SETS = {
   lowercase: "abcdefghijklmnopqrstuvwxyz",
   uppercase: "ABCDEFGHIJKLMNOPQRSTUVWXYZ",
@@ -58,89 +57,100 @@ export default function AdvancedPasswordGenerator() {
   const [useCustomCharSet, setUseCustomCharSet] = useState(false)
   const [excludedChars, setExcludedChars] = useState("")
   const [passwordCount, setPasswordCount] = useState(1)
+  const [isGenerating, setIsGenerating] = useState(false)
+  const animationRef = useRef(null)
 
   const generatePassword = useCallback(() => {
     try {
-      let charset = ""
-      if (useLowercase) charset += CHAR_SETS.lowercase
-      if (useUppercase) charset += CHAR_SETS.uppercase
-      if (useNumbers) charset += CHAR_SETS.numbers
-      if (useSymbols) charset += CHAR_SETS.symbols
-      if (useCustomCharSet && customCharSet) charset += customCharSet
+      setIsGenerating(true)
+      
+      // Simulate generation time for the animation to be visible
+      setTimeout(() => {
+        let charset = ""
+        if (useLowercase) charset += CHAR_SETS.lowercase
+        if (useUppercase) charset += CHAR_SETS.uppercase
+        if (useNumbers) charset += CHAR_SETS.numbers
+        if (useSymbols) charset += CHAR_SETS.symbols
+        if (useCustomCharSet && customCharSet) charset += customCharSet
 
-      if (charset.length === 0) {
-        toast.error("Please select at least one character type")
-        return
-      }
-
-      if (excludeSimilar) {
-        charset = charset.replace(/[ilLI|`1oO0]/g, "")
-      }
-
-      if (excludeAmbiguous) {
-        charset = charset.replace(/[{}[\]()/\\'"~,;.<>]/g, "")
-      }
-
-      if (excludedChars) {
-        const excludeSet = new Set(excludedChars)
-        charset = charset
-          .split("")
-          .filter((char) => !excludeSet.has(char))
-          .join("")
-      }
-
-      if (charset.length === 0) {
-        toast.error("No characters available after applying exclusions")
-        return
-      }
-
-      const generateSinglePassword = () => {
-        let result = ""
-        const charsetArray = charset.split("")
-        const getRandomChar = () => charsetArray[Math.floor(Math.random() * charsetArray.length)]
-
-        if (beginWithLetter) {
-          const letters = (CHAR_SETS.lowercase + CHAR_SETS.uppercase).split("")
-          if (letters.length === 0) {
-            toast.error("No letters available for password beginning")
-            return ""
-          }
-          result += letters[Math.floor(Math.random() * letters.length)]
+        if (charset.length === 0) {
+          toast.error("Please select at least one character type")
+          setIsGenerating(false)
+          return
         }
 
-        while (result.length < length) {
-          const char = getRandomChar()
-          if (noConsecutive && result[result.length - 1] === char) {
-            continue
-          }
-          result += char
+        if (excludeSimilar) {
+          charset = charset.replace(/[ilLI|`1oO0]/g, "")
         }
 
-        if (requireEveryType) {
-          const types = [
-            { condition: useLowercase, charset: CHAR_SETS.lowercase },
-            { condition: useUppercase, charset: CHAR_SETS.uppercase },
-            { condition: useNumbers, charset: CHAR_SETS.numbers },
-            { condition: useSymbols, charset: CHAR_SETS.symbols },
-          ]
+        if (excludeAmbiguous) {
+          charset = charset.replace(/[{}[\]()/\\'"~,;.<>]/g, "")
+        }
 
-          types.forEach((type) => {
-            if (type.condition && !new RegExp(`[${type.charset}]`).test(result)) {
-              const index = Math.floor(Math.random() * result.length)
-              const char = type.charset[Math.floor(Math.random() * type.charset.length)]
-              result = result.substring(0, index) + char + result.substring(index + 1)
+        if (excludedChars) {
+          const excludeSet = new Set(excludedChars)
+          charset = charset
+            .split("")
+            .filter((char) => !excludeSet.has(char))
+            .join("")
+        }
+
+        if (charset.length === 0) {
+          toast.error("No characters available after applying exclusions")
+          setIsGenerating(false)
+          return
+        }
+
+        const generateSinglePassword = () => {
+          let result = ""
+          const charsetArray = charset.split("")
+          const getRandomChar = () => charsetArray[Math.floor(Math.random() * charsetArray.length)]
+
+          if (beginWithLetter) {
+            const letters = (CHAR_SETS.lowercase + CHAR_SETS.uppercase).split("")
+            if (letters.length === 0) {
+              toast.error("No letters available for password beginning")
+              return ""
             }
-          })
+            result += letters[Math.floor(Math.random() * letters.length)]
+          }
+
+          while (result.length < length) {
+            const char = getRandomChar()
+            if (noConsecutive && result[result.length - 1] === char) {
+              continue
+            }
+            result += char
+          }
+
+          if (requireEveryType) {
+            const types = [
+              { condition: useLowercase, charset: CHAR_SETS.lowercase },
+              { condition: useUppercase, charset: CHAR_SETS.uppercase },
+              { condition: useNumbers, charset: CHAR_SETS.numbers },
+              { condition: useSymbols, charset: CHAR_SETS.symbols },
+            ]
+
+            types.forEach((type) => {
+              if (type.condition && !new RegExp(`[${type.charset}]`).test(result)) {
+                const index = Math.floor(Math.random() * result.length)
+                const char = type.charset[Math.floor(Math.random() * type.charset.length)]
+                result = result.substring(0, index) + char + result.substring(index + 1)
+              }
+            })
+          }
+
+          return result
         }
 
-        return result
-      }
-
-      const passwords = Array.from({ length: passwordCount }, generateSinglePassword)
-      setPassword(passwords.join("\n"))
+        const passwords = Array.from({ length: passwordCount }, generateSinglePassword)
+        setPassword(passwords.join("\n"))
+        setIsGenerating(false)
+      }, 800) // Delay to show animation
     } catch (error) {
       console.error("Password generation error:", error)
       toast.error("An error occurred while generating the password")
+      setIsGenerating(false)
     }
   }, [
     length,
@@ -212,6 +222,24 @@ export default function AdvancedPasswordGenerator() {
     }
   }
 
+  // Get color based on password strength
+  const getStrengthColor = () => {
+    switch (passwordStrength) {
+      case "Very Strong":
+        return "bg-success"
+      case "Strong":
+        return "bg-success-400"
+      case "Moderate":
+        return "bg-warning"
+      case "Weak":
+        return "bg-danger-400"
+      case "Very Weak":
+        return "bg-danger"
+      default:
+        return "bg-default-300"
+    }
+  }
+
   return (
     <ToolLayout
       title="Password Generator"
@@ -219,12 +247,12 @@ export default function AdvancedPasswordGenerator() {
       toolId="678f383026f06f912191bccb"
     >
       <div className="flex flex-col gap-8">
-        {/* Password Output Section */}
-        <Card className="bg-default-50 dark:bg-default-100">
-          <CardBody className="p-6">
+        {/* Password Output Section - Redesigned with animation */}
+        <Card className="bg-default-50 dark:bg-default-100 overflow-hidden">
+          <CardBody className="p-6 relative">
             <div className="flex items-center justify-between mb-4">
               <h2 className="text-2xl font-bold text-default-700">Generated Password</h2>
-              <div className="flex items-center space-x-2">
+              <div className="flex items-center space-x-2 bg-default-100 dark:bg-default-200 px-3 py-1 rounded-full">
                 <Shield
                   className={`${
                     passwordStrength === "Very Strong"
@@ -238,19 +266,43 @@ export default function AdvancedPasswordGenerator() {
                             : "text-danger"
                   }`}
                 />
-                <span className="text-default-600">Strength: {passwordStrength}</span>
+                <span className="text-default-600 font-medium">{passwordStrength}</span>
               </div>
             </div>
 
-            <div className="relative">
-            <Textarea 
+            <div className="relative rounded-xl overflow-hidden">
+              {/* Password strength indicator */}
+              <div className="h-1 w-full bg-default-200 dark:bg-default-700 absolute top-0 left-0 z-10">
+                <div 
+                  className={`h-full ${getStrengthColor()} transition-all duration-300 ease-in-out`}
+                  style={{ 
+                    width: passwordStrength === "N/A" ? "0%" : 
+                          passwordStrength === "Very Weak" ? "20%" :
+                          passwordStrength === "Weak" ? "40%" :
+                          passwordStrength === "Moderate" ? "60%" :
+                          passwordStrength === "Strong" ? "80%" : "100%" 
+                  }}
+                />
+              </div>
+              
+              {/* Animation overlay during generation */}
+              {isGenerating && (
+                <div className="absolute inset-0 bg-default-100/50 dark:bg-default-800/50 z-20 backdrop-blur-sm flex items-center justify-center">
+                  <div className="flex flex-col items-center">
+                    <RefreshCw className="h-8 w-8 text-primary animate-spin mb-2" />
+                    <p className="text-sm font-medium text-default-700 dark:text-default-300">Generating password...</p>
+                  </div>
+                </div>
+              )}
+              
+              <Textarea 
                 value={password} 
                 readOnly 
                 rows={4} 
-                className="w-full font-mono "
+                className="w-full font-mono mt-1"
                 variant="bordered"
                 classNames={{
-                inputWrapper: [
+                  inputWrapper: [
                     "border-2", 
                     "border-default-300", 
                     "dark:border-default-600", 
@@ -258,31 +310,46 @@ export default function AdvancedPasswordGenerator() {
                     "dark:bg-default-200/50", 
                     "hover:border-primary-500", 
                     "dark:hover:border-primary-400",
-                    "overflow-y-auto border",
-                ],
-                input: "overflow-y-auto"
+                    "overflow-y-auto",
+                    "shadow-sm",
+                    !isGenerating && "transition-all duration-300 ease-in-out",
+                  ],
+                  input: "overflow-y-auto pt-4 pb-2"
                 }}
                 style={{
-                      
-/* @ts-expect-error: Suppressing TypeScript error for WebkitTextSecurity style property */
+                  /* @ts-expect-error: Suppressing TypeScript error for WebkitTextSecurity style property */
                   WebkitTextSecurity: showPassword ? "none" : "disc",
                 }}
               />
+              
               <Button
                 isIconOnly
                 variant="light"
-                className="absolute top-2 right-2"
+                className="absolute top-4 right-4 z-10 bg-default-100/70 dark:bg-default-700/70 backdrop-blur-sm"
                 onClick={() => setShowPassword(!showPassword)}
               >
-                {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+                {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
               </Button>
             </div>
 
             <div className="mt-4 flex flex-col sm:flex-row items-center justify-end space-y-2 sm:space-y-0 sm:space-x-2">
-              <Button onClick={handleCopyToClipboard} color="primary" startContent={<Copy className="h-5 w-5" />}>
+              <Button 
+                onClick={handleCopyToClipboard} 
+                color="primary" 
+                variant="flat"
+                startContent={<Copy className="h-4 w-4" />}
+                className="font-medium"
+              >
                 Copy
               </Button>
-              <Button onClick={generatePassword} color="success" startContent={<RefreshCw className="h-5 w-5" />}>
+              <Button 
+                onClick={generatePassword} 
+                color="success" 
+                variant="shadow"
+                startContent={<RefreshCw className={`h-4 w-4 ${isGenerating ? 'animate-spin' : ''}`} />}
+                className="font-medium"
+                isLoading={isGenerating}
+              >
                 Generate
               </Button>
             </div>
@@ -386,43 +453,42 @@ export default function AdvancedPasswordGenerator() {
               >
                 <div className="mt-4 space-y-6">
                   <div>
-                  <label htmlFor="password-count" className="block text-default-700">
-                    Number of Passwords
-                </label>
-                <div className="min-h-[56px] overflow-hidden"> {/* Prevent additional scrollbar */}
-                    <Select
-                    id="password-count"
-                    label="Select Password Count"
-                    placeholder="Select the Password count..."
-                    selectedKeys={new Set([passwordCount.toString()])}
-                    onSelectionChange={(keys) => {
-                        const selected = Array.from(keys)[0]
-                        setPasswordCount(Number(selected))
-                    }}
-                    className="max-w-xs"
-                    variant="bordered"
-                    listboxProps={{
-                        className: "max-h-[200px] overflow-y-auto" // Control dropdown scrolling
-                    }}
-                    classNames={{
-                        trigger: "bg-default-100 data-[hover=true]:bg-default-200",
-                        listbox: "overflow-y-auto" // Ensure dropdown scrolling
-                    }}
-                    >
-                    {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((num) => (
-                        <SelectItem 
-                        key={num.toString()} 
-                        value={num.toString()} 
-                        textValue={num.toString()}
-                        className="text-default-700 dark:text-default-600 hover:bg-default-100 dark:hover:bg-default-200"
-                        >
-                        {num}
-                        </SelectItem>
-                    ))}
-                    </Select>
-                </div>
+                    <label htmlFor="password-count" className="block text-default-700">
+                      Number of Passwords
+                    </label>
+                    <div className="min-h-[56px] overflow-hidden">
+                      <Select
+                        id="password-count"
+                        label="Select Password Count"
+                        placeholder="Select the Password count..."
+                        selectedKeys={new Set([passwordCount.toString()])}
+                        onSelectionChange={(keys) => {
+                          const selected = Array.from(keys)[0]
+                          setPasswordCount(Number(selected))
+                        }}
+                        className="max-w-xs"
+                        variant="bordered"
+                        listboxProps={{
+                          className: "max-h-[200px] overflow-y-auto"
+                        }}
+                        classNames={{
+                          trigger: "bg-default-100 data-[hover=true]:bg-default-200",
+                          listbox: "overflow-y-auto"
+                        }}
+                      >
+                        {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((num) => (
+                          <SelectItem 
+                            key={num.toString()} 
+                            value={num.toString()} 
+                            textValue={num.toString()}
+                            className="text-default-700 dark:text-default-600 hover:bg-default-100 dark:hover:bg-default-200"
+                          >
+                            {num}
+                          </SelectItem>
+                        ))}
+                      </Select>
+                    </div>
                   </div>
-
 
                   <div>
                     <Checkbox isSelected={useCustomCharSet} onValueChange={setUseCustomCharSet}>
@@ -460,24 +526,21 @@ export default function AdvancedPasswordGenerator() {
         {/* Info Section */}
         <Card className="bg-default-50 dark:bg-default-100">
           <CardBody className="p-6">
-            <div className="rounded-xl p-2 md:p-4 max-w-4xl mx-auto">
+            <div className="rounded-xl p-2 md:p-4 max-w-5xl mx-auto">
               <h2 className="text-lg md:text-xl lg:text-2xl font-semibold text-default-700 mb-4 flex items-center">
                 <Info className="w-6 h-6 mr-2" />
-                What is the Advanced Password Generator?
+                What is Advanced Password Generator?
               </h2>
               <p className="text-sm md:text-base text-default-600 mb-4">
-                The Advanced Password Generator is a versatile tool designed for creating strong, secure passwords
-                tailored to your specific needs. Whether you're setting up a new account, updating existing passwords,
-                or managing multiple logins, this tool provides the flexibility and security features you need to
-                generate robust passwords quickly and easily.
+                Advanced password generators are a versatile tool designed to create strong, safe password to suit your specific requirements. Whether you are setting a new account, updating the existing password, or managing several logins, this tool provides flexibility and safety facilities that you need to generate strong passwords quickly and easily.
               </p>
 
               <div className="my-8">
                 <Image
                   src="/placeholder.svg?height=400&width=600"
                   alt="Screenshot of the Advanced Password Generator interface showing various password generation options"
-                  width={600}
-                  height={400}
+                  width={500}
+                  height={200}
                   className="rounded-lg shadow-lg w-full h-auto"
                 />
               </div>
@@ -490,15 +553,15 @@ export default function AdvancedPasswordGenerator() {
                 How to Use the Advanced Password Generator
               </h2>
               <ol className="list-decimal list-inside space-y-2 text-sm md:text-base text-default-600">
-                <li>Set your desired password length using the slider in the Basic tab.</li>
+                <li>Set your desired password length using the slider in the Original tab.</li>
                 <li>
-                  Choose which character types to include (lowercase, uppercase, numbers, symbols) in the Basic tab.
+                  Choose which character types to include (lowercase, uppercase, numbers, symbols) in the Original tab.
                 </li>
                 <li>
                   Explore advanced options in the Advanced tab, such as requiring every character type or beginning with
                   a letter.
                 </li>
-                <li>Use the Security tab to exclude similar or ambiguous characters for easier reading.</li>
+                <li>Use the Safety tab to exclude similar or ambiguous characters for easier reading.</li>
                 <li>
                   For more control, use the Custom tab to set a custom character set or exclude specific characters.
                 </li>
@@ -556,4 +619,3 @@ export default function AdvancedPasswordGenerator() {
     </ToolLayout>
   )
 }
-

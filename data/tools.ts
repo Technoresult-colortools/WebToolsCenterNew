@@ -256,7 +256,7 @@ export const allTools: Tool[] = [
     category: "Image",
     href: "/tools/image/image-filters",
     icon: faImage,
-    description: "Apply filters to your images.",
+    description: "Count the number of letters in Text Tools.",
     iconColor: "text-purple-600 dark:text-purple-500",
   },
   {

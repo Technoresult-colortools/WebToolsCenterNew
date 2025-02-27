@@ -11,8 +11,6 @@ import {
   Info,
   BookOpen,
   Lightbulb,
-  ShapesIcon,
-  ShrinkIcon,
   EyeIcon,
   ImageIcon,
   Plus,
@@ -278,11 +276,19 @@ const initialShapes: Record<Shape, number[][]> = {
   ],
 }
 
+const UNSPLASH_ACCESS_KEY = process.env.NEXT_PUBLIC_UNSPLASH_ACCESS_KEY
+
+// Add type checking for the environment variable
+if (!UNSPLASH_ACCESS_KEY) {
+  throw new Error('Missing NEXT_PUBLIC_UNSPLASH_ACCESS_KEY environment variable')
+}
+
 export default function ClipPathGenerator() {
   const [shape, setShape] = useState<Shape>('triangle')
   const [points, setPoints] = useState(initialShapes.triangle)
   const [clipPath, setClipPath] = useState('')
-  const [imageUrl, setImageUrl] = useState('https://picsum.photos/seed/1/600/400')
+  const [imageUrl, setImageUrl] = useState('https://api.unsplash.com/photos/random?orientation=landscape&w=600&h=400') 
+  const [, setIsLoadingImage] = useState(false)
   const [showOutside, setShowOutside] = useState(false)
   const [hideGuides, setHideGuides] = useState(false)
   const [useCustomBackground, setUseCustomBackground] = useState(false)
@@ -294,6 +300,40 @@ export default function ClipPathGenerator() {
   const previewRef = useRef<HTMLDivElement>(null)
   const isDragging = useRef(false)
   const activePointIndex = useRef(-1)
+
+  // Function to fetch random image from Unsplash
+  const handleShuffleImage = async () => {
+    try {
+      setIsLoadingImage(true)
+      const response = await fetch(
+        `https://api.unsplash.com/photos/random?orientation=landscape&w=600&h=400`,
+        {
+          headers: {
+            Authorization: `Client-ID ${UNSPLASH_ACCESS_KEY}`
+          }
+        }
+      )
+      
+      if (!response.ok) {
+        throw new Error('Failed to fetch image')
+      }
+      
+      const data = await response.json()
+      setImageUrl(data.urls.regular)
+    } catch (error) {
+      console.error('Error fetching Unsplash image:', error)
+      toast.error('Failed to load image')
+      // Fallback to a default image or show an error state
+      setImageUrl('/default-image.jpg') // Make sure to have a default image in your public folder
+    } finally {
+      setIsLoadingImage(false)
+    }
+  }
+
+   // Load initial image when component mounts
+ useEffect(() => {
+  handleShuffleImage()
+}, [])
 
   useEffect(() => {
     updateClipPath()
@@ -316,20 +356,19 @@ export default function ClipPathGenerator() {
     }
   }
 
-  const handleShuffleImage = () => {
-    const randomId = Math.floor(Math.random() * 1000)
-    setImageUrl(`https://picsum.photos/seed/${randomId}/600/400`)
-  }
+
+
 
   const handleCopy = () => {
     navigator.clipboard.writeText(`clip-path: ${clipPath};`)
     toast.success('CSS copied to clipboard!')
   }
 
-  const handleReset = () => {
+   // Modified reset function
+   const handleReset = () => {
     setShape('triangle')
     setPoints(initialShapes.triangle)
-    setImageUrl('https://picsum.photos/seed/${randomId}/600/400')
+    handleShuffleImage()
     setShowOutside(true)
     setHideGuides(false)
     setUseCustomBackground(false)
@@ -416,107 +455,138 @@ export default function ClipPathGenerator() {
     >
       <div className="flex flex-col gap-8">
         <Card className="bg-default-50 dark:bg-default-100">
-          <CardBody className="p-6">
-          <div className="flex justify-between items-center mb-4">
-              <h2 className="text-2xl font-bold">Clip Path Preview</h2>
+        <CardBody className="p-6">
+          {/* Controls section - responsive layout */}
+          <div className="flex flex-col md:flex-row justify-between items-stretch md:items-center gap-4 mb-4">
+            {/* Shape selector */}
+            <div className="w-full md:w-1/4">
+              <Select
+                label="Select Shape"
+                selectedKeys={new Set([shape])}
+                onSelectionChange={(keys) => setShape(Array.from(keys)[0] as Shape)}
+                variant="bordered"
+              >
+                {Object.keys(initialShapes).map((shapeKey) => (
+                  <SelectItem key={shapeKey} value={shapeKey} className="text-default-700">
+                    {shapeKey.charAt(0).toUpperCase() + shapeKey.slice(1)}
+                  </SelectItem>
+                ))}
+              </Select>
+            </div>
+
+            {/* Sliders container - side by side on all screens */}
+            <div className="w-full md:flex-1 flex flex-col md:flex-row gap-4">
+              {/* Width slider */}
+              <div className="flex-1">
+                <p className="text-small text-default-500 mb-2">Width: {width}%</p>
+                <Slider
+                  aria-label="Width"
+                  size="sm"
+                  step={1}
+                  maxValue={100}
+                  minValue={0}
+                  value={width}
+                  onChange={(value: number | number[]) => setWidth(Array.isArray(value) ? value[0] : value)}
+                />
+              </div>
+
+              {/* Height slider */}
+              <div className="flex-1">
+                <p className="text-small text-default-500 mb-2">Height: {height}%</p>
+                <Slider
+                  aria-label="Height"
+                  size="sm"
+                  step={1}
+                  maxValue={100}
+                  minValue={0}
+                  value={height}
+                  onChange={(value: number | number[]) => setHeight(Array.isArray(value) ? value[0] : value)}
+                />
+              </div>
+            </div>
+
+            {/* Reset button */}
+            <div className="self-end md:self-center">
               <Button 
                 color="danger" 
                 variant="flat" 
+                isIconOnly
                 onPress={handleReset}
-                startContent={<RotateCcw className="w-4 h-4" />}
+                aria-label="Reset All"
               >
-                Reset All
+                <RotateCcw className="w-4 h-4" />
               </Button>
             </div>
-
-            <div 
-              ref={previewRef}
-              className="relative rounded-lg overflow-hidden touch-none border-4 border-gray-700"
-              style={{ width: '100%', paddingBottom: '50.00%'}}
-              onPointerMove={handlePointerMove}
-              onPointerUp={handlePointerUp}
-              onPointerLeave={handlePointerUp}
-            >
-                  <div className="absolute inset-0">
-                    <img 
-                      src={useCustomBackground && customBackgroundUrl ? customBackgroundUrl : imageUrl} 
-                      alt="Clipped image"
-                      className="absolute top-0 left-0 w-full h-full object-cover"
-                      style={{ 
-                        clipPath: clipPath,
-                        WebkitClipPath: clipPath,
-                        opacity: opacity / 100,
-                      }}
-                    />
-                    {!hideGuides && (
-                      <div className="absolute inset-0 pointer-events-none">
-                        <div className="w-full h-full border-2 border-dashed border-blue-500 opacity-50"></div>
-                        <div className="absolute top-1/2 left-0 w-full border-t-2 border-dashed border-blue-500 opacity-50"></div>
-                        <div className="absolute top-0 left-1/2 h-full border-l-2 border-dashed border-blue-500 opacity-50"></div>
-                      </div>
-                    )}
-                    {showOutside && (
-                      <div 
-                        className="absolute inset-0"
-                        style={{ 
-                          backgroundImage: `url(${useCustomBackground && customBackgroundUrl ? customBackgroundUrl : imageUrl})`,
-                          backgroundSize: 'cover',
-                          backgroundColor: outsideColor,
-                          opacity: 0.1,
-                        }}
-                      ></div>
-                    )}
-                    {!hideGuides && shape !== 'circle' && shape !== 'ellipse' && points && points.length > 0 && points.map(([x, y], index) => (
-                      <div
-                        key={index}
-                        className="absolute w-6 h-6 bg-blue-500 rounded-full cursor-move touch-none"
-                        style={{ 
-                          left: `${((100 - width) / 2) + (x * width) / 100}%`, 
-                          top: `${((100 - height) / 2) + (y * height) / 100}%`, 
-                          transform: 'translate(-50%, -50%)' 
-                        }}
-                        onPointerDown={handlePointerDown(index)}
-                      />
-                    ))}
-                  </div>
+          </div>
+          
+          {/* Preview section - unchanged */}
+          <div 
+            ref={previewRef}
+            className="relative rounded-lg overflow-hidden touch-none border-2 border-gray-400"
+            style={{ width: '100%', paddingBottom: '50.00%'}}
+            onPointerMove={handlePointerMove}
+            onPointerUp={handlePointerUp}
+            onPointerLeave={handlePointerUp}
+          >
+            <div className="absolute inset-0">
+              <img 
+                src={useCustomBackground && customBackgroundUrl ? customBackgroundUrl : imageUrl} 
+                alt="Clipped image"
+                className="absolute top-0 left-0 w-full h-full object-cover"
+                style={{ 
+                  clipPath: clipPath,
+                  WebkitClipPath: clipPath,
+                  opacity: opacity / 100,
+                }}
+              />
+              {!hideGuides && (
+                <div className="absolute inset-0 pointer-events-none">
+                  <div className="absolute top-1/2 left-0 w-full border-t-2 border-dashed border-blue-500 opacity-50"></div>
+                  <div className="absolute top-0 left-1/2 h-full border-l-2 border-dashed border-blue-500 opacity-50"></div>
                 </div>
-                <div className="mt-4">
-              <Button onPress={handleShuffleImage} variant="shadow" color="primary" className="w-full">
-                <RefreshCw className="h-5 w-5 mr-2" />
-                Shuffle Image
-              </Button>
+              )}
+              {showOutside && (
+                <img 
+                  src={useCustomBackground && customBackgroundUrl ? customBackgroundUrl : imageUrl} 
+                  alt="Outside image"
+                  className="absolute top-0 left-0 w-full h-full object-cover"
+                  style={{
+                    opacity: 0.2,
+                    filter: 'blur(1px)',
+                    transform: 'scale(1.01)',
+                  }}
+                />
+              )}
+              {!hideGuides && shape !== 'circle' && shape !== 'ellipse' && points && points.length > 0 && points.map(([x, y], index) => (
+                <div
+                  key={index}
+                  className="absolute w-6 h-6 bg-blue-500 rounded-full cursor-move touch-none"
+                  style={{ 
+                    left: `${((100 - width) / 2) + (x * width) / 100}%`, 
+                    top: `${((100 - height) / 2) + (y * height) / 100}%`, 
+                    transform: 'translate(-50%, -50%)' 
+                  }}
+                  onPointerDown={handlePointerDown(index)}
+                />
+              ))}
             </div>
-          </CardBody>
+          </div>
+          
+          {/* Shuffle button - unchanged */}
+          <div className="mt-4">
+            <Button onPress={handleShuffleImage} variant="shadow" color="primary" className="w-full">
+              <RefreshCw className="h-5 w-5 mr-2" />
+              Shuffle Image
+            </Button>
+          </div>
+        </CardBody>
         </Card>
 
         <Card className="bg-default-50 dark:bg-default-100">
           <CardBody className="p-6">
             <h2 className="text-2xl font-bold mb-4">Settings</h2>
             <Tabs aria-label="Clip Path Generator options">
-              <Tab
-                key="shape"
-                title={
-                  <div className="flex items-center">
-                    <ShapesIcon className="w-4 h-4 mr-2" />
-                    Shape
-                  </div>
-                }
-              >
-                <div className="mt-4">
-                  <Select
-                  label="Select Shape"
-                  selectedKeys={new Set([shape])}
-                  onSelectionChange={(keys) => setShape(Array.from(keys)[0] as Shape)}
-                  variant="bordered"
-                >
-                  {Object.keys(initialShapes).map((shapeKey) => (
-                    <SelectItem key={shapeKey} value={shapeKey} className="text-default-700">
-                      {shapeKey.charAt(0).toUpperCase() + shapeKey.slice(1)}
-                    </SelectItem>
-                  ))}
-                </Select>
-                </div>
-              </Tab>
+              
               <Tab
                 key="points"
                 title={
@@ -565,45 +635,7 @@ export default function ClipPathGenerator() {
                   </Button>
                 </div>
               </Tab>
-              <Tab
-                key="size"
-                title={
-                  <div className="flex items-center">
-                    <ShrinkIcon className="w-4 h-4 mr-2" />
-                    Size
-                  </div>
-                }
-              >
-                <div className="space-y-4 mt-4">
-                  <div>
-                    <p className="text-small text-default-500 mb-2">Width: {width}%</p>
-                    <Slider
-                      aria-label="Width"
-                      size="sm"
-                      step={1}
-                      maxValue={100}
-                      minValue={0}
-                      value={width}
-                      onChange={(value: number | number[]) => setWidth(Array.isArray(value) ? value[0] : value)}
-                    
-                    />
-                  </div>
-
-                  <div>
-                    <p className="text-small text-default-500 mb-2">Height: {height}%</p>
-                    <Slider
-                      aria-label="Height"
-                      size="sm"
-                      step={1}
-                      maxValue={100}
-                      minValue={0}
-                      value={height}
-                      onChange={(value: number | number[]) => setHeight(Array.isArray(value) ? value[0] : value)}
-
-                    />
-                  </div>
-                </div>
-              </Tab>
+              
               <Tab
                 key="appearance"
                 title={
@@ -697,7 +729,7 @@ export default function ClipPathGenerator() {
 
         <Card className="bg-default-50 dark:bg-default-100 p-4 md:p-8">
       
-            <div className="rounded-xl p-2 md:p-4 max-w-4xl mx-auto">
+            <div className="rounded-xl p-2 md:p-4 max-w-6xl mx-auto">
               <h2 className="text-lg md:text-xl lg:text-2xl font-semibold text-default-700 mb-4 flex items-center">
                 <Info className="w-6 h-6 mr-2" />
                 What is the Clip Path Generator?
@@ -715,7 +747,7 @@ export default function ClipPathGenerator() {
                   alt="Screenshot of the Clip Path Generator interface showing various shape options and controls" 
                   width={600} 
                   height={400} 
-                  className="rounded-lg shadow-lg"
+                  className="rounded-lg shadow-lg w-full h-auto"
                 />
               </div>
               
