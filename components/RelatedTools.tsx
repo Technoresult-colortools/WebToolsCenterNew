@@ -5,40 +5,71 @@ import { Tool, allTools } from '@/data/tools';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 interface RelatedToolsProps {
-  toolId: string;
-  toolName: string;
+  toolId: string;  // We'll still accept this for compatibility
+  toolName?: string; // Make this optional
   maxTools?: number;
 }
 
-const RelatedTools = ({ toolName, maxTools = 3 }: RelatedToolsProps) => {
-  const currentTool = allTools.find(tool => 
-    tool.name.toLowerCase() === toolName.toLowerCase()
+const RelatedTools = ({ toolId, toolName, maxTools = 3 }: RelatedToolsProps) => {
+  // First try to find the current tool by name
+  let currentTool = allTools.find(tool => 
+    toolName && tool.name.toLowerCase() === toolName.toLowerCase()
   );
   
+  // If not found by name, try using the path from toolId
+  if (!currentTool && toolId) {
+    // Extract potential path from toolId
+    const toolPath = `/tools/${toolId.split('/').pop()}`;
+    currentTool = allTools.find(tool => tool.href.includes(toolPath));
+    
+    // If still not found, just find it by checking if href contains any part of toolId
+    if (!currentTool) {
+      currentTool = allTools.find(tool => 
+        toolId.includes(tool.name.toLowerCase().replace(/\s+/g, '-')) ||
+        tool.href.includes(toolId.toLowerCase().replace(/\s+/g, '-'))
+      );
+    }
+  }
+  
+  // Last resort - just use the first tool from the same category indicated in toolId
+  if (!currentTool && toolId) {
+    const pathParts = toolId.split('/');
+    if (pathParts.length >= 2) {
+      const categoryFromPath = pathParts[pathParts.length - 2];
+      currentTool = allTools.find(tool => 
+        tool.category.toLowerCase().replace(/\s+/g, '-') === categoryFromPath
+      );
+    }
+  }
+  
   if (!currentTool) {
-    console.log('Current tool not found:', toolName);
-    return null;
+    // Return empty div instead of null for consistent rendering
+    return <div className="hidden"></div>;
   }
 
   const getRelatedTools = (): Tool[] => {
+    // Get tools from the same category
     const sameCategory = allTools.filter(tool => 
-      tool.name !== currentTool.name && 
-      tool.category === currentTool.category
+      tool.name !== currentTool?.name && 
+      tool.category === currentTool?.category
     );
 
     if (sameCategory.length < maxTools) {
+      // If we need more tools, find semantically related ones
       const otherTools = allTools.filter(tool =>
-        tool.name !== currentTool.name &&
-        tool.category !== currentTool.category &&
-        (tool.description.toLowerCase().includes(currentTool.name.toLowerCase()) ||
-         currentTool.description.toLowerCase().includes(tool.name.toLowerCase()))
+        tool.name !== currentTool?.name &&
+        tool.category !== currentTool?.category &&
+        (tool.description.toLowerCase().includes(currentTool?.name.toLowerCase() || '') ||
+         currentTool?.description.toLowerCase().includes(tool.name.toLowerCase()))
       );
 
+      // Use consistent sorting (alphabetical) instead of random
       return [...sameCategory, ...otherTools]
         .sort((a, b) => a.name.localeCompare(b.name))
         .slice(0, maxTools);
     }
 
+    // Use consistent sorting (alphabetical) instead of random
     return sameCategory
       .sort((a, b) => a.name.localeCompare(b.name))
       .slice(0, maxTools);
@@ -47,7 +78,7 @@ const RelatedTools = ({ toolName, maxTools = 3 }: RelatedToolsProps) => {
   const relatedTools = getRelatedTools();
 
   if (relatedTools.length === 0) {
-    return null;
+    return <div className="hidden"></div>;
   }
 
   return (
@@ -61,6 +92,7 @@ const RelatedTools = ({ toolName, maxTools = 3 }: RelatedToolsProps) => {
             key={tool.href} 
             href={tool.href}
             className="w-full h-full no-underline group"
+            passHref
           >
             <Card 
               className="w-full h-full bg-content1 group-hover:shadow-lg transition-all duration-300 transform group-hover:-translate-y-1"

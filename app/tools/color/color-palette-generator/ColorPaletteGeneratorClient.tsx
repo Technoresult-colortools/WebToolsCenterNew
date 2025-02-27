@@ -250,80 +250,88 @@ export default function ColorPaletteGenerator() {
         <Card className="bg-default-50 dark:bg-default-100">
           <CardBody className="p-6">
             <div className="space-y-6">
-              <Tabs
-                selectedKey={inputMethod}
-                onSelectionChange={(key) => setInputMethod(key as 'color' | 'grid' | 'image' | 'text')}
+            <Tabs
+              selectedKey={inputMethod}
+              onSelectionChange={(key) => setInputMethod(key as 'color' | 'grid' | 'image' | 'text')}
+              classNames={{
+                tabList: "flex overflow-x-auto sm:justify-start no-scrollbar",
+                tab: "max-w-fit flex-shrink-0"
+              }}
+              aria-label="Color input options"
+            >
+              <Tab 
+                key="color" 
+                title={
+                  <div className="flex items-center gap-1 sm:gap-2">
+                    <Droplet className="w-4 h-4" />
+                    <span className="hidden sm:inline">Color Input</span>
+                    <span className="inline sm:hidden">Color</span>
+                  </div>
+                }
               >
-                <Tab 
-                    key="color" 
-                    title={
-                        <div className="flex items-center gap-2">
-                        <Droplet className="w-4 h-4" />
-                        <span>Color Input</span>
-                        </div>
-                    }
-                    >
-                    <div className="flex items-center gap-2">
-                        <Input
-                        type="color"
-                        value={baseColor}
-                        onChange={(e) => setBaseColor(e.target.value)}
-                        className="w-16 h-12 p-1 rounded"
-                        variant="bordered"
-                        />
-                        <Input
-                        type="text"
-                        value={baseColor}
-                        onChange={(e) => setBaseColor(e.target.value)}
-                        className="flex-grow"
-                        variant="bordered"
-                        />
-                    </div>
-                    </Tab>
+                <div className="flex items-center gap-2">
+                  <Input
+                    type="color"
+                    value={baseColor}
+                    onChange={(e) => setBaseColor(e.target.value)}
+                    className="w-16 h-12 p-1 rounded"
+                    variant="bordered"
+                  />
+                  <Input
+                    type="text"
+                    value={baseColor}
+                    onChange={(e) => setBaseColor(e.target.value)}
+                    className="flex-grow"
+                    variant="bordered"
+                  />
+                </div>
+              </Tab>
 
-                    <Tab 
-                        key="grid" 
-                        title={
-                        <div className="flex items-center gap-2">
-                            <Grid className="w-4 h-4" />
-                            <span>Color Grid</span>
-                        </div>
-                        }
-                    >
-                        <ColorGrid onColorSelect={setBaseColor} selectedColor={baseColor} />
-                    </Tab>
+              <Tab 
+                key="grid" 
+                title={
+                  <div className="flex items-center gap-1 sm:gap-2">
+                    <Grid className="w-4 h-4" />
+                    <span className="hidden sm:inline">Color Grid</span>
+                    <span className="inline sm:hidden">Grid</span>
+                  </div>
+                }
+              >
+                <ColorGrid onColorSelect={setBaseColor} selectedColor={baseColor} />
+              </Tab>
 
-                    <Tab 
-                        key="image" 
-                        title={
-                        <div className="flex items-center gap-2">
-                            <ImageIcon className="w-4 h-4" />
-                            <span>Image Upload</span>
-                        </div>
-                        }
-                        className="border-2 rounded-lg"
-                    >
-                        <ImageUpload onImageUpload={handleImageUpload} uploadedImage={uploadedImage} />
-                    </Tab>
+              <Tab 
+                key="image" 
+                title={
+                  <div className="flex items-center gap-1 sm:gap-2">
+                    <ImageIcon className="w-4 h-4" />
+                    <span className="hidden sm:inline">Image Upload</span>
+                    <span className="inline sm:hidden">Image</span>
+                  </div>
+                }
+              >
+                <ImageUpload onImageUpload={handleImageUpload} uploadedImage={uploadedImage} />
+              </Tab>
 
-                    <Tab 
-                        key="text" 
-                        title={
-                        <div className="flex items-center gap-2">
-                            <Wand2 className="w-4 h-4" />
-                            <span>AI Generation</span>
-                        </div>
-                        }
-                    >
-                        <Textarea
-                        label="Describe your desired color palette"
-                        placeholder="E.g., A warm sunset palette with orange and purple tones"
-                        value={userInput}
-                        onChange={(e) => setUserInput(e.target.value)}
-                        variant="bordered"
-                        />
-                    </Tab>
-              </Tabs>
+              <Tab 
+                key="text" 
+                title={
+                  <div className="flex items-center gap-1 sm:gap-2">
+                    <Wand2 className="w-4 h-4" />
+                    <span className="hidden sm:inline">AI Generation</span>
+                    <span className="inline sm:hidden">AI</span>
+                  </div>
+                }
+              >
+                <Textarea
+                  label="Describe your desired color palette"
+                  placeholder="E.g., A warm sunset palette with orange and purple tones"
+                  value={userInput}
+                  onChange={(e) => setUserInput(e.target.value)}
+                  variant="bordered"
+                />
+              </Tab>
+            </Tabs>
 
               {inputMethod !== 'text' && (
                 <Select
