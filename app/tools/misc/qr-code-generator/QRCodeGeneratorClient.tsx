@@ -15,6 +15,7 @@ import {
   Card,
   CardBody,
   CardHeader,
+  CardFooter,
 } from "@nextui-org/react"
 import { toast } from "react-hot-toast"
 import {
@@ -186,12 +187,10 @@ export default function QRCodeGenerator() {
       description="Create Customized QR Code for various purposes"
       toolId="678f383026f06f912191bccd"
     >
-      <div className="flex flex-col gap-8">
-        <Card>
-          <CardHeader>
-            <h2 className="text-2xl font-bold">QR Code Preview</h2>
-          </CardHeader>
-          <CardBody className="flex justify-center items-center p-8">
+      <div className="flex flex-col-reverse md:flex-col gap-6">
+        {/* Preview Card - Moved to top on mobile for immediate feedback */}
+        <Card className="bg-default-50 dark:bg-default-100">
+          <CardBody className="flex justify-center items-center p-4 md:p-8">
             <div
               ref={qrCodeRef}
               className="p-4 rounded-lg"
@@ -208,45 +207,57 @@ export default function QRCodeGenerator() {
                 level={errorCorrectionLevel}
                 includeMargin={includeMargin}
                 imageSettings={
-                    logoUrl
+                  logoUrl
                     ? {
                         src: logoUrl,
                         height: logoSize,
                         width: logoSize,
                         excavate: true,
-                        }
+                      }
                     : undefined
                 }
                 style={{
-                    width: "100%",
-                    height: "100%",
-                    maxWidth: `${qrSize}px`,
-                    maxHeight: `${qrSize}px`,
+                  width: "100%",
+                  height: "100%",
+                  maxWidth: `${qrSize}px`,
+                  maxHeight: `${qrSize}px`,
                 }}
-                {...(qrStyle === "dots" ? { 
-                    renderas: "svg", 
-                    dotsoptions: { 
-                    type: "rounded", 
-                    color: qrFgColor 
-                    } 
-                } : {})}
-                />
+                {...(qrStyle === "dots"
+                  ? {
+                      renderas: "svg",
+                      dotsoptions: {
+                        type: "rounded",
+                        color: qrFgColor,
+                      },
+                    }
+                  : {})}
+              />
             </div>
           </CardBody>
+          
+          {/* Download button moved inside preview card for easy access */}
+          <CardFooter className="flex justify-center pb-4">
+            <Button color="primary" onClick={handleDownload} size="lg">
+              <Download className="w-4 h-4 mr-2" />
+              Download QR Code
+            </Button>
+          </CardFooter>
         </Card>
-
-        <Card>
+  
+        {/* Settings Card */}
+        <Card className="bg-default-50 dark:bg-default-100">
           <CardHeader>
-            <h2 className="text-2xl font-bold">QR Code Settings</h2>
+            <h2 className="text-xl md:text-2xl font-bold p-2 md:p-6">QR Code Settings</h2>
           </CardHeader>
-          <CardBody>
-            <Tabs aria-label="QR Code Options">
+          <CardBody className="p-3 md:p-6">
+            <Tabs aria-label="QR Code Options" className="w-full">
+              {/* Content Tab - Most important tab first */}
               <Tab
                 key="content"
                 title={
                   <div className="flex items-center space-x-2">
                     <FileText className="w-4 h-4" />
-                    <span>Content</span>
+                    <span className="hidden sm:inline">Content</span>
                   </div>
                 }
               >
@@ -258,8 +269,8 @@ export default function QRCodeGenerator() {
                     variant="bordered"
                     onChange={(e) => setQRType(e.target.value as QRCodeType)}
                     classNames={{
-                        trigger: "bg-default-100 data-[hover=true]:bg-default-200",
-                      }}
+                      trigger: "bg-default-100 data-[hover=true]:bg-default-200",
+                    }}
                   >
                     <SelectItem key="url" value="url" className="text-default-700">
                       URL
@@ -280,7 +291,7 @@ export default function QRCodeGenerator() {
                       Wi-Fi
                     </SelectItem>
                   </Select>
-
+  
                   {qrType === "url" && (
                     <Input
                       type="url"
@@ -291,7 +302,7 @@ export default function QRCodeGenerator() {
                       onChange={(e) => setQRValue(e.target.value)}
                     />
                   )}
-
+  
                   {qrType === "text" && (
                     <Input
                       type="text"
@@ -302,9 +313,9 @@ export default function QRCodeGenerator() {
                       onChange={(e) => setQRValue(e.target.value)}
                     />
                   )}
-
+  
                   {qrType === "email" && (
-                    <>
+                    <div className="space-y-3">
                       <Input
                         type="email"
                         label="Email Address"
@@ -329,9 +340,9 @@ export default function QRCodeGenerator() {
                         value={emailBody}
                         onChange={(e) => setEmailBody(e.target.value)}
                       />
-                    </>
+                    </div>
                   )}
-
+  
                   {qrType === "phone" && (
                     <Input
                       type="tel"
@@ -342,9 +353,9 @@ export default function QRCodeGenerator() {
                       onChange={(e) => setPhoneNumber(e.target.value)}
                     />
                   )}
-
+  
                   {qrType === "sms" && (
-                    <>
+                    <div className="space-y-3">
                       <Input
                         type="tel"
                         label="Phone Number"
@@ -361,11 +372,11 @@ export default function QRCodeGenerator() {
                         value={smsBody}
                         onChange={(e) => setSmsBody(e.target.value)}
                       />
-                    </>
+                    </div>
                   )}
-
+  
                   {qrType === "wifi" && (
-                    <>
+                    <div className="space-y-3">
                       <Input
                         type="text"
                         label="Network Name (SSID)"
@@ -387,10 +398,12 @@ export default function QRCodeGenerator() {
                         placeholder="Select encryption type"
                         variant="bordered"
                         selectedKeys={[wifiEncryption]}
-                        onChange={(e) => setWifiEncryption(e.target.value as "WEP" | "WPA" | "nopass")}
+                        onChange={(e) =>
+                          setWifiEncryption(e.target.value as "WEP" | "WPA" | "nopass")
+                        }
                         classNames={{
-                            trigger: "bg-default-100 data-[hover=true]:bg-default-200",
-                          }}
+                          trigger: "bg-default-100 data-[hover=true]:bg-default-200",
+                        }}
                       >
                         <SelectItem key="WEP" value="WEP" className="text-default-700">
                           WEP
@@ -402,181 +415,255 @@ export default function QRCodeGenerator() {
                           No encryption
                         </SelectItem>
                       </Select>
-                    </>
+                    </div>
                   )}
                 </div>
               </Tab>
+  
+              {/* Appearance Tab */}
               <Tab
                 key="appearance"
                 title={
                   <div className="flex items-center space-x-2">
                     <Brush className="w-4 h-4" />
-                    <span>Appearance</span>
+                    <span className="hidden sm:inline">Appearance</span>
                   </div>
                 }
               >
                 <div className="mt-4 space-y-4">
-                  <div>
-                    <p className="text-small text-default-500 mb-2">
-                      QR Code Size: {qrSize}x{qrSize}
-                    </p>
-                    <Slider
-                      size="sm"
-                      step={8}
-                      maxValue={512}
-                      minValue={128}
-                      value={qrSize}
-                      onChange={(value) => setQRSize(value as number)}
-                      className="max-w-md"
-                    />
-                  </div>
-                  <Select
-                    label="QR Code Style"
-                    placeholder="Select QR code style"
-                    selectedKeys={[qrStyle]}
-                    variant="bordered"
-                    onChange={(e) => setQrStyle(e.target.value as "squares" | "dots")}
-                    classNames={{
+                  {/* Group related settings together for better organization */}
+                  <div className="space-y-4 p-2 rounded-lg bg-default-100">
+                    <h3 className="text-md font-semibold">QR Code Style</h3>
+                    <div>
+                      <p className="text-small text-default-500 mb-2">
+                        QR Code Size: {qrSize}x{qrSize}
+                      </p>
+                      <Slider
+                        size="sm"
+                        step={8}
+                        maxValue={512}
+                        minValue={128}
+                        value={qrSize}
+                        onChange={(value) => setQRSize(value as number)}
+                        className="max-w-full"
+                      />
+                    </div>
+                    <Select
+                      label="Pattern Style"
+                      placeholder="Select QR code style"
+                      selectedKeys={[qrStyle]}
+                      variant="bordered"
+                      onChange={(e) => setQrStyle(e.target.value as "squares" | "dots")}
+                      classNames={{
                         trigger: "bg-default-100 data-[hover=true]:bg-default-200",
                       }}
-                  >
-                    <SelectItem key="squares" value="squares" className="text-default-700">
-                      Squares
-                    </SelectItem>
-                    <SelectItem key="dots" value="dots" className="text-default-700">
-                      Dots
-                    </SelectItem>
-                  </Select>
-                  <div>
-                    <p className="text-small text-default-500 mb-2">Foreground Color</p>
-                    <div className="flex items-center space-x-2">
-                      <Input
-                        type="color"
-                        value={qrFgColor}
-                        onChange={(e) => setQrFgColor(e.target.value)}
-                        className="w-14 h-14 p-1"
-                        variant="bordered"
-                      />
-                      <Input
-                        type="text"
-                        value={qrFgColor}
-                        onChange={(e) => setQrFgColor(e.target.value)}
-                        className="flex-grow"
-                        variant="bordered"
-                      />
+                    >
+                      <SelectItem key="squares" value="squares" className="text-default-700">
+                        Squares
+                      </SelectItem>
+                      <SelectItem key="dots" value="dots" className="text-default-700">
+                        Dots
+                      </SelectItem>
+                    </Select>
+                  </div>
+  
+                  <div className="space-y-4 p-2 rounded-lg bg-default-100">
+                    <h3 className="text-md font-semibold">Colors</h3>
+                    <div>
+                      <p className="text-small text-default-500 mb-2">Foreground Color</p>
+                      <div className="flex items-center space-x-2">
+                        <Input
+                          type="color"
+                          value={qrFgColor}
+                          onChange={(e) => setQrFgColor(e.target.value)}
+                          className="w-12 h-12 p-1"
+                          variant="bordered"
+                        />
+                        <Input
+                          type="text"
+                          value={qrFgColor}
+                          onChange={(e) => setQrFgColor(e.target.value)}
+                          className="flex-grow"
+                          variant="bordered"
+                        />
+                      </div>
+                    </div>
+                    <div>
+                      <p className="text-small text-default-500 mb-2">Background Color</p>
+                      <div className="flex items-center space-x-2">
+                        <Input
+                          type="color"
+                          value={qrBgColor}
+                          onChange={(e) => setQrBgColor(e.target.value)}
+                          className="w-12 h-12 p-1"
+                          variant="bordered"
+                        />
+                        <Input
+                          type="text"
+                          value={qrBgColor}
+                          onChange={(e) => setQrBgColor(e.target.value)}
+                          className="flex-grow"
+                          variant="bordered"
+                        />
+                      </div>
                     </div>
                   </div>
-                  <div>
-                    <p className="text-small text-default-500 mb-2">Background Color</p>
-                    <div className="flex items-center space-x-2">
-                      <Input
-                        type="color"
-                        value={qrBgColor}
-                        onChange={(e) => setQrBgColor(e.target.value)}
-                        className="w-14 h-14 p-1"
-                        variant="bordered"
-                      />
-                      <Input
-                        type="text"
-                        value={qrBgColor}
-                        onChange={(e) => setQrBgColor(e.target.value)}
-                        className="flex-grow"
-                        variant="bordered"
+  
+                  <div className="space-y-4 p-2 rounded-lg bg-default-100">
+                    <h3 className="text-md font-semibold">Container</h3>
+                    <div>
+                      <p className="text-small text-default-500 mb-2">Container Background</p>
+                      <div className="flex items-center space-x-2">
+                        <Input
+                          type="color"
+                          value={backgroundColor}
+                          variant="bordered"
+                          onChange={(e) => setBackgroundColor(e.target.value)}
+                          className="w-12 h-12 p-1"
+                        />
+                        <Input
+                          type="text"
+                          value={backgroundColor}
+                          variant="bordered"
+                          onChange={(e) => setBackgroundColor(e.target.value)}
+                          className="flex-grow"
+                        />
+                      </div>
+                    </div>
+                    <div>
+                      <p className="text-small text-default-500 mb-2">Border Size: {borderSize}px</p>
+                      <Slider
+                        size="sm"
+                        step={1}
+                        maxValue={20}
+                        minValue={0}
+                        value={borderSize}
+                        onChange={(value) => setBorderSize(value as number)}
+                        className="max-w-full"
                       />
                     </div>
-                  </div>
-                  <div>
-                    <p className="text-small text-default-500 mb-2">Border Size: {borderSize}px</p>
-                    <Slider
-                      size="sm"
-                      step={1}
-                      maxValue={20}
-                      minValue={0}
-                      value={borderSize}
-                      onChange={(value) => setBorderSize(value as number)}
-                      className="max-w-md"
-                    />
-                  </div>
-                  <div>
-                    <p className="text-small text-default-500 mb-2">Border Color</p>
-                    <div className="flex items-center space-x-2">
-                      <Input
-                        type="color"
-                        value={borderColor}
-                        variant="bordered"
-                        onChange={(e) => setBorderColor(e.target.value)}
-                        className="w-14 h-14 p-1"
-                      />
-                      <Input
-                        type="text"
-                        value={borderColor}
-                        onChange={(e) => setBorderColor(e.target.value)}
-                        className="flex-grow"
-                      />
+                    <div>
+                      <p className="text-small text-default-500 mb-2">Border Color</p>
+                      <div className="flex items-center space-x-2">
+                        <Input
+                          type="color"
+                          value={borderColor}
+                          variant="bordered"
+                          onChange={(e) => setBorderColor(e.target.value)}
+                          className="w-12 h-12 p-1"
+                        />
+                        <Input
+                          type="text"
+                          value={borderColor}
+                          onChange={(e) => setBorderColor(e.target.value)}
+                          className="flex-grow"
+                        />
+                      </div>
                     </div>
-                  </div>
-                  <Select
-                    label="Border Style"
-                    placeholder="Select border style"
-                    variant="bordered"
-                    selectedKeys={[borderStyle]}
-                    onChange={(e) => setBorderStyle(e.target.value as BorderStyle)}
-                    classNames={{
+                    <Select
+                      label="Border Style"
+                      placeholder="Select border style"
+                      variant="bordered"
+                      selectedKeys={[borderStyle]}
+                      onChange={(e) => setBorderStyle(e.target.value as BorderStyle)}
+                      classNames={{
                         trigger: "bg-default-100 data-[hover=true]:bg-default-200",
                       }}
-                  >
-                    <SelectItem key="solid" value="solid" className="text-default-700">
-                      Solid
-                    </SelectItem>
-                    <SelectItem key="dashed" value="dashed" className="text-default-700">
-                      Dashed
-                    </SelectItem>
-                    <SelectItem key="dotted" value="dotted" className="text-default-700">
-                      Dotted
-                    </SelectItem>
-                    <SelectItem key="double" value="double" className="text-default-700">
-                      Double
-                    </SelectItem>
-                    <SelectItem key="groove" value="groove" className="text-default-700">
-                      Groove
-                    </SelectItem>
-                    <SelectItem key="ridge" value="ridge" className="text-default-700">
-                      Ridge
-                    </SelectItem>
-                    <SelectItem key="inset" value="inset" className="text-default-700">
-                      Inset
-                    </SelectItem>
-                    <SelectItem key="outset" value="outset" className="text-default-700">
-                      Outset
-                    </SelectItem>
-                  </Select>
-                  <div>
-                    <p className="text-small text-default-500 mb-2">Background Color</p>
-                    <div className="flex items-center space-x-2">
-                      <Input
-                        type="color"
-                        value={backgroundColor}
-                        variant="bordered"
-                        onChange={(e) => setBackgroundColor(e.target.value)}
-                        className="w-14 h-14 p-1"
-                      />
-                      <Input
-                        type="text"
-                        value={backgroundColor}
-                        variant="bordered"
-                        onChange={(e) => setBackgroundColor(e.target.value)}
-                        className="flex-grow"
-                      />
-                    </div>
+                    >
+                      <SelectItem key="solid" value="solid" className="text-default-700">
+                        Solid
+                      </SelectItem>
+                      <SelectItem key="dashed" value="dashed" className="text-default-700">
+                        Dashed
+                      </SelectItem>
+                      <SelectItem key="dotted" value="dotted" className="text-default-700">
+                        Dotted
+                      </SelectItem>
+                      <SelectItem key="double" value="double" className="text-default-700">
+                        Double
+                      </SelectItem>
+                      <SelectItem key="groove" value="groove" className="text-default-700">
+                        Groove
+                      </SelectItem>
+                      <SelectItem key="ridge" value="ridge" className="text-default-700">
+                        Ridge
+                      </SelectItem>
+                      <SelectItem key="inset" value="inset" className="text-default-700">
+                        Inset
+                      </SelectItem>
+                      <SelectItem key="outset" value="outset" className="text-default-700">
+                        Outset
+                      </SelectItem>
+                    </Select>
                   </div>
                 </div>
               </Tab>
+  
+              {/* Logo Tab - Combined with Advanced tab for simplified mobile view */}
+              <Tab
+                key="logo"
+                title={
+                  <div className="flex items-center space-x-2">
+                    <ImageIcon className="w-4 h-4" />
+                    <span className="hidden sm:inline">Logo</span>
+                  </div>
+                }
+              >
+                <div className="mt-4 space-y-4">
+                  <Input
+                    type="file"
+                    label="Upload Logo (optional)"
+                    accept="image/*"
+                    onChange={handleLogoUpload}
+                    variant="bordered"
+                  />
+                  {logoUrl && (
+                    <div className="flex flex-col space-y-4">
+                      <div className="flex flex-col sm:flex-row items-center gap-4">
+                        <div className="w-24 h-24 border rounded flex items-center justify-center">
+                          <img
+                            src={logoUrl}
+                            alt="Logo Preview"
+                            className="max-w-full max-h-full object-contain"
+                          />
+                        </div>
+                        <div className="flex-grow w-full">
+                          <p className="text-small text-default-500 mb-2">
+                            Logo Size: {logoSize}x{logoSize}
+                          </p>
+                          <Slider
+                            size="sm"
+                            step={5}
+                            maxValue={150}
+                            minValue={20}
+                            value={logoSize}
+                            onChange={(value) => setLogoSize(value as number)}
+                            className="max-w-full"
+                          />
+                        </div>
+                      </div>
+                      <Button
+                        color="danger"
+                        variant="light"
+                        onClick={() => {
+                          setLogoUrl("");
+                          setLogoSize(50);
+                        }}
+                      >
+                        Remove Logo
+                      </Button>
+                    </div>
+                  )}
+                </div>
+              </Tab>
+  
+              {/* Advanced Tab */}
               <Tab
                 key="advanced"
                 title={
                   <div className="flex items-center space-x-2">
                     <Sliders className="w-4 h-4" />
-                    <span>Advanced</span>
+                    <span className="hidden sm:inline">Advanced</span>
                   </div>
                 }
               >
@@ -586,10 +673,12 @@ export default function QRCodeGenerator() {
                     placeholder="Select error correction level"
                     selectedKeys={[errorCorrectionLevel]}
                     variant="bordered"
-                    onChange={(e) => setErrorCorrectionLevel(e.target.value as ErrorCorrectionLevel)}
+                    onChange={(e) =>
+                      setErrorCorrectionLevel(e.target.value as ErrorCorrectionLevel)
+                    }
                     classNames={{
-                        trigger: "bg-default-100 data-[hover=true]:bg-default-200",
-                      }}
+                      trigger: "bg-default-100 data-[hover=true]:bg-default-200",
+                    }}
                   >
                     <SelectItem key="L" value="L" className="text-default-700">
                       Low (7%)
@@ -606,76 +695,16 @@ export default function QRCodeGenerator() {
                   </Select>
                   <div className="flex justify-between items-center">
                     <span>Include Margin</span>
-                    <Switch checked={includeMargin} onChange={(e) => setIncludeMargin(e.target.checked)} />
+                    <Switch
+                      checked={includeMargin}
+                      onChange={(e) => setIncludeMargin(e.target.checked)}
+                    />
                   </div>
                 </div>
-              </Tab>
-              <Tab
-                key="logo"
-                title={
-                  <div className="flex items-center space-x-2">
-                    <ImageIcon className="w-4 h-4" />
-                    <span>Logo</span>
-                  </div>
-                }
-              >
-                <div className="mt-4 space-y-4">
-                    <Input 
-                        type="file" 
-                        label="Upload Logo (optional)" 
-                        accept="image/*" 
-                        onChange={handleLogoUpload} 
-                        variant="bordered"
-                    />
-                    {logoUrl && (
-                        <div className="flex flex-col space-y-4">
-                        <div className="flex items-center space-x-4">
-                            <div className="w-24 h-24 border rounded flex items-center justify-center">
-                            <img 
-                                src={logoUrl} 
-                                alt="Logo Preview" 
-                                className="max-w-full max-h-full object-contain"
-                            />
-                            </div>
-                            <div className="flex-grow">
-                            <p className="text-small text-default-500 mb-2">
-                                Logo Size: {logoSize}x{logoSize}
-                            </p>
-                            <Slider
-                                size="sm"
-                                step={5}
-                                maxValue={150}
-                                minValue={20}
-                                value={logoSize}
-                                onChange={(value) => setLogoSize(value as number)}
-                                className="max-w-md"
-                            />
-                            </div>
-                        </div>
-                        <Button 
-                            color="danger" 
-                            variant="light" 
-                            onClick={() => {
-                            setLogoUrl('');
-                            setLogoSize(50);
-                            }}
-                        >
-                            Remove Logo
-                        </Button>
-                        </div>
-                    )}
-                    </div>
               </Tab>
             </Tabs>
           </CardBody>
         </Card>
-
-        <div className="flex justify-center">
-          <Button color="primary" onClick={handleDownload}>
-            <Download className="w-4 h-4 mr-2" />
-            Download QR Code
-          </Button>
-        </div>
 
        {/* Info Section */}
         <Card className="bg-default-50 dark:bg-default-100">
@@ -686,12 +715,12 @@ export default function QRCodeGenerator() {
                 About QR Code Generator
             </h2>
             <p className="text-sm md:text-base text-gray-600 dark:text-gray-300 mb-4">
-                The QR Code Generator is a powerful and versatile tool that allows you to create customized QR codes for various purposes. Whether you need to share a website URL, contact information, Wi-Fi credentials, or any other type of data, this generator provides an easy-to-use interface to create QR codes tailored to your needs.
+            The QR Code Generator is a powerful and versatile tool that allows you to create a QR code adapted for different purposes. Whether you need to share a website URL, contact information, Wi-Fi credentials, or any other type of data, this generator offers an easy-to-use interface to create a QR code to suit your needs.
             </p>
 
             <div className="my-8">
                 <NextImage
-                src="/Images/QRCodeGeneratorPreview.png"
+                src="/Images/InfosectionImages/QRCodeGeneratorPreview.webp?height=400&width=600"
                 alt="Screenshot of the QR Code Generator interface showing customization options and generated QR code"
                 width={600}
                 height={400}
@@ -704,7 +733,7 @@ export default function QRCodeGenerator() {
                 How to Use QR Code Generator?
             </h2>
             <ol className="list-decimal pl-6 space-y-2 text-gray-600 dark:text-gray-300">
-                <li>Select the QR code type (URL, text, email, phone, SMS, or Wi-Fi) from the dropdown menu.</li>
+                <li>First, Select the QR code type (URL, text, email, phone, SMS, or Wi-Fi) from the dropdown menu.</li>
                 <li>Enter the required information for the selected type in the provided fields.</li>
                 <li>Customize the appearance of your QR code using the options in the "Appearance" tab.</li>
                 <li>Adjust advanced settings like error correction level in the "Advanced" tab.</li>
@@ -725,23 +754,6 @@ export default function QRCodeGenerator() {
                 <li>Real-time Preview: See your QR code update in real-time as you modify settings.</li>
                 <li>Responsive Design: The tool works well on both desktop and mobile devices.</li>
                 <li>Easy Download: Download your QR code as a PNG image with a single click.</li>
-            </ul>
-
-            <h2 className="text-xl font-semibold text-gray-800 dark:text-gray-200 mt-6 mb-3 flex items-center">
-                <Share2 className="w-5 h-5 mr-2" />
-                Applications and Use Cases
-            </h2>
-            <ul className="list-disc pl-6 space-y-2 text-gray-600 dark:text-gray-300">
-                <li>Marketing: Create QR codes for promotional materials, business cards, and product packaging.</li>
-                <li>Education: Share educational resources, course materials, or campus information via QR codes.</li>
-                <li>Events: Use QR codes for ticketing, attendee registration, or sharing event details.</li>
-                <li>Retail: Implement QR codes for contactless payments, product information, or loyalty programs.</li>
-                <li>Hospitality: Provide easy access to menus, Wi-Fi credentials, or hotel information through QR codes.</li>
-                <li>Healthcare: Use QR codes for patient identification, medical record access, or prescription information.</li>
-                <li>Real Estate: Share property listings, virtual tours, or contact information via QR codes.</li>
-                <li>Museums and Galleries: Offer additional information about exhibits or artworks through QR codes.</li>
-                <li>Transportation: Implement QR codes for ticketing, schedules, or route information.</li>
-                <li>Personal Use: Create QR codes for sharing contact information, social media profiles, or personal websites.</li>
             </ul>
             </div>
         </CardBody>

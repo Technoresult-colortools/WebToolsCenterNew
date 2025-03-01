@@ -2,12 +2,15 @@
 
 import type React from "react"
 import { useState, useEffect } from "react"
-import { Button, Input, Select, SelectItem, Tabs, Tab, Card, CardBody, CardHeader } from "@nextui-org/react"
+import { Button, Input, Select, SelectItem, Tabs, Tab, Card, CardBody, CardHeader, Spinner } from "@nextui-org/react"
 import { toast } from "react-hot-toast"
 import { ArrowLeftRight, Copy, Check, RefreshCw, Info, BookOpen, Lightbulb, Share2 } from "lucide-react"
 import ToolLayout from "@/components/ToolLayout"
 import { categories } from "./unitCategories"
 import Image from "next/image"
+
+// Find the index of the Currency category
+const currencyIndex = categories.findIndex(cat => cat.name === 'Currency')
 
 export default function UnitConverter() {
   const [category, setCategory] = useState(categories[0])
@@ -17,14 +20,81 @@ export default function UnitConverter() {
   const [toValue, setToValue] = useState("")
   const [conversionHistory, setConversionHistory] = useState<string[]>([])
   const [copied, setCopied] = useState(false)
+  const [exchangeRates, setExchangeRates] = useState<{ [key: string]: number }>({})
+  const [loadingRates, setLoadingRates] = useState(false)
+  const [ratesError, setRatesError] = useState<string | null>(null)
 
   useEffect(() => {
     convertValue(fromValue)
   }, [fromValue])
 
+  useEffect(() => {
+    // If the selected category is Currency, fetch exchange rates
+    if (category.name === 'Currency' && Object.keys(exchangeRates).length === 0) {
+      fetchExchangeRates()
+    }
+  }, [category])
+
+  const fetchExchangeRates = async () => {
+    setLoadingRates(true)
+    setRatesError(null)
+    
+    try {
+      const res = await fetch("https://api.exchangerate-api.com/v4/latest/USD")
+      const data = await res.json()
+      
+      if (data && data.rates) {
+        setExchangeRates(data.rates)
+        
+        // Update the Currency category with available currencies
+        if (currencyIndex !== -1) {
+          // Create a modified categories array with updated currency units
+          const updatedCurrencyCategory = {
+            ...categories[currencyIndex],
+            units: Object.keys(data.rates),
+            convert: (value: number, from: string, to: string) => {
+              // Convert to USD first
+              const usdValue = value / data.rates[from]
+              // Convert from USD to target currency
+              return usdValue * data.rates[to]
+            },
+            formula: (from: string, to: string) => {
+              const rate = (data.rates[to] / data.rates[from]).toFixed(4)
+              return `1 ${from} = ${rate} ${to} (Live)`
+            }
+          }
+          
+          // If category is currently Currency, update it
+          if (category.name === 'Currency') {
+            setCategory(updatedCurrencyCategory)
+            setFromUnit('USD')
+            setToUnit('EUR')
+          }
+        }
+        
+        toast.success("Exchange rates updated successfully!")
+      } else {
+        throw new Error("Invalid response format")
+      }
+    } catch (error) {
+      console.error("Failed to fetch exchange rates", error)
+      setRatesError("Failed to fetch exchange rates. Using fallback rates.")
+      toast.error("Failed to fetch exchange rates. Using fallback rates.")
+    } finally {
+      setLoadingRates(false)
+    }
+  }
+
   const convertValue = (value: string) => {
     const numValue = Number.parseFloat(value)
     if (!isNaN(numValue)) {
+      // If category is Currency and we're still loading rates, show loading in result
+      if (category.name === 'Currency' && loadingRates) {
+        setToValue("Loading...")
+        return
+      }
+      
+      // If there was an error loading currency rates, use the original conversion function
       const result = category.convert(numValue, fromUnit, toUnit)
       setToValue(result.toFixed(6))
       addToHistory(`${numValue} ${fromUnit} = ${result.toFixed(6)} ${toUnit}`)
@@ -61,6 +131,20 @@ export default function UnitConverter() {
     toast.success("Conversion history cleared!")
   }
 
+  const handleCategoryChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const newCategory = categories.find((c) => c.name === e.target.value)
+    if (newCategory) {
+      setCategory(newCategory)
+      setFromUnit(newCategory.units[0])
+      setToUnit(newCategory.units[1])
+      
+      // If switching to Currency and we haven't loaded rates yet, fetch them
+      if (newCategory.name === 'Currency' && Object.keys(exchangeRates).length === 0) {
+        fetchExchangeRates()
+      }
+    }
+  }
+
   return (
     <ToolLayout
       title="Advanced Unit Converter"
@@ -71,6 +155,21 @@ export default function UnitConverter() {
         <Card>
           <CardHeader>
             <h2 className="text-2xl font-bold">Unit Converter</h2>
+            {category.name === 'Currency' && (
+              <div className="flex items-center ml-4">
+                <Button
+                  size="sm"
+                  color="primary"
+                  isLoading={loadingRates}
+                  onClick={fetchExchangeRates}
+                  disabled={loadingRates}
+                >
+                  {!loadingRates && <RefreshCw className="w-4 h-4 mr-1" />}
+                  Refresh Rates
+                </Button>
+                {ratesError && <span className="text-danger text-sm ml-2">Using fallback rates</span>}
+              </div>
+            )}
           </CardHeader>
           <CardBody>
             <Tabs aria-label="Unit Converter Options">
@@ -88,14 +187,7 @@ export default function UnitConverter() {
                     label="Category"
                     placeholder="Select category"
                     selectedKeys={[category.name]}
-                    onChange={(e) => {
-                      const newCategory = categories.find((c) => c.name === e.target.value)
-                      if (newCategory) {
-                        setCategory(newCategory)
-                        setFromUnit(newCategory.units[0])
-                        setToUnit(newCategory.units[1])
-                      }
-                    }}
+                    onChange={handleCategoryChange}
                     variant="bordered"
                     classNames={{
                       trigger: "bg-default-100 data-[hover=true]:bg-default-200",
@@ -119,6 +211,7 @@ export default function UnitConverter() {
                         classNames={{
                           trigger: "bg-default-100 data-[hover=true]:bg-default-200",
                         }}
+                        isDisabled={category.name === 'Currency' && loadingRates}
                       >
                         {category.units.map((unit) => (
                           <SelectItem key={unit} value={unit} className="text-default-700">
@@ -134,6 +227,7 @@ export default function UnitConverter() {
                         onChange={handleFromValueChange}
                         variant="bordered"
                         className="mt-2"
+                        isDisabled={category.name === 'Currency' && loadingRates}
                       />
                     </div>
                     <div>
@@ -146,6 +240,7 @@ export default function UnitConverter() {
                         classNames={{
                           trigger: "bg-default-100 data-[hover=true]:bg-default-200",
                         }}
+                        isDisabled={category.name === 'Currency' && loadingRates}
                       >
                         {category.units.map((unit) => (
                           <SelectItem key={unit} value={unit} className="text-default-700">
@@ -166,15 +261,33 @@ export default function UnitConverter() {
                   </div>
 
                   <div className="flex justify-center space-x-4">
-                    <Button color="primary" onClick={swapUnits}>
+                    <Button color="primary" onClick={swapUnits} isDisabled={category.name === 'Currency' && loadingRates}>
                       <ArrowLeftRight className="w-4 h-4 mr-2" />
                       Swap
                     </Button>
-                    <Button color="primary" onClick={copyToClipboard}>
+                    <Button color="primary" onClick={copyToClipboard} isDisabled={!toValue || toValue === "Loading..."}>
                       {copied ? <Check className="w-4 h-4 mr-2" /> : <Copy className="w-4 h-4 mr-2" />}
                       {copied ? "Copied!" : "Copy"}
                     </Button>
                   </div>
+
+                  {category.name === 'Currency' && category.formula && (
+                    <div className="mt-4 p-3 bg-default-100 rounded-md text-sm">
+                      <p>Exchange Rate: {category.formula(fromUnit, toUnit)}</p>
+                      {loadingRates ? (
+                        <div className="flex items-center mt-1">
+                          <Spinner size="sm" />
+                          <span className="ml-2">Fetching latest rates...</span>
+                        </div>
+                      ) : (
+                        <p className="text-xs text-default-500 mt-1">
+                          {Object.keys(exchangeRates).length > 0 ? 
+                            "Using live exchange rates" :
+                            "Using fallback exchange rates"}
+                        </p>
+                      )}
+                    </div>
+                  )}
                 </div>
               </Tab>
               <Tab
@@ -188,13 +301,17 @@ export default function UnitConverter() {
               >
                 <div className="mt-4 space-y-4">
                   <div className="bg-default-100 rounded-md p-4 max-h-40 overflow-y-auto">
-                    {conversionHistory.map((conversion, index) => (
-                      <div key={index} className="text-default-700 mb-1">
-                        {conversion}
-                      </div>
-                    ))}
+                    {conversionHistory.length > 0 ? (
+                      conversionHistory.map((conversion, index) => (
+                        <div key={index} className="text-default-700 mb-1">
+                          {conversion}
+                        </div>
+                      ))
+                    ) : (
+                      <div className="text-default-500 text-center">No conversion history yet</div>
+                    )}
                   </div>
-                  <Button color="danger" onClick={clearHistory}>
+                  <Button color="danger" onClick={clearHistory} isDisabled={conversionHistory.length === 0}>
                     <RefreshCw className="w-4 h-4 mr-2" />
                     Clear History
                   </Button>
@@ -212,14 +329,14 @@ export default function UnitConverter() {
                 About Advanced Unit Converter
               </h2>
               <p className="text-sm md:text-base text-gray-600 dark:text-gray-300 mb-4">
-                The Advanced Unit Converter is a powerful and versatile tool designed to simplify the process of
-                converting between various units of measurement. With its intuitive interface and comprehensive unit
-                categories, it's perfect for students, professionals, and anyone needing quick and accurate conversions.
+              Advanced unit converter is a powerful and versatile tool designed to simplify the process
+                Changing between different units of measurement. With your spontaneous interface and broad unit
+                Categories, it requires quick and accurate conversion to students, professionals and anyone.
               </p>
 
               <div className="my-8">
                 <Image
-                  src="/Images/UnitConverterPreview.png"
+                  src="/Images/InfosectionImages/UnitConverterPreview.webp?height=400&width=600"
                   alt="Screenshot of the Advanced Unit Converter interface showing conversion options and results"
                   width={600}
                   height={400}
@@ -232,14 +349,15 @@ export default function UnitConverter() {
                 How to Use Advanced Unit Converter?
               </h2>
               <ol className="list-decimal pl-6 space-y-2 text-gray-600 dark:text-gray-300">
-                <li>Select the category of units you want to convert (e.g., Length, Weight, Temperature).</li>
-                <li>Choose the unit you're converting from in the "From" dropdown.</li>
+                <li>First Select the main category of units you want to convert (e.g., Length, Weight, Temperature).</li>
+                <li>Choose the unit you're converting from in the "From" dropdown menu.</li>
                 <li>Enter the value you want to convert in the input field.</li>
                 <li>Select the unit you're converting to in the "To" dropdown.</li>
                 <li>The converted value will appear automatically in the result field.</li>
                 <li>Use the "Swap" button to quickly reverse the conversion.</li>
                 <li>Click "Copy" to copy the conversion result to your clipboard.</li>
                 <li>Switch to the "History" tab to view your recent conversions.</li>
+                <li>For currency conversions, the latest exchange rates are fetched automatically.</li>
               </ol>
 
               <h2 className="text-xl font-semibold text-gray-800 dark:text-gray-200 mt-6 mb-3 flex items-center">
@@ -253,28 +371,12 @@ export default function UnitConverter() {
                 </li>
                 <li>Extensive list of units within each category for precise conversions.</li>
                 <li>Real-time conversion as you type.</li>
+                <li>This tool maintain Live currency exchange rates for accurate currency conversions.</li>
                 <li>Swap function to quickly reverse conversion direction.</li>
                 <li>Copy to clipboard functionality for easy sharing.</li>
                 <li>Conversion history to keep track of recent conversions.</li>
                 <li>Clean and intuitive tabbed interface.</li>
                 <li>Responsive design for use on desktop and mobile devices.</li>
-              </ul>
-
-              <h2 className="text-xl font-semibold text-gray-800 dark:text-gray-200 mt-6 mb-3 flex items-center">
-                <Share2 className="w-5 h-5 mr-2" />
-                Applications and Use Cases
-              </h2>
-              <ul className="list-disc pl-6 space-y-2 text-gray-600 dark:text-gray-300">
-                <li>Education: For math, science, and engineering calculations.</li>
-                <li>Engineering: Convert between different units for design and calculations.</li>
-                <li>Cooking: Convert between volume and weight measurements for recipes.</li>
-                <li>Fitness and Health: Convert between units for weight, length, and energy.</li>
-                <li>Travel: Convert units when visiting countries with different measurement systems.</li>
-                <li>Construction: Convert units of length, area, and volume for building projects.</li>
-                <li>Science: Perform conversions for various scientific calculations and experiments.</li>
-                <li>International Trade: Convert units for shipping and logistics.</li>
-                <li>IT and Networking: Use data conversions for storage and bandwidth calculations.</li>
-                <li>Energy Management: Convert between energy units for power consumption analysis.</li>
               </ul>
             </div>
           </CardBody>
@@ -283,4 +385,3 @@ export default function UnitConverter() {
     </ToolLayout>
   )
 }
-

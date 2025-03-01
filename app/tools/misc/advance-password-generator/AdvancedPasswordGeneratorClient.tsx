@@ -250,7 +250,7 @@ export default function AdvancedPasswordGenerator() {
         <Card className="bg-default-50 dark:bg-default-100 overflow-hidden">
           <CardBody className="p-6 relative">
             <div className="flex items-center justify-between mb-4">
-              <h2 className="text-2xl font-bold text-default-700">Generated Password</h2>
+            <h2 className="text-lg sm:text-xl md:text-2xl font-bold text-default-700">Generated Password</h2>
               <div className="flex items-center space-x-2 bg-default-100 dark:bg-default-200 px-3 py-1 rounded-full">
                 <Shield
                   className={`${
@@ -332,33 +332,34 @@ export default function AdvancedPasswordGenerator() {
             </div>
 
             <div className="mt-4 flex flex-col sm:flex-row items-center justify-end space-y-2 sm:space-y-0 sm:space-x-2">
-              <Button 
-                onClick={handleCopyToClipboard} 
-                color="primary" 
-                variant="flat"
-                startContent={<Copy className="h-4 w-4" />}
-                className="font-medium"
-              >
-                Copy
-              </Button>
-              <Button 
-                onClick={generatePassword} 
-                color="success" 
-                variant="shadow"
-                startContent={<RefreshCw className={`h-4 w-4 ${isGenerating ? 'animate-spin' : ''}`} />}
-                className="font-medium"
-                isLoading={isGenerating}
-              >
-                Generate
-              </Button>
-            </div>
+            <Button 
+              onClick={handleCopyToClipboard} 
+              color="primary" 
+              variant="flat"
+              startContent={<Copy className="h-4 w-4" />}
+              className="font-medium text-base px-5 py-3 sm:px-4 sm:py-2"
+            >
+              Copy
+            </Button>
+            <Button 
+              onClick={generatePassword} 
+              color="success" 
+              variant="shadow"
+              startContent={<RefreshCw className={`h-4 w-4 ${isGenerating ? 'animate-spin' : ''}`} />}
+              className="font-medium text-base px-5 py-3 sm:px-4 sm:py-2"
+              isLoading={isGenerating}
+            >
+              Generate
+            </Button>
+          </div>
+
           </CardBody>
         </Card>
 
         {/* Password Settings Section */}
         <Card className="bg-default-50 dark:bg-default-100">
           <CardBody className="p-6">
-            <h2 className="text-2xl font-bold text-default-700 mb-4">Password Settings</h2>
+            <h2 className="text-lg sm:text-xl md:text-2xl font-bold text-default-700">Password Settings</h2>
 
             <Tabs aria-label="Password settings">
               <Tab
@@ -531,15 +532,20 @@ export default function AdvancedPasswordGenerator() {
                 What is Advanced Password Generator?
               </h2>
               <p className="text-sm md:text-base text-default-600 mb-4">
-                Advanced password generators are a versatile tool designed to create strong, safe password to suit your specific requirements. Whether you are setting a new account, updating the existing password, or managing several logins, this tool provides flexibility and safety facilities that you need to generate strong passwords quickly and easily.
+                Advanced password generator is a versatile tool designed to create strong, safe passwords to suit your specific requirements. Whether you are setting a new account, updating the existing password, or managing several logins, this tool provides flexibility and safety features that you need to generate strong passwords quickly and easily.
               </p>
+
+              <p className="text-sm md:text-base text-default-600 mb-4">
+                Our Password Generator tool operates entirely on the client side, ensuring that no passwords are stored, transmitted, or processed on any server. All password generation happens securely within your browser, keeping your data private and protected.
+              </p>
+
 
               <div className="my-8">
                 <Image
-                  src="/placeholder.svg?height=400&width=600"
+                  src="/Images/InfosectionImages/PasswordGeneratorPreview.webp?height=400&width=600"
                   alt="Screenshot of the Advanced Password Generator interface showing various password generation options"
-                  width={500}
-                  height={200}
+                  width={600}
+                  height={400}
                   className="rounded-lg shadow-lg w-full h-auto"
                 />
               </div>

@@ -408,16 +408,18 @@ export default function ListRandomizer() {
           <CardBody className="p-6">
             <h2 className="text-2xl font-bold text-gray-800 dark:text-gray-200 mb-4">Randomized Output</h2>
             <Textarea value={outputList} readOnly className="w-full" minRows={6} variant="bordered" />
-            <div className="mt-4 flex flex-wrap justify-between gap-2">
-              <Button onClick={handleCopyToClipboard} color="primary">
+            <div className="mt-4 flex flex-col sm:flex-row sm:justify-end sm:space-x-2 space-y-2 sm:space-y-0 items-end">
+              <Button onPress={handleCopyToClipboard} color="primary" className="w-full sm:w-48">
                 <Copy className="h-5 w-5 mr-2" />
                 Copy to Clipboard
               </Button>
-              <Button onClick={handleDownload} color="primary">
+              <Button onPress={handleDownload} color="primary" className="w-full sm:w-48">
                 <Download className="h-5 w-5 mr-2" />
                 Download Result
               </Button>
             </div>
+
+
           </CardBody>
         </Card>
 
@@ -430,16 +432,12 @@ export default function ListRandomizer() {
                 About List Randomizer
               </h2>
               <p className="text-sm md:text-base text-gray-600 dark:text-gray-300 mb-4">
-                The List Randomizer is a powerful and versatile tool designed to shuffle and manipulate lists of items
-                with precision and flexibility. Whether you're a researcher conducting a random sampling, a teacher
-                assigning random groups, a project manager allocating tasks, or simply someone looking to introduce an
-                element of chance into your decision-making, this tool offers a comprehensive suite of features to meet
-                your randomization needs.
+              The list is designed for the item and designed for items and designed for items and the item input listing the input listeryu lincomicolontebuster upload listrandomisation settingsbasic advanced listrandrandomized output to the clipboard The listing is designed to manipulate the list of flexible. Whether you are a researcher doing a random sampling, a teacher who is assigning random groups, is allocating a project manager work, or just a person wants to present an element of chance in your decision, this tool offers a comprehensive suit of features to meet your randomization needs.
               </p>
 
               <div className="my-8">
                 <Image
-                  src="/placeholder.svg?height=400&width=600"
+                  src="/Images/InfosectionImages/ListRandomizerPreview.webp?height=400&width=600"
                   alt="Screenshot of the List Randomizer interface showing input area, randomization options, and output"
                   width={600}
                   height={400}
@@ -449,34 +447,25 @@ export default function ListRandomizer() {
 
               <h2 className="text-xl font-semibold text-gray-800 dark:text-gray-200 mt-6 mb-3 flex items-center">
                 <BookOpen className="w-5 h-5 mr-2" />
-                How to Use List Randomizer?
+                How to Use a List Randomizer?
               </h2>
               <ol className="list-decimal pl-6 space-y-2 text-gray-600 dark:text-gray-300">
                 <li>Enter your list items in the input textarea or upload a text file.</li>
-                <li>
-                  Choose the appropriate separator for your list items (newline, comma, semicolon, tab, or custom).
-                </li>
-                <li>
-                  Adjust the randomization settings according to your needs:
-                  <ul className="list-disc pl-6 mt-2 space-y-1 text-gray-600 dark:text-gray-300">
-                    <li>Set trimming, duplicate removal, and sorting options</li>
-                    <li>Choose the randomization method (Fisher-Yates or JavaScript Sort)</li>
-                    <li>Adjust subset size, grouping, and other advanced options</li>
-                  </ul>
-                </li>
+                <li>Choose a suitable divider for your list items (newline, comma, semicolon, tab, or custom).</li>
                 <li>Click the "Randomize List" button to generate a randomized version of your list.</li>
-                <li>View the randomized output in the result textarea.</li>
+                <li>View the randomized output in the result text area.</li>
                 <li>Copy the result to your clipboard or download it as a text file.</li>
                 <li>Use the "Reset" button to return all settings to their default values.</li>
               </ol>
+
 
               <h2 className="text-xl font-semibold text-gray-800 dark:text-gray-200 mt-6 mb-3 flex items-center">
                 <Lightbulb className="w-5 h-5 mr-2" />
                 Key Features
               </h2>
               <ul className="list-disc pl-6 space-y-2 text-gray-600 dark:text-gray-300">
-                <li>Multiple input methods: Enter text directly or upload files</li>
-                <li>Flexible separators: Choose from common separators or use a custom one</li>
+                <li>Multiple input methods: You can enter the text directly or upload files which contains List</li>
+                <li>Flexible separators: Choose the seperators from the Select option or use a custom one</li>
                 <li>Advanced randomization options: Fisher-Yates shuffle or JavaScript sort</li>
                 <li>List preprocessing: Trim items, remove duplicates, and sort before randomization</li>
                 <li>Subset selection: Choose a specific number of items from the randomized list</li>
@@ -486,23 +475,6 @@ export default function ListRandomizer() {
                 <li>Reproducible results: Use a seed for consistent randomization across sessions</li>
                 <li>Easy reset: Quickly return all settings to their default values</li>
                 <li>Export options: Copy to clipboard or download as a text file</li>
-              </ul>
-
-              <h2 className="text-xl font-semibold text-gray-800 dark:text-gray-200 mt-6 mb-3 flex items-center">
-                <Share2 className="w-5 h-5 mr-2" />
-                Applications and Use Cases
-              </h2>
-              <ul className="list-disc pl-6 space-y-2 text-gray-600 dark:text-gray-300">
-                <li>Research: Randomize participant lists or create random samples for studies</li>
-                <li>Education: Assign random groups for projects or create randomized test question orders</li>
-                <li>Project Management: Randomly assign tasks to team members or prioritize project backlogs</li>
-                <li>Game Development: Generate random events, loot drops, or NPC behaviors</li>
-                <li>Music and Media: Create shuffled playlists or randomize content order</li>
-                <li>Decision Making: Use randomization to make unbiased choices or break ties</li>
-                <li>Data Analysis: Perform random sampling or create control groups for experiments</li>
-                <li>Event Planning: Randomize seating arrangements or determine presentation orders</li>
-                <li>Sports and Competitions: Create random tournament brackets or team matchups</li>
-                <li>Software Testing: Generate random input data for thorough application testing</li>
               </ul>
             </div>
           </CardBody>

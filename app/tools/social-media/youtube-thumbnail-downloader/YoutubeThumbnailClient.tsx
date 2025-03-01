@@ -52,7 +52,6 @@ const ThumbnailGrid = ({ thumbnails }: { thumbnails: ThumbnailQuality[] }) => {
       setTimeout(() => setCopiedIndex(null), 2000);
     });
   };
-
   const downloadThumbnail = async (url: string, quality: string) => {
     try {
       const response = await fetch(url);
@@ -94,6 +93,8 @@ const ThumbnailGrid = ({ thumbnails }: { thumbnails: ThumbnailQuality[] }) => {
                 <Image
                   src={thumb.url}
                   alt={`Thumbnail ${thumb.width}x${thumb.height}`}
+                  width={thumb.width}
+                  height={thumb.height}
                   className="w-full h-auto rounded-lg"
                 />
               </div>

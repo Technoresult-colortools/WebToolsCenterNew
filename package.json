@@ -8,7 +8,8 @@
     "start": "next start",
     "lint": "next lint",
     "postinstall": "prisma generate",
-    "db:seed": "npx ts-node --project tsconfig.seed.json prisma/seed.ts"
+    "db:seed": "npx ts-node --project tsconfig.seed.json prisma/seed.ts",
+    "postbuild": "next-sitemap"
   },
   "dependencies": {
     "@auth0/auth0-react": "^2.2.4",
@@ -74,6 +75,7 @@
     "autoprefixer": "^10.4.20",
     "eslint": "^9",
     "eslint-config-next": "15.1.4",
+    "next-sitemap": "^4.2.3",
     "postcss": "^8.4.49",
     "prisma": "^6.2.1",
     "tailwindcss": "^3.4.17",

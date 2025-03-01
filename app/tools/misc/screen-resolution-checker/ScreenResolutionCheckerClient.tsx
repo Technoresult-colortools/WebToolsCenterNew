@@ -697,15 +697,12 @@ export default function AdvancedScreenChecker() {
                 What is the Screen Resolution Checker?
               </h2>
               <p className="text-sm md:text-base text-default-600 mb-4">
-                The Advanced Screen Checker is a comprehensive tool designed to provide detailed information about your
-                display and device capabilities. It offers insights into physical and logical display properties, color
-                characteristics, and system information, making it invaluable for developers, designers, and tech
-                enthusiasts.
+              Advanced screen checker is a comprehensive device designed to provide detailed information about your performance and device capabilities. It provides insight into physical and logical performance properties, color characteristics and system information, making it priceless to developers, designers and technical enthusiasts.
               </p>
 
               <div className="my-8">
                 <Image
-                  src="/placeholder.svg?height=400&width=600"
+                  src="/Images/InfosectionImages/ScreenResolutionCheckerPreview.webp?height=400&width=600"
                   alt="Screenshot of the Advanced Screen Checker interface showing various screen information and capabilities"
                   width={600}
                   height={400}
@@ -724,8 +721,8 @@ export default function AdvancedScreenChecker() {
                 Using our Advanced Screen Checker is straightforward:
               </p>
               <ol className="list-decimal list-inside space-y-2 text-sm md:text-base">
-                <li>Open the tool on the device you want to analyze.</li>
-                <li>View the comprehensive display information in the main panel.</li>
+                <li>This tool Automatically analyze the screen resolution based on the device</li>
+                <li>You can View the comprehensive display information in the main panel.</li>
                 <li>
                   Use the tabs to switch between different types of information (Display, Screen Resolution, Browser
                   Resolution, Pixel Details).
@@ -766,10 +763,10 @@ export default function AdvancedScreenChecker() {
               </ul>
 
               <p className="text-sm md:text-base text-default-600 mt-4">
-                Ready to discover the full capabilities of your display? Dive into our Advanced Screen Checker and
-                uncover detailed insights about your screen. Whether you're a developer optimizing your designs, a tech
-                enthusiast curious about your hardware, or someone troubleshooting display issues, our tool provides the
-                comprehensive information you need. Start exploring your screen's potential now!
+                Are you ready to discover the full capabilities of your performance? Dive into our advanced screen resolution checker and
+                Highlight the detailed insight about your screen. Whether you are optimizing your designs a developer, a technology
+                Eager enthusiastic about your hardware, or someone provides our equipment to prevent performance issues
+                You need comprehensive information. Now start searching for your screen ability!
               </p>
             </div>
           </CardBody>
