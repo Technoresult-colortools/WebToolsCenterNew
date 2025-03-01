@@ -27,7 +27,6 @@ import {
   Info,
   BookOpen,
   Lightbulb,
-  Share2,
 } from "lucide-react"
 import ToolLayout from "@/components/ToolLayout"
 import NextImage from "next/image"

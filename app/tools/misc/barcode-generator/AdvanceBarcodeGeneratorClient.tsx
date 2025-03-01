@@ -8,16 +8,13 @@ import {
   Select,
   SelectItem,
   Slider,
-  Tabs,
-  Tab,
   Card,
   CardBody,
   CardHeader,
-  Accordion,
-  AccordionItem,
+
 } from "@nextui-org/react"
 import { toast } from "react-hot-toast"
-import { Download, Copy, RefreshCw, Info, Lightbulb, BookOpen, Settings } from "lucide-react"
+import { Download, Copy, RefreshCw, Info, Lightbulb, BookOpen } from "lucide-react"
 import JsBarcode from "jsbarcode"
 import ToolLayout from "@/components/ToolLayout"
 import Image from "next/image"

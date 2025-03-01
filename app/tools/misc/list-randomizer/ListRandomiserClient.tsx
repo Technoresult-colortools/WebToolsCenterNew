@@ -15,7 +15,7 @@ import {
   Tabs,
   Tab,
 } from "@nextui-org/react"
-import { Shuffle, Copy, Upload, Download, Info, BookOpen, Lightbulb, Share2, Settings,  RefreshCcw } from "lucide-react"
+import { Shuffle, Copy, Upload, Download, Info, BookOpen, Lightbulb, Settings,  RefreshCcw } from "lucide-react"
 import { toast } from "react-hot-toast"
 import ToolLayout from "@/components/ToolLayout"
 import Image from "next/image"

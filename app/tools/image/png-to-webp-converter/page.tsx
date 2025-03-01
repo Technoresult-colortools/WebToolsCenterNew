@@ -1,10 +1,9 @@
 'use client';
 
 import React, { useState, useCallback, useRef } from 'react';
-import { Card, CardBody, Button, Select, SelectItem, Textarea, Input, Slider, Checkbox } from "@nextui-org/react";
+import { Card, CardBody, Button,  Input, Slider, Checkbox } from "@nextui-org/react";
 import NextImage from 'next/image';
-import Link from 'next/link';
-import { Copy, Download, Info, Lightbulb, BookOpen, RefreshCw, Trash2, Upload, ImageIcon, ZapIcon, Settings, Search, Layers, ImagePlus, FileUp, Sliders, Clock, AlertCircle, CheckCircle2, EyeIcon, Scale } from 'lucide-react';
+import {  Download, Info, Lightbulb, BookOpen, Trash2, Upload, ImageIcon, ZapIcon, Settings, Layers, ImagePlus, Sliders, Clock, AlertCircle, CheckCircle2, EyeIcon, Scale } from 'lucide-react';
 import { toast } from 'react-hot-toast';
 import ToolLayout from '@/components/ToolLayout';
 
