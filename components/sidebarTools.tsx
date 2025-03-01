@@ -117,7 +117,7 @@ export default function SidebarTools() {
                         startContent={
                           <FontAwesomeIcon
                             icon={tool.icon as IconDefinition}
-                            className={`w-4 h-4 flex-shrink-0 ${tool.iconColor}`}
+                            className={`w-4 h-4 flex-shrink-0`}
                             style={{ color: 'currentColor' }}
                           />
                         }
