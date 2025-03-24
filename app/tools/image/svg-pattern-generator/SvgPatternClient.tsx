@@ -501,44 +501,7 @@ export default function SvgPatternGenerator() {
   )
 
   // Added responsive CustomImage upload with proper loading state
-  const renderCustomImageUpload = () => {
-    if (patternType !== "customImage") return null;
-    
-    return (
-      <div className="mt-4">
-        <Button
-          color="primary"
-          variant="flat"
-          fullWidth
-          onClick={() => fileInputRef.current?.click()}
-          isLoading={isImageUploading}
-          startContent={!isImageUploading && <ImageIcon className="h-4 w-4" />}
-          aria-label="Upload custom image"
-        >
-          {isImageUploading ? "Uploading..." : customImage ? "Change Image" : "Upload Image (Max 5MB)"}
-        </Button>
-        <input
-          type="file"
-          accept="image/*"
-          onChange={handleImageUpload}
-          ref={fileInputRef}
-          className="hidden"
-          aria-hidden="true"
-        />
-        {customImage && (
-          <div className="mt-2 flex justify-center">
-            <div className="relative w-16 h-16 rounded overflow-hidden border border-gray-300">
-              <img 
-                src={customImage} 
-                alt="Uploaded pattern" 
-                className="object-cover w-full h-full" 
-              />
-            </div>
-          </div>
-        )}
-      </div>
-    );
-  };
+
   return (
     <ToolLayout
       title="SVG Pattern Generator"
