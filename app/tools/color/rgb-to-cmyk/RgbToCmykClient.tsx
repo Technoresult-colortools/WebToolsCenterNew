@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { AlertCircle, BookOpen, Info, Lightbulb, RefreshCw, Copy, Palette, Eye, Code } from "lucide-react"
+import { AlertCircle, BookOpen, Info, Lightbulb, RefreshCw, Copy, Eye, Code } from "lucide-react"
 import { toast } from "react-hot-toast"
 import ToolLayout from "@/components/ToolLayout"
 import { Button, Card, CardBody, Input, Slider, Tabs, Tab } from "@nextui-org/react"

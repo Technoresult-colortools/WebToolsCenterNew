@@ -7,12 +7,9 @@ import {
   BookOpen, 
   Lightbulb, 
   AlertCircle, 
-  RefreshCw, 
   Download, 
-  Palette, 
   Eye, 
   Code,
-  ChevronRight,
   Check,
   Shuffle
 } from "lucide-react"
@@ -30,8 +27,6 @@ import {
   Select, 
   SelectItem,
   Tooltip,
-  Badge,
-  Divider
 } from "@nextui-org/react"
 
 interface Shade {

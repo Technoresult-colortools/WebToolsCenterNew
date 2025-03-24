@@ -228,7 +228,7 @@ const PhotoCensor: React.FC = () => {
           resolve()
         }, 0)
       })
-    } catch (error) {
+    } catch {
       toast.error("Failed to apply censoring effect")
     } finally {
       setIsProcessing(false)

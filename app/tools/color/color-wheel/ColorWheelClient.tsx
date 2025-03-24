@@ -2,7 +2,7 @@
 
 import type React from "react"
 import { useState, useRef, useEffect, useMemo, useCallback } from "react"
-import { Copy, Download, Info, Palette, BookOpen, Lightbulb, Eye, Code, Check } from "lucide-react"
+import { Copy, Download, Info, BookOpen, Lightbulb, Eye, Code, Check } from "lucide-react"
 import { Button, Card, CardBody, Input, Slider, Select, SelectItem, Tabs, Tab } from "@nextui-org/react"
 import { toast } from "react-hot-toast"
 import ToolLayout from "@/components/ToolLayout"

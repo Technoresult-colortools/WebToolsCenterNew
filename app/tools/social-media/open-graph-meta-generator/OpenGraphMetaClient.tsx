@@ -4,7 +4,6 @@ import { useState } from "react"
 import {
   Copy,
   RefreshCw,
-  Share2,
   Globe,
   Newspaper,
   Book,

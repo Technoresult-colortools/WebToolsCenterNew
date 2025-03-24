@@ -1,7 +1,7 @@
 'use client'
 import React, { useState, useRef, useEffect } from 'react';
 import { Card, CardBody, Button, Input, Select, SelectItem } from "@nextui-org/react";
-import { Search, RefreshCw, AlertCircle, ImageIcon, Clock, Info, Lightbulb, BookOpen, Share2, Download, Clipboard, Check, Youtube, Trash2 } from 'lucide-react';
+import { Search, RefreshCw, AlertCircle, ImageIcon, Clock, Info, Lightbulb, BookOpen, Download, Clipboard, Check, Youtube, Trash2 } from 'lucide-react';
 import { toast } from 'react-hot-toast';
 import ToolLayout from '@/components/ToolLayout';
 import Image from 'next/image';

@@ -37,7 +37,7 @@ interface PatternProps {
 }
 
 export const generatePattern = (type: PatternType, props: PatternProps): string => {
-    const { size, spacing, patternColor, secondaryColor, strokeWidth, complexity, customImage, skew } = props;
+    const { size, spacing, patternColor, secondaryColor, strokeWidth, complexity, customImage, } = props;
     const svgSize = size + spacing;
     const complexityFactor = complexity / 100;
 

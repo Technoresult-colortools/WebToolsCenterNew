@@ -2,7 +2,7 @@
 
 import type React from "react"
 import { useState, useRef, useEffect } from "react"
-import { Upload, X, Download, RefreshCw, Sliders, Eye, EyeOff, Info, BookOpen, Lightbulb, Save, Undo, Redo, Layers, Settings, Star } from "lucide-react"
+import { Upload, X, Download, RefreshCw, Sliders, Eye, EyeOff, Info, BookOpen, Lightbulb, Save, Undo, Redo, Layers, Star } from "lucide-react"
 import {
   Card,
   CardBody,

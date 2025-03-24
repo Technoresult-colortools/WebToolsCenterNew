@@ -16,7 +16,6 @@ import {
   Trash2,
   Download,
   Lightbulb,
-  Share2,
   ImageIcon,
   BookOpen,
 } from "lucide-react"
@@ -24,7 +23,6 @@ import { Button, Card, CardBody, CardHeader, Input, Tabs, Tab, Image, Chip, Tool
 import { toast, } from "react-hot-toast"
 import NextImage from 'next/image'
 import ToolLayout from "@/components/ToolLayout"
-import Link from "next/link"
 
 interface VideoMetadata {
   tags: string[]

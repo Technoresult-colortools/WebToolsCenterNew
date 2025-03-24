@@ -14,7 +14,6 @@ import {
   Trash2,
   Download,
   Lightbulb,
-  Share2,
   ImageIcon,
   BookOpen
 } from 'lucide-react';

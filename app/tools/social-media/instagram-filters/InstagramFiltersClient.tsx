@@ -13,7 +13,6 @@ import {
   ZoomIn,
   ZoomOut,
   BookOpen,
-  Lightbulb,
   Info,
   Link2,
   Maximize2,

@@ -69,7 +69,7 @@ export default function EnhancedImageResizer() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const fileInputRef = useRef<HTMLInputElement>(null)
   const [imageSrc, setImageSrc] = useState<string | null>(null)
-  const [showOriginal, setShowOriginal] = useState<boolean>(true)
+  const [showOriginal,] = useState<boolean>(true)
   const [activeTab, setActiveTab] = useState<string>("settings")
 
   const handleImageUpload = (file: File) => {

@@ -18,7 +18,6 @@ import {
   Tabs,
   Tab,
 } from "@nextui-org/react"
-import Image from "next/image"
 import Link from "next/link"
 import { toast, Toaster } from "react-hot-toast"
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter"

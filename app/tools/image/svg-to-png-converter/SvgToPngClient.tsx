@@ -28,7 +28,6 @@ import {
   Maximize2,
   RefreshCw,
   Shield,
-  Target,
   HelpCircle,
   Lock,
 } from "lucide-react"
