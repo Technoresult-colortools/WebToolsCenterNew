@@ -186,7 +186,7 @@ export default function QRCodeGenerator() {
       description="Create Customized QR Code for various purposes"
       toolId="678f383026f06f912191bccd"
     >
-      <div className="flex flex-col-reverse md:flex-col gap-6">
+      <div className="flex flex-col gap-6">
         {/* Preview Card - Moved to top on mobile for immediate feedback */}
         <Card className="bg-default-50 dark:bg-default-100">
           <CardBody className="flex justify-center items-center p-4 md:p-8">
@@ -714,7 +714,7 @@ export default function QRCodeGenerator() {
                 About QR Code Generator
             </h2>
             <p className="text-sm md:text-base text-gray-600 dark:text-gray-300 mb-4">
-            The QR Code Generator is a powerful and versatile tool that allows you to create a QR code adapted for different purposes. Whether you need to share a website URL, contact information, Wi-Fi credentials, or any other type of data, this generator offers an easy-to-use interface to create a QR code to suit your needs.
+            The QR Code Generator is a tool that allows you to create a QR code for different purposes. Whether you need to share a website URL, contact information, Wi-Fi credentials, or any other type of data, this generator offers an easy-to-use interface to create a QR code to suit your needs.
             </p>
 
             <div className="my-8">

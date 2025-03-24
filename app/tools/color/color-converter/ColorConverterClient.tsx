@@ -258,8 +258,8 @@ const ColorConverter: React.FC = () => {
       description="Convert colors between HEX, RGB, HSL, HSV, and RGBA formats with advanced features"
       toolId="678f382e26f06f912191bcb5"
     >
-      <div className="max-w-4xl mx-auto">
-        <Card className="bg-default-50 dark:bg-default-100 shadow-md mb-8">
+      <div className="max-w-6xl mx-auto">
+        <Card className="mb-8 bg-default-50 dark:bg-default-100">
           <CardBody className="p-6">
             <h2 className="text-2xl font-bold mb-2">Color Preview</h2>
             <p className="text-default-500 mb-4">Current color: {hex}</p>
@@ -290,7 +290,7 @@ const ColorConverter: React.FC = () => {
           </CardBody>
         </Card>
 
-        <Card className="bg-default-50 dark:bg-default-100 shadow-md mb-8">
+        <Card className="mb-8 bg-default-50 dark:bg-default-100">
           <CardBody className="p-6">
             <h2 className="text-2xl font-bold mb-4">Color Formats</h2>
             <Tabs
@@ -440,20 +440,14 @@ const ColorConverter: React.FC = () => {
                 About Color Converter
               </h2>
               <p className="text-sm md:text-base text-default-600 mb-4">
-                The Color Converter is a powerful tool designed for developers, designers, and color enthusiasts. It
-                allows you to easily convert colors between various formats, including HEX, RGB, HSL, HSV, and RGBA.
-                This tool ensures accurate and fast conversions for all your color-related needs, whether you're working
-                on web development, graphic design, or any other project involving colors.
+              Color converter is a powerful tool designed for developers, designers and color enthusiasts. This allows you to easily convert colors between formats including Hex, RGB, HSL, HSV and RGBA. This tool ensures accurate and rapid conversion for all your color-related requirements, whether you are working on web development, graphic design or any other color-related project.
               </p>
               <p className="text-sm md:text-base text-default-600 mb-4">
-                With features like real-time color preview, interactive sliders, fullscreen mode, and support for
-                multiple color formats, the Enhanced Color Converter is an invaluable resource for anyone working with
-                digital colors. It's perfect for ensuring color consistency across different projects, exploring color
-                relationships, or simply converting colors between different formats quickly and accurately.
+              This tool includes features such as real -time color preview, interactive sliders, fullscreen mode, and support for many color formats, advanced color converter is an invaluable resource for anyone working with digital colors. It is perfect for ensuring color stability in various projects, searching color relationships, or simply converting colors between different formats quickly and accurately.
               </p>
               <div className="my-8">
                 <NextImage
-                  src="/Images/ColorConverterPreview.png?height=400&width=600"
+                  src="/Images/InfosectionImages/ColorConverterPreview.png?height=400&width=600"
                   alt="Screenshot of the Color Converter interface showing color input options and preview"
                   width={600}
                   height={400}
@@ -493,55 +487,11 @@ const ColorConverter: React.FC = () => {
                 <li>Dynamic background color and shadow effects for enhanced visual feedback</li>
               </ul>
 
-              <h2 className="text-xl md:text-2xl font-semibold text-default-700 mb-4 mt-8 flex items-center">
-                <Info className="w-6 h-6 mr-2" />
-                Applications and Use Cases
-              </h2>
-              <ul className="list-disc list-inside text-default-600 space-y-2 text-sm md:text-base">
-                <li>
-                  <strong>Web Development:</strong> Easily convert between color formats for CSS styling and JavaScript
-                  color manipulation.
-                </li>
-                <li>
-                  <strong>Graphic Design:</strong> Ensure color consistency across different design tools and formats.
-                </li>
-                <li>
-                  <strong>UI/UX Design:</strong> Experiment with color schemes and accessibility in various formats,
-                  including transparency with RGBA.
-                </li>
-                <li>
-                  <strong>Digital Marketing:</strong> Create consistent brand colors across different platforms and
-                  media.
-                </li>
-                <li>
-                  <strong>Print Design:</strong> Convert web colors to print-friendly formats and vice versa.
-                </li>
-                <li>
-                  <strong>Color Theory Education:</strong> Explore relationships between different color models and
-                  learn about color spaces.
-                </li>
-                <li>
-                  <strong>Accessibility Testing:</strong> Check color contrasts and readability in different formats to
-                  ensure WCAG compliance.
-                </li>
-                <li>
-                  <strong>Brand Identity Development:</strong> Develop and maintain consistent color palettes across all
-                  brand materials, including digital and print.
-                </li>
-                <li>
-                  <strong>Game Development:</strong> Create and adjust color palettes for game assets and UI elements.
-                </li>
-                <li>
-                  <strong>Data Visualization:</strong> Generate color schemes for charts, graphs, and other data
-                  representation tools.
-                </li>
-              </ul>
-
               <p className="text-sm md:text-base text-default-600 mt-6">
-                Whether you're a professional designer working on complex projects or a hobbyist exploring the world of
-                digital colors, our Enhanced Color Converter provides the accuracy, functionality, and user-friendly
-                interface you need. Start using it today to streamline your workflow, enhance your understanding of
-                color spaces, and bring your creative visions to life with precision and ease!
+              Whether you are a professional designer who are working on complex projects or searching for the world of a fond person
+                Digital color, our enhanced color converter provides accuracy, functionality and user friendly
+                You need interface. Start using it today to streamline your workflow, increase your understanding
+                Color spaces, and bring your creative view to life with accurate and ease!
               </p>
             </div>
           </CardBody>

@@ -195,7 +195,7 @@ export default function YouTubeThumbnailDownloader() {
                   placeholder="Paste YouTube video URL here..."
                   size="md"
                   variant="bordered"
-                  startContent={<Youtube className="text-default-400" />}
+                  startContent={<Youtube className="text-danger" />}
                   className="flex-1"
                 />
                 <Button
@@ -272,13 +272,13 @@ export default function YouTubeThumbnailDownloader() {
                 About YouTube Thumbnail Downloader
             </h2>
             <p className="text-sm md:text-base text-default-600 mb-4">
-                Our YouTube Thumbnail Downloader is a powerful and user-friendly tool designed to help content creators, marketers, researchers, and YouTube enthusiasts easily access and download high-quality thumbnails from any YouTube video. This versatile tool goes beyond simple thumbnail extraction, offering a range of features to enhance your YouTube-related projects and workflows.
+            Our YouTube Thumbnail Downloader is a powerful and user -friendly device designed to help the creators, abusers, researchers and youtube enthusiasts, easily access and download high quality thumbnails from any YouTube video. This versatile tool is beyond simple thumbnail extraction, which offers several features to increase your YouTube related projects and workflows.
             </p>
 
             {/* Image Preview */}
             <div className="my-8">
                 <Image 
-                src="/Images/YoutubeThumbnailPreview.png" 
+                src="/Images/InfosectionImages/YoutubeThumbnailPreview.png?height=400&width=600" 
                 alt="Screenshot of the YouTube Thumbnail Downloader interface showing thumbnail extraction options" 
                 width={600} 
                 height={400} 
@@ -318,21 +318,6 @@ export default function YouTubeThumbnailDownloader() {
                 <li>Alternatively, use "Copy URL" to get the direct link to the thumbnail.</li>
                 <li>Use the recent search history for quick access to previously fetched videos.</li>
             </ol>
-
-            {/* Applications and Use Cases */}
-            <h2 className="text-lg md:text-xl lg:text-2xl font-semibold text-default-700 mb-4 mt-8 flex items-center">
-                <Share2 className="w-6 h-6 mr-2" />
-                Applications and Use Cases
-            </h2>
-            <ul className="list-disc list-inside space-y-2 text-sm md:text-base">
-                <li>Content Creation: Use high-quality thumbnails as templates or inspiration for your own video thumbnails.</li>
-                <li>Marketing: Analyze successful video thumbnails in your niche to improve your own thumbnail strategy.</li>
-                <li>Social Media: Easily share eye-catching video previews on various social platforms.</li>
-                <li>Blogging: Enhance your blog posts with relevant YouTube video thumbnails.</li>
-                <li>Research: Collect and analyze thumbnail trends for YouTube-related studies.</li>
-                <li>Education: Use thumbnails in presentations or educational materials.</li>
-                <li>Web Development: Quickly integrate YouTube video previews into websites.</li>
-            </ul>
 
             {/* Tips for Effective Use */}
             <h2 className="text-lg md:text-xl lg:text-2xl font-semibold text-default-700 mb-4 mt-8 flex items-center">

@@ -81,7 +81,7 @@ export default function HexToRgba() {
       toolId="678f382c26f06f912191bca4"
     >
       <div className="space-y-8">
-        <Card className="bg-default-50 dark:bg-default-100 shadow-md">
+        <Card className="bg-default-50 dark:bg-default-100">
           <CardBody className="gap-6 p-6">
             <div className="grid gap-6 md:grid-cols-2">
               {/* Input Section */}
@@ -201,21 +201,15 @@ export default function HexToRgba() {
                 What is the Hex to RGBA Converter?
               </h2>
               <p className="text-sm md:text-base text-default-600 mb-4">
-                The Hex to RGBA Converter is a powerful tool designed for web developers, designers, and digital
-                artists. It allows you to easily convert hexadecimal color codes to their RGBA (Red, Green, Blue, Alpha)
-                equivalents. This tool is particularly useful when working with web design, CSS styling, or any project
-                that requires precise color management with transparency.
+              Hex to RGBA converter is a powerful tool designed for web developers, designers and digital artists. This allows you to easily convert the hexadecimal color code to their RGBA (red, green, blue, alpha). This device is particularly useful when working with web design, CSS styling, or any project, which requires accurate color management with transparency.
               </p>
               <p className="text-sm md:text-base text-default-600 mb-4">
-                With features like real-time conversion, interactive alpha slider, and support for both 3-digit and
-                6-digit hex codes, the Hex to RGBA Converter streamlines your workflow and ensures accurate color
-                representation across different formats. It's perfect for creating consistent color schemes, adjusting
-                transparency levels, or simply exploring the relationship between hex and RGBA color representations.
+              With features such as real-time conversion, interactive alpha slider, and support for both 3-numeric and 6-conductive hex code, the hex to RGBA converter streamlines your workflow and ensures accurate color representation in various formats. This is perfect for making consistent color schemes, adjusting the level of transparency, or the discovery of relationships between hex and RGBA color representations.
               </p>
 
               <div className="my-8">
                 <NextImage
-                  src="/Images/HexToRGBAPreview.png?height=400&width=600"
+                  src="/Images/InfosectionImages/HexToRgbaConverterPreview.png?height=400&width=600"
                   alt="Screenshot of the Hex to RGBA Converter interface showing hex input, alpha slider, and color preview"
                   width={600}
                   height={400}
@@ -254,45 +248,6 @@ export default function HexToRgba() {
                 <li>Reset functionality for quick new color explorations</li>
                 <li>User-friendly interface with clear, easy-to-read color information</li>
                 <li>Error handling for invalid hex codes</li>
-              </ul>
-
-              <h2 className="text-xl md:text-2xl font-semibold text-default-700 mb-4 mt-8 flex items-center">
-                <Info className="w-6 h-6 mr-2" />
-                Applications and Use Cases
-              </h2>
-              <ul className="list-disc list-inside text-default-600 space-y-2 text-sm md:text-base">
-                <li>
-                  <strong>Web Development:</strong> Easily convert hex colors to RGBA for use in CSS, especially when
-                  working with transparency.
-                </li>
-                <li>
-                  <strong>Graphic Design:</strong> Translate hex codes to RGBA values for software that supports alpha
-                  channels.
-                </li>
-                <li>
-                  <strong>UI/UX Design:</strong> Create consistent color schemes with varying levels of opacity for
-                  interface elements.
-                </li>
-                <li>
-                  <strong>Digital Art:</strong> Experiment with color transparency in digital painting or illustration
-                  software.
-                </li>
-                <li>
-                  <strong>Brand Identity:</strong> Maintain color consistency across various digital platforms while
-                  incorporating transparency.
-                </li>
-                <li>
-                  <strong>Education:</strong> Learn about color theory and the relationship between different color
-                  representations.
-                </li>
-                <li>
-                  <strong>Accessibility Testing:</strong> Adjust color opacity to ensure proper contrast and readability
-                  in web designs.
-                </li>
-                <li>
-                  <strong>Color Exploration:</strong> Experiment with color combinations and see how transparency
-                  affects color perception.
-                </li>
               </ul>
 
               <p className="text-sm md:text-base text-default-600 mt-6">

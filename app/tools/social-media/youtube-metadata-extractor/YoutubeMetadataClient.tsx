@@ -188,7 +188,7 @@ export default function YouTubeMetadataExtractor() {
                   placeholder="Paste YouTube video URL here..."
                   size="md"
                   variant="bordered"
-                  startContent={<Youtube className="text-default-400" />}
+                  startContent={<Youtube className="text-danger" />}
                   className="flex-1"
                 />
                 <div className="flex gap-2">
@@ -201,7 +201,7 @@ export default function YouTubeMetadataExtractor() {
                   >
                     {loading ? "Extracting..." : "Extract"}
                   </Button>
-                  <Button color="danger" size="md" onClick={handleReset} startContent={<RotateCcw size={20} />}>
+                  <Button color="danger" size="md" onPress={handleReset} startContent={<RotateCcw size={20} />}>
                     Reset
                   </Button>
                 </div>
@@ -300,7 +300,7 @@ export default function YouTubeMetadataExtractor() {
                         color="success"
                         className="w-full"
                         startContent={<Download size={18} />}
-                        onClick={downloadMetadata}
+                        onPress={downloadMetadata}
                       >
                         Download Metadata
                       </Button>
@@ -369,7 +369,7 @@ export default function YouTubeMetadataExtractor() {
                 variant="flat"
                 size="sm"
                 startContent={<Trash2 size={16} />}
-                onClick={clearSearchHistory}
+                onPress={clearSearchHistory}
               >
                 Clear History
               </Button>
@@ -381,7 +381,7 @@ export default function YouTubeMetadataExtractor() {
                     key={index}
                     variant="flat"
                     className="w-full justify-start"
-                    onClick={() => setVideoUrl(url)}
+                    onPress={() => setVideoUrl(url)}
                     startContent={<Youtube className="text-danger" />}
                   >
                     {url}
@@ -401,15 +401,15 @@ export default function YouTubeMetadataExtractor() {
         What is the YouTube Metadata Extractor?
         </h2>
         <p className="text-sm md:text-base text-default-600 mb-4">
-        The YouTube Metadata Extractor is a powerful tool designed for content creators, marketers, researchers, and YouTube enthusiasts. It allows you to extract and analyze valuable metadata from any YouTube video, providing insights that can help optimize your content strategy, improve SEO, and understand video performance. With a <Link href="#how-to-use" className="text-primary hover:underline">user-friendly interface</Link>, this tool makes it easy to access and analyze video metadata in just a few clicks.
+        YouTube metadetta extractor material is a powerful tool designed for creators, abstracts, researchers and youtube enthusiasts. This allows you to extract and analyze valuable metadata from any YouTube video that provides insight that can help customize your content strategy, improve SEO and understand video performance. With a user friendly interface, this device makes it easy to use and analyze video metadata in a few clicks.
         </p>
         <p className="text-sm md:text-base text-default-600 mb-4">
-        Whether you're analyzing your own videos or studying competitors, the YouTube Metadata Extractor offers a comprehensive suite of features to help you make data-driven decisions and enhance your YouTube strategy.
+        Whether you are analyzing your own videos or studying contestants, YouTube Matadetta Extractor offers you a comprehensive suit of features to make data-operated decisions and help you increase your YouTube strategy.
         </p>
         
         <div className="my-8">
         <NextImage
-            src="/Images/YoutubeMetadataPreview.png"
+            src="/Images/InfosectionImages/YoutubeMetadataPreview.png?height=400&width=600" 
             alt="Screenshot of the YouTube Metadata Extractor interface showing metadata extraction options"
             width={600}
             height={400}
@@ -458,25 +458,6 @@ export default function YouTubeMetadataExtractor() {
         <li><strong>One-Click Download</strong>: Easily download all extracted metadata as a JSON file.</li>
         <li><strong>Search History</strong>: Keep track of your recently analyzed videos for quick reference.</li>
         <li><strong>User-Friendly Interface</strong>: Intuitive design with tabs for organized data presentation.</li>
-        </ul>
-
-        <h2 className="text-lg md:text-xl lg:text-2xl font-semibold text-default-700 mb-4 mt-8 flex items-center">
-        <Share2 className="w-6 h-6 mr-2" />
-        Benefits and Applications
-        </h2>
-        <p className="text-sm md:text-base text-default-600 mb-4">
-        The YouTube Metadata Extractor is a versatile tool with numerous applications:
-        </p>
-        <ul className="list-disc list-inside space-y-2 text-xs md:text-sm">
-        <li><strong>Content Strategy</strong>: Analyze successful videos in your niche to identify effective metadata practices.</li>
-        <li><strong>SEO Optimization</strong>: Improve your video's searchability by studying high-performing video metadata.</li>
-        <li><strong>Competitor Analysis</strong>: Study the metadata strategies of top-performing channels in your industry.</li>
-        <li><strong>Trend Identification</strong>: Track changes in metadata usage over time to spot emerging trends.</li>
-        <li><strong>Content Ideation</strong>: Use popular tags and descriptions as inspiration for new video topics.</li>
-        <li><strong>Audience Research</strong>: Gain insights into what content resonates with your target audience.</li>
-        <li><strong>Marketing Campaigns</strong>: Align your video metadata with ongoing marketing initiatives.</li>
-        <li><strong>Educational Research</strong>: Study metadata patterns across different types of educational content.</li>
-        <li><strong>Legal Compliance</strong>: Verify licensing and privacy status for content usage or partnerships.</li>
         </ul>
 
         <h2 className="text-lg md:text-xl lg:text-2xl font-semibold text-default-700 mb-4 mt-8 flex items-center">

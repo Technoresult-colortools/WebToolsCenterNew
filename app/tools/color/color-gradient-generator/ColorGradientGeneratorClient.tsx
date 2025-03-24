@@ -274,13 +274,13 @@ export default function GradientGeneratorPage() {
                       selectedKeys={[gradientType]}
                       onSelectionChange={(keys) => setGradientType(Array.from(keys)[0] as GradientType)}
                     >
-                      <SelectItem key="linear" value="linear">
+                      <SelectItem key="linear" value="linear" className="text-default-700">
                         Linear
                       </SelectItem>
-                      <SelectItem key="radial" value="radial">
+                      <SelectItem key="radial" value="radial" className="text-default-700">
                         Radial
                       </SelectItem>
-                      <SelectItem key="conic" value="conic">
+                      <SelectItem key="conic" value="conic" className="text-default-700">
                         Conic
                       </SelectItem>
                     </Select>
@@ -432,15 +432,15 @@ export default function GradientGeneratorPage() {
               </Tab>
             </Tabs>
             <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-2 mt-4">
-              <Button onPress={handleDownloadImage} className="flex-1" color="primary" >
+              <Button onPress={handleDownloadImage}  color="primary" >
                 <Download className="h-4 w-4 mr-2" />
                 Download PNG
               </Button>
-              <Button onPress={resetGradient} color="danger" className="flex-1">
+              <Button onPress={resetGradient} color="danger" >
                 <RotateCcw className="h-4 w-4 mr-2" />
                 Reset
               </Button>
-              <Button onPress={generateRandomGradient} className="flex-1" color="primary">
+              <Button onPress={generateRandomGradient}  color="primary">
                 <Shuffle className="h-4 w-4 mr-2" />
                 Random
               </Button>
@@ -458,13 +458,11 @@ export default function GradientGeneratorPage() {
               About Color Gradient Generator
             </h2>
             <p className="text-default-600 mb-4">
-              The Color Gradient Generator is a powerful and intuitive tool designed for web developers, designers, and
-              creative professionals. It allows you to create stunning CSS gradients with advanced customization
-              options, providing a seamless experience for both beginners and experts.
+            The color gradient generator is a powerful and intuitive tool designed for web developers, designers and creative professionals. This allows you to create stunning CSS gradients with advanced adaptation options, providing a spontaneous experience for both beginners and experts.
             </p>
             <div className="my-8">
               <Image
-                src="/Images/ColorGradientPreview.png?height=400&width=600"
+                src="/Images/InfosectionImages/ColorGradientGeneratorPreview.png?height=400&width=600"
                 alt="Screenshot of the Color Gradient Generator interface showing gradient preview and controls"
                 width={600}
                 height={400}
@@ -532,10 +530,7 @@ export default function GradientGeneratorPage() {
             </ul>
 
             <p className="text-default-600 mt-6">
-              Whether you're creating eye-catching backgrounds for websites, designing user interfaces, or generating
-              assets for print materials, the Color Gradient Generator provides the flexibility and power you need to
-              bring your creative visions to life. Start exploring the possibilities and elevate your designs with
-              stunning gradients today!
+            Whether you are creating eye -catching backgrounds for websites, user interfaces are designing, or generating property for print materials, the color shield generator provides flexibility and strength that needs you to bring your creative view to life. Start discovering possibilities and elevate your designs with amazing gradients today!
             </p>
           </CardBody>
         </Card>

@@ -78,8 +78,8 @@ export default function RGBToHSL() {
       description="Convert RGB Color Codes to HSL with Real-time Preview"
       toolId="678f382d26f06f912191bcaf"
     >
-      <div className="max-w-4xl mx-auto">
-        <Card className="bg-default-50 dark:bg-default-100 shadow-md">
+      <div className="max-w-6xl mx-auto">
+        <Card className="bg-default-50 dark:bg-default-100">
           <CardBody className="gap-6 p-6">
             <div className="grid gap-6 md:grid-cols-2">
               {/* Input Section */}
@@ -185,7 +185,7 @@ export default function RGBToHSL() {
 
               <div className="my-8">
                 <NextImage
-                  src="/Images/RGBToHSLPreview.png?height=400&width=600"
+                  src="/Images/InfosectionImages/RGBToHSLPreview.png?height=400&width=600"
                   alt="Screenshot of the RGB to HSL Converter interface showing RGB sliders and color preview"
                   width={600}
                   height={400}
@@ -221,21 +221,6 @@ export default function RGBToHSL() {
                 <li>Responsive design for seamless use on desktop and mobile devices</li>
                 <li>Reset functionality for quick new color explorations</li>
                 <li>User-friendly interface with clear, easy-to-read color information</li>
-              </ul>
-
-              <h2 className="text-xl md:text-2xl font-semibold text-default-700 mb-4 mt-8 flex items-center">
-                <Info className="w-6 h-6 mr-2" />
-                Applications and Use Cases
-              </h2>
-              <ul className="list-disc list-inside text-default-600 space-y-2 text-sm md:text-base">
-                <li><strong>Web Development:</strong> Easily convert RGB colors to HSL for use in CSS and HTML.</li>
-                <li><strong>Graphic Design:</strong> Translate RGB values to HSL for software that utilizes HSL color representation.</li>
-                <li><strong>UI/UX Design:</strong> Create consistent color schemes by converting between RGB and HSL formats.</li>
-                <li><strong>Digital Art:</strong> Experiment with color properties using RGB and obtain HSL values for use in various digital art software.</li>
-                <li><strong>Brand Identity:</strong> Maintain color consistency across various digital platforms by converting between color models.</li>
-                <li><strong>Education:</strong> Learn about color theory and the relationship between different color representations.</li>
-                <li><strong>Accessibility Testing:</strong> Adjust color properties to ensure proper contrast and readability in web designs.</li>
-                <li><strong>Color Exploration:</strong> Experiment with RGB color combinations and see their HSL equivalents for creative inspiration.</li>
               </ul>
 
               <p className="text-sm md:text-base text-default-600 mt-6">

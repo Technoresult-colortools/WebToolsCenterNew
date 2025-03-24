@@ -568,11 +568,11 @@ export const allTools: Tool[] = [
 
 },
 {
-  name: "Color Palette Generator",
+  name: "AI Color Palette Generator",
   category: "Color",
   href: "/tools/color/color-palette-generator",
   icon: faMicrochip,
-  description: "Create stunning color palettes for your designs.",
+  description: "Create the perfect color scheme with AI assistance.",
 
 },
 {
@@ -584,7 +584,7 @@ export const allTools: Tool[] = [
 
 },
 {
-  name: "Gradient Generator",
+  name: "Color Gradient Generator",
   category: "Color",
   href: "/tools/color/color-gradient-generator",
   icon: faPalette,

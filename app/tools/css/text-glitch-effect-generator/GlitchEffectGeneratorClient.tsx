@@ -617,21 +617,15 @@ ${generatedCSS}
             What is CSS Text Glitch Effect Generator?
             </h2>
             <p className="text-sm md:text-base text-default-600 mb-4">
-            The CSS Text Glitch Effect Generator is a powerful tool for creating eye-catching, glitchy text effects
-            using CSS. It offers a wide range of customizable options for various glitch styles, colors, intensities,
-            and animation speeds, making it easy to design modern, dynamic text effects for web projects, digital art,
-            or any creative endeavor requiring a unique visual impact.
+            CSS Text is a powerful tool for catching the eye, catching the eye using the glitter CSS, creating a mess. It offers a wide range of adaptable options for various disturbed styles, colors, intensity and animation speed, making it easy to design modern, dynamic text effects for web projects, digital art, or any creative effort, requiring a unique visible effect.
             </p>
             <p className="text-sm md:text-base text-default-600 mb-4">
-            This tool provides real-time previews and generates HTML and CSS code that you can easily copy or download
-            for use in your projects. Whether you're a web developer, designer, or digital artist, this generator offers
-            an intuitive interface to experiment with different glitch effects and fine-tune them to your exact
-            specifications.
+            This device provides real -time preview and produces HTML and CSS code that you can easily copy or download for use in your projects. Whether you are a web developer, designer, or digital artist, this generator provides an intuitive interface to experiment with various mess effects and makes them fine for its exact specifications.
             </p>
 
             <div className="my-8">
             <Image 
-                src="/Images/CSSTextGlitchPreview.png?height=400&width=600" 
+                 src="/Images/InfosectionImages/TextGlitchPreview.png?height=400&width=600"
                 alt="Screenshot of the CSS Text Glitch Effect Generator is a powerful tool for creating eye-catching, glitchy text effects using CSS."
                 width={600} 
                 height={400} 
@@ -676,23 +670,6 @@ ${generatedCSS}
             <li>Reset option to quickly return to default settings</li>
             <li>Responsive design for use on various devices</li>
             <li>Tabbed interface for easy navigation between text and glitch settings</li>
-            </ul>
-
-            <h2 className="text-lg md:text-xl lg:text-2xl font-semibold text-default-700 mb-4 mt-8 flex items-center">
-            <Info className="w-6 h-6 mr-2" />
-            Applications and Use Cases
-            </h2>
-            <ul className="list-disc list-inside space-y-2 text-xs md:text-sm">
-            <li><strong>Web Design:</strong> Create attention-grabbing headers, titles, or call-to-action text for websites.</li>
-            <li><strong>Digital Art:</strong> Incorporate glitch effects into digital illustrations or artwork.</li>
-            <li><strong>Video Games:</strong> Design title screens, menu text, or in-game UI elements with a glitchy aesthetic.</li>
-            <li><strong>Motion Graphics:</strong> Use as a starting point for animated text in video productions.</li>
-            <li><strong>Social Media:</strong> Create eye-catching graphics for social media posts or profile images.</li>
-            <li><strong>Advertising:</strong> Design unique and memorable text effects for digital advertisements.</li>
-            <li><strong>Cyberpunk or Sci-Fi Themed Projects:</strong> Perfect for projects requiring a futuristic or dystopian look.</li>
-            <li><strong>Music Industry:</strong> Design album covers, concert posters, or music video graphics.</li>
-            <li><strong>Error Pages:</strong> Create visually interesting 404 or error pages for websites.</li>
-            <li><strong>Educational Tools:</strong> Teach concepts of CSS animations and effects in a hands-on, interactive way.</li>
             </ul>
 
             <p className="text-sm md:text-base text-default-600 mt-4">

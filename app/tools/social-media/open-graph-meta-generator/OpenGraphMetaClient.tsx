@@ -219,7 +219,7 @@ export default function OpenGraphGenerator() {
       description="Generate Open Graph meta tags for your website to control how your content appears when shared on social media"
       toolId="678f383226f06f912191bcda"
     >
-      <div className="max-w-4xl mx-auto space-y-8">
+      <div className="flex flex-col gap-8">
         <Card className="bg-default-50 dark:bg-default-100">
           <CardBody className="space-y-6">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -433,19 +433,19 @@ export default function OpenGraphGenerator() {
         </Card>
 
         {/* About section */}
-        <Card className="mt-8 bg-default-50 dark:bg-default-100 p-4 md:p-8">
+        <Card className="bg-default-50 dark:bg-default-100 p-4 md:p-8">
         <div className="rounded-xl p-2 md:p-4 max-w-4xl mx-auto">
             <h2 className="text-lg md:text-xl lg:text-2xl font-semibold text-default-700 mb-4 flex items-center">
             <Info className="w-6 h-6 mr-2" />
             About Open Graph Meta Generator
             </h2>
             <p className="text-sm md:text-base text-default-600 mb-4">
-            The Open Graph Meta Generator is a powerful tool designed to help you create accurate and comprehensive Open Graph meta tags for your web content. These meta tags control how your content appears when shared on social media platforms, ensuring your links look great and attract more clicks.
+            The Open Graph Meta Generator is a powerful tool designed to help create an accurate and comprehensive open graph meta tag for your web content. These meta tags control how your content appears when shared on social media platforms ensures that your links look great and attract more clicks.
             </p>
 
             <div className="my-8">
             <NextImage
-                src="/Images/OpenGraphMetaPreview.png"
+                src="/Images/InfosectionImages/OpengraphMetaPreview.png?height=400&width=600"
                 alt="Screenshot of the Open Graph Meta Generator interface showing input fields and preview"
                 width={600}
                 height={400}
@@ -497,25 +497,8 @@ export default function OpenGraphGenerator() {
             <li>Test your tags using social media platform debugging tools.</li>
             </ul>
 
-            <h2 className="text-lg md:text-xl lg:text-2xl font-semibold text-default-700 mb-4 mt-8 flex items-center">
-            <Share2 className="w-6 h-6 mr-2" />
-            Applications and Use Cases
-            </h2>
-            <ul className="list-disc list-inside space-y-2 text-xs md:text-sm">
-            <li><strong>Social Media Marketing</strong>: Enhance the appearance of shared links.</li>
-            <li><strong>SEO Optimization</strong>: Improve click-through rates from social media.</li>
-            <li><strong>E-commerce</strong>: Create attractive product previews.</li>
-            <li><strong>Content Marketing</strong>: Ensure blog posts and articles look engaging.</li>
-            <li><strong>Personal Branding</strong>: Customize how your personal site appears in shares.</li>
-            <li><strong>Event Promotion</strong>: Create eye-catching previews for events.</li>
-            <li><strong>App Marketing</strong>: Improve the appearance of app store links.</li>
-            <li><strong>Video Content</strong>: Customize video previews for better engagement.</li>
-            <li><strong>News and Media</strong>: Ensure news articles are presented attractively.</li>
-            <li><strong>Educational Resources</strong>: Improve visibility for online courses or content.</li>
-            </ul>
-
             <p className="text-sm md:text-base text-default-600 mt-4">
-            The Open Graph Meta Generator is an essential tool for anyone looking to optimize their web content for social media sharing. By creating accurate and comprehensive Open Graph meta tags, you can significantly improve how your content appears across various platforms, leading to increased engagement and traffic. Start using this tool today to ensure your content stands out in the crowded social media landscape!
+            Open graph meta generator is an essential tool for anyone looking to customize your web content for social media sharing. By creating an accurate and comprehensive open graph meta tag, you can significantly improve how your content appears in different platforms, causing engagement and traffic to increase. Start using this tool today to ensure your content in crowded social media scenario!
             </p>
         </div>
         </Card>

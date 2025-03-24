@@ -469,7 +469,7 @@ export default function FlexboxGenerator() {
                   </Card>
                 ))}
                 <Button 
-                onClick={addItem} 
+                onPress={addItem} 
                 className="w-full bg-gradient-to-r from-green-500 to-green-600 text-white shadow-lg hover:shadow-green-200 transition-all duration-200 py-6"
                 startContent={<Plus className="w-5 h-5" />}
                 >
@@ -481,7 +481,7 @@ export default function FlexboxGenerator() {
 
             <div className="mt-8 flex justify-between gap-4">
             <Button
-                onClick={handleReset}
+                onPress={handleReset}
                 variant="shadow"
                 color="danger"
                 startContent={<RefreshCw className="h-5 w-5" />}
@@ -489,7 +489,7 @@ export default function FlexboxGenerator() {
                 Reset Layout
             </Button>
             <Button
-                onClick={handleCopy}
+                onPress={handleCopy}
                 className="bg-gradient-to-r from-blue-500 to-blue-600 text-white shadow-lg hover:shadow-blue-200 transition-all duration-200"
                 startContent={<Copy className="h-5 w-5" />}
             >
@@ -506,13 +506,12 @@ export default function FlexboxGenerator() {
           What is CSS Flexbox Generator?
         </h2>
         <p className="text-sm md:text-base text-default-600 mb-4">
-          The CSS Flexbox Generator is a powerful tool for web developers and designers to create and customize flexible layouts using CSS Flexbox.
-          It provides an interactive interface to adjust various Flexbox properties in real-time and generate the corresponding CSS code.
+        CSS Flexbox generators are a powerful tool for web developers and designers to create and customize flexible layouts using CSS Flexbox. It provides an interactive interface to accommodate various flaxbox properties in real time and generate related CSS code.
         </p>
 
         <div className="my-8">
           <Image 
-            src="/Images/FlexBoxGeneratorPreview.png?height=400&width=600" 
+             src="/Images/InfosectionImages/CSSFlexboxPreview.png?height=400&width=600" 
             alt="CSS Flexbox Generator interface preview"
             width={600} 
             height={400} 

@@ -421,18 +421,16 @@ export default function CSSTriangleGenerator() {
               About CSS Triangle Generator
             </h2>
             <p className="text-default-600 mb-4">
-              The CSS Triangle Generator is a powerful tool designed for web developers and designers to create
-              customizable CSS triangles without using images. It offers a range of options to adjust the triangle's
-              appearance, including direction, size, color, opacity, rotation, and border radius.
+            The CSS triangle generator is a powerful tool designed for web developers and designers to create a customized CSS triangle without using images. This provides several options to adjust the appearance of the triangle, including the direction, size, color, color, opacity, rotation and border radius.
             </p>
 
             <div className="my-8">
               <Image
-                src="/Images/CSSTrianglePreview.png?height=400&width=600"
+                src="/Images/InfosectionImages/CSSTrainglePreview.png?height=400&width=600"
                 alt="Screenshot of the CSS Triangle Generator tool"
                 width={600}
                 height={400}
-                className="rounded-lg shadow-lg"
+                className="rounded-lg shadow-lg w-full h-auto" 
               />
             </div>
 
@@ -472,46 +470,8 @@ export default function CSSTriangleGenerator() {
               <li>Reset feature to quickly return to default settings</li>
             </ul>
 
-            <h2 className="text-xl font-semibold text-default-700 mb-4 mt-8 flex items-center">
-              <Info className="w-6 h-6 mr-2" />
-              Applications and Use Cases
-            </h2>
-            <ul className="list-disc list-inside space-y-2 text-default-600">
-              <li>
-                <strong>UI Elements:</strong> Create custom tooltips, dropdown menus, or accordion indicators.
-              </li>
-              <li>
-                <strong>Decorative Shapes:</strong> Add triangular design elements to headers, footers, or dividers.
-              </li>
-              <li>
-                <strong>Buttons and Icons:</strong> Design play buttons, directional indicators, or custom bullet
-                points.
-              </li>
-              <li>
-                <strong>Background Patterns:</strong> Generate repeating triangle patterns for unique backgrounds.
-              </li>
-              <li>
-                <strong>Infographics:</strong> Create triangular elements for data visualization or timelines.
-              </li>
-              <li>
-                <strong>Logo Design:</strong> Incorporate triangular shapes into logo designs or branding elements.
-              </li>
-              <li>
-                <strong>Navigation:</strong> Design triangular navigation elements or breadcrumbs.
-              </li>
-              <li>
-                <strong>Responsive Design:</strong> Create adaptable triangular elements that work across different
-                screen sizes.
-              </li>
-            </ul>
-
             <p className="text-default-600 mt-6">
-              The CSS Triangle Generator empowers designers and developers to create customizable triangular elements
-              for their web projects. By providing an intuitive interface for adjusting various properties, along with
-              real-time previews and easy CSS generation, this tool bridges the gap between design concept and
-              implementation. Whether you're aiming for simple, clean shapes or more complex decorative elements, the
-              CSS Triangle Generator gives you the control and flexibility you need to bring your creative vision to
-              life using pure CSS.
+            The CSS triangle strengthens generator designers and developers to create adaptable triangular elements for their web projects. By providing an intuitive interface to adjust various properties, with real -time preview and easy CSS generation, this tool bridges the difference between design concept and implementation. Whether you are targeting for simple, clean shapes or more complex decorative elements, the CSS triangle generator gives you control and flexibility that you need to bring your creative vision into life using pure CSS.
             </p>
           </div>
         </Card>

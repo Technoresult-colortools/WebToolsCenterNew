@@ -233,7 +233,7 @@ export default function EnhancedBorderRadiusGenerator() {
                           <SelectItem key="em" value="em" className="text-default-700">
                             em
                           </SelectItem>
-                          <SelectItem key="rem" value="rem">
+                          <SelectItem key="rem" value="rem" className="text-default-700">
                             rem
                           </SelectItem>
                         </Select>
@@ -399,14 +399,12 @@ export default function EnhancedBorderRadiusGenerator() {
               What is the Enhanced Border Radius Generator?
             </h2>
             <p className="text-default-600 mb-4">
-              The Enhanced Border Radius Generator is a powerful and intuitive tool designed for web developers and
-              designers to create visually appealing and modern UI elements. It allows you to easily customize the
-              corner radii and border properties of boxes, providing a wide range of options to suit your design needs.
+            The border radius generator is a powerful and intuitive tool designed for web developers and designers that are visually attractive and modern UI elements. This allows you to easily customize the ready and border properties of the corner of the box, providing a wide range of options to suit your design needs.
             </p>
 
             <div className="my-8">
               <Image
-                src="/Images/BoxRadiusPreview.png?height=400&width=600"
+                src="/Images/InfosectionImages/CSSBorderRadiusPreview.png?height=400&width=600"
                 alt="Screenshot of the Enhanced Border Radius Generator interface showing preview and customization options"
                 width={600}
                 height={400}
@@ -443,38 +441,6 @@ export default function EnhancedBorderRadiusGenerator() {
               <li>Copy to clipboard and download as file options</li>
               <li>Reset option to quickly return to default settings</li>
               <li>Responsive design for use on various devices</li>
-            </ul>
-
-            <h2 className="text-xl font-semibold text-default-700 mb-4 mt-8 flex items-center">
-              <Info className="w-6 h-6 mr-2" />
-              Applications and Use Cases
-            </h2>
-            <ul className="list-disc list-inside space-y-2 text-default-600">
-              <li>
-                <strong>Web Design:</strong> Create unique button styles, cards, and containers for websites.
-              </li>
-              <li>
-                <strong>UI/UX Design:</strong> Prototype and fine-tune interface elements for web and mobile apps.
-              </li>
-              <li>
-                <strong>CSS Learning:</strong> Experiment with CSS properties to understand their effects visually.
-              </li>
-              <li>
-                <strong>Responsive Design:</strong> Test how different border radii and styles look on various screen
-                sizes.
-              </li>
-              <li>
-                <strong>Brand Identity:</strong> Maintain consistent styling across web properties by defining standard
-                border styles.
-              </li>
-              <li>
-                <strong>Accessibility:</strong> Ensure that border radii contribute to, rather than detract from, the
-                usability of your designs.
-              </li>
-              <li>
-                <strong>Print Design:</strong> While primarily for web, these styles can inspire rounded elements in
-                print materials.
-              </li>
             </ul>
 
             <p className="text-default-600 mt-6">

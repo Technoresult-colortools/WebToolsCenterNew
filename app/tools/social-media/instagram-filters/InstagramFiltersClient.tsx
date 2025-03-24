@@ -309,6 +309,8 @@ export default function InstagramFilters() {
               <NextImage
                 src={image || "/placeholder.svg"}
                 alt="Fullscreen preview"
+                width={dimensions.width || 500}
+                height={dimensions.height || 500}
                 className="w-full h-full object-contain"
                 style={{
                   filter: `${filterStyles[filter]} brightness(${brightness}%) contrast(${contrast}%) saturate(${saturation}%)`,
@@ -368,9 +370,11 @@ export default function InstagramFilters() {
               onClick={() => setFilter(filterName)}
             >
               <div className="w-24">
-                <NextImage
+              <NextImage
                   src={image || "/placeholder.svg"}
                   alt={filterName}
+                  width={dimensions.width || 100}
+                  height={dimensions.height || 100}
                   className="w-24 h-24 object-cover rounded-lg"
                   style={{
                     filter: filterStyles[filterName],
@@ -419,17 +423,19 @@ export default function InstagramFilters() {
                       height: `${(100 * zoom) / 100}%`,
                     }}
                   >
-                    <NextImage
-                      ref={imageRef}
-                      src={image || "/placeholder.svg"}
-                      alt="Uploaded"
-                      className="w-full h-full object-contain"
-                      style={{
-                        ...imageStyle,
-                        transform: `scale(${zoom / 100})`,
-                        transformOrigin: "center center",
-                      }}
-                    />
+                  <NextImage
+                    ref={imageRef}
+                    src={image || "/placeholder.svg"}
+                    alt="Uploaded"
+                    width={dimensions.width || 500} // Add default width
+                    height={dimensions.height || 500} // Add default height
+                    className="w-full h-full object-contain"
+                    style={{
+                      ...imageStyle,
+                      transform: `scale(${zoom / 100})`,
+                      transformOrigin: "center center",
+                    }}
+                  />
                   </div>
                   <div className="absolute top-2 left-2 bg-black bg-opacity-50 text-white px-2 py-1 rounded text-sm">
                     {dimensions.width} x {dimensions.height}
@@ -677,16 +683,16 @@ export default function InstagramFilters() {
                     About Instagram Filters
                 </h2>
                 <p className="text-sm md:text-base text-default-600 mb-4">
-                    The Instagram Filters tool is a powerful image editing application that brings the magic of Instagram's iconic filters to your browser. With 34 unique filters, including classic Instagram favorites and modern effects, this tool enables you to transform your photos instantly with just a few clicks.
+                The Instagram filters tool is a powerful image editing application that brings the magic of instagram's iconic filters to your browser. With 34 unique filters including Classic Instagram favorite and modern effects, this tool enables you to immediately replace your photos immediately with a few clicks.
                 </p>
                 <p className="text-sm md:text-base text-default-600 mb-4">
-                    Whether you're enhancing your selfies, adjusting travel shots, or experimenting with artistic edits, our Instagram Filters tool provides an intuitive and seamless experience. Say goodbye to complicated photo editing software and embrace the simplicity of online filter applications.
+                Whether you are increasing your selfie, adjusting travel shots, or experimenting with artistic editing, our Instagram filter tool provides a simple and easy experience. Say goodbye to complicated photo editing software and embrace the simplicity of online filter applications.
                 </p>
 
                 {/* Image Preview */}
                 <div className="my-8">
                     <NextImage 
-                    src="/Images/InstagramFiltersPreview.png" 
+                    src="/Images/InfosectionImages/InstagramFiltersPreview.png?height=400&width=600"
                     alt="Screenshot of the Instagram Filters interface showing various filter options and adjustments" 
                     width={600} 
                     height={400} 
@@ -700,7 +706,7 @@ export default function InstagramFilters() {
                     How to Use Instagram Filters?
                 </h2>
                 <p className="text-sm md:text-base text-default-600 mb-4">
-                    Getting started with Instagram Filters is effortless. Just follow these simple steps:
+                    Follow the below mentioned steps to apply Instagram Filters on any image:
                 </p>
                 <ol className="list-decimal list-inside space-y-2 text-sm md:text-base">
                     <li>Upload an image using file upload, drag & drop, or by entering an image URL.</li>
@@ -725,19 +731,7 @@ export default function InstagramFilters() {
                     <li>Keyboard navigation for quick filter selection.</li>
                     <li>Responsive design for a seamless experience across all devices.</li>
                 </ul>
-
-                {/* Tips for Best Results */}
-                <h2 className="text-lg md:text-xl lg:text-2xl font-semibold text-default-700 mb-4 mt-8 flex items-center">
-                    <Lightbulb className="w-6 h-6 mr-2" />
-                    Tips for Best Results
-                </h2>
-                <ul className="list-disc list-inside space-y-2 text-sm md:text-base">
-                    <li>Experiment with different filters to find the best match for your photo.</li>
-                    <li>Use the adjustment sliders to fine-tune brightness, contrast, and saturation.</li>
-                    <li>Combine multiple filters with manual adjustments for unique effects.</li>
-                    <li>Toggle fullscreen mode to check details and refine your edits.</li>
-                    <li>Subtle enhancements often produce the most professional-looking results.</li>
-                </ul>
+                
                 </div>
             </Card>
 

@@ -226,7 +226,7 @@ export default function Base64ToImageConverter() {
                     <div className="flex flex-col sm:flex-row gap-4">
                         <Button
                             color="primary"
-                            onClick={convertBase64ToImage}
+                            onPress={convertBase64ToImage}
                             isLoading={isLoading}
                             startContent={!isLoading && <ImagePlus size={18} />}
                             className="w-full sm:w-auto"
@@ -236,7 +236,7 @@ export default function Base64ToImageConverter() {
 
                         <Button
                             color="primary"
-                            onClick={() => fileInputRef.current?.click()}
+                            onPress={() => fileInputRef.current?.click()}
                             startContent={<UploadIcon size={18} />}
                             className="w-full sm:w-auto"
                         >
@@ -301,10 +301,10 @@ export default function Base64ToImageConverter() {
                             selectedKeys={new Set([sortOrder])}
                             selectionMode="single"
                             >
-                            <DropdownItem key="date">Date Added</DropdownItem>
-                            <DropdownItem key="name">Name</DropdownItem>
-                            <DropdownItem key="size">Size</DropdownItem>
-                            <DropdownItem key="type">Type</DropdownItem>
+                            <DropdownItem key="date" className="text-default-700">Date Added</DropdownItem>
+                            <DropdownItem key="name" className="text-default-700">Name</DropdownItem>
+                            <DropdownItem key="size" className="text-default-700">Size</DropdownItem>
+                            <DropdownItem key="type" className="text-default-700">Type</DropdownItem>
                             </DropdownMenu>
                         </Dropdown>
 
@@ -312,7 +312,7 @@ export default function Base64ToImageConverter() {
                             <Button
                             isIconOnly
                             variant={viewMode === "grid" ? "solid" : "bordered"}
-                            onClick={() => setViewMode("grid")}
+                            onPress={() => setViewMode("grid")}
                             className="flex-1 sm:flex-none"
                             >
                             <Grid size={18} />
@@ -320,7 +320,7 @@ export default function Base64ToImageConverter() {
                             <Button
                             isIconOnly
                             variant={viewMode === "list" ? "solid" : "bordered"}
-                            onClick={() => setViewMode("list")}
+                            onPress={() => setViewMode("list")}
                             className="flex-1 sm:flex-none"
                             >
                             <List size={18} />
@@ -332,7 +332,7 @@ export default function Base64ToImageConverter() {
                         color="danger"
                         variant="flat"
                         startContent={<Trash2 size={18} />}
-                        onClick={clearAll}
+                        onPress={clearAll}
                         className="w-full sm:w-auto"
                         >
                         Clear All
@@ -366,7 +366,7 @@ export default function Base64ToImageConverter() {
                                     <Button
                                     isIconOnly
                                     variant="light"
-                                    onClick={() => removeImage(index)}
+                                    onPress={() => removeImage(index)}
                                     className="self-end sm:self-auto"
                                     >
                                     <X size={18} />
@@ -389,7 +389,7 @@ export default function Base64ToImageConverter() {
                                     className="w-full sm:flex-1"
                                     size="md"
                                     variant="bordered"
-                                    onClick={() => copyToClipboard(img.url)}
+                                    onPress={() => copyToClipboard(img.url)}
                                     startContent={<Copy size={16} />}
                                     >
                                     Copy URL
@@ -398,7 +398,7 @@ export default function Base64ToImageConverter() {
                                     className="w-full sm:flex-1"
                                     size="md"
                                     color="primary"
-                                    onClick={() => downloadImage(img.url, img.name)}
+                                    onPress={() => downloadImage(img.url, img.name)}
                                     startContent={<Download size={16} />}
                                     >
                                     Download
@@ -434,27 +434,29 @@ export default function Base64ToImageConverter() {
               What is the Base64 to Image Converter?
             </h2>
             <p className="text-sm md:text-base text-default-600 mb-4">
-              The Base64 to Image Converter is a powerful and user-friendly tool designed to transform Base64 encoded
-              strings back into viewable image files. This conversion process is essential for developers, designers,
-              and anyone working with Base64 encoded image data who needs to quickly visualize or extract the original
-              image.
+            The Base64 to image converter is a powerful and user -friendly device designed to replace the base 64 encoded strings back into viewed image files. This conversion process is required for developers, designers and anyone working with an encoded image data, who needs to quickly imagine or remove the original image.
             </p>
             <p className="text-sm md:text-base text-default-600 mb-4">
-              Base64 encoding is a method of representing binary data using a set of 64 characters, commonly used to
-              embed image data within text-based formats like HTML, CSS, or JSON. Our tool reverses this process,
-              allowing you to easily convert Base64 strings back into their original image format for viewing,
-              downloading, or further processing.
+            Base64 Encoding is a method of representing binary data using a set of 64 characters, which is usually used to embed image data within text-based formats such as HTML, CSS or JSON. Our tool reverse this process, allowing you to easily see, download, download, or change back to your original image format for further process.
             </p>
 
-            <div className="my-8">
+            <div className="my-8 flex flex-wrap gap-4">
               <NextImage
-                src="/Images/Base64ToImagePreview.png?height=400&width=600"
-                alt="Screenshot of the Base64 to Image Converter interface showing conversion options and a sample converted image"
-                width={600}
-                height={400}
-                className="rounded-lg shadow-lg w-full h-auto"
+                  src="/Images/InfosectionImages/Base64ImagePreview1.png?height=400&width=600"
+                  alt="Screenshot of the Image Color Picker interface showing image upload area, color selection tools, and color analysis results"
+                  width={600}
+                  height={400}
+                  className="rounded-lg shadow-lg w-full sm:w-1/2 h-auto"
               />
-            </div>
+              <NextImage
+                  src="/Images/InfosectionImages/Base64ImagePreview.png?height=400&width=600"
+                  alt="Description of the second image"
+                  width={600}
+                  height={400}
+                  className="rounded-lg shadow-lg w-full sm:w-1/2 h-auto"
+              />
+          </div>
+
 
             <h2
               id="how-to-use"
@@ -464,10 +466,10 @@ export default function Base64ToImageConverter() {
               How to Use the Base64 to Image Converter?
             </h2>
             <ol className="list-decimal list-inside space-y-2 text-sm md:text-base text-default-600">
-              <li>Navigate to the "Input Base64" tab.</li>
+              <li>Click on the "Input Base64" tab.</li>
               <li>Paste your Base64 encoded string into the text area provided.</li>
               <li>Click the "Convert to Image" button to process your input.</li>
-              <li>The tool will automatically convert your Base64 string to an image.</li>
+              <li>This tool will automatically convert your Base64 string to an image.</li>
               <li>Switch to the "Converted Images" tab to view and manage your converted images.</li>
               <li>For each converted image, you can:</li>
               <ul className="list-disc list-inside ml-6 space-y-2 text-sm md:text-base text-default-600">
@@ -525,7 +527,7 @@ export default function Base64ToImageConverter() {
             </h2>
             <ul className="list-disc list-inside text-default-600 space-y-2 text-sm md:text-base">
               <li>Ensure your Base64 string is complete and doesn't contain any extra characters.</li>
-              <li>If your Base64 string includes aextra characters.</li>
+              <li>If your Base64 string includes a extra characters delete it.</li>
               <li>
                 If your Base64 string includes a data URL prefix (e.g., "data:image/png;base64,"), you can include or
                 exclude it - our converter handles both formats.
@@ -540,39 +542,6 @@ export default function Base64ToImageConverter() {
                 size may be smaller than the Base64 string length.
               </li>
               <li>If you're working with multiple images, use the sorting feature to organize them efficiently.</li>
-            </ul>
-
-            <h2 className="text-xl md:text-2xl font-semibold text-default-700 mb-4 mt-8 flex items-center">
-              <Info className="w-6 h-6 mr-2" />
-              Applications and Use Cases
-            </h2>
-            <ul className="list-disc list-inside text-default-600 space-y-2 text-sm md:text-base">
-              <li>
-                <strong>Web Development:</strong> Quickly visualize Base64 encoded images used in CSS or JavaScript.
-              </li>
-              <li>
-                <strong>Email Template Testing:</strong> Extract and view images from Base64 encoded email templates.
-              </li>
-              <li>
-                <strong>API Testing:</strong> Visualize image data returned from APIs that use Base64 encoding.
-              </li>
-              <li>
-                <strong>Data URI Debugging:</strong> Convert and view images from data URIs used in web applications.
-              </li>
-              <li>
-                <strong>Database Management:</strong> Retrieve and visualize images stored as Base64 strings in
-                databases.
-              </li>
-              <li>
-                <strong>File Format Conversion:</strong> Use as an intermediate step when converting between different
-                image formats.
-              </li>
-              <li>
-                <strong>Digital Forensics:</strong> Examine Base64 encoded image data in logs or data dumps.
-              </li>
-              <li>
-                <strong>Content Management Systems:</strong> Debug or extract images stored as Base64 in CMS platforms.
-              </li>
             </ul>
 
             <p className="text-sm md:text-base text-default-600 mt-6">

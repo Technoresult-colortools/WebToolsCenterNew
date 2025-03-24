@@ -338,7 +338,8 @@ export default function ImageAverageColorFinder() {
       <div className="flex flex-col gap-8">
         <Card>
           <CardBody className="p-6 bg-default-50 dark:bg-default-100">
-            <h2 className="text-2xl font-bold text-default-700 mb-4">Upload an Image</h2>
+          <h2 className="text-xl sm:text-1xl md:text-2xl font-bold text-default-700 mb-4">Upload an Image</h2>
+
             {!imageSrc ? (
               <label
                 className={`flex flex-col items-center justify-center h-64 px-4 py-6 bg-default-100 text-primary rounded-lg shadow-lg tracking-wide uppercase border-2 ${
@@ -350,9 +351,10 @@ export default function ImageAverageColorFinder() {
                 onDrop={handleDrop}
               >
                 <Upload size={48} />
-                <span className="mt-2 text-base leading-normal">
+                <span className="mt-2 text-sm sm:text-base md:text-md leading-normal text-center block">
                   {isDragging ? "Drop image here" : "Select a file or drag and drop"}
                 </span>
+
                 <input ref={fileInputRef} type="file" className="hidden" onChange={handleFileChange} accept="image/*" />
               </label>
             ) : (
@@ -443,7 +445,7 @@ export default function ImageAverageColorFinder() {
 
                 <div className="my-8">
                 <NextImage
-                    src="/Images/ImageAverageColorPreview.png"
+                    src="/Images/InfosectionImages/ImageAverageColorPreview.png?height=400&width=600"
                     alt="Screenshot of the Image Average Color Finder interface"
                     width={600}
                     height={400}
@@ -480,23 +482,8 @@ export default function ImageAverageColorFinder() {
                 <li>Drag and drop functionality for easy image uploading</li>
                 </ul>
 
-                <h2 className="text-lg md:text-xl lg:text-2xl font-semibold text-default-700 mb-4 mt-8 flex items-center">
-                <Info className="w-6 h-6 mr-2" />
-                Applications and Use Cases
-                </h2>
-                <ul className="list-disc list-inside space-y-2 text-sm md:text-base">
-                <li><strong>Graphic Design:</strong> Extract color palettes from inspirational images for use in designs.</li>
-                <li><strong>Web Design:</strong> Analyze website screenshots to create cohesive color schemes.</li>
-                <li><strong>Digital Art:</strong> Find the perfect color balance for digital paintings and illustrations.</li>
-                <li><strong>Photography:</strong> Understand the color composition of photographs for editing and retouching.</li>
-                <li><strong>Branding:</strong> Ensure consistent color usage across various brand materials.</li>
-                <li><strong>Interior Design:</strong> Extract color palettes from room photos for decoration ideas.</li>
-                <li><strong>Fashion:</strong> Analyze clothing and accessory colors to create matching outfits.</li>
-                <li><strong>Education:</strong> Teach color theory and analysis in art and design courses.</li>
-                </ul>
-
                 <p className="text-sm md:text-base text-default-600 mt-4">
-                Ready to explore the colors in your images? Start using our Image Average Color Finder tool now and unlock the power of color analysis for your projects. Whether you're working on a professional design or just curious about the colors in your favorite photos, our tool provides the insights you need. Try it out and see how it can enhance your color selection process and inspire your creative work!
+                Are you ready to detect colors in your images? Now start using our image average color finding device and unlock the power of color analysis for your projects. Whether you are working on a professional design or eager about colors in your favorite photos, our tool provides the required insight for you. Try it and see how it can increase your color selection process and inspire your creative work!
                 </p>
             </div>
             </Card>

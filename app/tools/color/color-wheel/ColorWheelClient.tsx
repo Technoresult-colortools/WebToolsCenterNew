@@ -358,7 +358,7 @@ export default function ColorWheel() {
             <div className="lg:col-span-2">
                <div
                   ref={wheelRef}
-                  className="relative w-full aspect-square max-w-[600px] mx-auto touch-none select-none"
+                  className="relative w-full aspect-square max-w-[500px] mx-auto touch-none select-none"
                   onMouseDown={handleMouseDown}
                   onTouchStart={handleTouchStart}
                   onTouchMove={handleTouchMove}
@@ -590,15 +590,12 @@ export default function ColorWheel() {
               About Color Wheel
             </h2>
             <p className="text-sm md:text-base text-default-600 mb-4">
-              The Color Wheel is an advanced tool designed for designers, developers, and color enthusiasts. It allows
-              you to explore color harmonies, generate color palettes, and visualize color relationships with ease and
-              precision. Whether you're working on web design, graphic design, or any project involving color theory,
-              this tool provides an intuitive interface to experiment with and perfect your color choices.
+            Color wheel is an advanced tool designed for designers, developers and color enthusiasts. This allows you to detect color harmony, generate color straps and imagine color relationships with ease and accuracy. Whether you are working on any project related to web design, graphic design, or color theory, this tool offers an intuitive interface to experiment and correct with your color options.
             </p>
 
             <div className="my-8">
               <Image
-                src="/Images/ColorWheelPreview.png?height=400&width=600"
+                src="/Images/InfosectionImages/ColorWheelPreview.png?height=400&width=600"
                 alt="Screenshot of the Color Wheel interface showing the interactive wheel and harmony colors"
                 width={600}
                 height={400}
@@ -612,7 +609,7 @@ export default function ColorWheel() {
             </h2>
             <ol className="list-decimal list-inside space-y-2 text-sm md:text-base text-default-600">
               <li>Interact with the color wheel by clicking or dragging to select your base color.</li>
-              <li>Use the custom color input to manually enter a specific color.</li>
+              <li>Or you can use the custom color input to manually enter a specific color.</li>
               <li>Adjust the lightness slider to modify the brightness of the colors.</li>
               <li>Select a color harmony from the available options to generate complementary colors.</li>
               <li>Click on the generated harmony colors to set them as the new base color.</li>
@@ -632,34 +629,6 @@ export default function ColorWheel() {
               <li>Lightness adjustment slider for fine-tuning colors</li>
               <li>Easy-to-use copy functionality for color values</li>
               <li>Option to download the generated color palette as an image</li>
-            </ul>
-
-            <h2 className="text-xl md:text-2xl font-semibold text-default-700 mb-4 mt-8 flex items-center">
-              <Palette className="w-6 h-6 mr-2" />
-              Applications and Use Cases
-            </h2>
-            <ul className="list-disc list-inside space-y-2 text-sm md:text-base text-default-600">
-              <li>
-                <strong>Web Design:</strong> Create consistent color schemes for websites and user interfaces.
-              </li>
-              <li>
-                <strong>Graphic Design:</strong> Develop color palettes for logos, branding, and marketing materials.
-              </li>
-              <li>
-                <strong>Digital Art:</strong> Explore color variations for digital illustrations and paintings.
-              </li>
-              <li>
-                <strong>Print Design:</strong> Ensure color consistency across various printed materials.
-              </li>
-              <li>
-                <strong>Product Design:</strong> Create color schemes for physical products and packaging.
-              </li>
-              <li>
-                <strong>Data Visualization:</strong> Generate color scales for charts, graphs, and infographics.
-              </li>
-              <li>
-                <strong>Accessibility Testing:</strong> Test color contrasts and readability with different shades.
-              </li>
             </ul>
 
             <h2 className="text-xl md:text-2xl font-semibold text-default-700 mb-4 mt-8 flex items-center">

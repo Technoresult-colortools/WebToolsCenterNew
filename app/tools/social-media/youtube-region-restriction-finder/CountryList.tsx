@@ -36,8 +36,8 @@ const CountryList: React.FC<CountryListProps> = ({ availability, countries }) =>
                   key={country.code}
                   content={
                     <div className="px-1 py-2">
-                      <div className="text-small font-bold">Last Checked</div>
-                      <div className="text-tiny">
+                      <div className="text-small text-default-700 font-bold">Last Checked</div>
+                      <div className="text-tiny text-default-700">
                         {status ? formatLastChecked(status.lastChecked) : 'Not checked'}
                       </div>
                     </div>

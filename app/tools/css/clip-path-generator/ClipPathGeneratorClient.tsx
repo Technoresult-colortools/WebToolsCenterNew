@@ -735,15 +735,15 @@ export default function ClipPathGenerator() {
                 What is the Clip Path Generator?
               </h2>
               <p className="text-sm md:text-base text-default-600 mb-4">
-                Imagine you're a digital artist with a magical pair of scissors that can cut any shape out of an image. That's essentially what our <Link href="#how-to-use" className="text-primary hover:underline">Clip Path Generator</Link> does! It's a fun and intuitive tool that lets you create custom shapes to reveal parts of an image while hiding others. Whether you're a web designer looking to add some flair to your site or a developer trying to create unique UI elements, this tool is your new best friend.
+              Imagine that you are a digital artist with a magical pair of scissors who can cut any shape from an image. What does this essentially do our  <Link href="#how-to-use" className="text-primary hover:underline">Clip Path Generator</Link>!  It is a fun and spontaneous tool that allows you to make a custom shape to reveal parts of an image hiding others. Whether you are a web designer who are looking to add some flair to your site or trying to create a developer unique UI element, this tool is your new best friend.
               </p>
               <p className="text-sm md:text-base text-default-600 mb-4">
-                With the Clip Path Generator, you can transform boring rectangles into exciting polygons, turn square profile pictures into perfect circles, or even create complex custom shapes that bring your creative vision to life. It's like having a digital exacto knife that never gets dull!
+              With clip path generator, you can convert boring rectangles into exciting polygons, convert square profile images into correct circles, or even create complex custom shapes that bring your creative vision into life. It is like being a digital accurate knife that is never sluggish!
               </p>
               
               <div className="my-8">
                 <NextImage 
-                  src="/Images/ClipPathPreview.png?height=400&width=600" 
+                  src="/Images/InfosectionImages/CSSClipPathPreview.png?height=400&width=600" 
                   alt="Screenshot of the Clip Path Generator interface showing various shape options and controls" 
                   width={600} 
                   height={400} 

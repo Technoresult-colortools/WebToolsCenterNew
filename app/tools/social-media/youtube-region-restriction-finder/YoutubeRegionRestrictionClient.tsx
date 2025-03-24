@@ -191,7 +191,7 @@ export default function YouTubeRegionRestrictionFinder() {
                   placeholder="Paste YouTube video URL here..."
                   size="md"
                   variant="bordered"
-                  startContent={<Youtube className="text-default-400" />}
+                  startContent={<Youtube className="text-danger" />}
                   className="flex-1"
                 />
               <Tooltip content="Check video availability in multiple regions">
@@ -307,15 +307,12 @@ export default function YouTubeRegionRestrictionFinder() {
                 About YouTube Region Restriction Finder
             </h2>
             <p className="text-sm md:text-base text-default-600 mb-4">
-                Our YouTube Region Restriction Finder is a powerful and comprehensive tool designed to help content creators, 
-                marketers, researchers, and viewers understand the global availability of YouTube videos. This innovative tool 
-                allows you to check the accessibility of any YouTube video across numerous countries worldwide, providing 
-                valuable insights into content distribution and potential region restrictions.
+            Our YouTube field restriction finder is a powerful and comprehensive tool designed to help the material creators, abusive, researchers and audiences understand the global availability of YouTube videos. This innovative device allows you to check the access to any YouTube video in many countries worldwide, providing valuable insight into material delivery and potential field restrictions.
             </p>
 
             <div className="my-8">
                 <NextImage
-                src="/Images/YoutubeMetadataPreview3.png"
+                src="/Images/InfosectionImages/YoutubeRegionRestrictionPreview.png?height=400&width=600" 
                 alt="Screenshot of the YouTube Region Restriction Finder interface"
                 width={600}
                 height={400}
@@ -344,7 +341,7 @@ export default function YouTubeRegionRestrictionFinder() {
                 How to Use YouTube Region Restriction Finder
             </h2>
             <ol className="list-decimal list-inside space-y-2 text-sm md:text-base">
-                <li>Copy the URL of the YouTube video you want to analyze.</li>
+                <li>Copy the Youtube Video URL which you want to analyze.</li>
                 <li>Paste the URL into the input field of the YouTube Region Restriction Finder.</li>
                 <li>Click the "Check Availability" button to start the process.</li>
                 <li>
@@ -357,21 +354,6 @@ export default function YouTubeRegionRestrictionFinder() {
                 </li>
                 <li>Use additional features like Reset, Share, and Recent Searches as needed.</li>
             </ol>
-
-            <h2 className="text-lg md:text-xl lg:text-2xl font-semibold text-default-700 mb-4 mt-8 flex items-center">
-                <Share2 className="w-6 h-6 mr-2" />
-                Applications and Use Cases
-            </h2>
-            <ul className="list-disc list-inside space-y-2 text-sm md:text-base">
-                <li>Global Content Strategy: Optimize your content distribution for international audiences.</li>
-                <li>Copyright Compliance: Ensure your content adheres to regional copyright laws and licensing agreements.</li>
-                <li>Market Research: Analyze the global reach of viral videos or trending content.</li>
-                <li>Competitive Analysis: Compare your video availability with competitors in key markets.</li>
-                <li>Localization Planning: Identify regions where your content is restricted to plan localized versions.</li>
-                <li>Troubleshooting: Quickly identify and address region-specific playback issues.</li>
-                <li>Educational Research: Study the impact of region restrictions on the spread of educational content.</li>
-                <li>Marketing Campaigns: Ensure promotional videos are accessible in target markets before launching campaigns.</li>
-            </ul>
 
             <h2 className="text-lg md:text-xl lg:text-2xl font-semibold text-default-700 mb-4 mt-8 flex items-center">
                 <Shield className="w-6 h-6 mr-2" />

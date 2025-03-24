@@ -59,8 +59,8 @@ export default function RGBAToHex() {
       description="Convert RGBA Color Codes to Hex with Real-time Preview"
       toolId="678f382c26f06f912191bca5"
     >
-      <div className="max-w-4xl mx-auto">
-        <Card className="bg-default-50 dark:bg-default-100 shadow-md">
+      <div className="max-w-6xl mx-auto">
+        <Card className="bg-default-50 dark:bg-default-100">
           <CardBody className="gap-6 p-6">
             <div className="grid gap-6 md:grid-cols-2">
               {/* Input Section */}
@@ -124,7 +124,7 @@ export default function RGBAToHex() {
                   </div>
                 </div>
                 <Button
-                  onClick={handleReset}
+                  onPress={handleReset}
                   color="danger"
          
                   startContent={<RefreshCw className="w-4 h-4" />}
@@ -197,22 +197,16 @@ export default function RGBAToHex() {
                 About RGBA to Hex Converter
               </h2>
               <p className="text-sm md:text-base text-default-600 mb-4">
-                The RGBA to Hex Converter is an advanced tool designed for web developers, designers, and digital
-                artists. It allows you to easily convert RGBA (Red, Green, Blue, Alpha) color values to their
-                Hexadecimal equivalents. This tool is particularly useful when working with web design, CSS styling, or
-                any project that requires precise color management and conversion between different color
-                representations.
+              Hex converter from RGBA is an advanced tool designed for web developers, designers and digital artists. This allows you to easily convert RGBA (red, green, blue, alpha) colors to their hexadesimal counterparts. This tool is particularly useful when working with web design, CSS styling, or any project, which requires accurate color management and conversion between various color representations.
               </p>
               <p className="text-sm md:text-base text-default-600 mb-4">
-                With features like real-time conversion, interactive sliders, and support for both RGBA and Hex formats,
-                the RGBA to Hex Converter streamlines your workflow and ensures accurate color representation across
-                different formats. It's perfect for creating consistent color schemes, adjusting color properties, or
-                simply exploring the relationship between RGBA and Hex color representations.
+              With features such as real -time conversion, interactive sliders and support for both RGBA and Hex forms, the hex converter from RGBA streamlines your workflow and ensures accurate color representation in various formats. This is perfect for constant color schemes, adjusting color properties, or simply searching for relationships between RGBA and Hex color representations.
+
               </p>
 
               <div className="my-8">
                 <NextImage
-                  src="/Images/RGBAToHexPreview.png?height=400&width=600"
+                  src="/Images/InfosectionImages/RGBAToHexPreview.png?height=400&width=600"
                   alt="Screenshot of the RGBA to Hex Converter interface showing RGBA sliders and color preview"
                   width={600}
                   height={400}
@@ -253,49 +247,6 @@ export default function RGBAToHex() {
                 <li>Reset functionality for quick new color explorations</li>
                 <li>User-friendly interface with clear, easy-to-read color information</li>
                 <li>Alpha channel support for transparent colors</li>
-              </ul>
-
-              <h2 className="text-xl md:text-2xl font-semibold text-default-700 mb-4 mt-8 flex items-center">
-                <Info className="w-6 h-6 mr-2" />
-                Applications and Use Cases
-              </h2>
-              <ul className="list-disc list-inside text-default-600 space-y-2 text-sm md:text-base">
-                <li>
-                  <strong>Web Development:</strong> Easily convert RGBA colors to Hex for use in CSS and HTML, including
-                  support for transparency.
-                </li>
-                <li>
-                  <strong>Graphic Design:</strong> Translate RGBA values to Hex codes for software that requires
-                  hexadecimal color inputs.
-                </li>
-                <li>
-                  <strong>UI/UX Design:</strong> Create consistent color schemes with transparency by converting between
-                  RGBA and Hex formats.
-                </li>
-                <li>
-                  <strong>Digital Art:</strong> Experiment with color properties and opacity using RGBA and obtain Hex
-                  values for use in various digital art software.
-                </li>
-                <li>
-                  <strong>Brand Identity:</strong> Maintain color consistency across various digital platforms by
-                  converting between color models, including transparency.
-                </li>
-                <li>
-                  <strong>Game Development:</strong> Convert RGBA colors to Hex for use in game engines and asset
-                  creation, ensuring consistent color representation across different platforms and rendering engines.
-                </li>
-                <li>
-                  <strong>Print Design:</strong> While print typically uses CMYK, converting RGBA to Hex can be useful
-                  for designing digital proofs or creating web versions of print materials.
-                </li>
-                <li>
-                  <strong>Color Theory Education:</strong> Use the converter as a teaching tool to demonstrate the
-                  relationship between RGBA values and their hexadecimal representations.
-                </li>
-                <li>
-                  <strong>Accessibility Testing:</strong> Convert colors with varying opacity levels to ensure proper
-                  contrast and readability in web designs, especially for users with visual impairments.
-                </li>
               </ul>
 
               <p className="text-sm md:text-base text-default-600 mt-6">

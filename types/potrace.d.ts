@@ -1,16 +1,20 @@
-// /types/potrace.d.ts
+// potrace.d.ts
 declare module 'potrace' {
-    export interface PotraceOptions {
-      threshold?: number;
-      turdSize?: number;
-      optCurve?: boolean;
-      alphaMax?: number;
-      optTolerance?: number;
-    }
-  
-    export function trace(
-      input: Buffer,
-      options: PotraceOptions,
-      callback: (err: Error | null, svg: string) => void
-    ): void;
+  export interface PotraceOptions {
+    turnPolicy?: 'black' | 'white' | 'left' | 'right' | 'minority' | 'majority';
+    turdSize?: number;
+    alphaMax?: number;
+    optCurve?: boolean;
+    optTolerance?: number;
+    threshold?: number;
+    blackOnWhite?: boolean;
+    color?: string;
+    background?: string;
   }
+
+  export function trace(
+    file: Buffer | string,
+    options: PotraceOptions,
+    callback: (err: Error | null, svg: string) => void
+  ): void;
+}

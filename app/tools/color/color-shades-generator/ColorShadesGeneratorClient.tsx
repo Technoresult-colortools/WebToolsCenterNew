@@ -1,11 +1,38 @@
 "use client"
 
 import { useCallback, useState, useEffect } from "react"
-import { Copy, Info, BookOpen, Lightbulb, AlertCircle, RefreshCw, Download, Palette, Eye, Code } from "lucide-react"
+import { 
+  Copy, 
+  Info, 
+  BookOpen, 
+  Lightbulb, 
+  AlertCircle, 
+  RefreshCw, 
+  Download, 
+  Palette, 
+  Eye, 
+  Code,
+  ChevronRight,
+  Check,
+  Shuffle
+} from "lucide-react"
 import NextImage from "next/image"
 import { toast } from "react-hot-toast"
 import ToolLayout from "@/components/ToolLayout"
-import { Button, Card, CardBody, Input, Slider, Tabs, Tab, Select, SelectItem } from "@nextui-org/react"
+import { 
+  Button, 
+  Card, 
+  CardBody, 
+  Input, 
+  Slider, 
+  Tabs, 
+  Tab, 
+  Select, 
+  SelectItem,
+  Tooltip,
+  Badge,
+  Divider
+} from "@nextui-org/react"
 
 interface Shade {
   hex: string
@@ -100,6 +127,7 @@ export default function ColorShadesGenerator() {
   const [selectedShade, setSelectedShade] = useState<Shade | null>(null)
   const [error, setError] = useState<string>("")
   const [shadeType, setShadeType] = useState<"tint" | "shade" | "both">("both")
+  const [copiedFormat, setCopiedFormat] = useState<string | null>(null)
 
   const generateShades = useCallback((hex: string, count: number, type: "tint" | "shade" | "both"): Shade[] => {
     const [r, g, b] = colorConversions.hexToRgb(hex)
@@ -147,9 +175,11 @@ export default function ColorShadesGenerator() {
     setSelectedShade(newShades[Math.floor(newShades.length / 2)])
   }, [baseColor, shadeCount, shadeType, generateShades])
 
-  const handleCopyColor = (colorValue: string) => {
+  const handleCopyColor = (colorValue: string, format: string) => {
     navigator.clipboard.writeText(colorValue)
     toast.success(`Copied ${colorValue} to clipboard`)
+    setCopiedFormat(format)
+    setTimeout(() => setCopiedFormat(null), 2000)
   }
 
   const handleRandomColor = () => {
@@ -182,45 +212,68 @@ export default function ColorShadesGenerator() {
     toast.success("Palette downloaded as PNG")
   }
 
+  // Function to determine text color based on background
+  const getContrastColor = (hexColor: string) => {
+    const [r, g, b] = colorConversions.hexToRgb(hexColor)
+    const brightness = (r * 299 + g * 587 + b * 114) / 1000
+    return brightness > 128 ? '#000000' : '#ffffff'
+  }
+
   return (
     <ToolLayout
       title="Color Shades Generator"
       description="Generate and explore harmonious color shades for your projects with advanced features"
       toolId="678f382d26f06f912191bcaa"
     >
-      <div className="max-w-4xl mx-auto">
-        <Card className="bg-default-50 dark:bg-default-100 shadow-md">
+      <div className="max-w-6xl mx-auto">
+        <Card className="bg-default-50 dark:bg-default-100">
           <CardBody className="gap-6 p-6">
 
-            <div className="flex flex-wrap items-center space-y-4 sm:space-y-0 sm:space-x-4">
-              <Input
-                type="text"
-                value={baseColor}
-                onChange={(e) => setBaseColor(e.target.value)}
-                className="flex-grow w-full sm:w-auto"
-                placeholder="Enter HEX color"
-                variant="bordered"
-              />
-              <div className="relative">
-                <input
-                  id="color-picker"
-                  type="color"
-                  value={baseColor}
-                  onChange={(e) => setBaseColor(e.target.value)}
-                  className="sr-only"
-                />
-                <label
-                  htmlFor="color-picker"
-                  className="w-12 h-12 rounded cursor-pointer border-2 border-default-200 flex items-center justify-center"
-                  style={{ backgroundColor: baseColor }}
-                >
-                  <div className="w-8 h-8 rounded-sm border border-white/40"></div>
-                </label>
-              </div>
-              <Button onPress={handleRandomColor} color="primary" className="w-full sm:w-auto">
-                <RefreshCw className="mr-2 h-4 w-4" /> Random
-              </Button>
-            </div>
+          <div className="flex flex-wrap items-center gap-3">
+                  <Input
+                    type="text"
+                    value={baseColor}
+                    onChange={(e) => setBaseColor(e.target.value)}
+                    className="flex-grow w-1/2"
+                    placeholder="Enter HEX color"
+                    variant="bordered"
+                    startContent={
+                      <div className="w-4 h-4 rounded-full" style={{ backgroundColor: baseColor }}></div>
+                    }
+                    size="lg"
+                  />
+                  <div className="flex gap-2">
+                    <div className="relative">
+                      <input
+                        id="color-picker"
+                        type="color"
+                        value={baseColor}
+                        onChange={(e) => setBaseColor(e.target.value)}
+                        className="sr-only"
+                      />
+                      <Tooltip content="Pick color">
+                        <label
+                          htmlFor="color-picker"
+                          className="w-12 h-12 rounded-lg cursor-pointer border-2 border-default-200 flex items-center justify-center transition-transform hover:scale-105"
+                          style={{ backgroundColor: baseColor }}
+                        >
+                          <div className="w-8 h-8 rounded-sm border border-white/40"></div>
+                        </label>
+                      </Tooltip>
+                    </div>
+                    <Tooltip content="Generate random color">
+                      <Button 
+                        isIconOnly 
+                        onPress={handleRandomColor} 
+                        color="primary" 
+                        size="lg"
+                        className="h-12 w-12"
+                      >
+                        <Shuffle className="h-5 w-5" />
+                      </Button>
+                    </Tooltip>
+                  </div>
+                </div>
 
             <div>
               <label className="block text-sm font-medium text-default-700 mb-2">Shade Count: {shadeCount}</label>
@@ -262,100 +315,201 @@ export default function ColorShadesGenerator() {
               </div>
             )}
 
-            <div className="flex mb-6" id="shades-container">
-              {shades.map((shade, index) => (
-                <div
-                  key={index}
-                  className="flex-1 h-20 shade cursor-pointer transition-transform hover:scale-105"
-                  style={{ backgroundColor: shade.hex }}
-                  onClick={() => setSelectedShade(shade)}
-                ></div>
-              ))}
-            </div>
-
+            {/* Palette display and selected shade info */}
+          <Card className="col-span-1 lg:col-span-2 bg-default-50 dark:bg-default-100 border border-default-200 dark:border-default-100 backdrop-blur-sm">
+            <CardBody className="p-6">
+              <div className="mb-6">
+                <h2 className="text-xl font-semibold flex items-center mb-4">
+                  <Eye className="w-5 h-5 mr-2 text-primary-500" />
+                  Your Palette
+                </h2>
+                <div className="rounded-xl overflow-hidden flex" id="shades-container" style={{ height: '120px' }}>
+                  {shades.map((shade, index) => (
+                    <Tooltip 
+                      key={index}
+                      content={shade.hex}
+                      color="foreground"
+                      placement="top"
+                    >
+                      <div
+                        className="flex-1 h-full shade cursor-pointer transition-all hover:flex-[1.5] relative group"
+                        style={{ backgroundColor: shade.hex }}
+                        onClick={() => setSelectedShade(shade)}
+                      >
+                        <div 
+                          className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
+                          style={{ color: getContrastColor(shade.hex) }}
+                        >
+                          <span className="text-xs font-mono bg-black/20 dark:bg-white/20 backdrop-blur-sm px-2 py-1 rounded">
+                            {shade.hex}
+                          </span>
+                        </div>
+                      </div>
+                    </Tooltip>
+                  ))}
+                </div>
+              </div>
             <Button onPress={handleDownloadPalette} color="primary" className="w-full">
               <Download className="mr-2 h-4 w-4" /> Download Palette
             </Button>
           </CardBody>
         </Card>
 
+       
         {selectedShade && (
-          <Card className="mt-8 bg-default-50 dark:bg-default-100">
-            <CardBody className="p-6">
-              <h2 className="text-2xl font-semibold text-default-900 mb-4">Selected Shade</h2>
-              <div className="flex flex-col md:flex-row">
-                <div
-                  className="w-full md:w-1/3 h-48 rounded-md mb-4 md:mb-0"
-                  style={{ backgroundColor: selectedShade.hex }}
-                ></div>
-                <div className="w-full md:w-2/3 md:ml-4 space-y-2">
-                  <Tabs aria-label="Color formats">
-                    <Tab key="hex" title="HEX">
-                      <div className="flex items-center justify-between mt-2">
-                        <span>{selectedShade.hex}</span>
-                        <Button isIconOnly variant="flat" size="sm" onPress={() => handleCopyColor(selectedShade.hex)}>
-                          <Copy className="h-4 w-4" />
-                        </Button>
-                      </div>
-                    </Tab>
-                    <Tab key="rgb" title="RGB">
-                      <div className="flex items-center justify-between mt-2">
-                        <span>rgb({selectedShade.rgb.join(", ")})</span>
-                        <Button
-                          isIconOnly
-                          variant="flat"
-                          size="sm"
-                          onPress={() => handleCopyColor(`rgb(${selectedShade.rgb.join(", ")})`)}
+                <div className="mt-4">
+                  <h2 className="text-xl font-semibold flex items-center mb-4">
+                    <Info className="w-5 h-5 mr-2 text-primary-500" />
+                    Selected Color
+                  </h2>
+                  <div className="flex flex-col md:flex-row gap-6">
+                    <div className="w-full md:w-1/3 h-48 rounded-xl overflow-hidden relative group">
+                      <div
+                        className="w-full h-full"
+                        style={{ backgroundColor: selectedShade.hex }}
+                      ></div>
+                      <div 
+                        className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
+                        style={{ backgroundColor: 'rgba(0,0,0,0.1)' }}
+                      >
+                        <Button 
+                          color="default" 
+                          variant="solid" 
+                          className="bg-white/80 dark:bg-black/80 backdrop-blur-md"
+                          onPress={() => handleCopyColor(selectedShade.hex, 'hex')}
+                          startContent={copiedFormat === 'hex' ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
                         >
-                          <Copy className="h-4 w-4" />
+                          Copy HEX
                         </Button>
                       </div>
-                    </Tab>
-                    <Tab key="hsl" title="HSL">
-                      <div className="flex items-center justify-between mt-2">
-                        <span>hsl({selectedShade.hsl.join(", ")})</span>
-                        <Button
-                          isIconOnly
-                          variant="flat"
-                          size="sm"
-                          onPress={() => handleCopyColor(`hsl(${selectedShade.hsl.join(", ")})`)}
-                        >
-                          <Copy className="h-4 w-4" />
-                        </Button>
+                    </div>
+                    <div className="w-full md:w-2/3 space-y-2">
+                      <Tabs 
+                        aria-label="Color formats" 
+                        color="primary"
+                        variant="underlined"
+                        classNames={{
+                          tab: "data-[selected=true]:text-primary-500"
+                        }}
+                      >
+                        <Tab key="hex" title={
+                          <div className="flex items-center gap-2">
+                            <span>HEX</span>
+                            {copiedFormat === 'hex' && <Check className="h-3 w-3 text-success-500" />}
+                          </div>
+                        }>
+                          <div className="flex items-center justify-between mt-2 p-3 bg-default-100 dark:bg-default-200 rounded-lg">
+                            <span className="font-mono">{selectedShade.hex}</span>
+                            <Button 
+                              isIconOnly 
+                              variant="light" 
+                              size="sm" 
+                              onPress={() => handleCopyColor(selectedShade.hex, 'hex')}
+                              color={copiedFormat === 'hex' ? "success" : "default"}
+                            >
+                              {copiedFormat === 'hex' ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
+                            </Button>
+                          </div>
+                        </Tab>
+                        <Tab key="rgb" title={
+                          <div className="flex items-center gap-2">
+                            <span>RGB</span>
+                            {copiedFormat === 'rgb' && <Check className="h-3 w-3 text-success-500" />}
+                          </div>
+                        }>
+                          <div className="flex items-center justify-between mt-2 p-3 bg-default-100 dark:bg-default-200 rounded-lg">
+                            <span className="font-mono">rgb({selectedShade.rgb.join(", ")})</span>
+                            <Button
+                              isIconOnly
+                              variant="light"
+                              size="sm"
+                              onPress={() => handleCopyColor(`rgb(${selectedShade.rgb.join(", ")})`, 'rgb')}
+                              color={copiedFormat === 'rgb' ? "success" : "default"}
+                            >
+                              {copiedFormat === 'rgb' ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
+                            </Button>
+                          </div>
+                        </Tab>
+                        <Tab key="hsl" title={
+                          <div className="flex items-center gap-2">
+                            <span>HSL</span>
+                            {copiedFormat === 'hsl' && <Check className="h-3 w-3 text-success-500" />}
+                          </div>
+                        }>
+                          <div className="flex items-center justify-between mt-2 p-3 bg-default-100 dark:bg-default-200 rounded-lg">
+                            <span className="font-mono">hsl({selectedShade.hsl.join(", ")})</span>
+                            <Button
+                              isIconOnly
+                              variant="light"
+                              size="sm"
+                              onPress={() => handleCopyColor(`hsl(${selectedShade.hsl.join(", ")})`, 'hsl')}
+                              color={copiedFormat === 'hsl' ? "success" : "default"}
+                            >
+                              {copiedFormat === 'hsl' ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
+                            </Button>
+                          </div>
+                        </Tab>
+                        <Tab key="hsv" title={
+                          <div className="flex items-center gap-2">
+                            <span>HSV</span>
+                            {copiedFormat === 'hsv' && <Check className="h-3 w-3 text-success-500" />}
+                          </div>
+                        }>
+                          <div className="flex items-center justify-between mt-2 p-3 bg-default-100 dark:bg-default-200 rounded-lg">
+                            <span className="font-mono">hsv({selectedShade.hsv.join(", ")})</span>
+                            <Button
+                              isIconOnly
+                              variant="light"
+                              size="sm"
+                              onPress={() => handleCopyColor(`hsv(${selectedShade.hsv.join(", ")})`, 'hsv')}
+                              color={copiedFormat === 'hsv' ? "success" : "default"}
+                            >
+                              {copiedFormat === 'hsv' ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
+                            </Button>
+                          </div>
+                        </Tab>
+                        <Tab key="cmyk" title={
+                          <div className="flex items-center gap-2">
+                            <span>CMYK</span>
+                            {copiedFormat === 'cmyk' && <Check className="h-3 w-3 text-success-500" />}
+                          </div>
+                        }>
+                          <div className="flex items-center justify-between mt-2 p-3 bg-default-100 dark:bg-default-200 rounded-lg">
+                            <span className="font-mono">cmyk({selectedShade.cmyk.join(", ")})</span>
+                            <Button
+                              isIconOnly
+                              variant="light"
+                              size="sm"
+                              onPress={() => handleCopyColor(`cmyk(${selectedShade.cmyk.join(", ")})`, 'cmyk')}
+                              color={copiedFormat === 'cmyk' ? "success" : "default"}
+                            >
+                              {copiedFormat === 'cmyk' ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
+                            </Button>
+                          </div>
+                        </Tab>
+                      </Tabs>
+
+                      <div className="grid grid-cols-3 gap-2 mt-4">
+                        <div className="bg-default-100 dark:bg-default-200 rounded-lg p-3">
+                          <div className="text-xs text-default-500 mb-1">Red</div>
+                          <div className="font-semibold">{selectedShade.rgb[0]}</div>
+                        </div>
+                        <div className="bg-default-100 dark:bg-default-200 rounded-lg p-3">
+                          <div className="text-xs text-default-500 mb-1">Green</div>
+                          <div className="font-semibold">{selectedShade.rgb[1]}</div>
+                        </div>
+                        <div className="bg-default-100 dark:bg-default-200 rounded-lg p-3">
+                          <div className="text-xs text-default-500 mb-1">Blue</div>
+                          <div className="font-semibold">{selectedShade.rgb[2]}</div>
+                        </div>
                       </div>
-                    </Tab>
-                    <Tab key="hsv" title="HSV">
-                      <div className="flex items-center justify-between mt-2">
-                        <span>hsv({selectedShade.hsv.join(", ")})</span>
-                        <Button
-                          isIconOnly
-                          variant="flat"
-                          size="sm"
-                          onPress={() => handleCopyColor(`hsv(${selectedShade.hsv.join(", ")})`)}
-                        >
-                          <Copy className="h-4 w-4" />
-                        </Button>
-                      </div>
-                    </Tab>
-                    <Tab key="cmyk" title="CMYK">
-                      <div className="flex items-center justify-between mt-2">
-                        <span>cmyk({selectedShade.cmyk.join(", ")})</span>
-                        <Button
-                          isIconOnly
-                          variant="flat"
-                          size="sm"
-                          onPress={() => handleCopyColor(`cmyk(${selectedShade.cmyk.join(", ")})`)}
-                        >
-                          <Copy className="h-4 w-4" />
-                        </Button>
-                      </div>
-                    </Tab>
-                  </Tabs>
+                    </div>
+                  </div>
                 </div>
-              </div>
+              )}
             </CardBody>
           </Card>
-        )}
+        </div>
 
             <Card className="mt-6 bg-default-50 dark:bg-default-100 p-4 md:p-8">
             <div className="rounded-xl p-2 md:p-4 max-w-4xl mx-auto">
@@ -369,7 +523,7 @@ export default function ColorShadesGenerator() {
                 
                 <div className="my-8">
                 <NextImage
-                    src="/Images/ColorShadesPreview.png?height=400&width=600"
+                    src="/Images/InfosectionImages/ColorShadesGeneratorPreview.png?height=400&width=600"
                     alt="Screenshot of the Enhanced Color Shades Generator interface showing color inputs and preview"
                     width={600}
                     height={400}
@@ -382,7 +536,7 @@ export default function ColorShadesGenerator() {
                 How to Use Color Shades Generator?
                 </h2>
                 <ol className="list-decimal list-inside space-y-2 text-sm md:text-base text-default-600">
-                <li>Enter a hex color code or use the color picker to select a base color.</li>
+                <li>Enter a hex color code or you can use the color picker to select a base color.</li>
                 <li>Adjust the slider to choose the number of shades you want to generate (between 2 and 20).</li>
                 <li>Select the shade type: tint (lighter), shade (darker), or both.</li>
                 <li>Click on the generated shades to view their details in various color formats.</li>
@@ -403,20 +557,6 @@ export default function ColorShadesGenerator() {
                 <li>Random color generation for inspiration</li>
                 <li>Real-time updates as you adjust settings</li>
                 <li>Responsive design for use on various devices</li>
-                </ul>
-
-                <h2 className="text-xl md:text-2xl font-semibold text-default-700 mb-4 mt-8 flex items-center">
-                <Palette className="w-6 h-6 mr-2" />
-                Applications and Use Cases
-                </h2>
-                <ul className="list-disc list-inside space-y-2 text-sm md:text-base text-default-600">
-                <li><strong>Web Design:</strong> Create consistent color schemes for websites and user interfaces.</li>
-                <li><strong>Graphic Design:</strong> Develop color palettes for logos, branding, and marketing materials.</li>
-                <li><strong>Digital Art:</strong> Explore color variations for digital illustrations and paintings.</li>
-                <li><strong>Print Design:</strong> Ensure color consistency across various printed materials.</li>
-                <li><strong>Product Design:</strong> Create color schemes for physical products and packaging.</li>
-                <li><strong>Data Visualization:</strong> Generate color scales for charts, graphs, and infographics.</li>
-                <li><strong>Accessibility Testing:</strong> Test color contrasts and readability with different shades.</li>
                 </ul>
 
                 <h2 className="text-xl md:text-2xl font-semibold text-default-700 mb-4 mt-8 flex items-center">
@@ -446,8 +586,6 @@ export default function ColorShadesGenerator() {
                 </ul>
             </div>
             </Card>
-
-      </div>
     </ToolLayout>
   )
 }

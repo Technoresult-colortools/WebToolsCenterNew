@@ -2,35 +2,36 @@ import { Metadata } from 'next';
 import ColorPaletteGeneratorClient from './ColorPaletteGeneratorClient';
 
 export const metadata: Metadata = {
-    title: 'Color Palette Generator | WebToolsCenter',
-    description: 'Create visually stunning color palettes with the Color Palette Generator. Choose a base color, select a harmony type, and generate custom color schemes perfect for designers, developers, and artists.',
+    title: 'AI Color Palette Generator | WebToolsCenter',
+    description: 'Create visually stunning color palettes with AI. Simply describe your desired palette in natural language, and our AI will generate custom color schemes perfect for designers, developers, and artists.',
     keywords: [
-        'color palette generator',
-        'color scheme tool',
-        'color harmony',
-        'complementary colors',
-        'analogous colors',
-        'triadic palette',
-        'tetradic palette',
-        'monochromatic colors',
+        'AI color palette generator',
+        'text to color palette',
+        'AI color scheme tool',
+        'natural language color generator',
+        'AI design tools',
+        'machine learning color palette',
+        'AI color harmony',
+        'color palette from description',
+        'AI-powered design tools',
+        'intelligent color scheme',
         'hex code generator',
-        'color design',
         'RGB color scheme',
         'HSL colors',
-        'web design tools',
-        'UI color preview'
+        'UI color preview',
+        'AI web design tools'
     ],
     openGraph: {
-        title: 'Color Palette Generator | Create Custom Color Schemes',
-        description: 'Design unique color palettes by choosing a base color and harmony type. Generate complementary, analogous, triadic, or tetradic palettes perfect for web design and art.',
+        title: 'AI Color Palette Generator | Create Palettes from Text Descriptions',
+        description: 'Design unique color palettes using AI. Simply describe your desired palette in natural language, and our tool will generate beautiful, harmonious color schemes for your projects.',
         type: 'website',
-        url: '/tools/color/color-palette-generator',
+        url: '/tools/color/ai-color-palette-generator',
         siteName: 'WebToolsCenter'
     },
     twitter: {
         card: 'summary_large_image',
-        title: 'Color Palette Generator | WebToolsCenter',
-        description: 'Generate custom color palettes using harmony types like complementary, analogous, and triadic. Perfect for web designers, developers, and artists.',
+        title: 'AI Color Palette Generator | WebToolsCenter',
+        description: 'Generate custom color palettes using AI. Describe your desired palette in natural language and see it come to life with our interactive UI preview.',
     },
     robots: {
         index: true,
@@ -44,7 +45,7 @@ export const metadata: Metadata = {
         }
     },
     alternates: {
-        canonical: '/tools/color/color-palette-generator'
+        canonical: '/tools/color/ai-color-palette-generator'
     },
 };
 

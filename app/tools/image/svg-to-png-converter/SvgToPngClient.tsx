@@ -241,9 +241,10 @@ const qualityOptions = [
                 onClick={() => fileInputRef.current?.click()}
               >
                 <Upload size={32} />
-                <span className="mt-2 text-sm sm:text-base text-center leading-normal">
+                <span className="mt-2 text-sm sm:text-base md:text-md leading-normal text-center block">
                 Select SVG file or drag and drop
                 </span>
+                <span className="mt-1 text-xs text-gray-500">Supports SVG file Only</span>
               </div>
             </CardBody>
           </Card>
@@ -466,24 +467,19 @@ const qualityOptions = [
               What is the SVG to PNG Converter?
             </h2>
             <p className="text-sm md:text-base text-default-600 mb-4">
-              The SVG to PNG Converter is a powerful and user-friendly tool designed to transform Scalable Vector
-              Graphics (SVG) into high-quality Portable Network Graphics (PNG) images. It's an essential utility for
-              designers, developers, and digital content creators who need to convert their scalable vector designs into
-              raster format for various applications. With our{" "}
+            The SVG to PNG converter is a powerful and user -friendly device designed to convert scalable vector graphics (SVG) into high quality portable network graphics (PNG) images. It is an essential utility for designers, developers and digital material creators, which need to convert their scalable vector designs into registration format for various applications. With our{" "}
               <Link href="#how-to-use" className="text-primary hover:underline">
                 easy-to-use interface
               </Link>
               , you can quickly convert your SVG files while maintaining image quality and customizing output settings.
             </p>
             <p className="text-sm md:text-base text-default-600 mb-4">
-              Whether you're preparing graphics for web use, creating app icons, or need bitmap versions of your vector
-              illustrations, our SVG to PNG Converter streamlines the process, saving you time and ensuring consistent
-              results across different platforms and devices.
+            Whether you are preparing graphics for web use, making app icons, or requiring the bitmap versions of your vector picture, streamlines our SVG to PNG converter process, saves you time and ensures frequent consequences in various platforms and equipment.
             </p>
 
             <div className="my-8">
               <NextImage
-                src="/Images/SVGToPNGPreview.png?height=400&width=600"
+                src="/Images/InfosectionImages/SvgToPngConverterPreview.png?height=400&width=600"
                 alt="Screenshot of the SVG to PNG Converter interface showing conversion options and a sample converted image"
                 width={600}
                 height={400}
@@ -577,38 +573,6 @@ const qualityOptions = [
             </ul>
 
             <h2 className="text-lg md:text-xl lg:text-2xl font-semibold text-default-700 mb-4 mt-8 flex items-center">
-              <Target className="w-6 h-6 mr-2" />
-              Use Cases
-            </h2>
-            <p className="text-sm md:text-base text-default-600 mb-4">
-              Our SVG to PNG Converter is versatile and can be used in various scenarios:
-            </p>
-            <ul className="list-disc list-inside space-y-2 text-xs md:text-sm">
-              <li>
-                <strong>Web Development</strong>: Convert SVG icons and logos to PNG for broader browser support
-              </li>
-              <li>
-                <strong>App Development</strong>: Create PNG assets from SVG designs for mobile applications
-              </li>
-              <li>
-                <strong>Graphic Design</strong>: Convert vector graphics to raster format for specific design needs
-              </li>
-              <li>
-                <strong>Social Media</strong>: Prepare images in correct sizes and formats for different social
-                platforms
-              </li>
-              <li>
-                <strong>Print Design</strong>: Convert vector graphics to high-resolution PNGs for print materials
-              </li>
-              <li>
-                <strong>E-commerce</strong>: Generate product images and thumbnails from vector graphics
-              </li>
-              <li>
-                <strong>Digital Marketing</strong>: Create banner ads and visual content in PNG format
-              </li>
-            </ul>
-
-            <h2 className="text-lg md:text-xl lg:text-2xl font-semibold text-default-700 mb-4 mt-8 flex items-center">
               <HelpCircle className="w-6 h-6 mr-2" />
               Tips for Optimal Conversion
             </h2>
@@ -625,11 +589,11 @@ const qualityOptions = [
             </ul>
 
             <p className="text-sm md:text-base text-default-600 mt-6">
-              Ready to transform your SVG files into high-quality PNG images? Our SVG to PNG Converter offers a perfect
-              blend of simplicity and powerful features to meet all your conversion needs. Whether you're a web
-              developer ensuring cross-browser compatibility, a graphic designer preparing assets for various mediums,
-              or a digital marketer creating visuals for multiple platforms, our tool is here to streamline your
-              workflow. Start converting now and experience the ease of professional-grade SVG to PNG conversion!
+            Are you ready to convert your SVG files into high quality PNG images? Our SVG to PNG converter offers an ideal
+              A mix of simplicity and powerful features to meet all your conversion needs. Whether you are a web
+              Developer ensures cross-browsers compatibility, a graphic designer prepares property for various mediums,
+              Or a digital market is making a view for many platforms, our tool is here to streamline you
+              Workflow. Now start changing and experience the ease of professional-grade SVG for PNG conversion!
             </p>
           </div>
         </Card>

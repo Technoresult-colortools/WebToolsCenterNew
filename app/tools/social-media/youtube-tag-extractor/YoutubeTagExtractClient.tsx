@@ -173,7 +173,7 @@ export default function YouTubeKeywordTagExtractor() {
                     placeholder="Paste YouTube video URL here..."
                     size="md"
                     variant="bordered"
-                    startContent={<Youtube className="text-default-400" />}
+                    startContent={<Youtube className="text-danger" />}
                     className="flex-1"
                 />
                 <div className="flex gap-2">
@@ -367,13 +367,13 @@ export default function YouTubeKeywordTagExtractor() {
                 About YouTube Keyword Tag Extractor
             </h2>
             <p className="text-sm md:text-base text-default-600 mb-4">
-                Our YouTube Keyword Tag Extractor is a comprehensive tool designed to help content creators, marketers, researchers, and YouTube enthusiasts extract and analyze valuable metadata from YouTube videos. This powerful tool goes beyond simple tag extraction, offering a comprehensive suite of features to enhance your understanding of video content and optimize your YouTube strategy.
+            Our YouTube keyword tag is a powerful tool designed to help the creators, sellets, researchers and youtube enthusiasts, who remove and analyze the valuable metadata from YouTube video. This video goes beyond simple tag extraction by offering a broad suit of features to enhance understanding understanding and customize YouTube strategies.
             </p>
 
             {/* Image Preview */}
             <div className="my-8">
                 <NextImage 
-                src="/Images/YoutubeKeywordTagsPreview.png" 
+                src="/Images/InfosectionImages/YoutubeKewordTagPreview.png?height=400&width=600" 
                 alt="Screenshot of the YouTube Keyword Tag Extractor interface showing keyword extraction options" 
                 width={600} 
                 height={400} 
@@ -403,7 +403,7 @@ export default function YouTubeKeywordTagExtractor() {
                 How to Use YouTube Keyword Tag Extractor?
             </h2>
             <ol className="list-decimal list-inside space-y-2 text-sm md:text-base">
-                <li>Enter the URL of the YouTube video you want to analyze in the input field.</li>
+                <li>Enter the URL of the YouTube video which you want to analyze in the input field.</li>
                 <li>Click the "Extract" button to fetch the video's metadata and tags.</li>
                 <li>Explore the extracted data in the tabbed interface:
                 <ul className="list-disc pl-6 mt-2 space-y-1">
@@ -413,39 +413,8 @@ export default function YouTubeKeywordTagExtractor() {
                 </ul>
                 </li>
                 <li>Use the additional metadata (views, likes, comments) to gauge video performance.</li>
-                <li>Leverage the search history feature for quick access to previously analyzed videos.</li>
+                <li>You can access Previously accessed Videos using the Search History feature.</li>
             </ol>
-
-            {/* Benefits and Applications */}
-            <h2 className="text-lg md:text-xl lg:text-2xl font-semibold text-default-700 mb-4 mt-8 flex items-center">
-                <Share2 className="w-6 h-6 mr-2" />
-                Benefits and Applications
-            </h2>
-            <ul className="list-disc list-inside space-y-2 text-sm md:text-base">
-                <li>Content Strategy: Analyze successful videos in your niche to identify trending tags and topics.</li>
-                <li>SEO Optimization: Improve your video's searchability by using relevant, high-performing tags.</li>
-                <li>Competitor Analysis: Study the tag strategies of top-performing channels in your industry.</li>
-                <li>Trend Identification: Track changes in tag usage over time to spot emerging trends.</li>
-                <li>Content Ideation: Use popular tags as inspiration for new video topics.</li>
-                <li>Audience Research: Gain insights into what keywords resonate with your target audience.</li>
-                <li>Marketing Campaigns: Align your video metadata with ongoing marketing initiatives.</li>
-                <li>Educational Research: Study tagging patterns across different types of educational content.</li>
-            </ul>
-
-            {/* Tips for Effective Use */}
-            <h2 className="text-lg md:text-xl lg:text-2xl font-semibold text-default-700 mb-4 mt-8 flex items-center">
-                <Lightbulb className="w-6 h-6 mr-2" />
-                Tips for Effective Use
-            </h2>
-            <ul className="list-disc list-inside space-y-2 text-sm md:text-base">
-                <li>Regularly analyze top-performing videos in your niche to stay updated on trending tags.</li>
-                <li>Compare tags across multiple videos to identify consistent high-performers.</li>
-                <li>Use the tag cloud to quickly identify the most prominent keywords for a video.</li>
-                <li>Don't just copy tags – use them as inspiration to create relevant, unique tag sets for your content.</li>
-                <li>Analyze your own videos to refine your tagging strategy over time.</li>
-                <li>Consider the relationship between tags, title, and description for comprehensive optimization.</li>
-                <li>Use the search history feature to track changes in tag usage for specific videos over time.</li>
-            </ul>
             </div>
 
         </Card>

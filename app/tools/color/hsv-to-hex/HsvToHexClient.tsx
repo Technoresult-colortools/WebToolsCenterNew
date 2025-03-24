@@ -78,8 +78,8 @@ export default function HsvToHex() {
       description="Convert HSV Color Codes to Hex with Real-time Preview"
       toolId="678f382d26f06f912191bcae"
     >
-      <div className="max-w-4xl mx-auto">
-        <Card className="bg-default-50 dark:bg-default-100 shadow-md">
+      <div className="max-w-6xl mx-auto">
+        <Card className="bg-default-50 dark:bg-default-100">
           <CardBody className="gap-6 p-6">
             <div className="grid gap-6 md:grid-cols-2">
               {/* Input Section */}
@@ -221,21 +221,15 @@ export default function HsvToHex() {
                 About HSV to Hex Converter
               </h2>
               <p className="text-sm md:text-base text-default-600 mb-4">
-                The HSV to Hex Converter is an advanced tool designed for web developers, designers, and color
-                enthusiasts. It allows you to easily convert HSV (Hue, Saturation, Value) color values to their
-                hexadecimal equivalents. This tool is particularly useful when working with web design, CSS styling, or
-                any project that requires precise color management and conversion between different color models.
+              Hex converter from HSV is an advanced tool designed for web developers, designers and color enthusiasts. This allows you to easily convert HSV (hue, saturation, value) color values ​​to their hexadecimal counterparts. This device is particularly useful when working with web design, CSS styling, or any project, requiring accurate color management and conversion between different color models.
               </p>
               <p className="text-sm md:text-base text-default-600 mb-4">
-                With features like real-time conversion, interactive sliders, and support for both HSV and Hex formats,
-                the HSV to Hex Converter streamlines your workflow and ensures accurate color representation across
-                different formats. It's perfect for creating consistent color schemes, adjusting color properties, or
-                simply exploring the relationship between HSV and Hex color representations.
+              With features such as real -time conversion, interactive sliders, and support for both HSV and hex formats, the HSV to Hex converter strengthens your workflow and ensures accurate color representation in various formats. This is perfect for making frequent color schemes, adjusting color properties, or only searching for relationships between HSV and hex color representations.
               </p>
 
               <div className="my-8">
                 <NextImage
-                  src="/Images/HSVToHexPreview.png?height=400&width=600"
+                  src="/Images/InfosectionImages/HsvToHexConverterPreview.png?height=400&width=600"
                   alt="Screenshot of the HSV to Hex Converter interface showing HSV sliders and color preview"
                   width={600}
                   height={400}
@@ -276,43 +270,6 @@ export default function HsvToHex() {
                 <li>User-friendly interface with clear, easy-to-read color information</li>
               </ul>
 
-              <h2 className="text-xl md:text-2xl font-semibold text-default-700 mb-4 mt-8 flex items-center">
-                <Info className="w-6 h-6 mr-2" />
-                Applications and Use Cases
-              </h2>
-              <ul className="list-disc list-inside text-default-600 space-y-2 text-sm md:text-base">
-                <li>
-                  <strong>Web Development:</strong> Easily convert HSV colors to Hex for use in CSS and HTML.
-                </li>
-                <li>
-                  <strong>Graphic Design:</strong> Translate HSV values to Hex codes for software that primarily uses
-                  hexadecimal color representation.
-                </li>
-                <li>
-                  <strong>UI/UX Design:</strong> Create consistent color schemes by converting between HSV and Hex
-                  formats.
-                </li>
-                <li>
-                  <strong>Digital Art:</strong> Experiment with color properties using HSV and obtain Hex codes for use
-                  in various digital art software.
-                </li>
-                <li>
-                  <strong>Brand Identity:</strong> Maintain color consistency across various digital platforms by
-                  converting between color models.
-                </li>
-                <li>
-                  <strong>Education:</strong> Learn about color theory and the relationship between different color
-                  representations.
-                </li>
-                <li>
-                  <strong>Accessibility Testing:</strong> Adjust color properties to ensure proper contrast and
-                  readability in web designs.
-                </li>
-                <li>
-                  <strong>Color Exploration:</strong> Experiment with HSV color combinations and see their Hex
-                  equivalents for creative inspiration.
-                </li>
-              </ul>
 
               <p className="text-sm md:text-base text-default-600 mt-6">
                 Ready to simplify your color workflow? Start using our HSV to Hex Converter now and experience the ease

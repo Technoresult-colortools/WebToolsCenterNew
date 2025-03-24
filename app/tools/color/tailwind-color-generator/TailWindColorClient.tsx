@@ -269,35 +269,18 @@ export default function TailwindColorGenerator() {
                 About Tailwind Color Generator
               </h2>
               <p className="text-sm md:text-base text-default-600 mb-4">
-                The Tailwind Color Generator is an advanced tool designed for web developers, designers, and digital
-                artists. It provides a comprehensive exploration and manipulation platform for Tailwind CSS colors,
-                allowing users to easily browse, search, and generate custom color palettes. This tool is particularly
-                useful when working with web design, CSS styling, or any project that requires precise color management
-                and consistency across different color representations.
+              The tailwind color generator is an advanced tool designed for web developers, designers and digital artists. It provides a comprehensive exploration and manipulation platform for tailwind CSS colors, allowing users to easily browse, find and generate custom color palettes. This tool is particularly useful when working with web design, CSS styling, or any project, which requires accurate color management and stability in various color representations.
               </p>
               <p className="text-sm md:text-base text-default-600 mb-4">
-                With features like real-time color preview, interactive color selection, custom palette generation, and
-                support for various color formats, the Tailwind Color Generator streamlines your workflow and ensures
-                accurate color representation across your projects. It's perfect for creating consistent color schemes,
-                exploring color relationships, or simply diving deep into the expansive world of Tailwind CSS colors.
+              With features such as real-time color preview, interactive color selection, custom palette generation, and support for various color formats, the telvind color generator streamlines your workflow and ensures accurate color representation in your projects. This is perfect for making persistent color schemes, searching color relationships, or simply diving deep into the wide world of tailwind CSS colors.
               </p>
-
-              <div className="my-8">
-                <NextImage
-                  src="/Images/TailwindPreview.png?height=400&width=600"
-                  alt="Screenshot of the Tailwind Color Generator interface showing color palettes and custom color generator"
-                  width={600}
-                  height={400}
-                  className="rounded-lg shadow-lg w-full h-auto"
-                />
-              </div>
 
               <h2
                 id="how-to-use"
                 className="text-xl md:text-2xl font-semibold text-default-700 mb-4 mt-8 flex items-center"
               >
                 <BookOpen className="w-6 h-6 mr-2" />
-                How to Use the Tailwind Color Generator
+                How to Use the Tailwind Color Generator?
               </h2>
               <ol className="list-decimal list-inside space-y-2 text-sm md:text-base text-default-600">
                 <li>Use the search bar to quickly find specific colors or shades within the Tailwind palette.</li>
@@ -328,49 +311,6 @@ export default function TailwindColorGenerator() {
                 <li>Responsive design for seamless use on desktop and mobile devices</li>
                 <li>Intuitive and user-friendly interface</li>
                 <li>Detailed information and usage tips for each color</li>
-              </ul>
-
-              <h2 className="text-xl md:text-2xl font-semibold text-default-700 mb-4 mt-8 flex items-center">
-                <Info className="w-6 h-6 mr-2" />
-                Applications and Use Cases
-              </h2>
-              <ul className="list-disc list-inside text-default-600 space-y-2 text-sm md:text-base">
-                <li>
-                  <strong>Web Development:</strong> Quickly find and implement Tailwind CSS color classes in your
-                  projects, ensuring consistency and efficiency in your styling process.
-                </li>
-                <li>
-                  <strong>UI/UX Design:</strong> Explore and experiment with color combinations to create visually
-                  appealing and harmonious user interfaces.
-                </li>
-                <li>
-                  <strong>Brand Identity:</strong> Develop and maintain consistent color schemes across various digital
-                  platforms by leveraging Tailwind's predefined color palette.
-                </li>
-                <li>
-                  <strong>Accessibility Testing:</strong> Use the tool to ensure proper color contrast and readability
-                  in your web designs, especially for users with visual impairments.
-                </li>
-                <li>
-                  <strong>Custom Theme Creation:</strong> Generate custom color palettes that seamlessly integrate with
-                  Tailwind CSS, allowing for unique project themes.
-                </li>
-                <li>
-                  <strong>Design Systems:</strong> Establish a cohesive color system for large-scale projects or design
-                  systems based on Tailwind's color structure.
-                </li>
-                <li>
-                  <strong>Prototyping:</strong> Quickly iterate through different color options during the prototyping
-                  phase of your design process.
-                </li>
-                <li>
-                  <strong>Color Theory Education:</strong> Use the tool as a teaching aid to demonstrate color
-                  relationships and how they translate into practical web design scenarios.
-                </li>
-                <li>
-                  <strong>Cross-Platform Design:</strong> Ensure color consistency across different devices and
-                  platforms by using Tailwind's carefully crafted color scales.
-                </li>
               </ul>
 
               <p className="text-sm md:text-base text-default-600 mt-6">

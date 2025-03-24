@@ -262,7 +262,7 @@ export default function LoaderGenerator() {
 
                       <div className="flex flex-col gap-2 absolute inset-0 bg-content2 bg-opacity-90 opacity-0 group-hover:opacity-100 transition-opacity duration-300 p-4 justify-center">
                         <Button
-                          onClick={() => handleCustomize(type, "customize")}
+                          onPress={() => handleCustomize(type, "customize")}
                           color="primary"
                           variant="flat"
                           className="text-xs py-1"
@@ -271,7 +271,7 @@ export default function LoaderGenerator() {
                           Customize
                         </Button>
                         <Button
-                          onClick={() => handleCustomize(type, "code")}
+                          onPress={() => handleCustomize(type, "code")}
                           color="secondary"
                           variant="flat"
                           className="text-xs py-1"
@@ -291,7 +291,7 @@ export default function LoaderGenerator() {
                     <div className="hidden md:flex items-center gap-2">
                     <Button
                         isIconOnly
-                        onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
+                        onPress={() => setCurrentPage((p) => Math.max(1, p - 1))}
                         isDisabled={currentPage === 1}
                         variant="flat"
                     >
@@ -304,7 +304,7 @@ export default function LoaderGenerator() {
                             key={page}
                             isIconOnly
                             variant={currentPage === page ? "solid" : "flat"}
-                            onClick={() => setCurrentPage(page)}
+                            onPress={() => setCurrentPage(page)}
                             className={`w-8 h-8 ${currentPage === page ? "bg-primary" : "bg-content3 hover:bg-content4"}`}
                         >
                             {page}
@@ -314,7 +314,7 @@ export default function LoaderGenerator() {
 
                     <Button
                         isIconOnly
-                        onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
+                        onPress={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
                         isDisabled={currentPage === totalPages}
                         variant="flat"
                     >
@@ -326,7 +326,7 @@ export default function LoaderGenerator() {
                     <div className="flex items-center md:hidden">
                     <Button
                         isIconOnly
-                        onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
+                        onPress={() => setCurrentPage((p) => Math.max(1, p - 1))}
                         isDisabled={currentPage === 1}
                         variant="flat"
                     >
@@ -335,7 +335,7 @@ export default function LoaderGenerator() {
                     <span className="ml-1 mr-1 text-sm">{currentPage} / {totalPages}</span>
                     <Button
                         isIconOnly
-                        onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
+                        onPress={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
                         isDisabled={currentPage === totalPages}
                         variant="flat"
                     >
@@ -364,22 +364,12 @@ export default function LoaderGenerator() {
                 makes it a breeze to design stunning loaders that will keep your users engaged while your content loads.
                 </p>
                 <p className="text-sm md:text-base text-default-600 mb-4">
-                With a wide variety of loader types across different categories, you can create anything from simple spinners to complex, multi-element animations. It's like having a digital animation studio at your fingertips, but without the complexity!
+                With different types of loader types in different categories, you can create anything from simple spinners to complex, multi-element animation. This is like a digital animation studio on your fingers, but without complexity!
                 </p>
-
-                <div className="my-8">
-                <Image 
-                    src="/Images/LoaderGeneratorPreview.png?height=400&width=600" 
-                    alt="Screenshot of the CSS Loader Generator interface showing various loader options and customization controls" 
-                    width={600} 
-                    height={400} 
-                    className="rounded-lg shadow-lg w-full h-auto"
-                />
-                </div>
 
                 <h2 id="how-to-use" className="text-lg md:text-xl lg:text-2xl font-semibold text-default-700 mb-4 mt-8 flex items-center">
                 <BookOpen className="w-6 h-6 mr-2" />
-                How to Use the CSS Loader Generator
+                How to Use the CSS Loader Generator?
                 </h2>
                 <ol className="list-decimal list-inside space-y-2 text-sm md:text-base">
                 <li>Start by selecting a <Link href="#categories" className="text-primary hover:underline">loader category</Link> from the dropdown menu. We've got everything from spinners to progress bars!</li>

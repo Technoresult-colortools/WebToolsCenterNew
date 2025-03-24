@@ -272,7 +272,7 @@ export default function ColorMixer() {
       description="Mix colors, generate shades, and explore different color formats with advanced features"
       toolId="678f382d26f06f912191bca9"
     >
-      <div className="max-w-4xl mx-auto">
+      <div className="max-w-6xl mx-auto">
         <Card className="bg-default-50 dark:bg-default-100 shadow-md">
           <CardBody className="gap-6 p-6">
             
@@ -509,21 +509,15 @@ export default function ColorMixer() {
                 About Color Mixer
               </h2>
               <p className="text-sm md:text-base text-default-600 mb-4">
-                The Color Mixer is a powerful tool designed for designers, developers, and color enthusiasts. It allows
-                you to create custom color blends, generate palettes, and explore different color formats with ease.
-                Whether you're working on web design, graphic design, or any project involving color, this tool provides
-                an intuitive interface to experiment with and perfect your color choices.
+              The color mixer is a powerful tool designed for designers, developers and color enthusiasts. This allows you to make custom color blend, generate palettes and detect various color formats with ease. Whether you are working on web design, graphic design, or any project related to color, this tool offers an intuitive interface to experiment and correct with your color options.
               </p>
               <p className="text-sm md:text-base text-default-600 mb-4">
-                With features like linear and radial blending, multiple color format support, and a fullscreen preview
-                mode, the Enhanced Color Mixer offers both versatility and precision in color manipulation. It's perfect
-                for creating cohesive color schemes, exploring color relationships, or simply finding inspiration for
-                your next project.
+              The enhanced color mixer provides both versatility and accurate in the enhanced color mixer color manipulation, with features such as linear and radial combination, multiple color format support, and a fullscreen preview mode. It is perfect to create united color schemes, search for color relationships or simply find inspiration for your next project.
               </p>
 
               <div className="my-8">
                 <NextImage
-                  src="/Images/ColorMixerPreview.png?height=400&width=600"
+                  src="/Images/InfosectionImages/ColorMixerPreview.png?height=400&width=600"
                   alt="Screenshot of the Enhanced Color Mixer interface showing color inputs, gradient preview, and generated palette"
                   width={600}
                   height={400}
@@ -579,10 +573,10 @@ export default function ColorMixer() {
               </ul>
 
               <p className="text-sm md:text-base text-default-600 mt-6">
-                The Color Mixer is more than just a tool—it's a playground for color exploration and a valuable asset in
-                any creative workflow. Whether you're a professional designer working on complex projects or an
-                enthusiast exploring the world of color, our tool provides the insights and functionality you need to
-                bring your color ideas to life. Start mixing, blending, and discovering new color possibilities today!
+              Color Mixer is more than just one tool - it is a playground for color exploration and a valuable property
+                Any creative workflow. Whether you are a professional designer working on complex projects or one
+                Enthusiastic to discover the color world, our equipment provides the required insight and functionality for you
+                Bring your color ideas to life. Start discovering new color possibilities, combining and searching today!
               </p>
             </div>
           </CardBody>

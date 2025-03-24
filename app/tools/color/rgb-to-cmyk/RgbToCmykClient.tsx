@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from "react"
 import { AlertCircle, BookOpen, Info, Lightbulb, RefreshCw, Copy, Palette, Eye, Code } from "lucide-react"
-import NextImage from "next/image"
 import { toast } from "react-hot-toast"
 import ToolLayout from "@/components/ToolLayout"
 import { Button, Card, CardBody, Input, Slider, Tabs, Tab } from "@nextui-org/react"
@@ -58,9 +57,9 @@ export default function RgbToCmyk() {
       description="Convert RGB Color Codes to CMYK with Real-time Preview"
       toolId="678f382d26f06f912191bcab"
     >
-      <div className="max-w-4xl mx-auto">
+      <div className="max-w-6xl mx-auto">
         <div className="grid gap-6 md:grid-cols-2">
-          <Card className="bg-default-50 dark:bg-default-100 shadow-md">
+          <Card className="bg-default-50 dark:bg-default-100">
             <CardBody className="gap-6 p-6">
               <h2 className="text-xl font-semibold text-default-900">RGB Input</h2>
               <div className="space-y-4">
@@ -101,7 +100,7 @@ export default function RgbToCmyk() {
             </CardBody>
           </Card>
 
-          <Card className="bg-default-50 dark:bg-default-100 shadow-md">
+          <Card className="bg-default-50 dark:bg-default-100">
             <CardBody className="gap-6 p-6">
               <h2 className="text-xl font-semibold text-default-900">Color Preview</h2>
               <div
@@ -149,21 +148,9 @@ export default function RgbToCmyk() {
               About RGB to CMYK Converter
             </h2>
             <p className="text-sm md:text-base text-default-600 mb-4">
-              The RGB to CMYK Converter is an advanced tool designed for graphic designers, print professionals, and
-              digital artists. It allows you to easily convert RGB (Red, Green, Blue) color values to their CMYK (Cyan,
-              Magenta, Yellow, Key/Black) equivalents. This tool is particularly useful when preparing digital designs
-              for print, as most printing processes use the CMYK color model.
+            The CMYK converter from RGB is an advanced tool designed for graphic designers, print professionals and digital artists. This allows you to easily convert RGB (red, green, blue) color values ​​to their cmk (cyan, magenta, yellow, key/black). This tool is particularly useful when preparing a digital design for print, as most printing processes use the cmyk color model.
             </p>
 
-            <div className="my-8">
-              <NextImage
-                src="/Images/RGBToCMYKPreview.png?height=400&width=600"
-                alt="Screenshot of the RGB to CMYK Converter interface showing RGB sliders and color preview"
-                width={600}
-                height={400}
-                className="rounded-lg shadow-lg w-full h-auto"
-              />
-            </div>
 
             <h2 className="text-xl md:text-2xl font-semibold text-default-700 mb-4 mt-8 flex items-center">
               <BookOpen className="w-6 h-6 mr-2" />
@@ -193,39 +180,6 @@ export default function RgbToCmyk() {
               <li>Responsive design for seamless use on desktop and mobile devices</li>
               <li>Reset functionality for quick new color explorations</li>
               <li>User-friendly interface with clear, easy-to-read color information</li>
-            </ul>
-
-            <h2 className="text-xl md:text-2xl font-semibold text-default-700 mb-4 mt-8 flex items-center">
-              <Palette className="w-6 h-6 mr-2" />
-              Applications and Use Cases
-            </h2>
-            <ul className="list-disc list-inside space-y-2 text-sm md:text-base text-default-600">
-              <li>
-                <strong>Print Design:</strong> Convert digital RGB colors to CMYK for accurate print reproduction.
-              </li>
-              <li>
-                <strong>Graphic Design:</strong> Translate RGB values to CMYK for projects that involve both digital and
-                print media.
-              </li>
-              <li>
-                <strong>Brand Identity:</strong> Ensure color consistency across various digital and print platforms.
-              </li>
-              <li>
-                <strong>Digital Art:</strong> Prepare digital artworks for print by converting RGB colors to CMYK.
-              </li>
-              <li>
-                <strong>Photography:</strong> Convert RGB photos to CMYK for professional printing.
-              </li>
-              <li>
-                <strong>Education:</strong> Learn about color theory and the relationship between different color
-                models.
-              </li>
-              <li>
-                <strong>Pre-press:</strong> Prepare digital files for commercial printing processes.
-              </li>
-              <li>
-                <strong>Color Matching:</strong> Match colors between digital displays and printed materials.
-              </li>
             </ul>
 
             <h2 className="text-xl md:text-2xl font-semibold text-default-700 mb-4 mt-8 flex items-center">

@@ -77,8 +77,8 @@ export default function RGBToHSV() {
       description="Convert RGB Color Codes to HSV with Real-time Preview"
       toolId="678f382c26f06f912191bca7"
     >
-      <div className="max-w-4xl mx-auto">
-        <Card className="bg-default-50 dark:bg-default-100 shadow-md">
+      <div className="max-w-6xl mx-auto">
+        <Card className="bg-default-50 dark:bg-default-100">
           <CardBody className="gap-6 p-6">
             <div className="grid gap-6 md:grid-cols-2">
               {/* Input Section */}
@@ -177,22 +177,15 @@ export default function RGBToHSV() {
                 About RGB to HSV Converter
               </h2>
               <p className="text-sm md:text-base text-default-600 mb-4">
-                The RGB to HSV Converter is an advanced tool designed for web developers, designers, and digital
-                artists. It allows you to easily convert RGB (Red, Green, Blue) color values to their HSV (Hue,
-                Saturation, Value) equivalents. This tool is particularly useful when working with color selection,
-                image processing, or any project that requires precise color management and conversion between different
-                color models.
+              HSV converter from RGB is an advanced tool designed for web developers, designers and digital artists. This allows you to easily convert RGB (red, green, blue) color values ​​into their HSV (hue, saturation, value) equivalent. This tool is particularly useful when working with color selection, image processing, or any project, requiring accurate color management and conversion between different color models.
               </p>
               <p className="text-sm md:text-base text-default-600 mb-4">
-                With features like real-time conversion, interactive sliders, and support for both RGB and HSV formats,
-                the RGB to HSV Converter streamlines your workflow and ensures accurate color representation across
-                different formats. It's perfect for creating consistent color schemes, adjusting color properties, or
-                simply exploring the relationship between RGB and HSV color representations.
+              With features such as real -time conversion, interactive sliders and support for both RGB and HSV forms, the HSV converter strengthens your workflow and ensures accurate color representation in various formats. This is perfect for making frequent color schemes, adjusting color properties, or simply searching for relationships between RGB and HSV color representations.
               </p>
 
               <div className="my-8">
                 <NextImage
-                  src="/Images/RGBToHSVPreview.png?height=400&width=600"
+                   src="/Images/InfosectionImages/RGBToHSVConverter.png?height=400&width=600"
                   alt="Screenshot of the RGB to HSV Converter interface showing RGB sliders and color preview"
                   width={600}
                   height={400}
@@ -232,45 +225,6 @@ export default function RGBToHSV() {
                 <li>Reset functionality for quick new color explorations</li>
                 <li>User-friendly interface with clear, easy-to-read color information</li>
               </ul>
-
-              <h2 className="text-xl md:text-2xl font-semibold text-default-700 mb-4 mt-8 flex items-center">
-                <Info className="w-6 h-6 mr-2" />
-                Applications and Use Cases
-              </h2>
-              <ul className="list-disc list-inside text-default-600 space-y-2 text-sm md:text-base">
-                <li>
-                  <strong>Web Development:</strong> Easily convert RGB colors to HSV for use in advanced color
-                  manipulation in web applications.
-                </li>
-                <li>
-                  <strong>Graphic Design:</strong> Translate RGB values to HSV for software that utilizes HSV color
-                  representation for more intuitive color selection.
-                </li>
-                <li>
-                  <strong>UI/UX Design:</strong> Create consistent color schemes by converting between RGB and HSV
-                  formats for precise color adjustments.
-                </li>
-                <li>
-                  <strong>Digital Art:</strong> Experiment with color properties using RGB and obtain HSV values for use
-                  in various digital art software that prefer HSV for color mixing.
-                </li>
-                <li>
-                  <strong>Image Processing:</strong> Convert RGB values to HSV for advanced image processing techniques
-                  that work better in the HSV color space.
-                </li>
-                <li>
-                  <strong>Data Visualization:</strong> Use HSV color model for creating more perceptually uniform color
-                  scales in data visualizations.
-                </li>
-                <li>
-                  <strong>Computer Vision:</strong> Convert RGB images to HSV for improved object detection and tracking
-                  algorithms.
-                </li>
-                <li>
-                  <strong>Color Theory Education:</strong> Learn about the relationship between RGB and HSV color models
-                  to deepen understanding of color theory.
-                </li>
-               </ul> 
             
 
               <p className="text-sm md:text-base text-default-600 mt-4">

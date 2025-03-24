@@ -532,11 +532,7 @@ export default function AdvancedPasswordGenerator() {
                 What is Advanced Password Generator?
               </h2>
               <p className="text-sm md:text-base text-default-600 mb-4">
-                Advanced password generator is a versatile tool designed to create strong, safe passwords to suit your specific requirements. Whether you are setting a new account, updating the existing password, or managing several logins, this tool provides flexibility and safety features that you need to generate strong passwords quickly and easily.
-              </p>
-
-              <p className="text-sm md:text-base text-default-600 mb-4">
-                Our Password Generator tool operates entirely on the client side, ensuring that no passwords are stored, transmitted, or processed on any server. All password generation happens securely within your browser, keeping your data private and protected.
+              A Password Generator is a tool which is used to create a strong and random passwords for online accounts, this tool createa a random password combingation of numbers, letters, and symbols to be used as a Password. This tools allows you to generate Password fast and convenient way, you can fully customize your password, also this tool Operates entirely on Client side, so we won't store, tansmit and process any of the generated password. All Password generation happens securely on your browser, keeping your data private and protected.
               </p>
 
 
@@ -558,15 +554,14 @@ export default function AdvancedPasswordGenerator() {
                 How to Use the Advanced Password Generator
               </h2>
               <ol className="list-decimal list-inside space-y-2 text-sm md:text-base text-default-600">
-                <li>Set your desired password length using the slider in the Original tab.</li>
+                <li>Under the Basic tab, you can set your desired password length using the slider.</li>
                 <li>
-                  Choose which character types to include (lowercase, uppercase, numbers, symbols) in the Original tab.
+                  You can choose which character types to include (lowercase, uppercase, numbers, symbols) in the Original tab.
                 </li>
                 <li>
-                  Explore advanced options in the Advanced tab, such as requiring every character type or beginning with
-                  a letter.
+                  Under the Advanced tab, you can check Require Every Type to include all type of characters, Lettes to Begin with, and No Consecutive Characters.
                 </li>
-                <li>Use the Safety tab to exclude similar or ambiguous characters for easier reading.</li>
+                <li>Use the Security tab to exclude similar or ambiguous characters for easier reading.</li>
                 <li>
                   For more control, use the Custom tab to set a custom character set or exclude specific characters.
                 </li>

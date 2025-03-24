@@ -412,15 +412,15 @@ const GlassmorphismGenerator = () => {
                     What is CSS Glassmorphism Generator?
                     </h2>
                     <p className="text-sm md:text-base text-default-600 mb-4">
-                    The CSS Glassmorphism Generator is a powerful and intuitive tool designed for web developers and designers to create stunning glass-like UI elements using the glassmorphism effect. It offers a wide range of customization options, allowing you to fine-tune every aspect of the glassmorphism effect to achieve the perfect look for your designs.
+                    The CSS Glassmorphism generator is a powerful and intuitive tool designed for web developers and designers to create UI elements such as stunning glass using a glazedurphism effect. This provides a wide range of adaptation options, allowing you to fix every aspect of the glamorphism effect to get the right look for your designs.
                     </p>
                     <p className="text-sm md:text-base text-default-600 mb-4">
-                    Whether you're a seasoned designer looking to streamline your workflow or a beginner exploring the world of modern UI design, this tool provides an interactive and user-friendly approach to creating glassmorphism effects. It bridges the gap between concept and implementation, making it easier to experiment with different configurations and visualize the results in real-time.
+                    Whether you are an experienced designer, who is looking to streamlute your workflow or a beginner who discovered the world of modern UI design, this tool offers an interactive and user friendly approach to create a Glasmorphism effect. It brids the gap between the concept and implementation, which makes it easier to experiment with various configurations and imagine the results in real time.
                     </p>
                     
                     <div className="my-8 flex justify-center">
                     <Image 
-                        src="/Images/GlassMorphismPreview.png?height=400&width=600" 
+                        src="/Images/InfosectionImages/CSSGlassmorphismPreview.png?height=400&width=600" 
                         alt="Screenshot of the Enhanced Glassmorphism Generator interface showing the preview and customization options" 
                         width={600} 
                         height={400} 
@@ -465,23 +465,6 @@ const GlassmorphismGenerator = () => {
                     <li>One-click copy and download functionality for the CSS code.</li>
                     <li>Reset option to quickly return to default settings.</li>
                     <li>Responsive design for use on various devices and screen sizes.</li>
-                    </ul>
-                    
-                    <h2 className="text-lg md:text-xl lg:text-2xl font-semibold text-default-700 mb-4 mt-8 flex items-center">
-                    <Info className="w-6 h-6 mr-2" />
-                    Applications and Use Cases
-                    </h2>
-                    <ul className="list-disc list-inside space-y-2 text-sm md:text-base text-default-600">
-                    <li><strong>Modern UI Design:</strong> Create sleek, contemporary user interfaces for websites and applications.</li>
-                    <li><strong>Card Components:</strong> Design eye-catching card elements for displaying content or data.</li>
-                    <li><strong>Modal Windows:</strong> Develop attractive and non-intrusive modal overlays for important information or actions.</li>
-                    <li><strong>Navigation Menus:</strong> Craft unique and visually appealing navigation bars and menus.</li>
-                    <li><strong>Form Elements:</strong> Enhance input fields, buttons, and other form components with a modern glass effect.</li>
-                    <li><strong>Image Overlays:</strong> Create subtle text overlays on images for captions or descriptions.</li>
-                    <li><strong>Dashboard Widgets:</strong> Design elegant widgets for data visualization in admin panels or dashboards.</li>
-                    <li><strong>Hero Sections:</strong> Develop striking hero sections for landing pages with glass-effect text or image containers.</li>
-                    <li><strong>Pricing Tables:</strong> Make your pricing information stand out with glassmorphic design elements.</li>
-                    <li><strong>Portfolio Showcases:</strong> Present your work in a modern, sophisticated manner using glass-effect galleries or project cards.</li>
                     </ul>
                     
                     <p className="text-sm md:text-base text-default-600 mt-6">

@@ -501,15 +501,15 @@ type Presets = {
                     What is CSS Cubic Bezier Generator?
                 </h2>
                 <p className="text-sm md:text-base text-default-600 mb-4">
-                    The CSS Cubic Bezier Generator is a powerful tool that enables web developers and designers to create custom easing functions for CSS animations. By adjusting control points on a bezier curve, you can fine-tune the acceleration and deceleration of animations, ensuring smooth and natural motion effects.
+                The CSS Cubic Bezer generator is a powerful tool that enables web developers and designers to create a custom easy function for CSS animation. By adjusting the control points on a bezier curve, you can fix the acceleration and recession of the animation, ensuring smooth and natural motion effects.
                 </p>
                 <p className="text-sm md:text-base text-default-600 mb-4">
-                    This tool provides real-time visualization and customization, allowing both beginners and experienced developers to craft perfect animation curves. Whether you need subtle transitions or dynamic effects, the generator offers flexibility and precision to bring your animations to life.
+                The device provides real -time visualization and adaptation, allowing both early and experienced developers to make the correct animation decreasing crafts. Whether you need a subtle infection or dynamic effect, the generator provides flexibility and accuracy to bring your animation into life.
                 </p>
                 
                 <div className="my-8 flex justify-center">
                     <Image 
-                    src="/Images/CubicBezierPreview.png?height=400&width=600" 
+                    src="/Images/InfosectionImages/CSSCubicBezierPreview.png?height=400&width=600" 
                     alt="Screenshot of the CSS Cubic Bezier Generator interface showing the curve editor and animation preview" 
                     width={600} 
                     height={400}
@@ -549,21 +549,6 @@ type Presets = {
                     <li>One-click copy for generated CSS code.</li>
                     <li>Reset option to restore default settings.</li>
                     <li>Fully responsive design for all devices.</li>
-                </ul>
-                
-                <h2 className="text-lg md:text-xl lg:text-2xl font-semibold text-default-700 mb-4 mt-8 flex items-center">
-                    <Info className="w-6 h-6 mr-2" />
-                    Applications and Use Cases
-                </h2>
-                <ul className="list-disc list-inside space-y-2 text-sm md:text-base text-default-600">
-                    <li><strong>Web Animations:</strong> Create fluid transitions for elements.</li>
-                    <li><strong>UI/UX Design:</strong> Enhance interactive elements like buttons and menus.</li>
-                    <li><strong>Game Development:</strong> Customize motion curves for objects.</li>
-                    <li><strong>Data Visualization:</strong> Add engaging animations to graphs.</li>
-                    <li><strong>Mobile Apps:</strong> Improve user experience with smooth transitions.</li>
-                    <li><strong>E-learning:</strong> Add interactive animations to lessons.</li>
-                    <li><strong>Portfolio Websites:</strong> Showcase creative animation effects.</li>
-                    <li><strong>Marketing:</strong> Design engaging animated banners.</li>
                 </ul>
                 
                 <p className="text-sm md:text-base text-default-600 mt-6">

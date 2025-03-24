@@ -446,15 +446,15 @@ export default function ModernGradientGenerator() {
           What is CSS Gradient Generator?
         </h2>
         <p className="text-sm md:text-base text-default-600 mb-4">
-          The CSS Gradient Generator is a powerful and intuitive tool designed for web developers and designers to create stunning, customizable gradients using CSS. It offers support for linear, radial, and conic gradients, along with a wide range of customization options, allowing you to craft eye-catching backgrounds, buttons, and other UI elements with ease.
+        The CSS gradient generator is a powerful and intuitive tool designed for web developers and designers to make stunning, adaptable gradients using CSS to create. It provides support for linear, radial and coniferous gradients with a wide range of adaptation options, allowing you to craft the eye -catching background, button and other UI elements easily.
         </p>
         <p className="text-sm md:text-base text-default-600 mb-4">
-          Whether you're a seasoned designer looking to streamline your workflow or a beginner exploring the world of CSS gradients, this tool provides an interactive and user-friendly approach to creating complex gradient effects. It bridges the gap between concept and implementation, making it easier to experiment with different configurations and visualize the results in real-time.
+        Whether you are an experienced designer who is looking to streamline your workflow or a beginner who discovered the world of CSS gradients, this tool offers an interactive and user friendly approach to create a complex shield effect. It brids the gap between the concept and implementation, which makes it easier to experiment with various configurations and imagine the results in real time.
         </p>
         
         <div className="my-8">
           <Image 
-            src="/Images/CSSGradientPreview.png?height=400&width=600" 
+             src="/Images/InfosectionImages/CSSGradientPreview.png?height=400&width=600"
             alt="Screenshot of the Enhanced CSS Gradient Generator interface showing the preview and customization options" 
             width={600} 
             height={400}

@@ -8,21 +8,17 @@ import {
   Button,
   Input,
   Slider,
-  Tabs,
-  Tab,
   Modal,
   ModalContent,
   Select,
   SelectItem,
 } from "@nextui-org/react"
-import Image from "next/image"
 import {
   Download,
   RefreshCw,
   Copy,
   Maximize2,
   X,
-  Settings,
   Sliders,
   Palette,
   ImageIcon,
@@ -43,15 +39,21 @@ import {
   Flower2,
   Info,
   Lightbulb,
-  BookOpen,
   Shell,
   Code,
   Eye,
+  BookOpen,
+  FlowerIcon,
+  SquareAsterisk,
+  LucideDna,
+  TreePine,
+  LucideCode2,
+  Network,
 } from "lucide-react"
 import { toast } from "react-hot-toast"
 import ToolLayout from "@/components/ToolLayout"
 import { type PatternType, generatePattern } from "./patternGenerators"
-
+import Image from "next/image"
 
 type ExportFormat = "svg" | "png"
 type ExportSize =
@@ -77,13 +79,15 @@ const exportSizes: Record<ExportSize, { width: number; height: number }> = {
   custom: { width: 800, height: 600 },
 }
 
+// Updated with all pattern types from PatternType
 const patternTypeOptions = [
+  { value: "mandala", label: "Mandala", icon: Flower2 },
   { value: "circles", label: "Circles", icon: Circle },
   { value: "squares", label: "Squares", icon: Square },
   { value: "triangles", label: "Triangles", icon: Triangle },
   { value: "hexagons", label: "Hexagons", icon: Hexagon },
   { value: "zigzag", label: "Zigzag", icon: StretchHorizontal },
-  { value: "brikwall1", label: "Brick Wall-1", icon: Grid },
+  { value: "brikwall1", label: "Brick Wall", icon: Grid },
   { value: "polkaDots", label: "Polka Dots", icon: CircleDot },
   { value: "stripes", label: "Stripes", icon: StretchHorizontal },
   { value: "chevron", label: "Chevron", icon: ChevronUp },
@@ -95,15 +99,20 @@ const patternTypeOptions = [
   { value: "dots3D", label: "3D Dots", icon: CircleDot },
   { value: "crosshatch", label: "Crosshatch", icon: Hash },
   { value: "spiral", label: "Spiral", icon: Shell },
-  { value: "flowerOfLife", label: "Flower of Life", icon: Flower2 },
+  { value: "flowerOfLife", label: "Flower of Life", icon: FlowerIcon },
+  { value: "geometricMosaic", label: "Geometric Mosaic", icon: SquareAsterisk },
+  { value: "celticKnot", label: "Celtic Knot", icon: LucideDna },
+  { value: "fractalTree", label: "Fractal Tree", icon: TreePine },
+  { value: "opArt", label: "Op Art", icon: LucideCode2 },
+  { value: "voronoiDiagram", label: "Voronoi Diagram", icon: Network },
   { value: "customImage", label: "Custom Image", icon: ImageIcon },
 ]
 
 const exportSizeOptions = [
+  { value: "ogImage", label: "OG Image" },
   { value: "facebookCover", label: "Facebook Cover" },
   { value: "youtubeCover", label: "YouTube Cover" },
   { value: "youtubeThumbnail", label: "YouTube Thumbnail" },
-  { value: "ogImage", label: "OG Image" },
   { value: "instagramSquare", label: "Instagram Square" },
   { value: "instagramLandscape", label: "Instagram Landscape" },
   { value: "instagramPortrait", label: "Instagram Portrait" },
@@ -121,53 +130,61 @@ export default function SvgPatternGenerator() {
   const [patternColor, setPatternColor] = useState("#3498db")
   const [secondaryColor, setSecondaryColor] = useState("#2980b9")
   const [backgroundColor, setBackgroundColor] = useState("#2343e1")
-  const [size, setSize] = useState(20)
-  const [spacing, setSpacing] = useState(5)
+  const [size, setSize] = useState(32)
+  const [spacing, setSpacing] = useState(53)
   const [rotation, setRotation] = useState(0)
+  const [skew, setSkew] = useState(0)
   const [opacity, setOpacity] = useState(100)
   const [complexity, setComplexity] = useState(50)
   const [strokeWidth, setStrokeWidth] = useState(2)
   const [svgCode, setSvgCode] = useState("")
-  const [exportSize, setExportSize] = useState<ExportSize>("facebookCover")
+  const [exportSize, setExportSize] = useState<ExportSize>("ogImage")
   const [exportFormat, setExportFormat] = useState<ExportFormat>("svg")
-  const [customWidth, setCustomWidth] = useState(800)
-  const [customHeight, setCustomHeight] = useState(600)
+  const [customWidth, setCustomWidth] = useState(1200)
+  const [customHeight, setCustomHeight] = useState(630)
   const [customImage, setCustomImage] = useState<string | null>(null)
   const [isModalOpen, setIsModalOpen] = useState(false)
+  const [isImageUploading, setIsImageUploading] = useState(false)
   const fileInputRef = useRef<HTMLInputElement>(null)
   const svgContainerRef = useRef<HTMLDivElement>(null)
 
   const generateSVG = useCallback(() => {
-    const pattern = generatePattern(patternType, {
-      size,
-      spacing,
-      patternColor,
-      secondaryColor,
-      strokeWidth,
-      complexity,
-      customImage,
-    })
+    try {
+      const pattern = generatePattern(patternType, {
+        size,
+        spacing,
+        patternColor,
+        secondaryColor,
+        strokeWidth,
+        complexity,
+        customImage,
+        skew,
+      })
 
-    const previewWidth = 800
-    const previewHeight = 600
+      const previewWidth = 800
+      const previewHeight = 600
 
-    const svg = `
-      <svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 ${previewWidth} ${previewHeight}"
-        preserveAspectRatio="xMidYMid slice" style="background-color: ${backgroundColor}">
-        <defs>
-          <pattern id="pattern" x="0" y="0" width="${size + spacing}" height="${size + spacing}" 
-            patternUnits="userSpaceOnUse">
-            <g transform="rotate(${rotation}, ${(size + spacing) / 2}, ${(size + spacing) / 2})" 
-              opacity="${opacity / 100}">
-              ${pattern}
-            </g>
-          </pattern>
-        </defs>
-        <rect x="0" y="0" width="100%" height="100%" fill="url(#pattern)" />
-      </svg>
-    `
+      const svg = `
+        <svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 ${previewWidth} ${previewHeight}"
+          preserveAspectRatio="xMidYMid slice" style="background-color: ${backgroundColor}">
+          <defs>
+            <pattern id="pattern" x="0" y="0" width="${size + spacing}" height="${size + spacing}" 
+              patternUnits="userSpaceOnUse">
+              <g transform="rotate(${rotation}, ${(size + spacing) / 2}, ${(size + spacing) / 2}) skewX(${skew})" 
+                opacity="${opacity / 100}">
+                ${pattern}
+              </g>
+            </pattern>
+          </defs>
+          <rect x="0" y="0" width="100%" height="100%" fill="url(#pattern)" />
+        </svg>
+      `
 
-    setSvgCode(svg)
+      setSvgCode(svg)
+    } catch (error) {
+      console.error("Error generating SVG:", error)
+      toast.error("Error generating pattern. Please try different settings.")
+    }
   }, [
     patternType,
     patternColor,
@@ -176,6 +193,7 @@ export default function SvgPatternGenerator() {
     size,
     spacing,
     rotation,
+    skew,
     opacity,
     complexity,
     strokeWidth,
@@ -194,6 +212,7 @@ export default function SvgPatternGenerator() {
       "triangles",
       "hexagons",
       "zigzag",
+      "mandala",
       "polkaDots",
       "stripes",
       "chevron",
@@ -206,6 +225,11 @@ export default function SvgPatternGenerator() {
       "crosshatch",
       "spiral",
       "flowerOfLife",
+      "geometricMosaic",
+      "celticKnot",
+      "fractalTree",
+      "opArt",
+      "voronoiDiagram",
     ]
 
     setPatternType(patternTypes[Math.floor(Math.random() * patternTypes.length)])
@@ -215,144 +239,165 @@ export default function SvgPatternGenerator() {
     setSize(Math.floor(Math.random() * 40) + 10)
     setSpacing(Math.floor(Math.random() * 20))
     setRotation(Math.floor(Math.random() * 360))
+    setSkew(Math.floor(Math.random() * 60) - 30)
     setOpacity(Math.floor(Math.random() * 100) + 1)
     setComplexity(Math.floor(Math.random() * 100) + 1)
     setStrokeWidth(Math.floor(Math.random() * 5) + 1)
   }
 
+  const handleReset = () => {
+    setPatternType("circles")
+    setPatternColor("#3498db")
+    setBackgroundColor("#2343e1")
+    setSize(32)
+    setSpacing(53)
+    setRotation(0)
+    setSkew(0)
+    setOpacity(100)
+    setComplexity(50)
+    setStrokeWidth(2)
+  }
+
   const handleDownload = async () => {
-    const { width, height } =
-      exportSize === "custom" ? { width: customWidth, height: customHeight } : exportSizes[exportSize]
+    try {
+      const { width, height } =
+        exportSize === "custom" ? { width: customWidth, height: customHeight } : exportSizes[exportSize]
 
-    if (exportFormat === "svg") {
-      const patternSize = size + spacing
-      const numPatternsX = Math.ceil(width / patternSize)
-      const numPatternsY = Math.ceil(height / patternSize)
-      const totalPatternWidth = numPatternsX * patternSize
-      const totalPatternHeight = numPatternsY * patternSize
-      const offsetX = (totalPatternWidth - width) / 2
-      const offsetY = (totalPatternHeight - height) / 2
+      if (exportFormat === "svg") {
+        const patternSize = size + spacing
+        const numPatternsX = Math.ceil(width / patternSize)
+        const numPatternsY = Math.ceil(height / patternSize)
+        const totalPatternWidth = numPatternsX * patternSize
+        const totalPatternHeight = numPatternsY * patternSize
+        const offsetX = (totalPatternWidth - width) / 2
+        const offsetY = (totalPatternHeight - height) / 2
 
-      const exportSvg = `
-        <svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}" viewBox="0 0 ${width} ${height}">
-          <rect width="${width}" height="${height}" fill="${backgroundColor}" />
-          <svg x="0" y="0" width="${width}" height="${height}" viewBox="-${offsetX} -${offsetY} ${totalPatternWidth} ${totalPatternHeight}">
-            <defs>
-              <pattern 
-                id="pattern" 
-                x="0" 
-                y="0" 
-                width="${patternSize}" 
-                height="${patternSize}" 
-                patternUnits="userSpaceOnUse"
-              >
-                <g transform="rotate(${rotation}, ${patternSize / 2}, ${patternSize / 2})" opacity="${opacity / 100}">
-                  ${generatePattern(patternType, {
-                    size,
-                    spacing,
-                    patternColor,
-                    secondaryColor,
-                    strokeWidth,
-                    complexity,
-                    customImage,
-                  })}
-                </g>
-              </pattern>
-            </defs>
-            <rect x="-${patternSize}" y="-${patternSize}" 
-                  width="${totalPatternWidth + 2 * patternSize}" 
-                  height="${totalPatternHeight + 2 * patternSize}" 
-                  fill="url(#pattern)" />
+        const exportSvg = `
+          <svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}" viewBox="0 0 ${width} ${height}">
+            <rect width="${width}" height="${height}" fill="${backgroundColor}" />
+            <svg x="0" y="0" width="${width}" height="${height}" viewBox="-${offsetX} -${offsetY} ${totalPatternWidth} ${totalPatternHeight}">
+              <defs>
+                <pattern 
+                  id="pattern" 
+                  x="0" 
+                  y="0" 
+                  width="${patternSize}" 
+                  height="${patternSize}" 
+                  patternUnits="userSpaceOnUse"
+                >
+                  <g transform="rotate(${rotation}, ${patternSize / 2}, ${patternSize / 2}) skewX(${skew})" opacity="${opacity / 100}">
+                    ${generatePattern(patternType, {
+                      size,
+                      spacing,
+                      patternColor,
+                      secondaryColor,
+                      strokeWidth,
+                      complexity,
+                      customImage,
+                      skew,
+                    })}
+                  </g>
+                </pattern>
+              </defs>
+              <rect x="-${patternSize}" y="-${patternSize}" 
+                    width="${totalPatternWidth + 2 * patternSize}" 
+                    height="${totalPatternHeight + 2 * patternSize}" 
+                    fill="url(#pattern)" />
+            </svg>
           </svg>
-        </svg>
-      `
-      const blob = new Blob([exportSvg], { type: "image/svg+xml" })
-      const url = URL.createObjectURL(blob)
-      const link = document.createElement("a")
-      link.href = url
-      link.download = `pattern_${width}x${height}.svg`
-      document.body.appendChild(link)
-      link.click()
-      document.body.removeChild(link)
-      URL.revokeObjectURL(url)
-      toast.success("SVG pattern downloaded successfully!")
-    } else {
-      const exportSvg = `
-        <svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}">
-          <rect width="${width}" height="${height}" fill="${backgroundColor}" />
-          <svg width="${width}" height="${height}">
-            <defs>
-              <pattern 
-                id="pattern" 
-                x="0" 
-                y="0" 
-                width="${size + spacing}" 
-                height="${size + spacing}" 
-                patternUnits="userSpaceOnUse"
-              >
-                <g transform="rotate(${rotation}, ${(size + spacing) / 2}, ${(size + spacing) / 2})" opacity="${opacity / 100}">
-                  ${generatePattern(patternType, {
-                    size,
-                    spacing,
-                    patternColor,
-                    secondaryColor,
-                    strokeWidth,
-                    complexity,
-                    customImage,
-                  })}
-                </g>
-              </pattern>
-            </defs>
-            <rect width="100%" height="100%" fill="url(#pattern)" />
+        `
+        const blob = new Blob([exportSvg], { type: "image/svg+xml" })
+        const url = URL.createObjectURL(blob)
+        const link = document.createElement("a")
+        link.href = url
+        link.download = `pattern_${width}x${height}.svg`
+        document.body.appendChild(link)
+        link.click()
+        document.body.removeChild(link)
+        URL.revokeObjectURL(url)
+        toast.success("SVG pattern downloaded successfully!")
+      } else {
+        const exportSvg = `
+          <svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}">
+            <rect width="${width}" height="${height}" fill="${backgroundColor}" />
+            <svg width="${width}" height="${height}">
+              <defs>
+                <pattern 
+                  id="pattern" 
+                  x="0" 
+                  y="0" 
+                  width="${size + spacing}" 
+                  height="${size + spacing}" 
+                  patternUnits="userSpaceOnUse"
+                >
+                  <g transform="rotate(${rotation}, ${(size + spacing) / 2}, ${(size + spacing) / 2}) skewX(${skew})" opacity="${opacity / 100}">
+                    ${generatePattern(patternType, {
+                      size,
+                      spacing,
+                      patternColor,
+                      secondaryColor,
+                      strokeWidth,
+                      complexity,
+                      customImage,
+                      skew,
+                    })}
+                  </g>
+                </pattern>
+              </defs>
+              <rect width="100%" height="100%" fill="url(#pattern)" />
+            </svg>
           </svg>
-        </svg>
-      `
-      const svg = new Blob([exportSvg], { type: "image/svg+xml" })
-      const url = URL.createObjectURL(svg)
-      const img = new window.Image()
+        `
+        const svg = new Blob([exportSvg], { type: "image/svg+xml" })
+        const url = URL.createObjectURL(svg)
+        const img = new window.Image()
 
-      img.onload = () => {
-        const scale = 2
-        const canvas = document.createElement("canvas")
-        canvas.width = width * scale
-        canvas.height = height * scale
-        const ctx = canvas.getContext("2d")
-        if (!ctx) {
-          toast.error("Unable to create canvas context")
-          return
+        img.onload = () => {
+          const scale = 2
+          const canvas = document.createElement("canvas")
+          canvas.width = width * scale
+          canvas.height = height * scale
+          const ctx = canvas.getContext("2d")
+          if (!ctx) {
+            toast.error("Unable to create canvas context")
+            return
+          }
+
+          ctx.imageSmoothingEnabled = true
+          ctx.imageSmoothingQuality = "high"
+
+          ctx.drawImage(img, 0, 0, canvas.width, canvas.height)
+
+          canvas.toBlob(
+            (blob) => {
+              if (!blob) {
+                toast.error("Unable to create PNG")
+                return
+              }
+              const url = URL.createObjectURL(blob)
+              const link = document.createElement("a")
+              link.href = url
+              link.download = `pattern_${width}x${height}.png`
+              document.body.appendChild(link)
+              link.click()
+              document.body.removeChild(link)
+              URL.revokeObjectURL(url)
+              toast.success("PNG pattern downloaded successfully!")
+            },
+            "image/png",
+            1.0,
+          )
         }
 
-        ctx.imageSmoothingEnabled = true
-        ctx.imageSmoothingQuality = "high"
+        img.onerror = () => {
+          toast.error("Error loading SVG for PNG conversion")
+        }
 
-        ctx.drawImage(img, 0, 0, canvas.width, canvas.height)
-
-        canvas.toBlob(
-          (blob) => {
-            if (!blob) {
-              toast.error("Unable to create PNG")
-              return
-            }
-            const url = URL.createObjectURL(blob)
-            const link = document.createElement("a")
-            link.href = url
-            link.download = `pattern_${width}x${height}.png`
-            document.body.appendChild(link)
-            link.click()
-            document.body.removeChild(link)
-            URL.revokeObjectURL(url)
-            toast.success("PNG pattern downloaded successfully!")
-          },
-          "image/png",
-          1.0,
-        )
+        img.src = url
       }
-
-      img.onerror = () => {
-        toast.error("Error loading SVG for PNG conversion")
-      }
-
-      img.src = url
+    } catch (error) {
+      console.error("Error during download:", error)
+      toast.error("Failed to download pattern. Please try again.")
     }
   }
 
@@ -375,20 +420,28 @@ export default function SvgPatternGenerator() {
         return
       }
 
+      setIsImageUploading(true)
       const reader = new FileReader()
       reader.onload = (e) => {
         setCustomImage(e.target?.result as string)
         setPatternType("customImage")
+        setIsImageUploading(false)
+      }
+      reader.onerror = () => {
+        toast.error("Failed to read image file")
+        setIsImageUploading(false)
       }
       reader.readAsDataURL(file)
     }
   }
 
-
+  // Fixed: Added proper accessibility labels and fixed preview issue for mobile
   const renderCodePreview = (fullscreen?: boolean) => (
     <div
       ref={svgContainerRef}
-      className={`relative w-full h-full ${fullscreen ? "min-h-[80vh]" : "aspect-video"} overflow-hidden`}
+      className={`relative w-full ${fullscreen ? "min-h-[80vh]" : "h-[300px] md:h-full"} overflow-hidden rounded-lg`}
+      aria-label="Pattern Preview"
+      role="img"
     >
       <div dangerouslySetInnerHTML={{ __html: svgCode }} className="absolute inset-0 w-full h-full" />
     </div>
@@ -398,6 +451,7 @@ export default function SvgPatternGenerator() {
     <Modal
       isOpen={isModalOpen}
       onOpenChange={setIsModalOpen}
+      hideCloseButton
       size="full"
       classNames={{
         base: "bg-black/50 backdrop-blur-md",
@@ -427,13 +481,14 @@ export default function SvgPatternGenerator() {
       <ModalContent>
         {(onClose) => (
           <div className="relative w-full h-full flex items-center justify-center">
-            <div className="w-[80%] h-[80%] bg-white rounded-lg overflow-hidden shadow-xl relative">
+            <div className="w-[90%] h-[90%] md:w-[80%] md:h-[80%] bg-white rounded-lg overflow-hidden shadow-xl relative">
               <Button
                 isIconOnly
                 variant="flat"
                 color="danger"
                 onPress={onClose}
                 className="absolute top-4 right-4 z-50"
+                aria-label="Close preview"
               >
                 <X className="w-6 h-6" />
               </Button>
@@ -444,251 +499,378 @@ export default function SvgPatternGenerator() {
       </ModalContent>
     </Modal>
   )
+
+  // Added responsive CustomImage upload with proper loading state
+  const renderCustomImageUpload = () => {
+    if (patternType !== "customImage") return null;
+    
+    return (
+      <div className="mt-4">
+        <Button
+          color="primary"
+          variant="flat"
+          fullWidth
+          onClick={() => fileInputRef.current?.click()}
+          isLoading={isImageUploading}
+          startContent={!isImageUploading && <ImageIcon className="h-4 w-4" />}
+          aria-label="Upload custom image"
+        >
+          {isImageUploading ? "Uploading..." : customImage ? "Change Image" : "Upload Image (Max 5MB)"}
+        </Button>
+        <input
+          type="file"
+          accept="image/*"
+          onChange={handleImageUpload}
+          ref={fileInputRef}
+          className="hidden"
+          aria-hidden="true"
+        />
+        {customImage && (
+          <div className="mt-2 flex justify-center">
+            <div className="relative w-16 h-16 rounded overflow-hidden border border-gray-300">
+              <img 
+                src={customImage} 
+                alt="Uploaded pattern" 
+                className="object-cover w-full h-full" 
+              />
+            </div>
+          </div>
+        )}
+      </div>
+    );
+  };
   return (
-
-  <ToolLayout
-  title="SVG Pattern Generator"
-  description="Create unique, repeatable vector patterns for web backgrounds, print designs, and digital art with customizable options"
-  toolId="678f382a26f06f912191bc92"
->
-  <div className="flex flex-col gap-8">
-    {/* Preview Section */}
-    <Card className="bg-default-50 dark:bg-default-100">
-      <CardBody className="p-6">
-        <div className="flex items-center justify-between mb-4">
-          <h2 className="text-xl md:text-2xl font-semibold text-default-700 mb-4 flex items-center">Pattern Preview</h2>
-          <Button isIconOnly color="primary" variant="light" onPress={() => setIsModalOpen(true)}>
-                <Maximize2 className="h-5 w-5" />
-            </Button>
-        </div>
-        <div className="relative w-full aspect-video rounded-lg overflow-hidden">{renderCodePreview()}</div>
-        <div className="mt-4 flex flex-wrap gap-2">
-          <Button color="primary" onPress={handleDownload}>
-            <Download className="h-4 w-4 mr-2" />
-            Download {exportFormat.toUpperCase()}
-          </Button>
-          <Button color="primary" onPress={handleCopyToClipboard}>
-            <Copy className="h-4 w-4 mr-2" />
-            Copy SVG
-          </Button>
-          <Button color="success" onPress={handleRandomize}>
-            <RefreshCw className="h-4 w-4 mr-2" />
-            Randomize
-          </Button>
-        </div>
-      </CardBody>
-    </Card>
-
-    {/* Controls Section */}
-    <Card className="bg-default-50 dark:bg-default-100">
-      <CardBody className="p-6">
-        <Tabs aria-label="Pattern Generator Options">
-          <Tab
-            key="basic"
-            title={
-              <div className="flex items-center space-x-2">
-                <Settings className="h-4 w-4" />
-                <span>Basic</span>
-              </div>
-            }
-          >
-            <div className="space-y-4 mt-4">
-              <Select
-                label="Pattern Type"
-                selectedKeys={[patternType]}
-                onSelectionChange={(keys) => setPatternType(Array.from(keys)[0] as PatternType)}
-                variant="bordered"
-              >
-                {patternTypeOptions.map((option) => {
-                  const IconComponent = option.icon
-                  return (
-                    <SelectItem
-                      key={option.value}
-                      value={option.value}
-                      startContent={<IconComponent className="h-4 w-4 mr-2" />}
-                      className="text-default-700"
-                    >
-                      {option.label}
-                    </SelectItem>
-                  )
-                })}
-              </Select>
-
-              <Slider
-                label="Size"
-                step={1}
-                maxValue={100}
-                minValue={5}
-                value={size}
-                onChange={(value) => setSize(Number(value))}
-               
-              />
-
-              <Slider
-                label="Spacing"
-                step={1}
-                maxValue={50}
-                minValue={0}
-                value={spacing}
-                onChange={(value) => setSpacing(Number(value))}
-                
-              />
-
-              {patternType === "customImage" && (
-                <Input
-                  type="file"
-                  accept="image/*"
-                  onChange={handleImageUpload}
-                  ref={fileInputRef}
-                  label="Upload Image (Max 5MB)"
-                  variant="bordered"
-                />
-              )}
-            </div>
-          </Tab>
-          <Tab
-            key="advanced"
-            title={
-              <div className="flex items-center space-x-2">
-                <Sliders className="h-4 w-4" />
-                <span>Advanced</span>
-              </div>
-            }
-          >
-            <div className="space-y-4 mt-4">
-              <Slider
-                label="Rotation"
-                step={1}
-                maxValue={360}
-                minValue={0}
-                value={rotation}
-                onChange={(value) => setRotation(Number(value))}
-             
-              />
-
-              <Slider
-                label="Opacity"
-                step={1}
-                maxValue={100}
-                minValue={0}
-                value={opacity}
-                onChange={(value) => setOpacity(Number(value))}
-        
-              />
-
-              <Slider
-                label="Complexity"
-                step={1}
-                maxValue={100}
-                minValue={0}
-                value={complexity}
-                onChange={(value) => setComplexity(Number(value))}
-           
-              />
-
-              <Slider
-                label="Stroke Width"
-                step={0.5}
-                maxValue={10}
-                minValue={1}
-                value={strokeWidth}
-                onChange={(value) => setStrokeWidth(Number(value))}
-        
-              />
-            </div>
-          </Tab>
-          <Tab
-            key="colors"
-            title={
-              <div className="flex items-center space-x-2">
-                <Palette className="h-4 w-4" />
-                <span>Colors</span>
-              </div>
-            }
-          >
-            <div className="space-y-4 mt-4">
-              <Input
-                type="color"
-                label="Pattern Color"
-                value={patternColor}
-                onChange={(e) => setPatternColor(e.target.value)}
-                variant="bordered"
-              />
-              <Input
-                type="color"
-                label="Secondary Color"
-                value={secondaryColor}
-                onChange={(e) => setSecondaryColor(e.target.value)}
-                variant="bordered"
-              />
-              <Input
-                type="color"
-                label="Background Color"
-                value={backgroundColor}
-                onChange={(e) => setBackgroundColor(e.target.value)}
-                variant="bordered"
-              />
-            </div>
-          </Tab>
-          <Tab
-            key="export"
-            title={
-              <div className="flex items-center space-x-2">
-                <ImageIcon className="h-4 w-4" />
-                <span>Export</span>
-              </div>
-            }
-          >
-            <div className="space-y-4 mt-4">
-              <Select
-                label="Export Size"
-                selectedKeys={[exportSize]}
-                onSelectionChange={(keys) => setExportSize(Array.from(keys)[0] as ExportSize)}
-                variant="bordered"
-              >
-                {exportSizeOptions.map((option) => (
-                  <SelectItem key={option.value} value={option.value} className="text-default-700">
-                    {option.label}
-                  </SelectItem>
-                ))}
-              </Select>
-
-              {exportSize === "custom" && (
-                <div className="flex space-x-2">
-                  <Input
-                    type="number"
-                    label="Width (px)"
-                    value={customWidth.toString()}
-                    onChange={(e) => setCustomWidth(Number(e.target.value))}
+    <ToolLayout
+      title="SVG Pattern Generator"
+      description="Create unique, repeatable vector patterns for web backgrounds, print designs, and digital art with customizable options"
+      toolId="678f382a26f06f912191bc92"
+    >
+      <div className="flex flex-col md:flex-row gap-6">
+        {/* Left side: Preview + Quick Settings */}
+        <div className="w-full md:w-7/12 flex flex-col gap-4">
+          {/* Quick settings panel */}
+          <Card className="bg-default-50 dark:bg-default-100">
+            <CardBody className="p-4">
+              <div className="flex flex-col gap-4">
+                {/* Pattern Type Selection */}
+                <div className="w-full">
+                  <Select
+                    label="Pattern Type"
+                    selectedKeys={[patternType]}
+                    onSelectionChange={(keys) => setPatternType(Array.from(keys)[0] as PatternType)}
                     variant="bordered"
-                  />
-                  <Input
-                    type="number"
-                    label="Height (px)"
-                    value={customHeight.toString()}
-                    onChange={(e) => setCustomHeight(Number(e.target.value))}
-                    variant="bordered"
-                  />
+                    classNames={{
+                      trigger: "h-10",
+                      value: "text-sm"
+                    }}
+                  >
+                    {patternTypeOptions.map((option) => {
+                      const IconComponent = option.icon
+                      return (
+                        <SelectItem
+                          key={option.value}
+                          value={option.value}
+                          startContent={<IconComponent className="h-4 w-4 mr-2" />}
+                          className="text-default-700"
+                        >
+                          {option.label}
+                        </SelectItem>
+                      )
+                    })}
+                  </Select>
                 </div>
-              )}
 
-              <Select
-                label="Export Format"
-                selectedKeys={[exportFormat]}
-                onSelectionChange={(keys) => setExportFormat(Array.from(keys)[0] as ExportFormat)}
-                variant="bordered"
-              >
-                {exportFormatOptions.map((option) => (
-                  <SelectItem key={option.value} value={option.value} className="text-default-700">
-                    {option.label}
-                  </SelectItem>
-                ))}
-              </Select>
-            </div>
-          </Tab>
-        </Tabs>
-      </CardBody>
-    </Card>
+                {/* Color Controls */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
+                  <div>
+                    <Input
+                      type="color"
+                      label="Pattern Color"
+                      labelPlacement="outside"
+                      value={patternColor}
+                      onChange={(e) => setPatternColor(e.target.value)}
+                      variant="bordered"
+                      classNames={{
+                        inputWrapper: "h-10",
+                        label: "text-xs"
+                      }}
+                    />
+                  </div>
+                  <div>
+                    <Input
+                      type="color"
+                      label="Background Color"
+                      labelPlacement="outside"
+                      value={backgroundColor}
+                      onChange={(e) => setBackgroundColor(e.target.value)}
+                      variant="bordered"
+                      classNames={{
+                        inputWrapper: "h-10",
+                        label: "text-xs"
+                      }}
+                    />
+                  </div>
+                  <div>
+                    <Input
+                      type="color"
+                      label="Secondary Color"
+                      labelPlacement="outside"
+                      value={secondaryColor}
+                      onChange={(e) => setSecondaryColor(e.target.value)}
+                      variant="bordered"
+                      classNames={{
+                        inputWrapper: "h-10",
+                        label: "text-xs"
+                      }}
+                    />
+                  </div>
+                </div>
+              </div>
+            </CardBody>
+          </Card>
+
+          {/* Preview Card */}
+          <Card className="bg-default-50 dark:bg-default-100 flex-1">
+            <CardBody className="p-4">
+              <div className="flex items-center justify-between mb-2">
+                <h2 className="text-lg font-semibold text-default-700">Pattern Preview</h2>
+                <div className="flex gap-2">
+                  <Button isIconOnly size="sm" variant="light" onPress={() => setIsModalOpen(true)}>
+                    <Maximize2 className="h-4 w-4" />
+                  </Button>
+                  <Button isIconOnly size="sm" variant="light" color="success" onPress={handleRandomize}>
+                    <RefreshCw className="h-4 w-4" />
+                  </Button>
+                </div>
+              </div>
+              <div className="h-[calc(100%-40px)] min-h-[300px]">
+                {renderCodePreview()}
+              </div>
+              <div className="mt-3 flex flex-wrap gap-2">
+                <Button size="sm" color="primary" onPress={handleDownload}>
+                  <Download className="h-4 w-4 mr-1" />
+                  Download {exportFormat.toUpperCase()}
+                </Button>
+                <Button size="sm" color="secondary" onPress={handleCopyToClipboard}>
+                  <Copy className="h-4 w-4 mr-1" />
+                  Copy SVG
+                </Button>
+              </div>
+            </CardBody>
+          </Card>
+        </div>
+
+        {/* Right side: Controls */}
+        <div className="w-full md:w-5/12">
+          <Card className="bg-default-50 dark:bg-default-100 h-full">
+            <CardBody className="p-4">
+              <div className="mb-4 flex items-center justify-between">
+                <h2 className="text-lg font-semibold text-default-700">Pattern Settings</h2>
+                <Button size="sm" variant="light" color="danger" onPress={handleReset}>Reset</Button>
+              </div>
+              
+              <div className="space-y-6">
+                {/* Size & Spacing */}
+                <div className="flex flex-col gap-6">
+                  <div>
+                    <div className="flex justify-between mb-1">
+                      <label className="text-sm text-default-700">Size: {size}px</label>
+                    </div>
+                    <Slider
+                      step={1}
+                      maxValue={100}
+                      minValue={5}
+                      value={size}
+                      onChange={(value) => setSize(Number(value))}
+                      classNames={{
+                        track: "h-2",
+                      }}
+                      size="sm"
+                    />
+                  </div>
+                  
+                  <div>
+                    <div className="flex justify-between mb-1">
+                      <label className="text-sm text-default-700">Spacing: {spacing}px</label>
+                    </div>
+                    <Slider
+                      step={1}
+                      maxValue={100}
+                      minValue={0}
+                      value={spacing}
+                      onChange={(value) => setSpacing(Number(value))}
+                      classNames={{
+                        track: "h-2",
+                      }}
+                      size="sm"
+                    />
+                  </div>
+                  
+                  <div>
+                    <div className="flex justify-between mb-1">
+                      <label className="text-sm text-default-700">Rotation: {rotation}deg</label>
+                    </div>
+                    <Slider
+                      step={1}
+                      maxValue={360}
+                      minValue={0}
+                      value={rotation}
+                      onChange={(value) => setRotation(Number(value))}
+                      classNames={{
+                        track: "h-2",
+                      }}
+                      size="sm"
+                    />
+                  </div>
+                  
+                  <div>
+                    <div className="flex justify-between mb-1">
+                      <label className="text-sm text-default-700">Skew: {skew}deg</label>
+                    </div>
+                    <Slider
+                      step={1}
+                      maxValue={45}
+                      minValue={-45}
+                      value={skew}
+                      onChange={(value) => setSkew(Number(value))}
+                      classNames={{
+                        track: "h-2",
+                      }}
+                      size="sm"
+                    />
+                  </div>
+                  
+                  <div>
+                    <div className="flex justify-between mb-1">
+                      <label className="text-sm text-default-700">Pattern Opacity: {opacity}%</label>
+                    </div>
+                    <Slider
+                      step={1}
+                      maxValue={100}
+                      minValue={1}
+                      value={opacity}
+                      onChange={(value) => setOpacity(Number(value))}
+                      classNames={{
+                        track: "h-2",
+                      }}
+                      size="sm"
+                    />
+                  </div>
+                </div>
+                
+                {/* Export Settings */}
+                <div className="mt-8">
+                  <h3 className="text-md font-semibold text-default-700 mb-3">Export Size Settings</h3>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                    <Select
+                      label="Background Template"
+                      selectedKeys={[exportSize]}
+                      onSelectionChange={(keys) => setExportSize(Array.from(keys)[0] as ExportSize)}
+                      variant="bordered"
+                      size="sm"
+                    >
+                      {exportSizeOptions.map((option) => (
+                        <SelectItem key={option.value} value={option.value} className="text-default-700">
+                          {option.label}
+                        </SelectItem>
+                      ))}
+                    </Select>
+                    
+                    <Select
+                      label="Export Format"
+                      selectedKeys={[exportFormat]}
+                      onSelectionChange={(keys) => setExportFormat(Array.from(keys)[0] as ExportFormat)}
+                      variant="bordered"
+                      size="sm"
+                    >
+                      {exportFormatOptions.map((option) => (
+                        <SelectItem key={option.value} value={option.value} className="text-default-700">
+                          {option.label}
+                        </SelectItem>
+                      ))}
+                    </Select>
+                    
+                    {exportSize === "custom" && (
+                      <>
+                        <Input
+                          type="number"
+                          label="Width (px)"
+                          value={customWidth.toString()}
+                          onChange={(e) => setCustomWidth(Number(e.target.value))}
+                          variant="bordered"
+                          size="sm"
+                        />
+                        <Input
+                          type="number"
+                          label="Height (px)"
+                          value={customHeight.toString()}
+                          onChange={(e) => setCustomHeight(Number(e.target.value))}
+                          variant="bordered"
+                          size="sm"
+                        />
+                      </>
+                    )}
+                  </div>
+                </div>
+                
+                {/* Advanced Settings */}
+                <div className="mt-4">
+                <h3 className="text-md font-semibold text-default-700 mb-3">Advanced Settings</h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+
+                  {/* Complexity Slider */}
+                  <div>
+                    <div className="flex justify-between mb-1">
+                      <label className="text-sm text-default-700">Complexity: {complexity}</label>
+                    </div>
+                    <Slider
+                      step={1}
+                      maxValue={100}
+                      minValue={0}
+                      value={complexity}
+                      onChange={(value) => setComplexity(Number(value))}
+                      size="sm"
+                    />
+                  </div>
+
+                  {/* Stroke Width Slider */}
+                  <div>
+                    <div className="flex justify-between mb-1">
+                      <label className="text-sm text-default-700">Stroke Width: {strokeWidth}</label>
+                    </div>
+                    <Slider
+                      step={0.5}
+                      maxValue={10}
+                      minValue={0.5}
+                      value={strokeWidth}
+                      onChange={(value) => setStrokeWidth(Number(value))}
+                      size="sm"
+                    />
+                  </div>
+
+                  {/* Image Upload Section */}
+                  {patternType === "customImage" && (
+                    <div className="col-span-1 md:col-span-2">
+                      <Input
+                        type="file"
+                        accept="image/*"
+                        onChange={handleImageUpload}
+                        ref={fileInputRef}
+                        label="Upload Image (Max 5MB)"
+                        variant="bordered"
+                        size="sm"
+                        className="w-full"
+                      />
+                    </div>
+                  )}
+
+                </div>
+                </div>
+              </div>
+            </CardBody>
+          </Card>
+        </div>
+      </div>
 
     {/* Info Section */}
     <Card className="mt-6 bg-default-50 dark:bg-default-100 p-4 md:p-8">
@@ -698,21 +880,15 @@ export default function SvgPatternGenerator() {
           What is the SVG Pattern Generator?
         </h2>
         <p className="text-sm md:text-base text-default-600 mb-4">
-          The SVG Pattern Generator is a powerful and versatile tool designed to create unique, repeatable vector
-          patterns for various design purposes. Whether you're a web designer, graphic artist, or someone looking to
-          add visual interest to your projects, this tool provides an intuitive interface to craft custom, scalable
-          vector graphics with ease.
+        The SVG pattern generator is a powerful and versatile tool designed to create unique, repeated vector patterns for various design purposes. Whether you are a web designer, graphic artist, or someone is looking to add visual interest to your projects, this device easily provides an introspection interface to craft the custom, scalable vector graphics.
         </p>
         <p className="text-sm md:text-base text-default-600 mb-4">
-          With a wide range of adjustable parameters and real-time preview, you can fine-tune your patterns to
-          perfectly fit your design needs. The generator offers options for various pattern types, color
-          customization, and even custom image uploads, allowing for versatile applications in web design, digital
-          art, print materials, and more.
+        With a wide range of adjustable parameters and real -time previews, you can fix your patterns to fully fit your design needs. The generator offers options for different patterns, color adaptation and even custom image uploads, which allows for versatile applications in web design, digital art, print material and more.
         </p>
 
         <div className="my-8">
           <Image
-            src="/Images/SVGPatternPreview.png"
+            src="/Images/InfosectionImages/SVGPatternGeneratorPreview.png?height=400&width=600"
             alt="Screenshot of the SVG Pattern Generator interface showing pattern customization options and a preview"
             width={600}
             height={400}
@@ -800,44 +976,6 @@ export default function SvgPatternGenerator() {
           <li>Experiment with the complexity and stroke width to achieve different artistic styles.</li>
         </ul>
 
-        <h2 className="text-xl md:text-2xl font-semibold text-default-700 mb-4 mt-8 flex items-center">
-          <Info className="w-6 h-6 mr-2" />
-          Applications and Use Cases
-        </h2>
-        <ul className="list-disc list-inside space-y-2 text-sm md:text-base text-default-600">
-          <li>
-            <strong>Web Design:</strong> Create unique background patterns, header designs, or section dividers
-          </li>
-          <li>
-            <strong>Graphic Design:</strong> Design textures for posters, flyers, or business cards
-          </li>
-          <li>
-            <strong>Digital Art:</strong> Use as a base for digital illustrations or abstract art pieces
-          </li>
-          <li>
-            <strong>UI/UX Design:</strong> Craft distinctive patterns for app backgrounds or interface elements
-          </li>
-          <li>
-            <strong>Presentations:</strong> Add visual interest to slides with custom pattern backgrounds
-          </li>
-          <li>
-            <strong>Social Media:</strong> Create eye-catching graphics for posts or profile picture backgrounds
-          </li>
-          <li>
-            <strong>Print Design:</strong> Incorporate repeating patterns into brochures, packaging, or textile
-            designs
-          </li>
-          <li>
-            <strong>Brand Identity:</strong> Develop unique, consistent pattern elements for brand materials
-          </li>
-          <li>
-            <strong>Product Design:</strong> Apply patterns to product surfaces or packaging
-          </li>
-          <li>
-            <strong>Educational Materials:</strong> Create engaging visuals and backgrounds for learning resources
-          </li>
-        </ul>
-
         <p className="text-sm md:text-base text-default-600 mt-6">
           Ready to transform your designs with captivating patterns? Our SVG Pattern Generator offers endless
           possibilities for your creative projects. Whether you're designing for web, print, or digital media, this
@@ -846,7 +984,7 @@ export default function SvgPatternGenerator() {
         </p>
       </div>
     </Card>
-  </div>
+
 
 
     {/* Fullscreen Modal */}

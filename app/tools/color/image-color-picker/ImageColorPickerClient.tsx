@@ -270,10 +270,10 @@ export default function ImageColorPicker() {
     >
 
 
-      <Card className="mb-8 bg-default-50 dark:bg-default-100">
+<Card className="mb-8 bg-default-50 dark:bg-default-100">
         <CardBody>
           <div className="flex justify-between items-center mb-4">
-            <h2 className="text-xl md:text-2xl font-bold">Upload an Image</h2>
+            
             <Button onClick={handleImageEyeDropper} disabled={isImageEyeDropperActive || !imageSrc} color="primary">
               <Pipette className="h-5 w-5 mr-2" />
               Pick Image Color
@@ -446,15 +446,15 @@ export default function ImageColorPicker() {
             What is the Image Color Picker?
             </h2>
             <p className="text-sm md:text-base text-default-600 mb-4">
-            The Image Color Picker is a powerful tool designed for designers, developers, and color enthusiasts. It allows you to upload any image and extract precise color information from it. Whether you're looking to pick individual colors or analyze the dominant color palette of an entire image, our tool provides you with accurate and easy-to-use color data.
+            Image Color Picker is a powerful device designed for designers, developers and color enthusiasts. This allows you to upload any image and remove the exact color information from it. Whether you are choosing a personal color or analyzes the major color palette of an entire image, our device provides you with accurate and easy-to-use color data.
             </p>
             <p className="text-sm md:text-base text-default-600 mb-4">
-            With features like an eyedropper tool for precise color selection, dominant color extraction, and support for multiple color formats (HEX, RGB, HSL), the Image Color Picker is an invaluable resource for anyone working with color in their projects. It's perfect for creating cohesive color schemes, matching colors from inspirational images, or simply exploring the color composition of your favorite photographs.
+            With features such as an ideopper tool for accurate color selection, major color extraction, and many color formats (hex, RGB, HSL), image color picker is an invaluable resource for anyone working with color in its projects. This is perfect for making united color schemes, matching colors with inspirational images, or simply searching for the color composition of your favorite photos.
             </p>
 
             <div className="my-8">
             <NextImage
-                src="/Images/ImageColorPickerPreview.png?height=400&width=600"
+                src="/Images/InfosectionImages/ImageColorPickerPreview.png?height=400&width=600"
                 alt="Screenshot of the Image Color Picker interface showing image upload area, color selection tools, and color analysis results"
                 width={600}
                 height={400}
@@ -473,7 +473,7 @@ export default function ImageColorPicker() {
             </li>
             <li>Click the "Pick Image Color" button to activate the eyedropper tool.</li>
             <li>Select a color from the image by clicking on it.</li>
-            <li>View the selected color's details in HEX, RGB, and HSL formats.</li>
+            <li>View the selected color's details in HEX, RGB, and HSL formats, click on the Drop down menu Hex button by default and then select the other formats. </li>
             <li>Copy the color value to your clipboard by clicking the "Copy" button.</li>
             <li>Explore the automatically extracted dominant colors from your image.</li>
             <li>Access your recently picked colors from the color history section.</li>
@@ -495,39 +495,8 @@ export default function ImageColorPicker() {
             <li>User-friendly interface with drag-and-drop image upload</li>
             </ul>
 
-            <h2 className="text-lg md:text-xl lg:text-2xl font-semibold text-default-700 mb-4 mt-8 flex items-center">
-            <Info className="w-6 h-6 mr-2" />
-            Applications and Use Cases
-            </h2>
-            <ul className="list-disc list-inside space-y-2 text-sm md:text-base">
-            <li>
-                <strong>Web Design:</strong> Extract exact colors from design mockups or inspiration images for your websites.
-            </li>
-            <li>
-                <strong>Graphic Design:</strong> Create color palettes based on images for consistent branding materials.
-            </li>
-            <li>
-                <strong>Digital Art:</strong> Analyze color compositions in reference images for digital paintings or illustrations.
-            </li>
-            <li>
-                <strong>Photography:</strong> Examine the color balance and dominant hues in your photographs for editing purposes.
-            </li>
-            <li>
-                <strong>Interior Design:</strong> Pick colors from room photos or inspiration images for paint and decor selection.
-            </li>
-            <li>
-                <strong>Fashion:</strong> Extract color palettes from fashion photographs for outfit coordination or textile design.
-            </li>
-            <li>
-                <strong>Brand Identity:</strong> Ensure color consistency across various brand materials by extracting precise color values.
-            </li>
-            <li>
-                <strong>UI/UX Design:</strong> Choose accessible color combinations by analyzing contrast ratios between picked colors.
-            </li>
-            </ul>
-
             <p className="text-sm md:text-base text-default-600 mt-4">
-            Ready to explore the world of colors in your images? Start using our Image Color Picker now and unlock the power of precise color selection and analysis. Whether you're a professional designer working on a complex project or an enthusiast exploring color theory, our tool provides the insights and functionality you need. Try it out today and see how it can enhance your color workflow and inspire your creative projects!
+            Are you ready to explore the world of colors in your images? Now start using our image color picker and unlock the power of accurate color selection and analysis. Whether you are working on a complex project a professional designer or searching an enthusiastic color theory, our equipment provides the required insight and functionality for you. Try it today and see how it can increase your color workflow and inspire your creative projects!
             </p>
         </div>
         </Card>
@@ -535,4 +504,3 @@ export default function ImageColorPicker() {
     </ToolLayout>
   )
 }
-

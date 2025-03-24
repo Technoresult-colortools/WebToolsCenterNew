@@ -180,18 +180,17 @@ export default function ColorExtractor() {
     setImage(null)
     setColors([])
   }
-
   return (
     <ToolLayout
       title="Image Color Extractor"
       description="Effortlessly extract dominant colors from images and create stunning color palettes for your projects"
       toolId="678f382c26f06f912191bca3"
     >
-      <Toaster position="top-right" />
+     <Toaster position="top-right" />
       <div className="flex flex-col gap-8">
         <Card>
           <CardBody className="p-6 bg-default-50 dark:bg-default-100">
-            <h2 className="text-2xl font-bold mb-4">Upload an Image</h2>
+            <h2 className="text-xl sm:text-1xl md:text-2xl font-bold text-default-700 mb-4">Upload an Image</h2>
             {!image ? (
               <label
                 ref={dropZoneRef}
@@ -204,7 +203,7 @@ export default function ColorExtractor() {
                 onDrop={handleDrop}
               >
                 <Upload size={48} />
-                <span className="mt-2 text-base leading-normal">
+                <span className="mt-2 text-sm sm:text-base md:text-md leading-normal text-center block">
                   {isDragging ? "Drop image here" : "Select a file or drag and drop"}
                 </span>
                 <input type="file" className="hidden" onChange={handleFileChange} accept="image/*" />
@@ -246,7 +245,7 @@ export default function ColorExtractor() {
 
             {colors.length > 0 && (
               <div>
-                <h2 className="text-2xl  font-bold mb-4">Extracted Colors</h2>
+                <h2 className="text-xl sm:text-1xl md:text-2xl font-bold text-default-700 mb-4">Extracted Colors</h2>
                 <Tabs
                   aria-label="Color format options"
                   selectedKey={activeTab}
@@ -275,12 +274,12 @@ export default function ColorExtractor() {
                 What is the Image Color Extractor?
                 </h2>
                 <p className="text-sm md:text-base text-default-600 mb-4">
-                The Image Color Extractor is a powerful tool designed to analyze images and extract their color information. It identifies the dominant colors present in the image and provides a comprehensive color palette. This tool is invaluable for designers, artists, and anyone working with color palettes in their projects.
+                The image color is a powerful tool designed to analyze the color tongs and remove their color information. It identifies the major colors present in the image and provides a broad color palette. This tool is invaluable to designers, artists and anyone working with color straps in their projects.
                 </p>
 
                 <div className="my-8">
                 <Image
-                    src="/Images/ImageColorExtractorPreview.png?height=400&width=600"
+                    src="/Images/InfosectionImages/ImageColorExtractorPreview.png?height=400&width=600"
                     alt="Screenshot of the Image Color Extractor interface showing image upload area and color analysis results"
                     width={600}
                     height={400}
@@ -316,23 +315,8 @@ export default function ColorExtractor() {
                 <li>User-friendly interface with drag-and-drop functionality</li>
                 </ul>
 
-                <h2 className="text-lg md:text-xl lg:text-2xl font-semibold text-default-700 mb-4 mt-8 flex items-center">
-                <Info className="w-6 h-6 mr-2" />
-                Applications and Use Cases
-                </h2>
-                <ul className="list-disc list-inside space-y-2 text-sm md:text-base text-default-600">
-                <li><strong>Graphic Design:</strong> Extract color palettes from inspirational images for use in designs.</li>
-                <li><strong>Web Design:</strong> Analyze website screenshots to create cohesive color schemes.</li>
-                <li><strong>Digital Art:</strong> Find the perfect color balance for digital paintings and illustrations.</li>
-                <li><strong>Photography:</strong> Understand the color composition of photographs for editing and retouching.</li>
-                <li><strong>Branding:</strong> Ensure consistent color usage across various brand materials.</li>
-                <li><strong>Interior Design:</strong> Extract color palettes from room photos for decoration ideas.</li>
-                <li><strong>Fashion:</strong> Analyze clothing and accessory colors to create matching outfits.</li>
-                <li><strong>Education:</strong> Teach color theory and analysis in art and design courses.</li>
-                </ul>
-
                 <p className="text-sm md:text-base text-default-600 mt-4">
-                Ready to explore the colors in your images? Start using our Image Color Extractor tool now and unlock the power of color analysis for your projects. Whether you're working on a professional design or just curious about the colors in your favorite photos, our tool provides the insights you need. Try it out and see how it can enhance your color selection process and inspire your creative work!
+                Are you ready to detect colors in your images? Now start using our image color tongs tool and unlock the power of color analysis for your projects. Whether you are working on a professional design or eager about colors in your favorite photos, our tool provides the required insight for you. Try it and see how it can increase your color selection process and inspire your creative work!
                 </p>
             </div>
             </Card>
@@ -368,4 +352,6 @@ function ColorGrid({ colors, format, onCopy }: ColorGridProps) {
     </div>
   )
 }
+
+
 

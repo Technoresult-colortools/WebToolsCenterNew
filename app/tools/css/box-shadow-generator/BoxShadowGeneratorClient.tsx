@@ -631,14 +631,12 @@ const DEFAULT_VALUES = {
               What is CSS Box Shadow Generator?
             </h2>
             <p className="text-default-600 mb-4">
-              The CSS Box Shadow Generator is a powerful and intuitive tool designed for web developers and designers to
-              create complex and visually appealing CSS box shadows. It allows you to easily customize multiple shadow
-              layers, adjust box properties, and generate precise CSS code for your projects.
+            The CSS box shadow generator is a powerful and intuitive tool designed for web developers and designers to appeal to create a complex and visually CSS box shade. This allows you to easily customize multiple shadow layers, adjust box properties and generate an exact CSS code for your projects.
             </p>
 
             <div className="my-8">
               <Image
-                src="/Images/BoxShadowPreview.png?height=400&width=600"
+                src="/Images/InfosectionImages/CSSBoxShadowPreview.png?height=400&width=600"
                 alt="Screenshot of the Enhanced Box Shadow Generator interface showing preview and customization options"
                 width={600}
                 height={400}
@@ -682,40 +680,6 @@ const DEFAULT_VALUES = {
               <li>Copy to clipboard and download as file options</li>
               <li>Reset option to quickly return to default settings</li>
               <li>Responsive design for use on various devices</li>
-            </ul>
-
-            <h2 className="text-xl font-semibold text-default-700 mb-4 mt-8 flex items-center">
-              <Info className="w-6 h-6 mr-2" />
-              Applications and Use Cases
-            </h2>
-            <ul className="list-disc list-inside space-y-2 text-default-600">
-              <li>
-                <strong>Web Design:</strong> Create depth and dimension for elements like cards, buttons, and modals.
-              </li>
-              <li>
-                <strong>UI/UX Design:</strong> Enhance user interfaces with subtle shadows for improved visual
-                hierarchy.
-              </li>
-              <li>
-                <strong>CSS Learning:</strong> Experiment with complex shadow effects to understand CSS properties
-                visually.
-              </li>
-              <li>
-                <strong>Responsive Design:</strong> Test how different shadow styles look on various screen sizes.
-              </li>
-              <li>
-                <strong>Brand Identity:</strong> Develop consistent shadow styles across web properties for cohesive
-                design.
-              </li>
-              <li>
-                <strong>Accessibility:</strong> Create shadows that enhance visibility without compromising readability.
-              </li>
-              <li>
-                <strong>Prototyping:</strong> Quickly generate and test different shadow styles for design mockups.
-              </li>
-              <li>
-                <strong>CSS Art:</strong> Use complex shadow combinations to create artistic effects and illustrations.
-              </li>
             </ul>
 
             <p className="text-default-600 mt-6">

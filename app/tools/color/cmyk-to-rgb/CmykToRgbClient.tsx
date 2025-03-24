@@ -60,8 +60,8 @@ export default function CMYKToRGB() {
       description="Convert CMYK Color Codes to RGB with Real-time Preview"
       toolId="678f382d26f06f912191bca8"
     >
-      <div className="max-w-4xl mx-auto">
-        <Card className="bg-default-50 dark:bg-default-100 shadow-md">
+      <div className="max-w-6xl mx-auto">
+        <Card className="mb-8 bg-default-50 dark:bg-default-100">
           <CardBody className="gap-6 p-6">
             <div className="grid gap-6 md:grid-cols-2">
               {/* Input Section */}
@@ -169,23 +169,15 @@ export default function CMYKToRGB() {
                 About CMYK to RGB Converter
               </h2>
               <p className="text-sm md:text-base text-default-600 mb-4">
-                The CMYK to RGB Converter is a sophisticated tool designed for graphic designers, print professionals,
-                and digital artists. It allows you to accurately convert colors from the CMYK color model (used in
-                print) to the RGB color model (used in digital displays). Whether you're preparing artwork for both
-                print and digital media or simply exploring color spaces, our tool provides precise and easy-to-use
-                color conversion.
+              The CMYK to RGB converter is a refined tool designed for graphic designers, print professionals and digital artists. This allows you to correctly convert the colors from RGB color model (used in digital display) from CMYK color model (used in prints). Whether you are preparing artwork for both print and digital media or just searching for color spaces, our equipment provides accurate and easy-to-use color conversion.
               </p>
               <p className="text-sm md:text-base text-default-600 mb-4">
-                With features like real-time conversion, interactive sliders, and support for multiple color formats
-                (CMYK, RGB, HEX), the CMYK to RGB Converter is an invaluable resource for anyone working across print
-                and digital mediums. It's perfect for ensuring color consistency between different projects, adapting
-                print designs for digital use, or simply understanding the relationship between CMYK and RGB color
-                spaces.
+              With features such as real-time conversion, interactive sliders, and support for many color formats (CMYK, RGB, Hex), RGB converter is an invaluable resource for any person working in rGB converter prints and digital mediums. It is perfect for ensuring color stability between various projects, adopting print designs for digital use or understanding the relationship between CMYK and RGB color spaces only.
               </p>
 
               <div className="my-8">
                 <NextImage
-                  src="/Images/CMYKtoRGBPreview.png?height=400&width=600"
+                  src="/Images/InfosectionImages/CMYKToRGBPreview.png?height=400&width=600"
                   alt="Screenshot of the CMYK to RGB Converter interface showing CMYK input sliders, RGB output, and color preview"
                   width={600}
                   height={400}
@@ -224,45 +216,6 @@ export default function CMYKToRGB() {
                 <li>Reset functionality for quick new color explorations</li>
                 <li>User-friendly interface with clear, easy-to-read color information</li>
                 <li>Accurate conversion algorithms ensuring color fidelity</li>
-              </ul>
-
-              <h2 className="text-xl md:text-2xl font-semibold text-default-700 mb-4 mt-8 flex items-center">
-                <Info className="w-6 h-6 mr-2" />
-                Applications and Use Cases
-              </h2>
-              <ul className="list-disc list-inside text-default-600 space-y-2 text-sm md:text-base">
-                <li>
-                  <strong>Print to Digital Conversion:</strong> Easily adapt print designs for digital use by converting
-                  CMYK colors to RGB.
-                </li>
-                <li>
-                  <strong>Graphic Design:</strong> Ensure color consistency when working on projects that span both
-                  print and digital mediums.
-                </li>
-                <li>
-                  <strong>Web Design:</strong> Convert print color references to web-safe RGB colors for accurate online
-                  representation.
-                </li>
-                <li>
-                  <strong>Digital Photography:</strong> Convert CMYK color profiles to RGB for optimal display on
-                  digital screens.
-                </li>
-                <li>
-                  <strong>Brand Identity:</strong> Maintain color consistency across various brand materials in both
-                  print and digital formats.
-                </li>
-                <li>
-                  <strong>Education:</strong> Learn about color theory and the relationship between CMYK and RGB color
-                  spaces.
-                </li>
-                <li>
-                  <strong>Print Preparation:</strong> Preview how CMYK colors might appear on RGB displays before
-                  printing.
-                </li>
-                <li>
-                  <strong>Color Exploration:</strong> Experiment with color combinations and see how they translate
-                  between color models.
-                </li>
               </ul>
 
               <p className="text-sm md:text-base text-default-600 mt-4">
