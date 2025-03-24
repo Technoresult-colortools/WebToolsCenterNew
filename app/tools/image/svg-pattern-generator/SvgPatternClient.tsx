@@ -144,7 +144,7 @@ export default function SvgPatternGenerator() {
   const [customHeight, setCustomHeight] = useState(630)
   const [customImage, setCustomImage] = useState<string | null>(null)
   const [isModalOpen, setIsModalOpen] = useState(false)
-  const [isImageUploading, setIsImageUploading] = useState(false)
+  const [, setIsImageUploading] = useState(false)
   const fileInputRef = useRef<HTMLInputElement>(null)
   const svgContainerRef = useRef<HTMLDivElement>(null)
 
