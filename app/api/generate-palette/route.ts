@@ -15,16 +15,26 @@ export async function POST(request: Request) {
         'Authorization': `Bearer ${OPENROUTER_API_KEY}`,
       },
       body: JSON.stringify({
-        model: 'deepseek/deepseek-r1:free',
+        model: 'anthropic/claude-3-sonnet-20240229',
         messages: [
           {
             role: 'user',
-            content: `Generate a color palette based on this description: "${prompt}". 
-                      Return exactly 5 colors in a valid JSON array of hex codes (e.g., ["#1A1A2E", "#16213E", "#0F3460", "#E94560", "#533483"]). 
-                      NO additional text, NO explanation, only the JSON array.`,
+            content: `PRECISE COLOR PALETTE GENERATION TASK:
+
+REQUIREMENTS:
+- Generate EXACTLY 5 unique hex color codes
+- Colors must cohesively represent the theme: "${prompt}"
+- Ensure colors are visually harmonious
+- Return ONLY a valid JSON array of hex codes
+- NO additional text or explanation allowed
+
+OUTPUT FORMAT (STRICT):
+["#RRGGBB","#RRGGBB","#RRGGBB","#RRGGBB","#RRGGBB"]
+
+Theme to interpret: ${prompt}`,
           },
         ],
-        max_tokens: 300,
+        max_tokens: 50,
         temperature: 0.3,
       }),
     });
@@ -42,37 +52,38 @@ export async function POST(request: Request) {
     const data = await response.json();
     console.log('OpenRouter Response:', JSON.stringify(data, null, 2));
 
-    // Ensure a valid response structure
+    // Extract and parse colors
     const content = data.choices?.[0]?.message?.content;
+    
     if (!content) {
       return NextResponse.json(
-        { error: 'Invalid response from model', data },
+        { error: 'No content in API response', data },
         { status: 500 }
       );
     }
 
-    // Extract the first valid JSON array from the content
     let colors: string[];
     try {
-      // Use regex to extract the first JSON array
-      const arrayMatch = content.match(/\[\s*"#[A-Fa-f0-9]{6}"\s*,\s*"#[A-Fa-f0-9]{6}"\s*,\s*"#[A-Fa-f0-9]{6}"\s*,\s*"#[A-Fa-f0-9]{6}"\s*,\s*"#[A-Fa-f0-9]{6}"\s*\]/);
+      // Multiple parsing strategies
+      const jsonMatches = content.match(/\[(?:\s*"#[0-9A-Fa-f]{6}"\s*,?){5}\]/);
       
-      if (!arrayMatch) {
-        // Fallback: try to clean the string and parse
-        const cleanedContent = content.split('\n')[0].trim();
-        colors = JSON.parse(cleanedContent);
+      if (jsonMatches) {
+        colors = JSON.parse(jsonMatches[0]);
       } else {
-        colors = JSON.parse(arrayMatch[0]);
+        // Fallback parsing
+        const colorCodes = content.match(/#[0-9A-Fa-f]{6}/g);
+        if (colorCodes && colorCodes.length >= 5) {
+          colors = colorCodes.slice(0, 5);
+        } else {
+          throw new Error('Could not extract color codes');
+        }
       }
-      
-      if (!Array.isArray(colors) || colors.length !== 5) {
-        throw new Error('Invalid color format');
+
+      // Validate colors
+      if (!colors.every(color => /^#[0-9A-Fa-f]{6}$/.test(color))) {
+        throw new Error('Invalid hex codes');
       }
-      
-      // Validate that each color is a valid hex code
-      if (!colors.every(color => /^#[A-Fa-f0-9]{6}$/.test(color))) {
-        throw new Error('Invalid hex code format');
-      }
+
     } catch (err) {
       console.error('Color Parsing Error:', err);
       return NextResponse.json(
