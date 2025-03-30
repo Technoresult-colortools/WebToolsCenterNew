@@ -1,13 +1,13 @@
 /** @type {import('next-sitemap').IConfig} */
 module.exports = {
-    siteUrl: 'https://webtoolscenter.com/',
+    siteUrl: 'https://www.webtoolscenter.com/',
     generateRobotsTxt: true,
     changefreq: 'weekly',
     priority: 0.7,
     exclude: ['/server-sitemap.xml'], // Exclude server-side sitemap if you have one
     robotsTxtOptions: {
       additionalSitemaps: [
-        'https://webtoolcenter.com/server-sitemap.xml', // Only needed if you have a server-side sitemap
+        'https://www.webtoolscenter.com/server-sitemap.xml', // Only needed if you have a server-side sitemap
       ],
     },
     // Transform the URLs if needed
