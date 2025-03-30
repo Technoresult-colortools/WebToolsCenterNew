@@ -2,7 +2,7 @@
 import React, { useState, useRef, useEffect } from "react"
 import { Card, CardBody, Button, Textarea, Tabs, Tab, Spinner, Input } from "@nextui-org/react"
 import { toast } from "react-hot-toast"
-import { Copy, Download, RefreshCw, Code, Eye, Upload, Cpu, FileCode, FileText, Info, BookOpen, Zap, Settings, Lightbulb } from "lucide-react"
+import { Copy, Download, RefreshCw, Code, Eye, Upload, Cpu, FileCode, FileText, Info, BookOpen, Zap, Settings } from "lucide-react"
 import ToolLayout from "@/components/ToolLayout"
 import DOMPurify from "dompurify"
 import Image from "next/image"
@@ -32,12 +32,8 @@ export default function MarkdownConverter() {
     }
   }, []);
 
-  // Update iframe preview when html changes or tab changes to preview
-  useEffect(() => {
-    if (activeTab === "preview" && html && previewIframeRef.current) {
-      updateIframePreview(html);
-    }
-  }, [html, activeTab]);
+
+  
 
   const sanitizeAndFormatHtml = (rawHtml: string) => {
     // Configuration that preserves interactive elements
@@ -241,7 +237,7 @@ ${sanitized}
       }
       
       // Enhance markdown button syntax to HTML buttons with interactivity
-      let enhancedHtml = enhanceButtonsInHtml(parsedHtml);
+      const enhancedHtml = enhanceButtonsInHtml(parsedHtml);
       
       // Sanitize the HTML for security while preserving interactive elements
       const sanitizedHtml = DOMPurify.sanitize(enhancedHtml, {
@@ -292,6 +288,13 @@ ${sanitized}
       iframeDoc.close();
     }
   };
+
+    // Update iframe preview when html changes or tab changes to preview
+    useEffect(() => {
+      if (activeTab === "preview" && html && previewIframeRef.current) {
+        updateIframePreview(html);
+      }
+    }, [html, activeTab, updateIframePreview]);
 
   const handleInputChange = (value: string) => {
     setMarkdown(value);

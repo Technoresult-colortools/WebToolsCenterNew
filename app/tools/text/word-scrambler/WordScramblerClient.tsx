@@ -16,12 +16,8 @@ import {
   BookIcon,
   Info,
   BookOpen,
-  Scissors,
-  Lightbulb,
-  ZapIcon,
   Zap
 } from "lucide-react"
-import Link from "next/link"
 import Image from "next/image"
 
 const MAX_CHARS = 10000
@@ -60,7 +56,7 @@ const scrambleWord = (word: string, method: ScrambleMethod, options: ScrambleOpt
   const trailingPunct = word.match(/[^\w]+$/) || [""]
   
   // Get the actual word without punctuation
-  let cleanWord = word.replace(/^[^\w]+/, "").replace(/[^\w]+$/, "")
+  const cleanWord = word.replace(/^[^\w]+/, "").replace(/[^\w]+$/, "")
   
   // Skip short words or common words if specified
   if (cleanWord.length < options.minWordLength || 
@@ -108,7 +104,7 @@ const scrambleWord = (word: string, method: ScrambleMethod, options: ScrambleOpt
     case SCRAMBLE_METHODS.VOWEL_SWAP:
       // Swap vowels with each other, keep consonants
       const vowels = middleChars.filter(c => /[aeiou]/i.test(c))
-      let shuffledVowels = [...vowels]
+      const shuffledVowels = [...vowels]
         for (let i = 0; i < shuffledVowels.length; i++) {
           const j = Math.floor(Math.random() * shuffledVowels.length)
           const k = Math.floor(Math.random() * shuffledVowels.length)

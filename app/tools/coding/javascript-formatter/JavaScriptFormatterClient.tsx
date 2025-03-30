@@ -12,7 +12,6 @@ import prettier from "prettier/standalone"
 import parserBabel from "prettier/plugins/babel"
 import parserTypeScript from "prettier/plugins/typescript"
 import parserEstree from "prettier/plugins/estree"
-import parserPostCSS from "prettier/plugins/postcss"
 import ToolLayout from "@/components/ToolLayout"
 import Image from "next/image"
 

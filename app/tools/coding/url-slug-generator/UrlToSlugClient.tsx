@@ -10,12 +10,11 @@ import {
   Select,
   SelectItem,
   Slider,
-  Textarea,
   Tooltip,
 
 } from "@nextui-org/react"
 import { Toaster, toast } from 'react-hot-toast'
-import { BookOpen, Copy, Info, Lightbulb, Download, Eye, EyeOff, AlertTriangle, Shield, Settings, RefreshCcw, Upload, Clipboard } from 'lucide-react'
+import { BookOpen,  Info, Lightbulb, Download, Eye, EyeOff, AlertTriangle, Shield, Settings, RefreshCcw, Upload, Clipboard } from 'lucide-react'
 import ToolLayout from '@/components/ToolLayout'
 import Image from 'next/image'
 import { FaMagic } from 'react-icons/fa'
@@ -50,7 +49,7 @@ export default function URLSlugCreator() {
   const [casing, setCasing] = useState('lowercase')
   const [maxLength, setMaxLength] = useState(50)
   const [removeStopWords, setRemoveStopWords] = useState(true)
-  const [customReplacements, setCustomReplacements] = useState('')
+  const [customReplacements,] = useState('')
   const [preserveNumbers, setPreserveNumbers] = useState(true)
   const [transliteration, setTransliteration] = useState('none')
   const [showPassword, setShowPassword] = useState(false)

@@ -134,7 +134,7 @@ export default function DuplicateLineRemover() {
               if (!regex.test(line)) {
                 continue
               }
-            } catch (e) {
+            } catch {
               // Skip regex on error, but continue processing
             }
           }
@@ -173,7 +173,7 @@ export default function DuplicateLineRemover() {
         let outputLines: string[] = []
         if (filterMode === "highlight") {
           // For highlight mode, include all lines but mark duplicates
-          outputLines = inputText.split(customSeparator || "\n").map((line, i) => {
+          outputLines = inputText.split(customSeparator || "\n").map((line,) => {
             const processedLine = trimWhitespace ? line.trim() : line
             const key = caseSensitive ? processedLine : processedLine.toLowerCase()
             const entry = seen.get(key)

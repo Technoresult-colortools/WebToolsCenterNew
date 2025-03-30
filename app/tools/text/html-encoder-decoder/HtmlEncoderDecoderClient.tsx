@@ -1,7 +1,7 @@
 "use client"
 
 import type React from "react"
-import { useState, useCallback } from "react"
+import { useState, useCallback, } from "react"
 import Image from "next/image"
 import { Card, CardBody, Button, Textarea, Select, SelectItem, Switch } from "@nextui-org/react"
 import {
@@ -15,7 +15,6 @@ import {
   Wand2,
   Info,
   BookOpen,
-  Lightbulb,
 } from "lucide-react"
 import { toast } from "react-hot-toast"
 import ToolLayout from "@/components/ToolLayout"

@@ -1,7 +1,7 @@
 "use client"
 
 import type React from "react"
-import { useState, useCallback, useRef, useEffect } from "react"
+import { useState, useRef, useEffect } from "react"
 import { Card, CardBody, Button, Select, SelectItem, Textarea, Switch, Tabs, Tab, Slider, Input } from "@nextui-org/react"
 import Image from "next/image"
 import {
@@ -24,15 +24,6 @@ import { toast } from "react-hot-toast"
 import ToolLayout from "@/components/ToolLayout"
 import crypto from "crypto"
 
-const MAX_CHARS = 10000
-
-const encodingOptions = [
-  { value: "utf8", label: "UTF-8" },
-  { value: "ascii", label: "ASCII" },
-  { value: "base64", label: "Base64" },
-] as const
-
-type Encoding = (typeof encodingOptions)[number]["value"]
 type Preset = {
   input: string
   encoding: "utf8" | "ascii" | "base64"

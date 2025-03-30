@@ -7,7 +7,7 @@ import { FileLock, FileLock2, Upload, Copy, RefreshCw, Check, Info, BookOpen, Li
 import { toast } from "react-hot-toast"
 import ToolLayout from "@/components/ToolLayout"
 import Image from "next/image"
-import Link from "next/link"
+
 
 const MAX_FILE_SIZE_MB = 2 // 2MB limit
 

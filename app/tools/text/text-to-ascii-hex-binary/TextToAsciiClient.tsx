@@ -3,7 +3,6 @@
 import React, { useState, useEffect, useCallback } from "react"
 import { Card, CardBody, Button, Textarea, Select, SelectItem, Switch, Tabs, Tab } from "@nextui-org/react"
 import Image from "next/image"
-import Link from "next/link"
 import {
   Copy,
   RefreshCw,
