@@ -270,31 +270,19 @@ export default function TextToAsciiHexBinary() {
         </Card>
 
         {/* Info Section */}
-        <Card className="mt-8 bg-default-50 dark:bg-default-100 p-4 md:p-8">
+        <Card className="bg-default-50 dark:bg-default-100 p-4 md:p-8">
           <div className="rounded-xl p-2 md:p-4 max-w-4xl mx-auto">
             <h2 className="text-lg md:text-xl lg:text-2xl font-semibold text-default-700 mb-4 flex items-center">
               <Info className="w-6 h-6 mr-2" />
               What is the Text to ASCII/Hex/Binary Converter?
             </h2>
             <p className="text-sm md:text-base text-default-600 mb-4">
-              The Text to ASCII/Hex/Binary Converter is a versatile tool designed for developers, cryptographers, and
-              digital enthusiasts. It offers quick and accurate conversions between plain text and various encoded
-              formats, all wrapped up in a{" "}
-              <Link href="#how-to-use" className="text-primary hover:underline">
-                user-friendly interface
-              </Link>
-              . Whether you need to convert text for programming, data analysis, or educational purposes, our converter
-              has got you covered.
-            </p>
-            <p className="text-sm md:text-base text-default-600 mb-4">
-              With support for ASCII, Hexadecimal, Binary, and Base64 conversions, it's like having a universal
-              translator for text and its digital representations right at your fingertips. Say goodbye to manual
-              conversions and hello to efficiency!
+            The Text to ASCII/Hex/Binary Converter is a multi-purpose application for developers, cryptographers, and digital hobbies. The app provides fast and accurate translations between basic text and several encoded formats in an easy-to-use interface for converting text for programming, data analysis, or educational purposes.This converter provides guaranteed translations back and forth between four formats, ASCII, Hexadecimal, Binary, and Base64, so you don't need to concern yourself with having to look up conversions again. It’s the ultimate stepping stone towards efficiency.
             </p>
 
             <div className="my-8">
               <Image
-                src="/Images/TextToASCIIPreview.png"
+                src="/Images/InfosectionImages/TexttoASCIIPreview.png?height=400&width=600"
                 alt="Screenshot of the Text to ASCII/Hex/Binary Converter interface showing input area, conversion options, and multiple output formats"
                 width={600}
                 height={400}

@@ -15,21 +15,24 @@ export async function POST(request: Request) {
         'Authorization': `Bearer ${OPENROUTER_API_KEY}`,
       },
       body: JSON.stringify({
-        model: 'anthropic/claude-3-sonnet-20240229',
+        model: 'mistralai/mistral-7b-instruct:free',
         messages: [
           {
+            role: 'system',
+            content: 'You are a precise color palette generator that returns ONLY a JSON array of hex codes.'
+          },
+          {
             role: 'user',
-            content: `PRECISE COLOR PALETTE GENERATION TASK:
+            content: `Generate EXACTLY 5 hex color codes for: ${prompt}
 
-REQUIREMENTS:
-- Generate EXACTLY 5 unique hex color codes
-- Colors must cohesively represent the theme: "${prompt}"
-- Ensure colors are visually harmonious
-- Return ONLY a valid JSON array of hex codes
-- NO additional text or explanation allowed
+STRICT REQUIREMENTS:
+- Return ONLY a valid JSON array of 5 hex color codes
+- Colors should cohesively represent the theme
+- No additional text or explanation
+- Ensure color harmony and visual appeal
 
-OUTPUT FORMAT (STRICT):
-["#RRGGBB","#RRGGBB","#RRGGBB","#RRGGBB","#RRGGBB"]
+FORMAT EXAMPLE: 
+["#1A1A2E", "#16213E", "#0F3460", "#E94560", "#533483"]
 
 Theme to interpret: ${prompt}`,
           },

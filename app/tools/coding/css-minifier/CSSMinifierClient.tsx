@@ -274,12 +274,12 @@ export default function CSSMinifier() {
               About CSS Minifier and Beautifier
             </h2>
             <p className="text-sm md:text-base text-default-600 mb-4">
-              Our CSS Minifier and Beautifier is a powerful tool designed to optimize and format your CSS code. It offers two main functions: CSS Minification for reducing file size, and CSS Beautification for improving code readability. Whether you're a web developer looking to optimize your stylesheets or a designer wanting to clean up your CSS, this tool can significantly enhance your workflow and website performance.
+            Our CSS Minifier and Beautiful are a powerful tool designed to customize and format your CSS code. This provides two main functions: CSS minishes to reduce file size, and CSS beautification to improve code readability. Whether you are a web developer who is looking to customize your stylificheet or a designer who wants to clean your CSS, this tool can greatly increase your workflow and website performance.
             </p>
 
             <div className="my-8">
               <Image
-                src="/Images/CSSMinifierPreview.png"
+                src="/Images/InfosectionImages/CSSMinifierPreview.png?height=400&width=600"
                 alt="Screenshot of the CSS Minifier and Beautifier interface showing input area, options, and output"
                 width={600}
                 height={400}

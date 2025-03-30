@@ -1,3 +1,4 @@
+
 "use client"
 
 import type React from "react"
@@ -9,7 +10,9 @@ import { Prism as SyntaxHighlighter } from "react-syntax-highlighter"
 import { atomDark } from "react-syntax-highlighter/dist/esm/styles/prism"
 import prettier from "prettier/standalone"
 import parserBabel from "prettier/plugins/babel"
-import estree from "prettier/plugins/estree"
+import parserTypeScript from "prettier/plugins/typescript"
+import parserEstree from "prettier/plugins/estree"
+import parserPostCSS from "prettier/plugins/postcss"
 import ToolLayout from "@/components/ToolLayout"
 import Image from "next/image"
 
@@ -25,6 +28,7 @@ export default function JavaScriptFormatter() {
   const [compressCode, setCompressCode] = useState(false)
   const [sortImports, setSortImports] = useState(false)
   const [removeConsoleLog, setRemoveConsoleLog] = useState(false)
+  const [selectedParser, setSelectedParser] = useState<'babel' | 'typescript'>('babel')
   const [fileName, setFileName] = useState("")
   const fileInputRef = useRef<HTMLInputElement>(null)
 
@@ -36,9 +40,21 @@ export default function JavaScriptFormatter() {
 
     setIsFormatting(true)
     try {
+      // Validate input before formatting
+      if (inputJS.length > 1000000) {
+        toast.error("File is too large. Please use a smaller JavaScript file.")
+        setIsFormatting(false)
+        return
+      }
+
+      // Determine plugins based on selected parser
+      const plugins = selectedParser === 'babel' 
+        ? [parserBabel, parserEstree] 
+        : [parserTypeScript, parserEstree]
+
       let formattedCode = await prettier.format(inputJS, {
-        parser: "babel",
-        plugins: [parserBabel, estree],
+        parser: selectedParser,
+        plugins: plugins,
         useTabs: useTabs,
         tabWidth: indentSize,
         singleQuote: singleQuotes,
@@ -46,6 +62,7 @@ export default function JavaScriptFormatter() {
         printWidth: compressCode ? Number.POSITIVE_INFINITY : 80,
       })
 
+      // Additional formatting options
       if (removeComments) {
         formattedCode = formattedCode.replace(/\/\*[\s\S]*?\*\/|([^\\:]|^)\/\/.*$/gm, "$1")
       }
@@ -58,16 +75,79 @@ export default function JavaScriptFormatter() {
       }
 
       if (removeConsoleLog) {
-        formattedCode = formattedCode.replace(/console\.log$$.*$$;?/g, "")
+        formattedCode = formattedCode.replace(/console\.log\(.*\);?/g, "")
       }
 
       setOutputJS(formattedCode)
       toast.success("JavaScript formatted successfully!")
     } catch (error) {
-      console.error("Formatting error:", error)
-      toast.error("Error formatting JavaScript. Please check your input.")
+      console.error("Full Formatting Error:", error)
+      
+      // More detailed error handling
+      if (error instanceof Error) {
+        let errorMessage = "Error formatting JavaScript."
+        
+        // Specific error type checks
+        if (error.message.includes("SyntaxError")) {
+          errorMessage = "Syntax error in your JavaScript. Please check your code."
+        } else if (error.message.includes("Cannot parse")) {
+          errorMessage = "Unable to parse the JavaScript file. Try switching parser or checking syntax."
+        } else if (error.message.includes("Unexpected token")) {
+          errorMessage = "Unexpected token found. Check for syntax errors in your code."
+        } else if (error.message.includes("Missing visitor keys")) {
+          errorMessage = "Parsing error. Try switching to TypeScript parser or checking for experimental features."
+        }
+        
+        toast.error(errorMessage)
+        
+        // Log additional context for debugging
+        console.error("Error Details:", {
+          name: error.name,
+          message: error.message,
+          stack: error.stack
+        })
+      } else {
+        toast.error("Unexpected error formatting JavaScript.")
+      }
     } finally {
       setIsFormatting(false)
+    }
+  }
+  const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (file) {
+      // Validate file type
+      const allowedExtensions = ['.js', '.jsx', '.ts', '.tsx']
+      const fileExtension = '.' + file.name.split('.').pop()?.toLowerCase()
+      
+      if (!allowedExtensions.includes(fileExtension)) {
+        toast.error(`Unsupported file type. Please upload ${allowedExtensions.join(', ')} files.`)
+        return
+      }
+
+      // Validate file size (limit to 5MB)
+      if (file.size > 5 * 1024 * 1024) {
+        toast.error("File is too large. Maximum file size is 5MB.")
+        return
+      }
+
+      setFileName(file.name)
+      const reader = new FileReader()
+      reader.onload = (e) => {
+        const content = e.target?.result as string
+        
+        // Debug logging
+        console.log("File Upload - Raw Content:", content)
+        console.log("File Upload - Content Length:", content.length)
+        
+        setInputJS(content)
+        toast.success("File uploaded successfully!")
+      }
+      reader.onerror = (error) => {
+        console.error("File Reading Error:", error)
+        toast.error("Error reading file. Please try again.")
+      }
+      reader.readAsText(file)
     }
   }
 
@@ -107,22 +187,6 @@ export default function JavaScriptFormatter() {
     toast.success("Download started!")
   }
 
-  const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0]
-    if (file) {
-      setFileName(file.name)
-      const reader = new FileReader()
-      reader.onload = (e) => {
-        const content = e.target?.result as string
-        setInputJS(content)
-        toast.success("File uploaded successfully!")
-      }
-      reader.onerror = () => {
-        toast.error("Error reading file. Please try again.")
-      }
-      reader.readAsText(file)
-    }
-  }
 
   return (
     <ToolLayout
@@ -165,6 +229,24 @@ export default function JavaScriptFormatter() {
                 </div>
               </Tab>
             </Tabs>
+            {/* Add Parser Selection */}
+            <div className="mt-4">
+              <h3 className="text-lg font-semibold mb-2">Parser Selection</h3>
+              <div className="flex space-x-4">
+                <Button 
+                  color={selectedParser === 'babel' ? 'primary' : 'default'}
+                  onPress={() => setSelectedParser('babel')}
+                >
+                  Babel Parser
+                </Button>
+                <Button 
+                  color={selectedParser === 'typescript' ? 'primary' : 'default'}
+                  onPress={() => setSelectedParser('typescript')}
+                >
+                  TypeScript Parser
+                </Button>
+              </div>
+            </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
               {/* Switch Group */}
@@ -264,16 +346,13 @@ export default function JavaScriptFormatter() {
               What is JavaScript Formatter?
             </h2>
             <p className="text-sm md:text-base text-default-600 mb-4">
-              The JavaScript Formatter is a powerful tool designed to clean up and standardize your JavaScript code. It
-              uses Prettier, a popular code formatting engine, to ensure consistent and readable JavaScript output.
-              Whether you're a web developer, software engineer, or just someone working with JavaScript, this tool can
-              help you maintain clean and organized code.
+            The JavaScript Formatter is a useful tool that helps you clean up and standardize your JavaScript code. It runs Prettier, a popular code formatting engine to produce consistent and easy to read JavaScript code. If you are a web developer, a software engineer, or just someone working with JavaScript, you can utilize this tool to help you keep your code clean and organized.
             </p>
 
             {/* Image Preview */}
             <div className="my-8">
               <Image
-                src="/Images/JavaScriptFormatterPreview.png"
+                src="/Images/InfosectionImages/JavaScriptFormatterPreview.png?height=400&width=600"
                 alt="Screenshot of the JavaScript Formatter interface showing input, formatting options, and output"
                 width={600}
                 height={400}

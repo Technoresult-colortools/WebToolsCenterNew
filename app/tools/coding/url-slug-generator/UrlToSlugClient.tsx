@@ -11,12 +11,14 @@ import {
   SelectItem,
   Slider,
   Textarea,
+  Tooltip,
 
 } from "@nextui-org/react"
 import { Toaster, toast } from 'react-hot-toast'
-import { BookOpen, Copy, Info, Lightbulb, Download, Eye, EyeOff, AlertTriangle, Shield, Settings, RefreshCcw, Upload } from 'lucide-react'
+import { BookOpen, Copy, Info, Lightbulb, Download, Eye, EyeOff, AlertTriangle, Shield, Settings, RefreshCcw, Upload, Clipboard } from 'lucide-react'
 import ToolLayout from '@/components/ToolLayout'
 import Image from 'next/image'
+import { FaMagic } from 'react-icons/fa'
 
 const separators = [
   { value: 'hyphen', label: 'Hyphen (-)', char: '-' },
@@ -186,69 +188,107 @@ export default function URLSlugCreator() {
       toolId="678f382e26f06f912191bcb7"
     >
       <Toaster position="top-right" />
-  
-      <div className="flex flex-col gap-8">
-        <Card className="bg-default-50 dark:bg-default-100">
-          <CardBody className="gap-4 p-6">
-          <div>
-            <p className="text-default-700 mb-2">Input Text</p>
-            <div className="flex flex-col sm:flex-row gap-2 flex-wrap">
-                <Input
-                value={input}
-                onChange={(e) => setInput(e.target.value)}
-                variant="bordered"
-                placeholder="Enter text to convert to a slug"
-                type={showPassword ? "text" : "password"}
-                className="w-full sm:w-auto flex-grow min-w-0"
-                endContent={
-                    <button onClick={() => setShowPassword(!showPassword)} className="p-2">
-                    {showPassword ? <EyeOff className="text-default-400 inline" /> : <Eye className="text-default-400 inline" />}
-                    </button>
-                }
-                />
-                <Button 
+      <div className="flex flex-col gap-6">
+   {/* Input and Slug Generation Section */}
+   <Card className="w-full bg-default-50/70 dark:bg-default-100/70 backdrop-blur-sm border border-default-200/50">
+        <CardBody className="space-y-6 p-6">
+          <div className="space-y-4">
+            <div className="flex items-center justify-between">
+              <h2 className="text-xl font-semibold text-default-700 flex items-center">
+                <FaMagic className="w-6 h-6 mr-2 text-primary" />
+                Slug Generator
+              </h2>
+              <Button 
+                size="sm" 
                 color="success" 
-                className="w-full sm:w-auto flex items-center justify-center" 
+                variant="flat" 
                 onPress={handleRandomize}
-                >
-                <RefreshCcw className="h-5 w-5 mr-2 inline" />
+                className="flex items-center"
+              >
+                <RefreshCcw className="w-4 h-4 mr-2" />
                 Randomize
-                </Button>
-            </div>
+              </Button>
             </div>
 
-            <div>
-            <p className="text-default-700 mb-2">Generated Slug</p>
-            <div className="flex flex-col sm:flex-row gap-2 flex-wrap">
+            {/* Input Section */}
+            <div className="space-y-2">
+              <label className="text-default-700 font-medium">Input Text</label>
+              <div className="relative">
+                <Input
+                  value={input}
+                  onChange={(e) => setInput(e.target.value)}
+                  variant="bordered"
+                  placeholder="Enter text to convert to a slug"
+                  type={showPassword ? "text" : "password"}
+                  className="w-full"
+                  classNames={{
+                    input: "placeholder:text-default-400/70",
+                    
+                  }}
+                  endContent={
+                    <button 
+                      onClick={() => setShowPassword(!showPassword)} 
+                      className="text-default-400 hover:text-primary transition-colors"
+                    >
+                      {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                    </button>
+                  }
+                />
+              </div>
+            </div>
+
+            {/* Slug Output Section */}
+            <div className="space-y-2">
+              <label className="text-default-700 font-medium">Generated Slug</label>
+              <div className="flex space-x-2">
                 <Input 
-                value={slug} 
-                variant="bordered" 
-                readOnly 
-                className="flex-grow min-w-0 w-full sm:w-auto"
+                  value={slug} 
+                  variant="bordered" 
+                  readOnly 
+                  className="flex-grow"
+                  classNames={{
+                    input: "text-primary font-mono",
+                    
+                  }}
                 />
                 <Button 
-                color="primary" 
-                className="w-full sm:w-auto flex items-center justify-center" 
-                onPress={copyToClipboard}
+                  color="primary" 
+                  variant="solid" 
+                  isIconOnly
+                  onPress={copyToClipboard}
+                  aria-label="Copy Slug"
                 >
-                <Copy className="h-4 w-4 mr-2 inline" />
-                Copy
+                  <Clipboard className="w-5 h-5" />
                 </Button>
                 <Button 
-                color="secondary" 
-                className="w-full sm:w-auto flex items-center justify-center" 
-                onPress={handleDownload}
+                  color="secondary" 
+                  variant="solid" 
+                  isIconOnly
+                  onPress={handleDownload}
+                  aria-label="Download Slug"
                 >
-                <Download className="h-4 w-4 mr-2 inline" />
-                Download
+                  <Download className="w-5 h-5" />
                 </Button>
+              </div>
             </div>
-            </div>
+          </div>
+        </CardBody>
+      </Card>
 
-  
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div>
-                <p className="text-default-700 mb-2">Separator</p>
+      {/* Configuration Section */}
+      <Card className="w-full bg-default-50/70 dark:bg-default-100/70 backdrop-blur-sm border border-default-200/50">
+        <CardBody className="space-y-6 p-6">
+          <div className="space-y-4">
+            <h2 className="text-xl font-semibold text-default-700 flex items-center">
+              <Settings className="w-6 h-6 mr-2 text-primary" />
+              Slug Configuration
+            </h2>
+
+            {/* Configuration Grid */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {/* Separator Configuration */}
+              <div className="space-y-2">
+                <label className="text-default-700 font-medium">Separator</label>
                 <Select
                   selectedKeys={[separator]}
                   variant='bordered'
@@ -261,18 +301,23 @@ export default function URLSlugCreator() {
                   ))}
                 </Select>
               </div>
+
+              {/* Custom Separator (if selected) */}
               {separator === 'custom' && (
-                <div>
-                  <p className="text-default-700 mb-2">Custom Separator</p>
+                <div className="space-y-2">
+                  <label className="text-default-700 font-medium">Custom Separator</label>
                   <Input
                     value={customSeparator}
                     variant='bordered'
                     onChange={(e) => setCustomSeparator(e.target.value)}
                     placeholder="Enter custom separator"
+                 
                   />
                 </div>
               )}
-              <div>
+
+              {/* Casing */}
+              <div className="space-y-2">
                 <p className="text-default-700 mb-2">Casing</p>
                 <Select
                   selectedKeys={[casing]}
@@ -286,7 +331,9 @@ export default function URLSlugCreator() {
                   ))}
                 </Select>
               </div>
-              <div>
+
+              {/* Transliteration */}
+              <div className="space-y-2">
                 <p className="text-default-700 mb-2">Transliteration</p>
                 <Select
                   selectedKeys={[transliteration]}
@@ -302,8 +349,12 @@ export default function URLSlugCreator() {
               </div>
             </div>
   
-            <div>
-              <p className="text-default-700 mb-2">Maximum Length: {maxLength}</p>
+            {/* Maximum Length Slider */}
+            <div className="space-y-2">
+              <div className="flex justify-between items-center">
+                <p className="text-default-700">Maximum Length: {maxLength}</p>
+                <span className="text-default-500 text-sm">(10-100 characters)</span>
+              </div>
               <Slider
                 aria-label="Maximum Length"
                 step={1}
@@ -311,69 +362,76 @@ export default function URLSlugCreator() {
                 minValue={10}
                 value={maxLength}
                 onChange={(value) => setMaxLength(value as number)}
+         
               />
             </div>
   
-            <div className="flex items-center gap-2">
-              <Switch
-                isSelected={removeStopWords}
-                onValueChange={setRemoveStopWords}
-              />
-              <p className="text-default-700">Remove Stop Words</p>
+            {/* Toggle Switches */}
+            <div className="space-y-2">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center space-x-2">
+                  <Switch
+                    isSelected={removeStopWords}
+                    onValueChange={setRemoveStopWords}
+                    color="primary"
+                  />
+                  <label className="text-default-700">Remove Stop Words</label>
+                </div>
+                <Tooltip content="Removes common words like 'and', 'the', 'is' from text." className="text-default-700">
+                  <Info className="text-default-400 w-4 h-4 cursor-pointer" />
+                </Tooltip>
+              </div>
+              <div className="flex items-center justify-between">
+                <div className="flex items-center space-x-2">
+                  <Switch
+                    isSelected={preserveNumbers}
+                    onValueChange={setPreserveNumbers}
+                    color="primary"
+                  />
+                  <label className="text-default-700">Preserve Numbers</label>
+                </div>
+                <Tooltip content="Keeps numbers in the text instead of filtering them out." className="text-default-700">
+                  <Info className="text-default-400 w-4 h-4 cursor-pointer" />
+                </Tooltip>
+              </div>
             </div>
   
-            <div className="flex items-center gap-2">
-              <Switch
-                isSelected={preserveNumbers}
-                onValueChange={setPreserveNumbers}
-              />
-              <p className="text-default-700">Preserve Numbers</p>
+            {/* File Upload */}
+            <div className="space-y-2">
+              <p className="text-default-700 mb-2">Upload File</p>
+              <label className="flex flex-col items-center justify-center w-full p-4 border-2 border-dashed border-gray-300 rounded-lg cursor-pointer hover:border-primary transition">
+                <input 
+                  type="file" 
+                  className="hidden" 
+                  onChange={handleFileUpload} 
+                />
+                <Upload className="h-6 w-6 text-gray-500" />
+                <span className="text-gray-500 text-sm mt-2">Choose a file</span>
+              </label>
             </div>
-  
-            <div>
-              <p className="text-default-700 mb-2">Custom Replacements</p>
-              <Textarea
-                value={customReplacements}
-                variant='bordered'
-                onChange={(e) => setCustomReplacements(e.target.value)}
-                placeholder="Enter custom replacements (one per line)&#10;Example:&#10;& : and&#10;@ : at"
-              />
-            </div>
-  
-            <div>
-                <p className="text-default-700 mb-2">Upload File</p>
-                
-                {/* Styled Upload Section */}
-                <label className="flex flex-col items-center justify-center w-full p-4 border-2 border-dashed border-gray-300 rounded-lg cursor-pointer hover:border-primary transition">
-                    <input 
-                    type="file" 
-                    className="hidden" 
-                    onChange={handleFileUpload} 
-                    />
-                    <Upload className="h-6 w-6 text-gray-500" />
-                    <span className="text-gray-500 text-sm mt-2">Choose a file</span>
-                </label>
-            </div>
-          </CardBody>
-        </Card>
+          </div>
+        </CardBody>
+      </Card>
+     
 
        {/* Info Section */}
-        <Card className="mt-8 bg-default-50 dark:bg-default-100 p-4 md:p-8">
+        <Card className="bg-default-50 dark:bg-default-100">
+        <CardBody className="p-6">
         <div className="rounded-xl  p-2 md:p-4 max-w-4xl mx-auto">
             <h2 className="text-lg md:text-xl lg:text-2xl font-semibold text-default-700 mb-4 flex items-center">
             <Info className="w-6 h-6 mr-2" />
             What is the URL Slug Creator?
             </h2>
             <p className="text-sm md:text-base text-default-600 mb-4">
-            The URL Slug Creator is an advanced tool designed to convert any text into clean, SEO-friendly URL slugs. It offers a wide range of customization options to cater to various slug generation needs, making it ideal for content management systems, blogs, e-commerce platforms, and any web application requiring URL-friendly text conversion.
+            The URL slug creator is an advanced tool designed to convert any text into a clean, SEO-friendly URL slug. It offers a wide range of adapt options to meet the needs of various slug generation, making it ideal for any web application requiring material management systems, blogs, e-commerce platforms and URL-friendly text conversion.
             </p>
             <p className="text-sm md:text-base text-default-600 mb-4">
-            With support for multiple separators, casing options, and advanced features like transliteration and custom replacements, it's like having a Swiss Army knife for URL generation right at your fingertips. Say goodbye to manual slug creation and hello to efficiency!
+            With support for many dividers, covering options, and advanced features such as translitation and custom replacement, it is like a Swiss army knife for the URL generation on your fingers. Say goodbye to manual slug creations and hello to efficiency!
             </p>
 
             <div className="my-8">
             <Image
-                src="/Images/URLSlugPreview.png?height=400&width=600"
+                src="/Images/InfosectionImages/URLSlugPreview.png?height=400&width=600"
                 alt="Screenshot of the URL Slug Creator interface"
                 width={600}
                 height={400}
@@ -469,6 +527,7 @@ export default function URLSlugCreator() {
             The URL Slug Creator is a powerful tool for generating clean, SEO-friendly URLs. By understanding its features and following best practices, you can create effective slugs that improve your website's usability and search engine performance. Remember to always consider your specific use case and adjust the settings accordingly for optimal results.
             </p>
         </div>
+        </CardBody>
         </Card>
         </div>
     </ToolLayout>

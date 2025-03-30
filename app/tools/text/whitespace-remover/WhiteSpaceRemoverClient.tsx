@@ -75,7 +75,7 @@ export default function WhiteSpaceRemover() {
       title="Whitespace Remover"
       description="Clean up text by removing unwanted white spaces"
       toolId="678f382826f06f912191bc80"
-    >f
+    >
       <div className="flex flex-col gap-8">
         <Card className="bg-default-50 dark:bg-default-100">
           <CardBody className="p-6">
@@ -145,24 +145,12 @@ export default function WhiteSpaceRemover() {
                 What is the White Space Remover?
               </h2>
               <p className="text-sm md:text-base text-default-600 mb-4">
-                The White Space Remover is a powerful text cleaning tool designed for writers, developers, editors, and
-                anyone who needs to ensure consistent text formatting. It goes beyond simple space removal, offering
-                customizable options to clean and optimize your text. With its{" "}
-                <Link href="#how-to-use" className="text-primary hover:underline">
-                  user-friendly interface
-                </Link>{" "}
-                and advanced functionality, it's the perfect companion for improving text readability and maintaining
-                consistent formatting across your documents.
-              </p>
-              <p className="text-sm md:text-base text-default-600 mb-4">
-                Whether you're cleaning up code, formatting articles, or preparing data for analysis, our White Space
-                Remover provides you with the flexibility and control you need. It's like having a personal text cleaner
-                right in your browser, tailored to your specific requirements!
+              The White Space Remover is a highly effective text cleaning tool tailored for writers, developers, editors, or anyone needing to maintain a consistent text appearance. It does not merely remove white spaces; it provides options for customizing the cleaning and optimizing your text. The White Space Remover is a handy tool, easy to use and powerful, which can be used to make text more readable and keep it formatted consistently across your use of the document or text.If you need to clean up any sizing in your code, formatting for an article, or prepare data for analysis, the White Space Remover provides you an opportunity for flexibility and control. It's like having a unique text cleaner in your browser and can be configured to just the way you need!
               </p>
 
               <div className="my-8">
                 <Image
-                  src="/Images/WhiteSpaceRemoverPreview.png"
+                  src="/Images/InfosectionImages/WhitespaceRemoverPreview.png?height=400&width=600"
                   alt="Screenshot of the White Space Remover interface showing text input area, cleaning options, and action buttons"
                   width={600}
                   height={400}
@@ -256,42 +244,6 @@ export default function WhiteSpaceRemover() {
                 <li>
                   <RefreshCw className="w-4 h-4 inline-block mr-1" /> <strong>Quick Reset:</strong> Clear function for
                   easy start-over
-                </li>
-              </ul>
-
-              <h2 className="text-xl md:text-2xl font-semibold text-default-700 mb-4 mt-8 flex items-center">
-                <Lightbulb className="w-6 h-6 mr-2" />
-                Practical Applications
-              </h2>
-              <p className="text-sm md:text-base text-default-600 mb-4">
-                The White Space Remover tool can be invaluable in various scenarios:
-              </p>
-              <ul className="list-disc list-inside space-y-2 text-sm md:text-base text-default-600">
-                <li>
-                  <strong>Code Cleaning:</strong> Remove unnecessary white spaces in code for better readability and
-                  consistency
-                </li>
-                <li>
-                  <strong>Data Preparation:</strong> Clean up data before analysis or import into databases
-                </li>
-                <li>
-                  <strong>Content Editing:</strong> Ensure consistent formatting in articles, blog posts, and other
-                  written content
-                </li>
-                <li>
-                  <strong>SEO Optimization:</strong> Clean up meta descriptions and titles for better search engine
-                  presentation
-                </li>
-                <li>
-                  <strong>Email Formatting:</strong> Ensure clean, consistent formatting in email templates and
-                  newsletters
-                </li>
-                <li>
-                  <strong>Document Conversion:</strong> Clean up text after converting between different file formats
-                </li>
-                <li>
-                  <strong>Collaborative Writing:</strong> Standardize formatting when combining text from multiple
-                  authors
                 </li>
               </ul>
 

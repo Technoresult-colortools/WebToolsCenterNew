@@ -239,7 +239,7 @@ export default function LetterCounter() {
 
             <div className="my-8">
               <Image
-                src="/Images/LetterCounterPreview.png?height=400&width=600"
+                src="/Images/InfosectionImages/LetterCounterPreview.png?height=400&width=600" 
                 alt="Screenshot of the Letter Counter interface showing text input area and letter frequency analysis"
                 width={600}
                 height={400}

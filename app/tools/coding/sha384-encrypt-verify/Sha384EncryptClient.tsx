@@ -41,14 +41,14 @@ type Preset = {
 }
 
 
-export default function SHA384Tool() {
+export default function SHA384EncryptVerify() {
   const [input, setInput] = useState("")
   const [output, setOutput] = useState("")
   const [compareHash, setCompareHash] = useState("")
-  const [, setFileName] = useState("")
+  const [fileName, setFileName] = useState("")
   const [autoUpdate, setAutoUpdate] = useState(false)
   const [caseSensitive, setCaseSensitive] = useState(false)
-  const [encoding, setEncoding] = useState<Encoding>("utf8")
+  const [encoding, setEncoding] = useState<"utf8" | "ascii" | "base64">("utf8")
   const [iterations, setIterations] = useState(1)
   const [salt, setSalt] = useState("")
   const [presets, setPresets] = useState<Record<string, Preset>>({})
@@ -59,7 +59,7 @@ export default function SHA384Tool() {
     if (autoUpdate) {
       generateSHA384()
     }
-  }, [input, encoding, iterations, salt])
+  }, [input, encoding, iterations, salt, autoUpdate])
 
   useEffect(() => {
     const savedPresets = localStorage.getItem("sha384Presets")
@@ -68,73 +68,32 @@ export default function SHA384Tool() {
     }
   }, [])
 
-  const generateSHA384 = useCallback(() => {
+  const generateSHA384 = () => {
     try {
       const hash = crypto.createHash("sha384")
       hash.update(salt)
       for (let i = 0; i < iterations; i++) {
-        hash.update(input, encoding as BufferEncoding)
+        hash.update(input, encoding)
       }
       const generatedHash = hash.digest("hex")
       setOutput(generatedHash)
       toast.success("SHA-384 hash generated successfully!")
-    } catch {
+    } catch (error) {
+      console.error("Error generating SHA-384:", error)
       toast.error("Error generating SHA-384 hash. Please check your input and encoding.")
     }
-  }, [input, encoding, iterations, salt])
+  }
 
-  const handleInputChange = useCallback(
-    (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-      const text = e.target.value
-      if (text.length <= MAX_CHARS) {
-        setInput(text)
-        if (autoUpdate) {
-          generateSHA384()
-        }
-      } else {
-        toast.error(`Maximum ${MAX_CHARS} characters allowed`)
-      }
-    },
-    [autoUpdate, generateSHA384],
-  )
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setInput(e.target.value)
+  }
 
-  const handleFileUpload = useCallback(
-    (e: React.ChangeEvent<HTMLInputElement>) => {
-      const file = e.target.files?.[0]
-      if (file) {
-        setFileName(file.name)
-        const reader = new FileReader()
-        reader.onload = (e) => {
-          const content = e.target?.result as string
-          setInput(content)
-          if (autoUpdate) {
-            generateSHA384()
-          }
-        }
-        reader.readAsText(file)
-        toast.success("File uploaded successfully!")
-      }
-    },
-    [autoUpdate, generateSHA384],
-  )
+  const copyToClipboard = (text: string) => {
+    navigator.clipboard.writeText(text)
+    toast.success("Copied to clipboard!")
+  }
 
-  const handleCopy = useCallback(() => {
-    navigator.clipboard.writeText(output)
-    toast.success("Hash copied to clipboard!")
-  }, [output])
-
-  const handleDownload = useCallback(() => {
-    const element = document.createElement("a")
-    const file = new Blob([output], { type: "text/plain" })
-    element.href = URL.createObjectURL(file)
-    element.download = "sha384_hash.txt"
-    document.body.appendChild(element)
-    element.click()
-    document.body.removeChild(element)
-    toast.success("Hash downloaded successfully!")
-  }, [output])
-
-  const handleReset = useCallback(() => {
+  const handleReset = () => {
     setInput("")
     setOutput("")
     setCompareHash("")
@@ -147,19 +106,53 @@ export default function SHA384Tool() {
       fileInputRef.current.value = ""
     }
     toast.success("All fields have been reset.")
-  }, [])
+  }
 
-  const compareHashes = useCallback(() => {
-    const match = caseSensitive ? output === compareHash : output.toLowerCase() === compareHash.toLowerCase()
-    if (match) {
-      toast.success("Hashes match!")
-    } else {
-      toast.error("Hashes do not match.")
+  const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (file) {
+      setFileName(file.name)
+      const reader = new FileReader()
+      reader.onload = (e) => {
+        const content = e.target?.result as string
+        setInput(content)
+        if (autoUpdate) {
+          generateSHA384()
+        }
+      }
+      reader.readAsText(file)
+      toast.success("File uploaded successfully!")
     }
-  }, [output, compareHash, caseSensitive])
+  }
 
+  const handleDownload = () => {
+    const element = document.createElement("a")
+    const file = new Blob([output], { type: "text/plain" })
+    element.href = URL.createObjectURL(file)
+    element.download = "sha384_hash.txt"
+    document.body.appendChild(element)
+    element.click()
+    document.body.removeChild(element)
+    toast.success("SHA-384 hash downloaded!")
+  }
 
-  const savePreset = useCallback(() => {
+  const compareHashes = () => {
+    if (caseSensitive) {
+      if (output === compareHash) {
+        toast.success("Hashes match!")
+      } else {
+        toast.error("Hashes do not match.")
+      }
+    } else {
+      if (output.toLowerCase() === compareHash.toLowerCase()) {
+        toast.success("Hashes match!")
+      } else {
+        toast.error("Hashes do not match.")
+      }
+    }
+  }
+
+  const savePreset = () => {
     const presetName = prompt("Enter a name for this preset:")
     if (presetName) {
       const newPresets = {
@@ -171,21 +164,45 @@ export default function SHA384Tool() {
       setSelectedPreset(presetName)
       toast.success("Preset saved successfully!")
     }
-  }, [input, encoding, iterations, salt, presets])
+  }
+
+  const loadPreset = (presetName: string) => {
+    const preset = presets[presetName]
+    if (preset) {
+      setInput(preset.input)
+      setEncoding(preset.encoding)
+      setIterations(preset.iterations)
+      setSalt(preset.salt)
+      setSelectedPreset(presetName)
+      toast.success("Preset loaded successfully!")
+    }
+  }
+
+  const deletePreset = (presetName: string) => {
+    const newPresets = { ...presets }
+    delete newPresets[presetName]
+    setPresets(newPresets)
+    localStorage.setItem("sha384Presets", JSON.stringify(newPresets))
+    if (selectedPreset === presetName) {
+      setSelectedPreset("")
+    }
+    toast.success("Preset deleted successfully!")
+  }
 
   return (
     <ToolLayout
-      title="SHA-384 Hash Generator & Verifier"
-      description="Generate and verify SHA-384 hashes with advanced options and features."
-      toolId="678f383026f06f912191bcc6"
+      title="SHA-384 Hash Generator and Verifier"
+      description="Generate and verify SHA-384 hashes for text and file content"
+      toolId="sha384-hash-tool"
     >
-      <div className="flex flex-col gap-8">
-        <Card className="bg-default-50 dark:bg-default-100">
-          <CardBody className="p-6">
-            <Tabs aria-label="SHA-384 options">
-              <Tab key="generate" title="Generate SHA-384">
-                <div className="flex flex-col gap-4 mt-4">
-                  <Textarea
+     <div className="flex flex-col gap-8">   
+
+      <Card className="bg-default-50 dark:bg-default-100">
+        <CardBody className="p-6">
+          <Tabs aria-label="SHA-384 options">
+            <Tab key="generate" title="Generate SHA-384">
+              <div className="space-y-4 mt-4">
+                <Textarea
                   label="Input Text"
                   placeholder="Enter text to generate SHA-384 hash..."
                   value={input}
@@ -194,168 +211,133 @@ export default function SHA384Tool() {
                   minRows={4}
                 />
                 <Input label="SHA-384 Hash" variant="bordered" value={output} readOnly />
-
-                  <div className="flex flex-wrap gap-4">
-                    <Select
-                      label="Encoding"
-                      selectedKeys={[encoding]}
-                      onChange={(e) => setEncoding(e.target.value as Encoding)}
-                      className="flex-1"
-                      variant="bordered"
-                    >
-                      {encodingOptions.map((option) => (
-                        <SelectItem key={option.value} value={option.value} className="text-default-700">
-                          {option.label}
-                        </SelectItem>
-                      ))}
-                    </Select>
-
-                    <div className="flex items-center gap-2">
-                      <Switch checked={autoUpdate} onChange={(e) => setAutoUpdate(e.target.checked)} />
-                      <span>Auto-update</span>
-                    </div>
-                  </div>
-
-                  <div className="flex gap-4">
-                    <Button color="primary" startContent={<Hash />} onClick={generateSHA384} className="flex-1">
-                      Generate SHA-384
-                    </Button>
-                    <Button color="secondary" startContent={<Upload />} onClick={() => fileInputRef.current?.click()}>
-                      Upload File
-                    </Button>
-                    <input type="file" ref={fileInputRef} onChange={handleFileUpload} className="hidden" />
-                  </div>
-
-                  <label className="text-lg font-medium">SHA-384 Hash</label>
-                  <Textarea
-                    value={output}
-                    isReadOnly
-                    placeholder="Generated hash will appear here..."
-                    minRows={2}
-                    size="lg"
-                    variant="bordered"
-                  />
-
-                  <div className="flex flex-col md:flex-row gap-2 w-full">
-                    <Button className="w-full md:flex-1" color="primary" startContent={<Copy />} onClick={handleCopy}>
-                      Copy Hash
-                    </Button>
-                    <Button className="w-full md:flex-1" color="primary" startContent={<Download />} onClick={handleDownload}>
-                      Download
-                    </Button>
-                    <Button className="w-full md:flex-1" color="danger" startContent={<RefreshCw />} onClick={handleReset}>
-                      Reset
-                    </Button>
-                  </div>
-
-
-                </div>
-              </Tab>
-              <Tab key="verify" title="Verify SHA-384">
-                <div className="flex flex-col gap-4 mt-4">
-                  <label className="text-lg font-medium">Input Text</label>
-                  <Textarea
-                    value={input}
-                    onChange={handleInputChange}
-                    placeholder="Enter text to verify..."
-                    minRows={4}
-                    size="lg"
-                    variant="bordered"
-                  />
-
-                  <label className="text-lg font-medium">Generated SHA-384 Hash</label>
-                  <Textarea
-                    value={output}
-                    isReadOnly
-                    placeholder="Generated hash will appear here..."
-                    minRows={2}
-                    size="lg"
-                    variant="bordered"
-                  />
-
-                  <label className="text-lg font-medium">Hash to Compare</label>
-                  <Textarea
-                    value={compareHash}
-                    onChange={(e) => setCompareHash(e.target.value)}
-                    placeholder="Enter SHA-384 hash to compare..."
-                    minRows={2}
-                    size="lg"
-                    variant="bordered"
-                  />
-
-                  <div className="flex items-center gap-4">
-                    <Button color="success" startContent={<CheckCircle2 />} onClick={compareHashes}>
-                      Verify Hash
-                    </Button>
-                    <div className="flex items-center gap-2">
-                      <Switch checked={caseSensitive} onChange={(e) => setCaseSensitive(e.target.checked)} />
-                      <span>Case-sensitive comparison</span>
-                    </div>
-                  </div>
-                </div>
-              </Tab>
-            </Tabs>
-          </CardBody>
-        </Card>
-      </div>  
-
-        {/* Advanced Options */}
-        <Card className="mt-8 bg-default-50 dark:bg-default-100">
-          <CardBody className="p-6">
-            <div className="flex flex-col gap-4">
-              <label className="text-lg font-medium">Advanced Options</label>
-
-              <div className="flex flex-col gap-2">
-                <label>Salt (optional)</label>
+              </div>
+            </Tab>
+            <Tab key="verify" title="Verify SHA-384">
+              <div className="space-y-4 mt-4">
                 <Textarea
-                  value={salt}
-                  onChange={(e) => setSalt(e.target.value)}
-                  placeholder="Enter salt value..."
-                  minRows={1}
-                  size="lg"
+                  label="Input Text"
+                  placeholder="Enter text to verify SHA-384 hash..."
+                  value={input}
                   variant="bordered"
+                  onChange={handleInputChange}
+                  minRows={4}
                 />
-              </div>
-
-              <div className="mt-4">
-                <p className="mb-2">Hash Iterations: {iterations}</p>
-                <Slider
-                  aria-label="Hash Iterations"
-                  step={1}
-                  maxValue={10000}
-                  minValue={1}
-                  value={iterations}
-                  onChange={(value) => setIterations(value as number)}
+                <Input label="Generated SHA-384 Hash" variant="bordered" value={output} readOnly />
+                <Input
+                  label="Hash to Compare"
+                  placeholder="Enter SHA-384 hash to compare..."
+                  value={compareHash}
+                  variant="bordered"
+                  onChange={(e) => setCompareHash(e.target.value)}
                 />
-              </div>
-
-              <div className="flex gap-4">
-                <Button color="primary" startContent={<Save />} onClick={savePreset}>
-                  Save Preset
+                <Button color="primary" onPress={compareHashes} startContent={<CheckCircle2 />}>
+                  Compare Hashes
                 </Button>
-                {selectedPreset && (
-                  <Button
-                    color="danger"
-                    startContent={<Trash2 />}
-                    onClick={() => {
-                      const newPresets = { ...presets }
-                      delete newPresets[selectedPreset]
-                      setPresets(newPresets)
-                      localStorage.setItem("sha384Presets", JSON.stringify(newPresets))
-                      setSelectedPreset("")
-                    }}
-                  >
-                    Delete Preset
-                  </Button>
-                )}
               </div>
+            </Tab>
+          </Tabs>
+
+          <div className="mt-4 space-y-4">
+            <div className="flex items-center space-x-2">
+              <Switch isSelected={autoUpdate} onValueChange={setAutoUpdate} />
+              <span>Auto-update hash on input change</span>
             </div>
-          </CardBody>
-        </Card>
+            <div className="flex items-center space-x-2">
+              <Switch isSelected={caseSensitive} onValueChange={setCaseSensitive} />
+              <span>Case-sensitive hash comparison</span>
+            </div>
+          </div>
+
+          <div className="mt-4">
+            <Select
+              label="Input Encoding"
+              selectedKeys={[encoding]}
+              variant="bordered"
+              onChange={(e) => setEncoding(e.target.value as "utf8" | "ascii" | "base64")}
+            >
+              <SelectItem key="utf8" value="utf8" className="text-default-700">
+                UTF-8
+              </SelectItem>
+              <SelectItem key="ascii" value="ascii" className="text-default-700">
+                ASCII
+              </SelectItem>
+              <SelectItem key="base64" value="base64" className="text-default-700">
+                Base64
+              </SelectItem>
+            </Select>
+          </div>
+
+          <div className="mt-4">
+            <p className="mb-2">Hash Iterations: {iterations}</p>
+            <Slider
+              aria-label="Hash Iterations"
+              step={1}
+              maxValue={10000}
+              minValue={1}
+              value={iterations}
+              onChange={(value) => setIterations(value as number)}
+            />
+          </div>
+
+          <div className="mt-4">
+            <Input
+              label="Salt (optional)"
+              placeholder="Enter salt..."
+              variant="bordered"
+              value={salt}
+              onChange={(e) => setSalt(e.target.value)}
+            />
+          </div>
+
+          <div className="mt-4 flex flex-col md:flex-row gap-2 w-full">
+            <Button className="w-full md:flex-1" color="primary" onPress={generateSHA384} startContent={<Hash />}>
+              Generate SHA-384
+            </Button>
+            <Button className="w-full md:flex-1" color="secondary" onPress={() => copyToClipboard(output)} startContent={<Copy />}>
+              Copy Hash
+            </Button>
+            <Button className="w-full md:flex-1" color="danger" onPress={handleReset} startContent={<RefreshCw />}>
+              Reset
+            </Button>
+            <Button className="w-full md:flex-1" color="primary" onPress={handleDownload} isDisabled={!output} startContent={<Download />}>
+              Download Hash
+            </Button>
+          </div>
+
+          <div className="mt-4 space-y-4">
+            <Input type="file" variant="bordered" onChange={handleFileUpload} ref={fileInputRef} />
+            <Button color="primary" onPress={() => fileInputRef.current?.click()} startContent={<Upload />}>
+              Choose File
+            </Button>
+            {fileName && <p>{fileName}</p>}
+          </div>
+
+          <div className="mt-4 space-y-4">
+            <Select label="Presets" variant="bordered" selectedKeys={[selectedPreset]} onChange={(e) => loadPreset(e.target.value)}>
+              {Object.keys(presets).map((presetName) => (
+                <SelectItem key={presetName} value={presetName} className="text-default-700">
+                  {presetName}
+                </SelectItem>
+              ))}
+            </Select>
+            <div className="flex gap-2">
+              <Button color="success" onPress={savePreset} startContent={<Save />}>
+                Save Preset
+              </Button>
+              {selectedPreset && (
+                <Button color="danger" onPress={() => deletePreset(selectedPreset)} startContent={<Trash2 />}>
+                  Delete Preset
+                </Button>
+              )}
+            </div>
+          </div>
+        </CardBody>
+      </Card>
 
         {/* Information Section */}
                 {/* Information Section */}
-                <Card className="mt-8 bg-default-50 dark:bg-default-100">
+        <Card className="bg-default-50 dark:bg-default-100">
           <CardBody>
             <div className="rounded-xl p-2 md:p-4 max-w-4xl mx-auto">
               <h2 className="text-lg md:text-xl lg:text-2xl font-semibold text-default-700 mb-4 flex items-center">
@@ -370,7 +352,7 @@ export default function SHA384Tool() {
 
               <div className="my-8">
                 <Image
-                  src="/Images/SHA384HashPreview.png"
+                   src="/Images/InfosectionImages/SHA384Preview.png?height=400&width=600"
                   alt="Screenshot of the SHA-384 Hash Generator & Verifier interface"
                   width={600}
                   height={400}
@@ -448,6 +430,7 @@ export default function SHA384Tool() {
             </div>
           </CardBody>
         </Card>
+       </div> 
         </ToolLayout>
   )
 }

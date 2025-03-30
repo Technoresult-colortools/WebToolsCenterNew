@@ -36,7 +36,6 @@ import {
 } from "lucide-react"
 import { KJUR } from "jsrsasign"
 import ToolLayout from "@/components/ToolLayout"
-import Image from "next/image"
 
 type Algorithm = "HS256" | "HS384" | "HS512" | "RS256" | "RS384" | "RS512" | "ES256" | "ES384" | "ES512"
 
@@ -434,17 +433,6 @@ export default function JWTEncoderDecoder() {
                 <strong>Signature:</strong> Ensures authenticity by signing the header and payload.
                 </li>
             </ol>
-
-            {/* Image Preview */}
-            <div className="my-8">
-                <Image
-                src="/Images/JWTEncoderPreview.png"
-                alt="Diagram showing the structure of a JWT"
-                width={600}
-                height={400}
-                className="rounded-lg shadow-lg w-full h-auto"
-                />
-            </div>
 
             {/* JWT Example */}
             <h2 className="text-lg md:text-xl lg:text-2xl font-semibold text-default-700 mb-4 mt-8 flex items-center">

@@ -365,7 +365,7 @@ export default function URLEncoderDecoder() {
 
         <div className="my-8">
           <Image 
-            src="/Images/URLEncoderPreview.png?height=400&width=600"  
+            src="/Images/InfosectionImages/URLEncoderPreview.png?height=400&width=600" 
             alt="Screenshot of the URL Encoder/Decoder interface" 
             width={600} 
             height={400}
@@ -423,7 +423,7 @@ export default function URLEncoderDecoder() {
         </ul>
 
         <h2 className="text-lg md:text-xl lg:text-2xl font-semibold text-default-700 mb-4 mt-8 flex items-center">
-          <Shield className="w-6 h-6 mr-2" />
+          <Shield className="w-6 h-6 mr-2 text-warning" />
           Security Considerations
         </h2>
         <ul className="list-disc list-inside space-y-2 text-sm md:text-base">

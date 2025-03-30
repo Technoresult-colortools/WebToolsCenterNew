@@ -312,9 +312,7 @@ export default function JsonValidator() {
                 What is JSON Validator and Formatter?
               </h2>
               <p className="text-sm md:text-base text-default-600 mb-4">
-                The JSON Validator and Formatter is a powerful tool designed for developers, data analysts, and anyone
-                working with JSON data. It provides a comprehensive set of features to validate, format, and manipulate
-                JSON, ensuring that your data is correct, well-structured, and easy to read.
+                The JSON Validator and Formatter is a powerful tool designed for verification and anyone working with developers, data analysts and anyone working with JSON data. It offers JSON to validate, format and manipulate a broad set of features, ensuring that your data is correct, well structured, and easy to read.
               </p>
               <p className="text-sm md:text-base text-default-600 mb-4">
                 Whether you're debugging API responses, cleaning up configuration files, or preparing data for
@@ -324,7 +322,7 @@ export default function JsonValidator() {
 
               <div className="my-8">
                 <Image
-                  src="/Images/JSONValidatorPreview.png?height=400&width=600"
+                src="/Images/InfosectionImages/JSONValidatorPreview.png?height=400&width=600"
                   alt="Screenshot of the JSON Validator and Formatter interface"
                   width={600}
                   height={400}
@@ -365,37 +363,6 @@ export default function JsonValidator() {
                 <li>Support for large JSON files</li>
               </ul>
 
-              <h2 className="text-lg md:text-xl lg:text-2xl font-semibold text-default-700 mb-4 mt-8 flex items-center">
-                <Info className="w-6 h-6 mr-2" />
-                Applications and Use Cases
-              </h2>
-              <ul className="list-disc list-inside text-default-600 space-y-2 text-sm md:text-base">
-                <li>
-                  <strong>API Development:</strong> Validate and format JSON responses for testing and documentation.
-                </li>
-                <li>
-                  <strong>Data Analysis:</strong> Clean and structure JSON data for easier processing and visualization.
-                </li>
-                <li>
-                  <strong>Configuration Management:</strong> Ensure configuration files are correctly formatted and
-                  valid.
-                </li>
-                <li>
-                  <strong>Debugging:</strong> Quickly identify issues in JSON data structures.
-                </li>
-                <li>
-                  <strong>Data Exchange:</strong> Prepare JSON data for transmission between systems.
-                </li>
-                <li>
-                  <strong>Documentation:</strong> Create well-formatted JSON examples for technical documentation.
-                </li>
-                <li>
-                  <strong>Learning Tool:</strong> Help beginners understand proper JSON structure and formatting.
-                </li>
-                <li>
-                  <strong>Performance Optimization:</strong> Use minification details to optimize JSON payload sizes.
-                </li>
-              </ul>
 
               <p className="text-sm md:text-base text-default-600 mt-6">
                 The JSON Validator and Formatter is an essential tool for anyone working with JSON data. By providing a

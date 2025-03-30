@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { Card, CardBody, Button, Select, SelectItem, Textarea, Switch } from "@nextui-org/react";
 import Image from 'next/image';
-import { RefreshCw, Download, Info, BookOpen, Lightbulb, Code, Eye, Edit } from 'lucide-react';
+import { RefreshCw, Download, Info, BookOpen, Lightbulb, Code, Eye, Edit, Palette, Plus, Trash, Copy, AlertTriangle, Settings, Target } from 'lucide-react';
 import { Toaster } from 'react-hot-toast';
 import TreeView from './Treeview';
 import ToolLayout from '@/components/ToolLayout';
@@ -201,6 +201,19 @@ export default function JSONViewerEditor() {
     }
     setJsonInput(JSON.stringify(newData, null, 2));
   };
+
+  const handleThemeChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    const selectedTheme = event.target.value as keyof typeof themes;
+    
+    // Add a safety check to ensure the selected theme exists in the themes object
+    if (themes[selectedTheme]) {
+      setTheme(selectedTheme);
+    } else {
+      // Fallback to default theme if somehow an invalid theme is selected
+      console.warn(`Theme ${selectedTheme} not found. Defaulting to monokai.`);
+      setTheme('monokai');
+    }
+  };
   
   const handleDelete = (path: string[]) => {
     const newData = JSON.parse(JSON.stringify(parsedJson));
@@ -319,19 +332,24 @@ export default function JSONViewerEditor() {
         <Card className="bg-default-50 dark:bg-default-100">
           <CardBody className="p-6">
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-              <Select
+            <Select
                 label="Theme"
                 selectedKeys={[theme]}
                 variant='bordered'
-                onChange={(e) => setTheme(e.target.value as keyof typeof themes)}
+                onChange={handleThemeChange}
                 className="w-full"
               >
                 {Object.keys(themes).map((themeName) => (
-                  <SelectItem key={themeName} value={themeName} className="text-default-700">
+                  <SelectItem 
+                    key={themeName} 
+                    value={themeName} 
+                    className="text-default-700"
+                  >
                     {themeName}
                   </SelectItem>
                 ))}
               </Select>
+
               <Select
                 label="Icon Style"
                 selectedKeys={[iconStyle]}
@@ -486,88 +504,172 @@ export default function JSONViewerEditor() {
 
         {/* Info Section */}
         <Card className="bg-default-50 dark:bg-default-100">
-            <CardBody className="p-6">
-                <div className="rounded-xl p-2 md:p-4 max-w-4xl mx-auto">
-                <h2 className="text-lg md:text-xl lg:text-2xl font-semibold text-default-700 mb-4 flex items-center">
-                    <Info className="w-6 h-6 mr-2" />
-                    What is the JSON Tree Viewer?
-                </h2>
-                <p className="text-sm md:text-base text-default-600 mb-4">
-                    The JSON Tree Viewer is a powerful visualization and editing tool that transforms complex JSON data into an interactive, hierarchical view. It helps developers and data analysts understand and manipulate JSON structures with ease.
-                </p>
+          <CardBody className="p-6">
+            <div className="rounded-xl p-2 md:p-4 max-w-4xl mx-auto">
+              <h2 className="text-xl md:text-2xl font-semibold text-default-700 mb-4 flex items-center">
+                <Info className="w-6 h-6 mr-2" />
+                What is the JSON Tree Viewer and Editor?
+              </h2>
+              <p className="text-sm md:text-base text-default-600 mb-4">
+              JSON Tree Viewer and Editor are a powerful tool that converts complex JSON data into an interactive, hierarchical tree view. This helps develop the developers, data analysts, and anyone working with JSON to easily imagine, navigate, and modify JSON structures with intuitive controls and adaptable performance options.
+              </p>
+              <p className="text-sm md:text-base text-default-600 mb-4">
+              Whether you are debaging API reactions, checking configuration files, or creating JSON data structures from scratch, this tool offers user -friendly interfaces with comprehensive adaptation options to suit your specific requirements and preferences.
+              </p>
 
-                <div className="my-8">
-                    <Image
-                    src="/api/placeholder/600/400"
-                    alt="JSON Tree Viewer Interface"
-                    width={600}
-                    height={400}
-                    className="rounded-lg shadow-lg w-full h-auto"
-                    />
-                </div>
+              <div className="my-8">
+                <Image
+                src="/Images/InfosectionImages/JSONTreeViewerPreview.png?height=400&width=600"
+                  alt="JSON Tree Viewer Interface showing a complex JSON structure with expandable nodes and syntax highlighting"
+                  width={600}
+                  height={400}
+                  className="rounded-lg shadow-lg w-full h-auto"
+                />
+              </div>
 
-                <h2 className="text-lg md:text-xl lg:text-2xl font-semibold text-default-700 mb-4 mt-8 flex items-center">
-                    <BookOpen className="w-6 h-6 mr-2" />
-                    Key Features
-                </h2>
-                <ul className="list-disc list-inside space-y-2 text-sm md:text-base">
-                    <li>Multiple theme options for customized visualization</li>
-                    <li>Flexible icon styles for tree navigation</li>
-                    <li>Adjustable indentation and collapsible branches</li>
-                    <li>Smart string and array handling with configurable length limits</li>
-                    <li>Built-in editing capabilities for JSON manipulation</li>
-                    <li>Clipboard integration for easy data transfer</li>
-                </ul>
+              <h2 id="how-to-use" className="text-xl md:text-2xl font-semibold text-default-700 mb-4 mt-8 flex items-center">
+                <BookOpen className="w-6 h-6 mr-2" />
+                How to Use the JSON Tree Viewer and Editor
+              </h2>
+              <ol className="list-decimal list-inside space-y-2 text-sm md:text-base text-default-600">
+                <li>Enter or paste your JSON data into the input text area.</li>
+                <li>The tool automatically validates and parses your JSON, displaying any syntax errors if present.</li>
+                <li>Once valid, your JSON appears as an interactive tree structure below the input area.</li>
+                <li>Use the expand/collapse icons to navigate through nested objects and arrays.</li>
+                <li>Customize the display using the settings panel to adjust themes, icons, and behavior.</li>
+                <li>Enable editing features to modify, add, or delete properties directly in the tree view.</li>
+                <li>Download your modified JSON data with a single click when finished.</li>
+              </ol>
 
-                <h2 className="text-lg md:text-xl lg:text-2xl font-semibold text-default-700 mb-4 mt-8 flex items-center">
-                    <Lightbulb className="w-6 h-6 mr-2" />
-                    Customization Options
-                </h2>
-                <ul className="list-disc list-inside space-y-2 text-sm md:text-base">
-                    <li>Visual Themes: Choose from various color schemes including Monokai, Dracula, Night Owl, and more</li>
-                    <li>Display Options: Toggle object size and data type visibility</li>
-                    <li>Tree Navigation: Select from different icon styles and indentation widths</li>
-                    <li>Content Management: Configure string collapse and array grouping thresholds</li>
-                </ul>
+              <h2 className="text-xl md:text-2xl font-semibold text-default-700 mb-4 mt-8 flex items-center">
+                <Lightbulb className="w-6 h-6 mr-2" />
+                Key Features
+              </h2>
+              <ul className="list-disc list-inside space-y-2 text-sm md:text-base text-default-600">
+                <li>
+                  <Eye className="w-4 h-4 inline-block mr-1" /> <strong>Interactive Tree Visualization:</strong> Navigate
+                  complex JSON structures with expandable/collapsible nodes
+                </li>
+                <li>
+                  <Palette className="w-4 h-4 inline-block mr-1" /> <strong>Multiple Themes:</strong> Choose from 11 different
+                  color schemes including Monokai, Dracula, Night Owl, and more
+                </li>
+                <li>
+                  <Edit className="w-4 h-4 inline-block mr-1" /> <strong>In-place Editing:</strong> Modify JSON values directly
+                  within the tree view
+                </li>
+                <li>
+                  <Plus className="w-4 h-4 inline-block mr-1" /> <strong>Structure Modification:</strong> Add new properties or
+                  array items to your JSON
+                </li>
+                <li>
+                  <Trash className="w-4 h-4 inline-block mr-1" /> <strong>Property Deletion:</strong> Remove unwanted elements
+                  from your JSON structure
+                </li>
+                <li>
+                  <Copy className="w-4 h-4 inline-block mr-1" /> <strong>Clipboard Integration:</strong> Copy values or entire
+                  branches to your clipboard
+                </li>
+                <li>
+                  <Download className="w-4 h-4 inline-block mr-1" /> <strong>Export Functionality:</strong> Download your JSON
+                  data as a file
+                </li>
+                <li>
+                  <AlertTriangle className="w-4 h-4 inline-block mr-1" /> <strong>Real-time Validation:</strong> Instant
+                  feedback on JSON syntax errors
+                </li>
+              </ul>
 
-                <h2 className="text-lg md:text-xl lg:text-2xl font-semibold text-default-700 mb-4 mt-8 flex items-center">
-                    <Code className="w-6 h-6 mr-2" />
-                    Advanced Features
-                </h2>
-                <ul className="list-disc list-inside space-y-2 text-sm md:text-base">
-                    <li>In-place JSON editing with validation</li>
-                    <li>Add and delete capabilities for JSON properties</li>
-                    <li>One-click JSON download functionality</li>
-                    <li>Real-time syntax validation and error reporting</li>
-                    <li>Responsive design for various screen sizes</li>
-                </ul>
+              <h2 className="text-xl md:text-2xl font-semibold text-default-700 mb-4 mt-8 flex items-center">
+                <Settings className="w-6 h-6 mr-2" />
+                Customization Options
+              </h2>
+              <ul className="list-disc list-inside space-y-2 text-sm md:text-base text-default-600">
+                <li>
+                  <strong>Visual Themes:</strong> Select from 11 different color schemes to match your preference or environment
+                </li>
+                <li>
+                  <strong>Icon Styles:</strong> Choose between triangle, circle, square, or arrow icons for tree navigation
+                </li>
+                <li>
+                  <strong>Indentation Width:</strong> Adjust the spacing between nested levels (0-4 spaces)
+                </li>
+                <li>
+                  <strong>Branch Collapsing:</strong> Configure how deeply nested structures are initially expanded
+                </li>
+                <li>
+                  <strong>String Handling:</strong> Set thresholds for when long strings should be collapsed
+                </li>
+                <li>
+                  <strong>Array Grouping:</strong> Define when large arrays should be grouped for better performance
+                </li>
+                <li>
+                  <strong>Display Options:</strong> Toggle visibility of object sizes and data types
+                </li>
+                <li>
+                  <strong>Editing Features:</strong> Enable or disable editing, deletion, and addition capabilities
+                </li>
+              </ul>
 
-                <h2 className="text-lg md:text-xl lg:text-2xl font-semibold text-default-700 mb-4 mt-8 flex items-center">
-                    <Eye className="w-6 h-6 mr-2" />
-                    Use Cases
-                </h2>
-                <ul className="list-disc list-inside space-y-2 text-sm md:text-base">
-                    <li>API response inspection and debugging</li>
-                    <li>Configuration file management</li>
-                    <li>Data structure analysis and visualization</li>
-                    <li>JSON document editing and validation</li>
-                    <li>Educational tool for understanding JSON structures</li>
-                </ul>
+              <h2 className="text-xl md:text-2xl font-semibold text-default-700 mb-4 mt-8 flex items-center">
+                <Code className="w-6 h-6 mr-2" />
+                Technical Capabilities
+              </h2>
+              <ul className="list-disc list-inside space-y-2 text-sm md:text-base text-default-600">
+                <li>
+                  <strong>Deep Object Traversal:</strong> Handles deeply nested JSON structures with ease
+                </li>
+                <li>
+                  <strong>Large Dataset Support:</strong> Efficiently processes and displays large JSON files
+                </li>
+                <li>
+                  <strong>Type-Aware Display:</strong> Visually distinguishes between strings, numbers, booleans, and null
+                  values
+                </li>
+                <li>
+                  <strong>Path Tracking:</strong> Maintains accurate path information for precise editing and navigation
+                </li>
+                <li>
+                  <strong>Structural Preservation:</strong> Maintains your JSON structure during editing operations
+                </li>
+                <li>
+                  <strong>Performance Optimizations:</strong> Implements smart rendering for large arrays and objects
+                </li>
+              </ul>
 
-                <h2 className="text-lg md:text-xl lg:text-2xl font-semibold text-default-700 mb-4 mt-8 flex items-center">
-                    <Edit className="w-6 h-6 mr-2" />
-                    Getting Started
-                </h2>
-                <ol className="list-decimal list-inside space-y-2 text-sm md:text-base">
-                    <li>Paste or input your JSON data into the text area</li>
-                    <li>Customize the viewer settings to your preferences</li>
-                    <li>Use the tree view to navigate through your JSON structure</li>
-                    <li>Enable editing features when modifications are needed</li>
-                    <li>Download or copy the modified JSON as needed</li>
-                </ol>
-                </div>
-            </CardBody>
-            </Card>
+              <h2 className="text-xl md:text-2xl font-semibold text-default-700 mb-4 mt-8 flex items-center">
+                <Target className="w-6 h-6 mr-2" />
+                Practical Applications
+              </h2>
+              <ul className="list-disc list-inside space-y-2 text-sm md:text-base text-default-600">
+                <li>
+                  <strong>API Development:</strong> Inspect and debug API responses with clarity
+                </li>
+                <li>
+                  <strong>Configuration Management:</strong> Edit complex configuration files with confidence
+                </li>
+                <li>
+                  <strong>Data Analysis:</strong> Explore and understand JSON data structures visually
+                </li>
+                <li>
+                  <strong>Documentation:</strong> Generate clear visualizations of JSON schemas
+                </li>
+                <li>
+                  <strong>Learning Tool:</strong> Understand JSON structure and hierarchy through visual representation
+                </li>
+                <li>
+                  <strong>Quality Assurance:</strong> Validate and verify JSON data before implementation
+                </li>
+              </ul>
+
+              <p className="text-sm md:text-base text-default-600 mt-6">
+                Whether you're a developer working with APIs, a data analyst exploring JSON datasets, or anyone who needs to
+                work with JSON data, our JSON Tree Viewer and Editor provides the perfect balance of powerful features and
+                user-friendly design. Try it today to transform how you interact with JSON data!
+              </p>
+            </div>
+          </CardBody>
+        </Card>
       </div>
     </ToolLayout>
   );

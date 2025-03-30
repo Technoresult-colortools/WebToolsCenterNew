@@ -384,24 +384,19 @@ const styles = StyleSheet.create({
               What is the React Native Shadow Generator?
             </h2>
             <p className="text-sm md:text-base text-default-600 mb-4">
-              The React Native Shadow Generator is a versatile tool designed for developers working with React Native.
-              It offers a{" "}
+            The react native shadow generator is a versatile tool designed for developers working with react natives. It provides a{" "}
               <Link href="#how-to-use" className="text-primary hover:underline">
                 user-friendly interface
               </Link>{" "}
-              for creating and customizing shadow styles for both iOS and Android platforms. Whether you're designing a
-              sleek UI or adding depth to your app's components, our Shadow Generator simplifies the process of crafting
-              perfect shadows for cross-platform development.
+              to create and customize shadow styles for both iOS and Android platforms. Whether you are designing a smooth UI or adding depth to the components of your app, our shadow generator simplifies the process of crafting to the correct shade for cross-platform development.
             </p>
             <p className="text-sm md:text-base text-default-600 mb-4">
-              With support for platform-specific shadow properties and real-time preview, it's like having a powerful
-              design tool right at your fingertips. Say goodbye to the complexities of managing different shadow
-              implementations and hello to efficient, consistent shadow styling across your entire React Native project!
+            With the platform-specific shade properties and support for real-time preview, this is like a powerful design device on your fingers. Say goodbye to the complexities of management of various shadow implementation and hello to skilled, consistent shade style in your entire react country project!
             </p>
 
             <div className="my-8">
               <Image
-                src="/Images/ReactNativeShadowGeneratorPreview.png?height=400&width=600"
+                src="/Images/InfosectionImages/ReactNativeShadowPreview.png?height=400&width=600"
                 alt="Screenshot of the React Native Shadow Generator interface showing various shadow customization options"
                 width={600}
                 height={400}

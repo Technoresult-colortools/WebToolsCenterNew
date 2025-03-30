@@ -251,7 +251,7 @@ input, button, textarea, select {
         </CardBody>
       </Card>
 
-      <Card className="mt-8 bg-default-50 dark:bg-default-100 p-4 md:p-8">
+      <Card className=" bg-default-50 dark:bg-default-100 p-4 md:p-8">
             <div className="rounded-xl p-2 md:p-4 max-w-4xl mx-auto">
             
             {/* About Section */}
@@ -260,15 +260,13 @@ input, button, textarea, select {
                 What is CSS Formatter?
             </h2>
             <p className="text-sm md:text-base text-default-600 mb-4">
-                The CSS Formatter is a powerful tool designed to clean up and standardize your CSS code. It uses **Prettier**, a
-                popular code formatting engine, to ensure consistent and readable CSS output. Whether you're a web developer,
-                designer, or just someone working with CSS, this tool can help you maintain clean and organized stylesheets.
+            The CSS formator is a powerful tool designed to clean and standardize your CSS code. It uses a popular code formatting engine ** prettier ** to ensure frequent and readable CSS output. Whether you belong to a web developer, designer, or just a person working with CSS, this tool can help you maintain clean and organized stylesheet.
             </p>
 
             {/* Image Preview */}
             <div className="my-8">
                 <Image
-                src="/Images/CSSFormatterPreview.png"
+                src="/Images/InfosectionImages/CSSFormatterPreview.png?height=400&width=600"
                 alt="Screenshot of the CSS Formatter interface showing input, formatting options, and output"
                 width={600}
                 height={400}

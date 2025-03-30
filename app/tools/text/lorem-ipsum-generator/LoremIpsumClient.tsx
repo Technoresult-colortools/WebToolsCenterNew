@@ -223,26 +223,22 @@ export default function LoremIpsumGenerator() {
     
         </div>
         {/* Info Section */}
-          <Card className="mt-8 bg-default-50 dark:bg-default-100 p-4 md:p-8">
+          <Card className="bg-default-50 dark:bg-default-100 p-4 md:p-8">
             <div className="rounded-xl p-2 md:p-4 max-w-4xl mx-auto">
               <h2 className="text-lg md:text-xl lg:text-2xl font-semibold text-default-700 mb-4 flex items-center">
                 <Info className="w-6 h-6 mr-2" />
                 What is the Lorem Ipsum Generator?
               </h2>
               <p className="text-sm md:text-base text-default-600 mb-4">
-                The Lorem Ipsum Generator is a powerful tool designed for designers, developers, and content creators who need placeholder text for their projects. It goes beyond simple text generation, offering customizable options and additional features to make your workflow smoother. With its{" "}
-                <Link href="#how-to-use" className="text-primary hover:underline">
-                  user-friendly interface
-                </Link>{" "}
-                and advanced functionality, it's the perfect companion for layout design, content testing, and mockup creation.
+              The Lorem Ipsum Generator is a great resource for designers, developers, and content creators who need dummy text for their projects. But it is not just a plain text generator, it has customizable options and extra features to improve your workflow. The user interface is very friendly and easy to use. You won't find a better companion for layout design, content testing, or mockups.
               </p>
               <p className="text-sm md:text-base text-default-600 mb-4">
-                Whether you're working on a website prototype, designing a brochure, or testing a new font, our Lorem Ipsum Generator provides you with the flexibility and control you need. It's like having a personal content filler right in your browser, tailored to your specific requirements!
+              Our Lorem Ipsum Generator gives you the flexibility and power to produce demonstrations, website prototypes, brochures, new fonts etc. It's like having your very own personal content filler right from the comfort of your browser!
               </p>
 
               <div className="my-8">
                 <Image
-                  src="/Images/LoremIpsumPreview.png"
+                   src="/Images/InfosectionImages/LoremIpsumPreview.png?height=400&width=600" 
                   alt="Screenshot of the Lorem Ipsum Generator interface showing text generation options and generated Lorem Ipsum text"
                   width={600}
                   height={400}

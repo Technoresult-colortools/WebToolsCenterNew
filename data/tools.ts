@@ -233,7 +233,7 @@ export const allTools: Tool[] = [
     description: "Scramble words in Text Tools.",
 
   },
-  {
+ /* {
     name: "Text to Handwriting Converter",
     category: "Text",
     href: "/tools/text/text-to-handwriting",
@@ -241,6 +241,7 @@ export const allTools: Tool[] = [
     description: "Transform your Text Tools into handwritten notes with customizable styles.",
 
   },
+  */
 
   // Image Tools
   {

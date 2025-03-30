@@ -231,7 +231,7 @@ export default function MD5HashGeneratorVerifier() {
           </CardBody>
         </Card>
 
-        <Card className="mt-8 bg-default-50 dark:bg-default-100">
+        <Card className="bg-default-50 dark:bg-default-100">
           <CardBody>
             <div className="rounded-xl p-2 md:p-4 max-w-4xl mx-auto">
               <h2 className="text-lg md:text-xl lg:text-2xl font-semibold text-default-700 mb-4 flex items-center">
@@ -239,15 +239,12 @@ export default function MD5HashGeneratorVerifier() {
                 What is MD5 Hash Generator & Verifier?
               </h2>
               <p className="text-sm md:text-base text-default-600 mb-4">
-                The MD5 Hash Generator & Verifier is a tool designed for generating and verifying MD5 (Message Digest
-                algorithm 5) hashes. MD5 produces a 128-bit (16-byte) hash value, typically expressed as a 32-digit
-                hexadecimal number. While MD5 is no longer considered cryptographically secure, it still finds use in
-                various non-security-critical applications for checksums and data verification.
+              The MD5 Hash Generator & Verifier is a tool meant for creating and verifying MD5 (Message Digest algorithm 5) hashes. MD5 provides a 128-bit (16-byte) hash value, usually represented in a 32-character hexadecimal number. While MD5 is not viewed as cryptographically secure anymore, it may still be useful in non-security situation usages, such as checksums or data verification. 
               </p>
 
               <div className="my-8">
                 <Image
-                  src="/Images/MD5HashPreview.png"
+                  src="/Images/InfosectionImages/MD5HashPreview.png?height=400&width=600"
                   alt="Screenshot of the MD5 Hash Generator & Verifier interface"
                   width={600}
                   height={400}

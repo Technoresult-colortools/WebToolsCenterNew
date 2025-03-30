@@ -288,16 +288,14 @@ export default function JavaScriptMinifier() {
                 What is JavaScript Minifier?
             </h2>
             <p className="text-sm md:text-base text-default-600 mb-4">
-                The JavaScript Minifier is a powerful tool designed for web developers to optimize JavaScript code by reducing its file size. It removes unnecessary characters such as whitespace, newlines, and comments while applying optimizations to improve performance and reduce load times.
+            Purpose built for web developers, the JavaScript Minifier is a powerful application that is designed to reduce the JavaScript file size to optimize performance. It reduces code by removing all unnecessary characters and optional characters (like whitespace, newlines, and comments) to optimize performance, and and reduce load time. The tool includes advanced options such as **console.log removal** and **variable name mangling**, which are useful for beginners who are optimizing their first JavaScript file or experienced developers optimizing the performance files for an enterprise javascript project.
             </p>
-            <p className="text-sm md:text-base text-default-600 mb-4">
-                This tool offers advanced options like **console.log removal** and **variable name mangling**, making it useful for both beginners optimizing their first JavaScript file and experienced developers working on large-scale projects.
-            </p>
+           
 
             {/* Image Preview */}
             <div className="my-8">
                 <Image
-                src="/Images/JavascriptMinifierPreview.png"
+                 src="/Images/InfosectionImages/JavascriptMinifierPreview.png?height=400&width=600"
                 alt="Screenshot of the JavaScript Minifier interface showing the code editor and minification options"
                 width={600}
                 height={400}
@@ -337,22 +335,6 @@ export default function JavaScriptMinifier() {
                 <li>Download minified JavaScript as a file.</li>
                 <li>Responsive design for seamless use on all devices.</li>
                 <li>Syntax error detection and reporting.</li>
-            </ul>
-
-            {/* Applications & Use Cases */}
-            <h2 className="text-lg md:text-xl lg:text-2xl font-semibold text-default-700 mb-4 mt-8 flex items-center">
-                <Lightbulb className="w-6 h-6 mr-2" />
-                Applications and Use Cases
-            </h2>
-            <ul className="list-disc list-inside space-y-2 text-sm md:text-base">
-                <li><strong>Performance Optimization:</strong> Reduce JavaScript file sizes for faster page loads.</li>
-                <li><strong>Bandwidth Savings:</strong> Minimize data transfer, beneficial for mobile users.</li>
-                <li><strong>Code Obfuscation:</strong> Make it harder for others to reverse-engineer your code.</li>
-                <li><strong>Development Workflow:</strong> Integrate minification into your build process.</li>
-                <li><strong>CDN Preparation:</strong> Optimize files before uploading to a Content Delivery Network (CDN).</li>
-                <li><strong>Legacy System Support:</strong> Reduce code size for memory-constrained systems.</li>
-                <li><strong>A/B Testing:</strong> Quickly create minified versions of scripts for performance comparisons.</li>
-                <li><strong>Open Source Contributions:</strong> Provide minified versions of your JavaScript libraries for easy distribution.</li>
             </ul>
 
             </div>

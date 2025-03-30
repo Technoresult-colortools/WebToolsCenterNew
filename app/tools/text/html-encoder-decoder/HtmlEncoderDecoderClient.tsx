@@ -286,7 +286,7 @@ export default function HTMLEncoderDecoder() {
       description="Convert between plain text and HTML entities"
       toolId="678f382926f06f912191bc87"
     >
-      <div className="max-w-4xl mx-auto p-4">
+      <div className="max-w-6xl mx-auto">
         <Card className="bg-default-50 dark:bg-default-100">
           <CardBody className="p-6">
             {/* Mode Selection and Options */}
@@ -385,7 +385,7 @@ export default function HTMLEncoderDecoder() {
 
 
         {/* Info Section */}
-        <Card className="bg-default-50 dark:bg-default-100 p-4 mt-8 md:p-8">
+        <Card className="bg-default-50 dark:bg-default-100 mt-8 md:p-8">
           <CardBody>
             <div className="rounded-xl p-2 md:p-4 max-w-4xl mx-auto">
               <h2 className="text-lg md:text-xl lg:text-2xl font-semibold text-default-700 mb-4 flex items-center">
@@ -393,15 +393,12 @@ export default function HTMLEncoderDecoder() {
                 About HTML Encoder/Decoder
               </h2>
               <p className="text-sm md:text-base text-default-600 mb-4">
-                The HTML Encoder/Decoder is a powerful tool designed for web developers, content creators, and anyone
-                working with HTML. It provides a simple and efficient way to convert plain text into HTML entities and
-                vice versa, ensuring that your content displays correctly in web browsers and prevents potential
-                security vulnerabilities.
+              The HTML Encoder/Decoder is an excellent tool for web developers, content creators, and anyone dealing with HTML. It is a quick and easy tool to convert text into HTML entities or HTML entities into text to ensure your content displays properly and is secured from potential security issues.
               </p>
 
               <div className="my-8">
                 <Image
-                  src="/Images/HTMLEncoderDecoderPreview.png"
+                   src="/Images/InfosectionImages/HTMLEncoderPreview.png?height=400&width=600" 
                   alt="Screenshot of the HTML Encoder/Decoder interface showing input and output areas, encoding options, and various controls"
                   width={600}
                   height={400}
@@ -438,36 +435,6 @@ export default function HTMLEncoderDecoder() {
                 </li>
                 <li>
                   <strong>Clipboard Integration:</strong> Quickly paste text from and copy results to your clipboard.
-                </li>
-              </ul>
-
-              <h2 className="text-lg md:text-xl lg:text-2xl font-semibold text-default-700 mb-4 mt-8 flex items-center">
-                <Lightbulb className="w-6 h-6 mr-2" />
-                Use Cases
-              </h2>
-              <ul className="list-disc list-inside space-y-2 text-xs md:text-sm text-default-600">
-                <li>
-                  <strong>Content Management:</strong> Safely prepare text for use in HTML documents, avoiding rendering
-                  issues and potential XSS vulnerabilities.
-                </li>
-                <li>
-                  <strong>Data Scraping:</strong> Clean and process HTML content extracted from web pages.
-                </li>
-                <li>
-                  <strong>Email Template Creation:</strong> Ensure special characters in email content display correctly
-                  across different email clients.
-                </li>
-                <li>
-                  <strong>XML Processing:</strong> Prepare text for use in XML documents, ensuring proper escaping of
-                  special characters.
-                </li>
-                <li>
-                  <strong>Debugging:</strong> Decode encoded HTML to investigate rendering issues or unexpected behavior
-                  in web applications.
-                </li>
-                <li>
-                  <strong>Accessibility:</strong> Ensure that screen readers and other assistive technologies can
-                  correctly interpret your web content.
                 </li>
               </ul>
 

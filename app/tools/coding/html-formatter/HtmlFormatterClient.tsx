@@ -310,16 +310,13 @@ export default function HTMLFormatter() {
                 What is HTML Formatter?
             </h2>
             <p className="text-sm md:text-base text-default-600 mb-4">
-                The HTML Formatter is a powerful tool designed to clean up, standardize, and optimize your HTML code. It
-                uses **Prettier**, a popular code formatting engine, to ensure consistent and readable HTML output. 
-                Whether you're a web developer, designer, or content creator, this tool helps maintain clean, organized, 
-                and optimized code effortlessly.
+            The HTML Formatter is an effective tool for cleaning up, normalizing, and enhancing your HTML code. It utilizes **Prettier**, an excellent code formatting engine, to ensure that your HTML output is consistent and readable. Whether you're a web developer, designer, or author, this tool allows you to create clean, ordered, and optimized code seamlessly.
             </p>
 
             {/* Image Preview */}
             <div className="my-8">
                 <Image
-                src="/Images/HTMLFormatterPreview.png"
+                src="/Images/InfosectionImages/HTMLFOrmatterPreview.png?height=400&width=600"
                 alt="Screenshot of the HTML Formatter interface showing input, options, and output preview"
                 width={600}
                 height={400}
@@ -335,12 +332,12 @@ export default function HTMLFormatter() {
             <ol className="list-decimal list-inside space-y-2 text-sm md:text-base">
                 <li>Enter your HTML code in the input area or upload an HTML file (max 5MB).</li>
                 <li>Adjust formatting options to your preferences.</li>
-                <li>Click the **"Format"** button to process your HTML code.</li>
+                <li>Click the "Format" button to process your HTML code.</li>
                 <li>Review the formatted HTML in the syntax-highlighted output area.</li>
-                <li>Click **"Show Preview"** to see how the formatted HTML renders in the browser.</li>
-                <li>Use the **"Copy"** button to copy the formatted HTML to your clipboard.</li>
-                <li>Click **"Download"** to save the formatted HTML as a file.</li>
-                <li>Click **"Reset"** to clear all inputs and start over.</li>
+                <li>Click "Show Preview" to see how the formatted HTML renders in the browser.</li>
+                <li>Use the "Copy" button to copy the formatted HTML to your clipboard.</li>
+                <li>Click "Download" to save the formatted HTML as a file.</li>
+                <li>Click "Reset" to clear all inputs and start over.</li>
             </ol>
 
             {/* Key Features */}

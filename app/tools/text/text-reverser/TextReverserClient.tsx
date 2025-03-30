@@ -151,24 +151,12 @@ export default function TextReverser() {
                 What is the Text Reverser?
               </h2>
               <p className="text-sm md:text-base text-default-600 mb-4">
-                The Text Reverser is a simple yet powerful tool designed to flip the order of characters, words, or
-                sentences in your text. It goes beyond basic reversal, offering a{" "}
-                <Link href="#how-to-use" className="text-primary hover:underline">
-                  user-friendly interface
-                </Link>{" "}
-                and additional features to enhance your text manipulation experience. Whether you're creating word
-                puzzles, experimenting with text formatting, or just having fun with your content, our Text Reverser
-                provides an efficient and enjoyable way to transform your text.
-              </p>
-              <p className="text-sm md:text-base text-default-600 mb-4">
-                From reversing single words to entire paragraphs, this tool offers versatility for various creative and
-                practical applications. It's like having a magic mirror for your text, instantly showing you the flip
-                side of your words!
+              The Text Reverser is a simple but powerful tool that reverses the order of characters, words, or sentences in text. There is more than the basic reversal, with an easy-to-use interface and additional features, it maximizes your text manipulation's fun and enjoyment. Whether you want to create word puzzles, change the formatting of text, or just mess around with your content, the Text Reverser is a fun and easy method of returning your text to its original order. From reversing a single word to a whole paragraph, this tool is usable for many different creative and practical uses. It is like a magic mirror for your text - you instantly see the flip side of your words!
               </p>
 
               <div className="my-8">
                 <Image
-                  src="/Images/TextReverserPreview.png"
+                  src="/Images/InfosectionImages/TextReverserPreview.png?height=400&width=600"
                   alt="Screenshot of the Text Reverser interface showing input area, reverse button, and output area with reversed text"
                   width={600}
                   height={400}
@@ -249,38 +237,6 @@ export default function TextReverser() {
                 <li>
                   <Puzzle className="w-4 h-4 inline-block mr-1" /> <strong>Versatile Applications:</strong> Useful for
                   puzzles, games, and creative writing
-                </li>
-              </ul>
-
-              <h2 className="text-xl md:text-2xl font-semibold text-default-700 mb-4 mt-8 flex items-center">
-                <Lightbulb className="w-6 h-6 mr-2" />
-                Practical Applications
-              </h2>
-              <p className="text-sm md:text-base text-default-600 mb-4">
-                The Text Reverser tool can be useful in various creative and practical scenarios:
-              </p>
-              <ul className="list-disc list-inside space-y-2 text-sm md:text-base text-default-600">
-                <li>
-                  <strong>Word Puzzles:</strong> Create reverse word challenges or riddles for games and quizzes
-                </li>
-                <li>
-                  <strong>Creative Writing:</strong> Experiment with reversed text in poetry or storytelling
-                </li>
-                <li>
-                  <strong>Language Learning:</strong> Practice reading backwards to improve letter recognition
-                </li>
-                <li>
-                  <strong>Cryptography:</strong> Use as a simple form of text encoding
-                </li>
-                <li>
-                  <strong>Graphic Design:</strong> Create mirrored text effects for logos or artistic designs
-                </li>
-                <li>
-                  <strong>Proofreading:</strong> Reverse text to spot errors you might miss reading forward
-                </li>
-                <li>
-                  <strong>Fun and Entertainment:</strong> Amuse friends with reversed messages or create social media
-                  content
                 </li>
               </ul>
 

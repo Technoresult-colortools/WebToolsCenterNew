@@ -166,7 +166,7 @@ export default function SHA1Tool() {
             <Tabs aria-label="SHA-1 options">
               <Tab key="generate" title="Generate SHA-1">
                 <div className="flex flex-col gap-4 mt-4">
-                  <label className="text-lg font-medium">Input Text</label>
+               
                   <Textarea
                     value={input}
                     onChange={handleInputChange}
@@ -320,7 +320,7 @@ export default function SHA1Tool() {
         </Card>
 
         {/* Information Section */}
-        <Card className="mt-8 bg-default-50 dark:bg-default-100 p-4 md:p-8">
+        <Card className="bg-default-50 dark:bg-default-100 p-4 md:p-8">
           <CardBody>
             <div className="rounded-xl p-2 md:p-4 max-w-4xl mx-auto">
               <h2 className="text-lg md:text-xl lg:text-2xl font-semibold text-default-700 mb-4 flex items-center">
@@ -328,19 +328,15 @@ export default function SHA1Tool() {
                 What is SHA-1 Hash Generator & Verifier?
               </h2>
               <p className="text-sm md:text-base text-default-600 mb-4">
-                The SHA-1 Hash Generator & Verifier is a tool designed for developers, security professionals, and
-                anyone working with data integrity. It provides a solution for generating and verifying SHA-1 hashes,
-                which can be used to ensure data hasn't been tampered with during transmission or storage.
+              The SHA-1 Hash Generator & Verifier is a utility built for developers, security professionals, and anyone else dealing with integrity of data. It provides functionality to generate and verify SHA-1 hashes in order to confirm the data has not changed during communication or storage.
               </p>
               <p className="text-sm md:text-base text-default-600 mb-4">
-                SHA-1 (Secure Hash Algorithm 1) produces a 160-bit (20-byte) hash value. While it has been deprecated
-                for certain security-critical applications due to theoretical attacks, it still finds use in various
-                non-cryptographic contexts.
+              SHA-1 (Secure Hash Algorithm 1) produces a hash value of 160 bits (which is 20 bytes long). Although it has been deprecated for some security-sensitive usage due to attacks in theory to happen, (which means in practical situations attacks exist), it is still being used in many other non-cryptographic situations.
               </p>
 
               <div className="my-8">
                 <Image
-                  src="/Images/SHA1Preview.png?height=400&width=600"
+                 src="/Images/InfosectionImages/SHA1Preview.png?height=400&width=600"
                   alt="Screenshot of the SHA-1 Hash Generator & Verifier interface"
                   width={600}
                   height={400}

@@ -346,21 +346,18 @@ export default function HTMLMinifier() {
                 About HTML Minifier
               </h2>
               <p className="text-sm md:text-base text-default-600 mb-4">
-                The HTML Minifier is a powerful tool designed to compress and optimize your HTML code by removing
-                unnecessary characters, whitespace, and optional elements. This advanced tool helps reduce file size,
-                improve page load times, and enhance overall website performance. Whether you're a developer, designer,
-                or website owner, this tool ensures your HTML is lean and efficient without compromising functionality.
+              The HTML Minifier does exactly what it says, minimizing and optimizing your HTML code by removing unnecessary characters, spaces, and optional elements. This advanced tool will decrease your file size, speed up loading time, and improve overall performance. It is an ideal tool for developers, designers, or web owners who want to maintain proper functionality while making the HTML efficient and lean.
               </p>
 
               <div className="my-8">
                 <Image
-                  src="/Images/HTMLMinifierPreview.png"
-                  alt="Screenshot of the Enhanced HTML Minifier interface showing input area, minification options, and output"
-                  width={600}
-                  height={400}
-                  className="rounded-lg shadow-lg"
+                src="/Images/InfosectionImages/HTMLMinifierPreview.png?height=400&width=600"
+                alt="Screenshot of the HTML Formatter interface showing input, options, and output preview"
+                width={600}
+                height={400}
+                className="rounded-lg shadow-lg w-full h-auto"
                 />
-              </div>
+            </div>
 
               <h2 className="text-lg md:text-xl lg:text-2xl font-semibold text-default-700 mb-4 mt-8 flex items-center">
                 <BookOpen className="w-6 h-6 mr-2" />

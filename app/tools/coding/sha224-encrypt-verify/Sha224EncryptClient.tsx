@@ -351,14 +351,12 @@ export default function SHA224EncryptVerify() {
               What is SHA-224 Hash Generator & Verifier?
             </h2>
             <p className="text-sm md:text-base text-default-600 mb-4">
-              The SHA-224 Hash Generator & Verifier is a powerful cryptographic tool that generates 224-bit (28-byte) hash values. 
-              As a member of the SHA-2 family, it is designed to provide a balance between security and performance, making it suitable for 
-              applications such as data integrity verification, digital signatures, and secure password hashing.
+            The SHA-224 Hash Generator & Verifier is a fast, secure cryptographic tool that generates 224-bit (28-byte) hash values. As part of the SHA-2 family, this tool embodies the weight and architecture known to provide an ideal balance between security and performance, making it suitable for applications, including data integrity verification, digital signatures, and password hashing.
             </p>
 
             <div className="my-8">
               <Image
-                src="/Images/SHA224Preview.png"
+                  src="/Images/InfosectionImages/SHA224Preview.png?height=400&width=600"
                 alt="Screenshot of the SHA-224 Hash Generator & Verifier interface"
                 width={600}
                 height={400}

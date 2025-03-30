@@ -270,24 +270,19 @@ export default function Base64EncoderDecoder() {
             What is the Base64 Encoder/Decoder?
           </h2>
           <p className="text-sm md:text-base text-default-600 mb-4">
-            The Base64 Encoder/Decoder is a versatile tool designed for developers, IT professionals, and anyone working
-            with data encoding. It offers a{" "}
+          Base64 is a versatile tool designed for Enkodar/decoder developers, IT professionals and anyone working with data encoding. It provides a{" "}
             <Link href="#how-to-use" className="text-primary hover:underline">
               user-friendly interface
             </Link>{" "}
-            for encoding and decoding text and files using the Base64 scheme. Whether you're working on web development,
-            data transmission, or just need to convert between text and Base64, our tool simplifies the process with
-            real-time conversion and advanced features.
+            for encoding and decoding the lessons using the base 64 plan. Whether you are working on web development, data transmission, or simply needs to be converted between text and base 64, our tool simplifies the process with real -time conversion and advanced features.
           </p>
           <p className="text-sm md:text-base text-default-600 mb-4">
-            With support for multiple file types, various text encodings, and instant preview functionality, it's like
-            having a Swiss Army knife for Base64 operations right in your browser. Say goodbye to command-line tools or
-            limited online converters and hello to a comprehensive Base64 solution!
+          With many file types, support for various lessons encoding and instant preview functionality, it is like being a Swiss Army knife for the base 64 operation in your browser. Say goodbye to command-line tools or limited online converters and hello to a broad base 64 solution!
           </p>
 
           <div className="my-8">
             <Image
-              src="/Images/Base64EncoderDecoderPreview.png?height=400&width=600"
+              src="/Images/InfosectionImages/Base64EncoderPreview.png?height=400&width=600"
               alt="Screenshot of the Base64 Encoder/Decoder interface showing encoding and decoding options"
               width={600}
               height={400}

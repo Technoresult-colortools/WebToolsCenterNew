@@ -17,10 +17,14 @@ import {
   ModalFooter,
   Autocomplete,
   AutocompleteItem,
+  CardHeader,
+  Accordion,
+  AccordionItem,
+  Chip,
 } from "@nextui-org/react"
 import Image from "next/image"
 import Link from "next/link"
-import { Copy, Download, RefreshCw, Shuffle, Info, Lightbulb, BookOpen, Type, Filter, Settings } from "lucide-react"
+import { Copy, Download, RefreshCw, Shuffle, Info, Lightbulb, BookOpen, Type, Filter, Settings, Heart, Clock, Book, User, HeartHandshake, MapPin, Phone, Mail, Briefcase, FileText, CreditCard, AlignLeft } from "lucide-react"
 import { toast } from "react-hot-toast"
 import ToolLayout from "@/components/ToolLayout"
 
@@ -94,6 +98,7 @@ const GoogleFontsPairFinder: React.FC = () => {
   const [headingPopularity, setHeadingPopularity] = useState("all")
   const [bodyPopularity, setBodyPopularity] = useState("all")
   const [showFontsPair, setShowFontsPair] = useState(false)
+  const [fontSettingsTab, setFontSettingsTab] = useState("controls");
 
   useEffect(() => {
     const preloadFonts = () => {
@@ -243,22 +248,28 @@ const GoogleFontsPairFinder: React.FC = () => {
         <div className="flex items-center justify-between">
           <label className="text-default-700">{isHeading ? "Heading" : "Body"} Font Family</label>
           <div className="flex space-x-2">
-            <Button
-              onClick={handleShuffle}
-              size="sm"
-              color="primary"
-              startContent={<Shuffle size={18} />}
-            >
-              Shuffle
-            </Button>
-            <Button
-              onClick={() => setIsDetailsOpen(true)}
-              size="sm"
-              color="secondary"
-              startContent={<Settings size={18} />}
-            >
-              Details
-            </Button>
+          <Button 
+            isIconOnly 
+            onPress={handleShuffle} 
+            color="primary" 
+            size="sm" 
+            aria-label="Shuffle" 
+            className="rounded-full"
+          >
+            <Shuffle size={18} />
+          </Button>
+
+          <Button 
+          isIconOnly 
+          onPress={() => setIsDetailsOpen(true)} 
+          color="secondary" 
+          size="sm" 
+          aria-label="Details" 
+          className="rounded-full"
+        >
+          <Settings size={18} />
+        </Button>
+
           </div>
         </div>
         <Autocomplete
@@ -636,7 +647,7 @@ const GoogleFontsPairFinder: React.FC = () => {
                                 key={weight}
                                 size="sm"
                                 color={selectedHeadingWeights.includes(weight) ? "primary" : "default"}
-                                onClick={() => toggleWeight(weight, true)}
+                                onPress={() => toggleWeight(weight, true)}
                                 className="text-xs"
                               >
                                 {weight}
@@ -720,210 +731,329 @@ const GoogleFontsPairFinder: React.FC = () => {
 
   ShowFontsPair.displayName = "ShowFontsPair"
 
+
+  
   return (
     <ToolLayout
       title="Google Fonts Pair Finder"
       description="Discover the perfect font combinations for your design projects"
       toolId="678f382926f06f912191bc81"
     >
-      <div className="flex flex-col gap-8">
-        <Card className="bg-default-50 dark:bg-default-100">
-          <CardBody className="p-6">
-            <div className="flex flex-wrap justify-center gap-4 mb-8">
-              <Button onClick={handleRandomPair} color="primary" startContent={<RefreshCw size={18} />}>
-                Random Pair
-              </Button>
-              <Button onClick={handleCopyCSS} color="primary" startContent={<Copy size={18} />}>
-                Copy CSS
-              </Button>
-              <Button onClick={() => setShowFontsPair(true)} color="primary" startContent={<Download size={18} />}>
-                Use Fonts in Web
-              </Button>
+      <div className="flex flex-col gap-4">
+        {/* Floating Action Bar */}
+        <Card className="bg-default-50 dark:bg-default-100 shadow-md">
+          <CardBody className="py-2 px-4">
+            <div className="flex flex-wrap items-center justify-between gap-2">
+              <div className="flex flex-wrap gap-1">
+                <Button isIconOnly onClick={handleRandomPair} color="primary" size="sm" aria-label="Random Pair" className="rounded-full">
+                  <RefreshCw size={16} />
+                </Button>
+                <Button isIconOnly onClick={handleCopyCSS} color="primary" size="sm" aria-label="Copy CSS" className="rounded-full">
+                  <Copy size={16} />
+                </Button>
+                <Button isIconOnly onClick={() => setShowFontsPair(true)} color="primary" size="sm" aria-label="Use Fonts" className="rounded-full">
+                  <Download size={16} />
+                </Button>
+              </div>
+              
+              <div className="flex items-center gap-1">
+                <Chip size="sm" variant="flat" color="primary" className="px-2 py-1">{headingFont.family}</Chip>
+                <span className="text-xs opacity-50 mx-1">+</span>
+                <Chip size="sm" variant="flat" color="primary" className="px-2 py-1">{bodyFont.family}</Chip>
+              </div>
             </div>
-
-            <Tabs>
-              <Tab key="preview" title="Preview">
-                <div className="flex flex-col gap-8">
-                  <Tabs
-                    selectedKey={activeTab}
-                    onSelectionChange={(key) => setActiveTab(key as "profile" | "article" | "card")}
+          </CardBody>
+        </Card>
+  
+        {/* Main Content */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-4">
+          {/* Preview Section - Takes 8/12 width on desktop */}
+          <Card className="lg:col-span-8 bg-default-50 dark:bg-default-100 shadow-md overflow-hidden">
+            <div className="absolute top-2 right-2 z-10">
+              {/* Fixed Tabs component for TypeScript compatibility */}
+              <Tabs 
+                size="sm" 
+                selectedKey={activeTab}
+                onSelectionChange={(key) => setActiveTab(key.toString() as "profile" | "article" | "card")}
+                aria-label="Preview content tabs"
+                classNames={{
+                  tabList: "bg-default-100/70 dark:bg-default-200/70 backdrop-blur-md rounded-full p-0.5",
+                  tab: "px-2 py-1 data-[selected=true]:bg-white/80 dark:data-[selected=true]:bg-default-100/80 data-[selected=true]:shadow-sm rounded-full"
+                }}
+              >
+                <Tab key="profile" title={<User size={14} />} />
+                <Tab key="article" title={<FileText size={14} />} />
+                <Tab key="card" title={<CreditCard size={14} />} />
+              </Tabs>
+            </div>
+            
+            {/* Preview Content - Ultra Modern Design */}
+            <div className="relative w-full h-full min-h-80">
+              {/* Profile Preview */}
+              {activeTab === "profile" && (
+                <div className="bg-gradient-to-br from-slate-100 to-slate-200 dark:from-slate-800 dark:to-slate-900 p-6 h-full">
+                  <div className="flex flex-col sm:flex-row sm:items-center gap-6 mb-6">
+                    <div className="relative">
+                      <img
+                        src="/Images/GoogleFontsPair/MarioImage.jpg?height=100&width=100"
+                        alt="Profile"
+                        className="w-24 h-24 rounded-full object-cover border-4 border-white dark:border-slate-700 shadow-lg"
+                      />
+                      <span className="absolute bottom-1 right-1 w-4 h-4 bg-green-500 rounded-full border-2 border-white"></span>
+                    </div>
+                    <div>
+                      <h2
+                        style={{
+                          fontFamily: `'${headingFont.family}', ${fonts.find((f) => f.family === headingFont.family)?.category || "sans-serif"}`,
+                          fontSize: `${headingFont.size}px`,
+                          fontWeight: headingFont.weight,
+                          lineHeight: headingFont.lineHeight,
+                          letterSpacing: `${headingFont.letterSpacing}px`,
+                        }}
+                        className="mb-1"
+                      >
+                        Premnash
+                      </h2>
+                      <p
+                        style={{
+                          fontFamily: `'${bodyFont.family}', ${fonts.find((f) => f.family === bodyFont.family)?.category || "sans-serif"}`,
+                          fontSize: `${bodyFont.size}px`,
+                          fontWeight: bodyFont.weight,
+                          lineHeight: bodyFont.lineHeight,
+                          letterSpacing: `${bodyFont.letterSpacing}px`,
+                        }}
+                        className="flex items-center text-default-600"
+                      >
+                        <Briefcase size={14} className="mr-1" /> Software Engineer - Microsoft
+                      </p>
+                    </div>
+                  </div>
+                  
+                  <div
+                    style={{
+                      fontFamily: `'${bodyFont.family}', ${fonts.find((f) => f.family === bodyFont.family)?.category || "sans-serif"}`,
+                      fontSize: `${bodyFont.size}px`,
+                      fontWeight: bodyFont.weight,
+                      lineHeight: bodyFont.lineHeight,
+                      letterSpacing: `${bodyFont.letterSpacing}px`,
+                    }}
                   >
-                    <Tab key="profile" title="Profile">
-                      <div className="bg-slate-200 text-default-900 dark:text-default-100 rounded-lg p-6">
-                        <div className="flex items-center space-x-4 mb-4">
-                          <img
-                            src="/Images/prem.jpg?height=100&width=100"
-                            alt="Profile"
-                            className="w-24 h-24 rounded-full"
-                          />
-                          <div>
-                            <h2
-                              style={{
-                                fontFamily: `'${headingFont.family}', ${fonts.find((f) => f.family === headingFont.family)?.category || "sans-serif"}`,
-                                fontSize: `${headingFont.size}px`,
-                                fontWeight: headingFont.weight,
-                                lineHeight: headingFont.lineHeight,
-                                letterSpacing: `${headingFont.letterSpacing}px`,
-                              }}
-                            >
-                              Premnash
-                            </h2>
-                            <p
-                              style={{
-                                fontFamily: `'${bodyFont.family}', ${fonts.find((f) => f.family === bodyFont.family)?.category || "sans-serif"}`,
-                                fontSize: `${bodyFont.size}px`,
-                                fontWeight: bodyFont.weight,
-                                lineHeight: bodyFont.lineHeight,
-                                letterSpacing: `${bodyFont.letterSpacing}px`,
-                              }}
-                            >
-                              Software Engineer - Microsoft
-                            </p>
-                          </div>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-6">
+                      <div className="space-y-2">
+                        <div className="flex items-center">
+                          <Mail size={14} className="mr-2 text-default-400" />
+                          <span>premnash@mario.com</span>
                         </div>
-                        <div
-                          style={{
-                            fontFamily: `'${bodyFont.family}', ${fonts.find((f) => f.family === bodyFont.family)?.category || "sans-serif"}`,
-                            fontSize: `${bodyFont.size}px`,
-                            fontWeight: bodyFont.weight,
-                            lineHeight: bodyFont.lineHeight,
-                            letterSpacing: `${bodyFont.letterSpacing}px`,
-                          }}
-                        >
-                          <p className="mb-2">premnash@mario.com</p>
-                          <p className="mb-2">+13 345 325 123</p>
-                          <p className="mb-4">Las Vegas, USA</p>
-                          <h3
-                            style={{
-                              fontFamily: `'${headingFont.family}', ${fonts.find((f) => f.family === headingFont.family)?.category || "sans-serif"}`,
-                              fontSize: `${headingFont.size * 0.8}px`,
-                              fontWeight: headingFont.weight,
-                              lineHeight: headingFont.lineHeight,
-                              letterSpacing: `${headingFont.letterSpacing}px`,
-                            }}
-                            className="mb-2"
-                          >
-                            Biography
-                          </h3>
-                          <p className="mb-4">
-                            I'm Premnash, a software engineer at Innovative Tech Solutions in San Francisco. I
-                            specialize in developing robust applications that deliver seamless functionality and enhance
-                            user engagement.
-                          </p>
-                          <h3
-                            style={{
-                              fontFamily: `'${headingFont.family}', ${fonts.find((f) => f.family === headingFont.family)?.category || "sans-serif"}`,
-                              fontSize: `${headingFont.size * 0.8}px`,
-                              fontWeight: headingFont.weight,
-                              lineHeight: headingFont.lineHeight,
-                              letterSpacing: `${headingFont.letterSpacing}px`,
-                            }}
-                            className="mb-2"
-                          >
-                            Hobbies
-                          </h3>
-                          <p>
-                            In my spare time, In my spare time, I love hiking in nature, trying out new recipes in the
-                            kitchen, and practicing photography to capturethe beauty around me.
-                          </p>
+                        <div className="flex items-center">
+                          <Phone size={14} className="mr-2 text-default-400" />
+                          <span>+13 345 325 123</span>
+                        </div>
+                        <div className="flex items-center">
+                          <MapPin size={14} className="mr-2 text-default-400" />
+                          <span>Las Vegas, USA</span>
                         </div>
                       </div>
-                    </Tab>
-                    <Tab key="article" title="Article">
-                      <div className="bg-slate-200 text-default-900 dark:text-default-100 rounded-lg p-6">
-                        <h2
+                      
+                      <div className="bg-white/40 dark:bg-slate-800/40 backdrop-blur-sm rounded-xl p-4">
+                        <h3
                           style={{
                             fontFamily: `'${headingFont.family}', ${fonts.find((f) => f.family === headingFont.family)?.category || "sans-serif"}`,
-                            fontSize: `${headingFont.size}px`,
+                            fontSize: `${headingFont.size * 0.7}px`,
                             fontWeight: headingFont.weight,
                             lineHeight: headingFont.lineHeight,
                             letterSpacing: `${headingFont.letterSpacing}px`,
                           }}
-                          className="mb-4"
+                          className="mb-2 flex items-center"
                         >
-                          The Art of Web Design: Crafting Engaging Digital Experiences
-                        </h2>
-                        <p
-                          style={{
-                            fontFamily: `'${bodyFont.family}', ${fonts.find((f) => f.family === bodyFont.family)?.category || "sans-serif"}`,
-                            fontSize: `${bodyFont.size}px`,
-                            fontWeight: bodyFont.weight,
-                            lineHeight: bodyFont.lineHeight,
-                            letterSpacing: `${bodyFont.letterSpacing}px`,
-                          }}
-                        >
-                          Web design is the creative process of planning and building websites, focusing on aesthetics,
-                          usability, and user experience. It involves a blend of graphic design, interface design, and
-                          interaction design to create visually appealing and functional websites. Effective web design
-                          enhances user engagement by ensuring that content is organized, easy to navigate, and
-                          responsive across devices. Key elements include color schemes, typography, imagery, and
-                          layout, all harmonizing to convey a brand's message. As technology evolves, trends in web
-                          design continue to shift, emphasizing minimalism, accessibility, and interactivity. A
-                          well-designedwebsite not only attracts visitors but also fosters trust and encourages
-                          conversions, making it a crucial aspect of any online presence.
+                          <HeartHandshake size={16} className="mr-1" /> Hobbies
+                        </h3>
+                        <p className="text-default-600">
+                          Hiking in nature, trying out new recipes, and practicing photography.
                         </p>
                       </div>
-                    </Tab>
-                    <Tab key="card" title="Card">
-                      <div className="bg-slate-200 text-default-900 dark:text-default-100 rounded-lg overflow-hidden">
-                        <img
-                          src="/Images/Typography.png?height=200&width=400"
-                          alt="Card"
-                          className="w-full h-48 object-cover"
-                        />
-                        <div className="p-6">
-                          <h3
-                            style={{
-                              fontFamily: `'${headingFont.family}', ${fonts.find((f) => f.family === headingFont.family)?.category || "sans-serif"}`,
-                              fontSize: `${headingFont.size * 0.8}px`,
-                              fontWeight: headingFont.weight,
-                              lineHeight: headingFont.lineHeight,
-                              letterSpacing: `${headingFont.letterSpacing}px`,
-                            }}
-                            className="mb-2"
-                          >
-                            Exploring Typography
-                          </h3>
-                          <p
-                            style={{
-                              fontFamily: `'${bodyFont.family}', ${fonts.find((f) => f.family === bodyFont.family)?.category || "sans-serif"}`,
-                              fontSize: `${bodyFont.size}px`,
-                              fontWeight: bodyFont.weight,
-                              lineHeight: bodyFont.lineHeight,
-                              letterSpacing: `${bodyFont.letterSpacing}px`,
-                            }}
-                          >
-                            Discover the world of fonts and how they can transform your designs. Learn about serif,
-                            sans-serif, and display typefaces.
-                          </p>
-                        </div>
+                    </div>
+                    
+                    <div className="bg-white/40 dark:bg-slate-800/40 backdrop-blur-sm rounded-xl p-4">
+                      <h3
+                        style={{
+                          fontFamily: `'${headingFont.family}', ${fonts.find((f) => f.family === headingFont.family)?.category || "sans-serif"}`,
+                          fontSize: `${headingFont.size * 0.7}px`,
+                          fontWeight: headingFont.weight,
+                          lineHeight: headingFont.lineHeight,
+                          letterSpacing: `${headingFont.letterSpacing}px`,
+                        }}
+                        className="mb-2 flex items-center"
+                      >
+                        <User size={16} className="mr-1" /> Biography
+                      </h3>
+                      <p className="text-default-600">
+                        I'm Premnash, a software engineer at Innovative Tech Solutions in San Francisco. I
+                        specialize in developing robust applications that deliver seamless functionality and enhance
+                        user engagement.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              )}
+              
+              {/* Article Preview */}
+              {activeTab === "article" && (
+                <div className="bg-gradient-to-br from-slate-100 to-slate-200 dark:from-slate-800 dark:to-slate-900 p-6 h-full">
+                  <div className="max-w-2xl mx-auto bg-white/40 dark:bg-slate-800/40 backdrop-blur-sm rounded-xl p-6 shadow-sm">
+                    <h2
+                      style={{
+                        fontFamily: `'${headingFont.family}', ${fonts.find((f) => f.family === headingFont.family)?.category || "sans-serif"}`,
+                        fontSize: `${headingFont.size}px`,
+                        fontWeight: headingFont.weight,
+                        lineHeight: headingFont.lineHeight,
+                        letterSpacing: `${headingFont.letterSpacing}px`,
+                      }}
+                      className="mb-4"
+                    >
+                      The Art of Web Design: Crafting Engaging Digital Experiences
+                    </h2>
+                    
+                    <div className="flex items-center mb-4 text-sm text-default-500"
+                      style={{
+                        fontFamily: `'${bodyFont.family}', ${fonts.find((f) => f.family === bodyFont.family)?.category || "sans-serif"}`,
+                      }}
+                    >
+                      <Clock size={14} className="mr-1" /> March 29, 2025
+                      <span className="mx-2">•</span>
+                      <Book size={14} className="mr-1" /> 5 min read
+                    </div>
+                    
+                    <p
+                      style={{
+                        fontFamily: `'${bodyFont.family}', ${fonts.find((f) => f.family === bodyFont.family)?.category || "sans-serif"}`,
+                        fontSize: `${bodyFont.size}px`,
+                        fontWeight: bodyFont.weight,
+                        lineHeight: bodyFont.lineHeight,
+                        letterSpacing: `${bodyFont.letterSpacing}px`,
+                      }}
+                      className="text-default-700"
+                    >
+                      Web design is the creative process of planning and building websites, focusing on aesthetics,
+                      usability, and user experience. It involves a blend of graphic design, interface design, and
+                      interaction design to create visually appealing and functional websites. Effective web design
+                      enhances user engagement by ensuring that content is organized, easy to navigate, and
+                      responsive across devices. Key elements include color schemes, typography, imagery, and
+                      layout, all harmonizing to convey a brand's message.
+                    </p>
+                  </div>
+                </div>
+              )}
+              
+              {/* Card Preview */}
+              {activeTab === "card" && (
+                <div className="bg-gradient-to-br from-slate-100 to-slate-200 dark:from-slate-800 dark:to-slate-900 p-6 h-full flex items-center justify-center">
+                  <div className="w-full max-w-sm overflow-hidden rounded-xl bg-white dark:bg-slate-800 shadow-lg">
+                    <div className="relative">
+                      <img
+                        src="/Images/GoogleFontsPair/Typography.jpg?height=200&width=400"
+                        alt="Card"
+                        className="w-full h-48 object-cover"
+                      />
+                      <div className="absolute top-4 right-4 bg-white/90 dark:bg-slate-900/90 backdrop-blur-sm rounded-full p-1">
+                        <Heart size={16} className="text-rose-500" />
                       </div>
-                    </Tab>
+                    </div>
+                    <div className="p-5">
+                      <div className="flex justify-between items-center mb-3">
+                        <h3
+                          style={{
+                            fontFamily: `'${headingFont.family}', ${fonts.find((f) => f.family === headingFont.family)?.category || "sans-serif"}`,
+                            fontSize: `${headingFont.size * 0.8}px`,
+                            fontWeight: headingFont.weight,
+                            lineHeight: headingFont.lineHeight,
+                            letterSpacing: `${headingFont.letterSpacing}px`,
+                          }}
+                        >
+                          Exploring Typography
+                        </h3>
+                        <Chip size="sm" variant="flat" color="secondary">Design</Chip>
+                      </div>
+                      <p
+                        style={{
+                          fontFamily: `'${bodyFont.family}', ${fonts.find((f) => f.family === bodyFont.family)?.category || "sans-serif"}`,
+                          fontSize: `${bodyFont.size}px`,
+                          fontWeight: bodyFont.weight,
+                          lineHeight: bodyFont.lineHeight,
+                          letterSpacing: `${bodyFont.letterSpacing}px`,
+                        }}
+                        className="mb-4 text-default-600"
+                      >
+                        Discover the world of fonts and how they can transform your designs. Learn about serif,
+                        sans-serif, and display typefaces.
+                      </p>
+                      <Button size="sm" color="primary" className="w-full">Read More</Button>
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
+          </Card>
+  
+          {/* Controls Section - Takes 4/12 width on desktop */}
+          <div className="lg:col-span-4 space-y-4">
+            {/* Font Controls Card */}
+            <Card className="bg-default-50 dark:bg-default-100 shadow-md">
+              <CardHeader className="pb-0 pt-3 px-4 flex flex-col gap-0">
+                <div className="flex justify-between items-center w-full">
+                  <h3 className="text-lg font-medium">Font Settings</h3>
+                  {/* Icon-only tabs that connect to fontSettingsTab state */}
+                  <Tabs 
+                    size="sm" 
+                    aria-label="Font settings tabs"
+                    onSelectionChange={(key) => setFontSettingsTab(key.toString())}
+                    selectedKey={fontSettingsTab}
+                    classNames={{
+                      tabList: "bg-default-100/70 dark:bg-default-200/70 rounded-full p-0.5",
+                      tab: "px-2 py-1 data-[selected=true]:bg-white/80 dark:data-[selected=true]:bg-default-100/80 data-[selected=true]:shadow-sm rounded-full"
+                    }}
+                  >
+                    <Tab key="controls" title={<Settings size={14} />} />
+                    <Tab key="filters" title={<Filter size={14} />} />
                   </Tabs>
                 </div>
-              </Tab>
-              <Tab key="controls" title="Font Controls">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mt-4">
-                  <div>
-                    <h3 className="text-lg font-semibold mb-4">Heading Font</h3>
-                    <FontControls isHeading={true} />
+              </CardHeader>
+              <CardBody>
+                {/* Font settings content based on selected tab */}
+                {fontSettingsTab === "controls" && (
+                  <Accordion defaultExpandedKeys={["heading"]} variant="splitted" className="px-0">
+                    <AccordionItem key="heading" title="Heading Font" className="px-2">
+                      <FontControls isHeading={true} />
+                    </AccordionItem>
+                    <AccordionItem key="body" title="Body Font" className="px-2">
+                      <FontControls isHeading={false} />
+                    </AccordionItem>
+                  </Accordion>
+                )}
+                
+                {fontSettingsTab === "filters" && (
+                  <div className="space-y-4">
+                    <div className="border dark:border-default-200 rounded-lg p-3">
+                      <h4 className="text-sm font-medium mb-2 flex items-center">
+                        <Type size={14} className="mr-1" /> Heading Font Filters
+                      </h4>
+                      <FontFilters isHeading={true} />
+                    </div>
+                    <div className="border dark:border-default-200 rounded-lg p-3">
+                      <h4 className="text-sm font-medium mb-2 flex items-center">
+                        <AlignLeft size={14} className="mr-1" /> Body Font Filters
+                      </h4>
+                      <FontFilters isHeading={false} />
+                    </div>
                   </div>
-                  <div>
-                    <h3 className="text-lg font-semibold mb-4">Body Font</h3>
-                    <FontControls isHeading={false} />
-                  </div>
-                </div>
-              </Tab>
-              <Tab key="filters" title="Filters">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mt-4">
-                  <FontFilters isHeading={true} />
-                  <FontFilters isHeading={false} />
-                </div>
-              </Tab>
-            </Tabs>
-            <ShowFontsPair />
-          </CardBody>
-        </Card>
+                )}
+              </CardBody>
+            </Card>
+          </div>
+        </div>
+        
+        {/* Modal for showing font pair usage */}
+        <ShowFontsPair />
+      
 
         <Card className="bg-default-50 dark:bg-default-100">
       <CardBody className="p-6">
@@ -950,7 +1080,7 @@ const GoogleFontsPairFinder: React.FC = () => {
 
           <div className="my-8">
             <Image
-              src="/placeholder.svg?height=400&width=600"
+              src="/Images/InfosectionImages/GoogleFontpairPreview.png?height=400&width=600" 
               alt="Screenshot of the Google Fonts Pair Finder interface showing font selection, preview area, and pairing options"
               width={600}
               height={400}
@@ -1029,30 +1159,6 @@ const GoogleFontsPairFinder: React.FC = () => {
             </li>
           </ul>
 
-          <h2 className="text-xl md:text-2xl font-semibold text-default-700 mb-4 mt-8 flex items-center">
-            <Lightbulb className="w-6 h-6 mr-2" />
-            Practical Applications
-          </h2>
-          <ul className="list-disc list-inside space-y-2 text-sm md:text-base text-default-600">
-            <li>
-              <strong>Web Design:</strong> Create visually appealing and readable websites.
-            </li>
-            <li>
-              <strong>Branding:</strong> Develop consistent typography for brand identities.
-            </li>
-            <li>
-              <strong>Print Design:</strong> Find perfect font pairs for posters, flyers, and other print materials.
-            </li>
-            <li>
-              <strong>UI/UX Design:</strong> Enhance user interfaces with harmonious typography.
-            </li>
-            <li>
-              <strong>Content Creation:</strong> Improve readability and visual appeal of digital content.
-            </li>
-            <li>
-              <strong>Typography Education:</strong> Learn about font pairing principles and best practices.
-            </li>
-          </ul>
 
           <p className="text-sm md:text-base text-default-600 mt-4">
             Ready to elevate your typography game? Start using our Google Fonts Pair Finder now and discover the perfect

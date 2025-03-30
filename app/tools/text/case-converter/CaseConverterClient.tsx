@@ -1,93 +1,310 @@
 'use client';
 
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import { Card, CardBody, Button, Select, SelectItem, Textarea } from "@nextui-org/react";
-import Image from 'next/image'
-import Link from 'next/link'
-import { Copy, Download, Info, Lightbulb, BookOpen, RefreshCw, Undo2, Space, Slice, RefreshCcw, Type, Trash2, AlignJustify, SplitSquareHorizontal, Scissors, ZapIcon, Calculator, Clock } from 'lucide-react';
+import { Copy, Download, Info, Lightbulb, BookOpen, RefreshCw, Undo2, Space, Slice, RefreshCcw, Type, Trash2, AlignJustify, SplitSquareHorizontal, Scissors, ZapIcon, Calculator, Clock, Globe } from 'lucide-react';
 import { toast } from 'react-hot-toast';
 import ToolLayout from '@/components/ToolLayout';
-
+import Image from 'next/image';
+import Link from 'next/link';
 
 const MAX_CHARS = 5000;
 
-function convertCase(text: string, caseType: string): string {
+const languageRules: Record<string, {
+  titleCase: (word: string) => string;
+  excludedWords: Set<string>;
+  name: string;
+}> = {
+  en: {
+    titleCase: (word: string) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase(),
+    excludedWords: new Set(['a', 'an', 'the', 'and', 'but', 'or', 'for', 'nor', 'on', 'at', 'to', 'from', 'by', 'with', 'in', 'of']),
+    name: "English"
+  },
+  es: {
+    titleCase: (word: string) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase(),
+    excludedWords: new Set(['el', 'la', 'los', 'las', 'un', 'una', 'unos', 'unas', 'y', 'o', 'para', 'por', 'en', 'de', 'a', 'con']),
+    name: "Spanish"
+  },
+  fr: {
+    titleCase: (word: string) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase(),
+    excludedWords: new Set(['le', 'la', 'les', 'un', 'une', 'des', 'et', 'ou', 'pour', 'par', 'en', 'de', 'à', 'avec']),
+    name: "French"
+  },
+  de: {
+    // German capitalizes all nouns, but we can't reliably detect nouns without NLP
+    // So we just capitalize the first letter of each word for title case
+    titleCase: (word: string) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase(),
+    excludedWords: new Set(['der', 'die', 'das', 'ein', 'eine', 'und', 'oder', 'für', 'von', 'mit', 'in', 'auf', 'zu']),
+    name: "German"
+  },
+  it: {
+    titleCase: (word: string) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase(),
+    excludedWords: new Set(['il', 'lo', 'la', 'i', 'gli', 'le', 'un', 'uno', 'una', 'e', 'o', 'per', 'di', 'a', 'da', 'in', 'con']),
+    name: "Italian"
+  },
+  pt: {
+    titleCase: (word: string) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase(),
+    excludedWords: new Set(['o', 'a', 'os', 'as', 'um', 'uma', 'uns', 'umas', 'e', 'ou', 'para', 'por', 'em', 'de', 'com']),
+    name: "Portuguese"
+  },
+  ru: {
+    titleCase: (word: string) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase(),
+    excludedWords: new Set(['и', 'или', 'но', 'а', 'в', 'на', 'с', 'из', 'по', 'о', 'к', 'у']),
+    name: "Russian"
+  },
+  zh: {
+    // Chinese doesn't have case, but we keep the function for consistency
+    titleCase: (word: string) => word,
+    excludedWords: new Set([]),
+    name: "Chinese"
+  },
+  ja: {
+    // Japanese doesn't have case, but we keep the function for consistency
+    titleCase: (word: string) => word,
+    excludedWords: new Set([]),
+    name: "Japanese"
+  },
+  ar: {
+    titleCase: (word: string) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase(),
+    excludedWords: new Set(['في', 'من', 'إلى', 'على', 'و', 'أو', 'مع']),
+    name: "Arabic"
+  }
+};
+
+// Detect language based on characters and common words
+const detectLanguage = (text: string): string => {
+  if (!text.trim()) return 'en';
+  
+  // Check for non-latin character sets
+  const charSets = {
+    zh: /[\u4E00-\u9FFF]/g, // Chinese
+    ja: /[\u3040-\u309F\u30A0-\u30FF]/g, // Japanese
+    ru: /[\u0400-\u04FF]/g, // Cyrillic
+    ar: /[\u0600-\u06FF]/g, // Arabic
+  };
+  
+  for (const [lang, regex] of Object.entries(charSets)) {
+    if (regex.test(text)) return lang;
+  }
+  
+  // Check for common words in different languages
+  const commonWords = {
+    en: ['the', 'and', 'is', 'in', 'to', 'it', 'that', 'for'],
+    es: ['el', 'la', 'los', 'y', 'es', 'en', 'que', 'por'],
+    fr: ['le', 'la', 'les', 'et', 'est', 'dans', 'que', 'pour'],
+    de: ['der', 'die', 'das', 'und', 'ist', 'in', 'zu', 'für'],
+    it: ['il', 'la', 'e', 'è', 'che', 'per', 'non', 'con'],
+    pt: ['o', 'a', 'e', 'é', 'que', 'para', 'não', 'em'],
+  };
+  
+  const words = text.toLowerCase().split(/\s+/);
+  const langScores = {} as {[key: string]: number};
+  
+  for (const [lang, wordList] of Object.entries(commonWords)) {
+    langScores[lang] = 0;
+    for (const word of words) {
+      if (wordList.includes(word)) {
+        langScores[lang]++;
+      }
+    }
+  }
+  
+  const maxLang = Object.entries(langScores).reduce((max, [lang, score]) => 
+    score > max[1] ? [lang, score] : max, ['en', 0]);
+  
+  return maxLang[1] > 0 ? maxLang[0] : 'en';
+};
+
+// Language-aware case conversion
+function convertCase(text: string, caseType: string, language: string = 'en'): string {
+  // Use language rules if available, fallback to English
+  const rules = languageRules[language as keyof typeof languageRules] || languageRules.en;
+  
   switch (caseType) {
     case 'lower':
       return text.toLowerCase();
+      
     case 'upper':
       return text.toUpperCase();
+      
     case 'title':
-      return text.replace(/\w\S*/g, (txt) => txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase());
+      // Language-aware title case
+      return text.split(' ').map((word, index, arr) => {
+        // Always capitalize first and last word
+        if (index === 0 || index === arr.length - 1) {
+          return rules.titleCase(word);
+        }
+        // For excluded words, only capitalize if they're not in the exclusion list
+        return rules.excludedWords.has(word.toLowerCase()) ? word.toLowerCase() : rules.titleCase(word);
+      }).join(' ');
+      
     case 'sentence':
-      return text.split('. ').map(sentence => 
-        sentence.charAt(0).toUpperCase() + sentence.slice(1).toLowerCase()
-      ).join('. ');
+      // Language-aware sentence case
+      return text.split('. ').map(sentence => {
+        if (!sentence.trim()) return sentence;
+        return sentence.charAt(0).toUpperCase() + sentence.slice(1).toLowerCase();
+      }).join('. ');
+      
     case 'camel':
+      // For languages without spaces like Chinese/Japanese, we can't really do camelCase
+      if (language === 'zh' || language === 'ja') {
+        toast(`CamelCase isn't applicable to ${rules.name}`);
+        return text;
+      }
       return text.replace(/(?:^\w|[A-Z]|\b\w)/g, (word, index) => 
         index === 0 ? word.toLowerCase() : word.toUpperCase()
       ).replace(/\s+/g, '');
+      
     case 'pascal':
+      if (language === 'zh' || language === 'ja') {
+        toast(`PascalCase isn't applicable to ${rules.name}`);
+        return text;
+      }
       return text.replace(/(?:^\w|[A-Z]|\b\w)/g, (word) => word.toUpperCase()).replace(/\s+/g, '');
+      
     case 'snake':
-      return text.toLowerCase().replace(/[^a-zA-Z0-9]+/g, '_');
+      if (language === 'zh' || language === 'ja') {
+        toast(`snake_case isn't applicable to ${rules.name}`);
+        return text;
+      }
+      return text.toLowerCase().replace(/[^a-zA-Z0-9\u0400-\u04FF\u0600-\u06FF\u3040-\u309F\u30A0-\u30FF\u4E00-\u9FFF]+/g, '_');
+      
     case 'kebab':
-      return text.toLowerCase().replace(/[^a-zA-Z0-9]+/g, '-');
+      if (language === 'zh' || language === 'ja') {
+        toast(`kebab-case isn't applicable to ${rules.name}`);
+        return text;
+      }
+      return text.toLowerCase().replace(/[^a-zA-Z0-9\u0400-\u04FF\u0600-\u06FF\u3040-\u309F\u30A0-\u30FF\u4E00-\u9FFF]+/g, '-');
+      
     case 'toggle':
+      // Toggle case should work for most alphabets
       return text.split('').map(char => 
         char === char.toUpperCase() ? char.toLowerCase() : char.toUpperCase()
       ).join('');
+      
     case 'alternate':
+      // Alternate case works for languages with spaces
+      if (language === 'zh' || language === 'ja') {
+        toast(`Alternate case isn't applicable to ${rules.name}`);
+        return text;
+      }
       return text.split(' ').map((word, index) => 
         index % 2 === 0 ? word.toLowerCase() : word.toUpperCase()
       ).join(' ');
+      
     case 'dot':
-      return text.toLowerCase().replace(/[^a-zA-Z0-9]+/g, '.');
+      if (language === 'zh' || language === 'ja') {
+        toast(`dot.case isn't applicable to ${rules.name}`);
+        return text;
+      }
+      return text.toLowerCase().replace(/[^a-zA-Z0-9\u0400-\u04FF\u0600-\u06FF\u3040-\u309F\u30A0-\u30FF\u4E00-\u9FFF]+/g, '.');
+      
     default:
       return text;
   }
 }
 
-const caseOptions = [
-  { value: "lower", label: "lowercase" },
-  { value: "upper", label: "UPPERCASE" },
-  { value: "title", label: "Title Case" },
-  { value: "sentence", label: "Sentence case" },
-  { value: "camel", label: "camelCase" },
-  { value: "pascal", label: "PascalCase" },
-  { value: "snake", label: "snake_case" },
-  { value: "kebab", label: "kebab-case" },
-  { value: "toggle", label: "ToGgLe CaSe" },
-  { value: "alternate", label: "Alternate WORDS" },
-  { value: "dot", label: "dot.case" }
-];
-
+// Expanded language options
 const languages = [
   { value: "en", label: "English" },
   { value: "es", label: "Español" },
   { value: "fr", label: "Français" },
   { value: "de", label: "Deutsch" },
-  // Add more languages as needed
-]
+  { value: "it", label: "Italiano" },
+  { value: "pt", label: "Português" },
+  { value: "ru", label: "Русский" },
+  { value: "zh", label: "中文" },
+  { value: "ja", label: "日本語" },
+  { value: "ar", label: "العربية" },
+  { value: "auto", label: "Auto Detect" }
+];
 
-const countWords = (text: string): number => {
-  return text.trim().split(/\s+/).length;
+// Helper function for case options based on language
+const getCaseOptions = (language: string) => {
+  const commonOptions = [
+    { value: "lower", label: "lowercase" },
+    { value: "upper", label: "UPPERCASE" },
+    { value: "title", label: "Title Case" },
+    { value: "sentence", label: "Sentence case" },
+    { value: "toggle", label: "ToGgLe CaSe" },
+  ];
+  
+  // For languages that don't use spaces like Chinese or Japanese,
+  // we don't show options that depend on word boundaries
+  if (language === 'zh' || language === 'ja') {
+    return commonOptions;
+  }
+  
+  return [
+    ...commonOptions,
+    { value: "camel", label: "camelCase" },
+    { value: "pascal", label: "PascalCase" },
+    { value: "snake", label: "snake_case" },
+    { value: "kebab", label: "kebab-case" },
+    { value: "alternate", label: "Alternate WORDS" },
+    { value: "dot", label: "dot.case" }
+  ];
+};
+
+const countWords = (text: string, language: string): number => {
+  if (language === 'zh' || language === 'ja') {
+    // Estimate word count for character-based languages
+    return Math.ceil(text.length / 2);
+  }
+  return text.trim().split(/\s+/).filter(Boolean).length;
 };
 
 const countCharacters = (text: string, excludeSpaces: boolean = false): number => {
   return excludeSpaces ? text.replace(/\s/g, '').length : text.length;
 };
 
-const estimateReadingTime = (text: string): number => {
-  const wordsPerMinute = 200;
-  const words = countWords(text);
-  return Math.ceil(words / wordsPerMinute);
+// Update estimateReadingTime function
+const estimateReadingTime = (text: string, language: string): number => {
+  const wordsPerMinute: Record<string, number> = {
+    en: 200,
+    es: 180,
+    fr: 190,
+    de: 170,
+    it: 185,
+    pt: 190,
+    ru: 160,
+    zh: 140, // Character-based languages are read differently
+    ja: 150,
+    ar: 155
+  };
+  
+  const wpm = wordsPerMinute[language] || 200;
+  const words = countWords(text, language);
+  return Math.ceil(words / wpm);
 };
 
-const getTextStatistics = (text: string) => {
-  const words = text.trim().split(/\s+/);
-  const sentences = text.split(/[.!?]+/).filter(Boolean);
-  const avgWordLength = words.reduce((sum, word) => sum + word.length, 0) / words.length;
+const getTextStatistics = (text: string, language: string) => {
+  if (!text.trim()) {
+    return {
+      avgWordLength: '0',
+      sentenceCount: 0
+    };
+  }
+  
+  // Handle different language sentence patterns
+  let sentenceSplitter = /[.!?]+/;
+  if (language === 'zh') sentenceSplitter = /[。！？]+/;
+  if (language === 'ja') sentenceSplitter = /[。！？、]+/;
+  
+  // Words in character-based languages function differently
+  let words = [];
+  let avgWordLength = 0;
+  
+  if (language === 'zh' || language === 'ja') {
+    // Characters are closer to "words" in these languages
+    words = text.split('');
+    avgWordLength = 1; // Character is a unit
+  } else {
+    words = text.trim().split(/\s+/).filter(Boolean);
+    avgWordLength = words.length ? words.reduce((sum, word) => sum + word.length, 0) / words.length : 0;
+  }
+  
+  const sentences = text.split(sentenceSplitter).filter(Boolean);
   
   return {
     avgWordLength: avgWordLength.toFixed(2),
@@ -98,14 +315,42 @@ const getTextStatistics = (text: string) => {
 export default function CaseConverter() {
     const [inputText, setInputText] = useState('');
     const [outputText, setOutputText] = useState('');
-    const [selectedCase, setSelectedCase] = React.useState("");
-    const [selectedLanguage, setSelectedLanguage] = React.useState("en");
+    const [selectedCase, setSelectedCase] = useState("");
+    const [selectedLanguage, setSelectedLanguage] = useState("en");
+    const [detectedLanguage, setDetectedLanguage] = useState("en");
     const [history, setHistory] = useState<string[]>([]);
     const [historyIndex, setHistoryIndex] = useState(-1);
     const [wordCount, setWordCount] = useState(0);
     const [charCount, setCharCount] = useState(0);
     const [readingTime, setReadingTime] = useState(0);
     const [textStats, setTextStats] = useState({ avgWordLength: '0', sentenceCount: 0 });
+    const [availableCaseOptions, setAvailableCaseOptions] = useState(getCaseOptions('en'));
+  
+    // Auto-detect language when input changes
+    useEffect(() => {
+      if (inputText.trim() && selectedLanguage === 'auto') {
+        const detectedLang = detectLanguage(inputText);
+        setDetectedLanguage(detectedLang);
+        setAvailableCaseOptions(getCaseOptions(detectedLang));
+        updateTextStats(inputText, detectedLang);
+      } else {
+        setDetectedLanguage(selectedLanguage);
+        setAvailableCaseOptions(getCaseOptions(selectedLanguage));
+        updateTextStats(inputText, selectedLanguage);
+      }
+    }, [inputText, selectedLanguage]);
+    
+    // Update case options when language changes
+    useEffect(() => {
+      setAvailableCaseOptions(getCaseOptions(selectedLanguage === 'auto' ? detectedLanguage : selectedLanguage));
+    }, [selectedLanguage, detectedLanguage]);
+    
+    const updateTextStats = (text: string, lang: string) => {
+      setWordCount(countWords(text, lang));
+      setCharCount(countCharacters(text, true));
+      setReadingTime(estimateReadingTime(text, lang));
+      setTextStats(getTextStatistics(text, lang));
+    };
   
     const addToHistory = useCallback((text: string) => {
       setHistory(prev => [...prev, text]);
@@ -113,11 +358,12 @@ export default function CaseConverter() {
     }, []);
   
     const handleConvert = useCallback(() => {
-      const converted = convertCase(inputText, selectedCase);
+      const langToUse = selectedLanguage === 'auto' ? detectedLanguage : selectedLanguage;
+      const converted = convertCase(inputText, selectedCase, langToUse);
       setOutputText(converted);
       addToHistory(converted);
       toast.success('Text converted successfully');
-    }, [inputText, selectedCase, addToHistory]);
+    }, [inputText, selectedCase, selectedLanguage, detectedLanguage, addToHistory]);
   
     const handleCopy = useCallback(() => {
       navigator.clipboard.writeText(outputText);
@@ -128,10 +374,6 @@ export default function CaseConverter() {
       const text = e.target.value;
       if (text.length <= MAX_CHARS) {
         setInputText(text);
-        setWordCount(countWords(text));
-        setCharCount(countCharacters(text, true));
-        setReadingTime(estimateReadingTime(text));
-        setTextStats(getTextStatistics(text));
       } else {
         setInputText(text.slice(0, MAX_CHARS));
         toast.error(`Character limit of ${MAX_CHARS} reached`);
@@ -184,11 +426,19 @@ export default function CaseConverter() {
     }, [outputText, addToHistory]);
   
     const handleCapitalizeWords = useCallback(() => {
-      const capitalized = outputText.replace(/\b\w/g, char => char.toUpperCase());
-      setOutputText(capitalized);
-      addToHistory(capitalized);
-      toast.success('Words capitalized');
-    }, [outputText, addToHistory]);
+      const langToUse = selectedLanguage === 'auto' ? detectedLanguage : selectedLanguage;
+      // Handle differently for character-based languages
+      let capitalized = outputText;
+      
+      if (langToUse === 'zh' || langToUse === 'ja') {
+        toast(`Word capitalization isn't applicable to ${languageRules[langToUse as keyof typeof languageRules].name}`);
+      } else {
+        capitalized = outputText.replace(/\b\w/g, char => char.toUpperCase());
+        setOutputText(capitalized);
+        addToHistory(capitalized);
+        toast.success('Words capitalized');
+      }
+    }, [outputText, addToHistory, selectedLanguage, detectedLanguage]);
   
     const handleRemoveDuplicateLines = useCallback(() => {
       const uniqueLines = Array.from(new Set(outputText.split('\n'))).join('\n');
@@ -206,11 +456,25 @@ export default function CaseConverter() {
         toast.error('No more undo history');
       }
     }, [history, historyIndex]);
+    
+    // Language auto-detection function
+    const handleAutoDetect = useCallback(() => {
+      if (!inputText.trim()) {
+        toast.error('Please enter some text to detect language');
+        return;
+      }
+      
+      const detectedLang = detectLanguage(inputText);
+      setDetectedLanguage(detectedLang);
+      setSelectedLanguage('auto');
+      const langName = languageRules[detectedLang as keyof typeof languageRules]?.name || 'Unknown';
+      toast.success(`Detected language: ${langName}`);
+    }, [inputText]);
 
     return (
       <ToolLayout
         title="Case Converter"
-        description="Transform your text into any case format with our powerful case converter tool. Support for camelCase, PascalCase, snake_case, and more!"
+        description="Transform your text into any case format with our powerful multi-language case converter tool. Support for camelCase, PascalCase, snake_case, and more across 10+ languages!"
         toolId="678f33831fa2b06f4b7ef590"
       >
         <div className="flex flex-col gap-8">
@@ -227,13 +491,18 @@ export default function CaseConverter() {
                 className="mb-2"
                 variant="bordered"
               />
+              
               <div className="mt-4 grid grid-cols-2 gap-2 text-sm text-default-600">
                 <div>Words: {wordCount}</div>
                 <div>Characters (no spaces): {charCount}</div>
                 <div>Reading time: {readingTime} min</div>
                 <div>Sentences: {textStats.sentenceCount}</div>
                 <div>Avg. word length: {textStats.avgWordLength}</div>
+                {selectedLanguage === 'auto' && detectedLanguage !== 'en' && (
+                  <div>Detected: {languageRules[detectedLanguage as keyof typeof languageRules]?.name || 'Unknown'}</div>
+                )}
               </div>
+              
               <p className="text-sm text-default-500 mt-2">
                 {inputText.length}/{MAX_CHARS} characters
               </p>
@@ -249,7 +518,7 @@ export default function CaseConverter() {
                     trigger: "bg-default-100 data-[hover=true]:bg-default-200",
                   }}
                 >
-                  {caseOptions.map((option) => (
+                  {availableCaseOptions.map((option) => (
                     <SelectItem key={option.value} value={option.value} className="text-default-700">
                       {option.label}
                     </SelectItem>
@@ -265,6 +534,7 @@ export default function CaseConverter() {
                   classNames={{
                     trigger: "bg-default-100 data-[hover=true]:bg-default-200",
                   }}
+                  startContent={<Globe className="h-4 w-4" />}
                 >
                   {languages.map((lang) => (
                     <SelectItem key={lang.value} value={lang.value} className="text-default-700">
@@ -274,45 +544,58 @@ export default function CaseConverter() {
                 </Select>
               </div>
   
-              <Button
-                onClick={handleConvert}
-                className="w-full mt-4"
-                color="primary"
-                startContent={<RefreshCcw className="h-5 w-5" />}
-              >
-                Convert
-              </Button>
+              <div className="flex gap-4 mt-4">
+                <Button
+                  onClick={handleAutoDetect}
+                  className="flex-1"
+                  color="secondary"
+                  startContent={<Globe className="h-5 w-5" />}
+                >
+                  Detect Language
+                </Button>
+              
+                <Button
+                  onClick={handleConvert}
+                  className="flex-1"
+                  color="primary"
+                  startContent={<RefreshCcw className="h-5 w-5" />}
+                  isDisabled={!inputText.trim() || !selectedCase}
+                >
+                  Convert
+                </Button>
+              </div>
             </CardBody>
           </Card>
   
           {/* Action Buttons */}
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-2">
-            <Button color="primary" onClick={handleCopy} startContent={<Copy className="h-4 w-4" />}>
+            <Button color="primary" onClick={handleCopy} startContent={<Copy className="h-4 w-4" />} isDisabled={!outputText}>
               Copy
             </Button>
-            <Button color="primary" onClick={handleDownload} startContent={<Download className="h-4 w-4" />}>
+            <Button color="primary" onClick={handleDownload} startContent={<Download className="h-4 w-4" />} isDisabled={!outputText}>
               Download
             </Button>
-            <Button color="primary" onClick={handleReverse} startContent={<Undo2 className="h-4 w-4" />}>
+            <Button color="primary" onClick={handleReverse} startContent={<Undo2 className="h-4 w-4" />} isDisabled={!outputText}>
               Reverse
             </Button>
-            <Button color="primary" onClick={handleRemoveSpaces} startContent={<Space className="h-4 w-4" />}>
+            <Button color="primary" onClick={handleRemoveSpaces} startContent={<Space className="h-4 w-4" />} isDisabled={!outputText}>
               No Spaces
             </Button>
-            <Button color="primary" onClick={handleTrim} startContent={<Slice className="h-4 w-4" />}>
+            <Button color="primary" onClick={handleTrim} startContent={<Slice className="h-4 w-4" />} isDisabled={!outputText}>
               Trim
             </Button>
-            <Button color="primary" onClick={handleCapitalizeWords} startContent={<Type className="h-4 w-4" />}>
+            <Button color="primary" onClick={handleCapitalizeWords} startContent={<Type className="h-4 w-4" />} isDisabled={!outputText}>
               Capitalize
             </Button>
             <Button
               color="primary"
               onClick={handleRemoveDuplicateLines}
               startContent={<SplitSquareHorizontal className="h-4 w-4" />}
+              isDisabled={!outputText}
             >
               Unique Lines
             </Button>
-            <Button color="danger" onClick={handleClear} startContent={<Trash2 className="h-4 w-4" />}>
+            <Button color="danger" onClick={handleClear} startContent={<Trash2 className="h-4 w-4" />} isDisabled={!inputText && !outputText}>
               Clear
             </Button>
             <Button
@@ -343,15 +626,15 @@ export default function CaseConverter() {
                 What is the Case Converter?
               </h2>
               <p className="text-sm md:text-base text-default-600 mb-4">
-                The Case Converter is a versatile text transformation tool designed for writers, developers, and content creators. It offers a wide range of text case conversions and manipulation features, all wrapped up in a <Link href="#how-to-use" className="text-primary hover:underline">user-friendly interface</Link>. Whether you need to quickly change text case for coding conventions, content formatting, or creative writing, our Case Converter has got you covered.
+              The Case Converter is an adaptable text transformation utility made especially for writers, developers, and all other content creators. The Case Converter is packed with a large variety of text case conversions and manipulation functionalities in one easy to use web application. Whether you're changing text case quickly for coding conventions, to format content or for creative writing, the Case Converter has your needs covered.
               </p>
               <p className="text-sm md:text-base text-default-600 mb-4">
-                With support for multiple case types and additional text manipulation features, it's like having a Swiss Army knife for text editing right at your fingertips. Say goodbye to manual text reformatting and hello to efficiency!
+              With multiple case options and some other text manipulation functionality, it's a bit like having a Swiss Army knife for text editing in your hands. End text re-formatting manually, and say hello to an efficient process.
               </p>
 
               <div className="my-8">
                 <Image 
-                  src="/Images/CaseConverterPreview.png?height=400&width=600" 
+                  src="/Images/InfosectionImages/CaseconverterPreview.png?height=400&width=600" 
                   alt="Screenshot of the Case Converter interface showing various case conversion options and text manipulation tools" 
                   width={600} 
                   height={400} 

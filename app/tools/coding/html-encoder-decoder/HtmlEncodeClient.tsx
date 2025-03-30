@@ -234,23 +234,12 @@ export default function HTMLEncoderDecoder() {
             What is the HTML Encoder/Decoder?
           </h2>
           <p className="text-sm md:text-base text-default-600 mb-4">
-            The HTML Encoder/Decoder is a powerful tool designed for web developers, content creators, and anyone
-            working with HTML. It offers a{" "}
-            <Link href="#how-to-use" className="text-primary hover:underline">
-              user-friendly interface
-            </Link>{" "}
-            for converting HTML special characters to their corresponding HTML entities and vice versa. This process is
-            crucial for ensuring that HTML code is displayed correctly in web browsers and for preventing potential
-            security vulnerabilities such as cross-site scripting (XSS) attacks.
-          </p>
-          <p className="text-sm md:text-base text-default-600 mb-4">
-            With features like file upload support, HTML validation, and customizable encoding options, it's an
-            essential tool for maintaining clean and secure HTML content in your web projects.
+          The HTML Encoder/Decoder is a free, easy-to-use program designed for web developers and content creators who need to work with HTML. It provides an efficient means of converting HTML special character points into the corresponding HTML entity (code) and back again. This allows ensuring all HTML code gets rendered appropriately in the web browser as expected, as well as protecting your code from certain security vulnerabilities sometimes referred to as cross-site scripting (XSS) attacks.With file uploading, HTML validation, options for custom encoding, etc., it is an essential utility for ensuring your web projects are clean and secure.
           </p>
 
           <div className="my-8">
             <Image
-              src="/Images/HTMLEncoderDecoderPreview.png?height=400&width=600"
+              src="/Images/InfosectionImages/HTMLEncodePreview.png?height=400&width=600"
               alt="Screenshot of the HTML Encoder/Decoder interface showing encoding and decoding options"
               width={600}
               height={400}
@@ -317,10 +306,7 @@ export default function HTMLEncoderDecoder() {
           </ul>
 
           <p className="text-sm md:text-base text-default-600 mt-6">
-            Ready to streamline your HTML encoding and decoding tasks? Start using our HTML Encoder/Decoder now and
-            experience the power of efficient and secure HTML processing. Whether you're a seasoned web developer or
-            just starting with HTML, our tool provides the perfect balance of simplicity and advanced features. Try it
-            out and see how it can enhance your web development workflow!
+          Are you looking to speed up your HTML encoding and decoding process? Begin using the HTML Encoder/Decoder today and take advantage of efficient and secure HTML handling. Whether you are a professional web developer or new to HTML, our HTML Encoder/Decoder has just the right mix of simplicity and highly advanced functionality.  Give it a try and see how it can improve your next web development project!
           </p>
         </div>
       </Card>

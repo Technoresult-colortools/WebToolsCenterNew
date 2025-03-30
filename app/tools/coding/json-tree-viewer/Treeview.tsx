@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { Button, Input } from "@nextui-org/react";
-import { ChevronRight, ChevronDown, ChevronUp, MoreHorizontal, Copy, Pencil, Check, X, Plus, Circle, Square, ArrowRight, Trash2 } from 'lucide-react';
+import { ChevronDown, ChevronUp, MoreHorizontal, Copy, Pencil, Check, X, Plus, Circle, Square, ArrowRight, Trash2, Triangle, TriangleRight } from 'lucide-react';
 import { toast } from 'react-hot-toast';
 
 type JSONValue = string | number | boolean | null | JSONValue[] | { [key: string]: JSONValue };
@@ -220,7 +220,7 @@ const TreeView: React.FC<TreeViewProps> = ({
         return isExpanded ? <ChevronDown className="w-4 h-4 mr-1 text-gray-400" /> : <ArrowRight className="w-4 h-4 mr-1 text-gray-400" />;
       case 'triangle':
       default:
-        return isExpanded ? <ChevronDown className="w-4 h-4 mr-1 text-gray-400" /> : <ChevronRight className="w-4 h-4 mr-1 text-gray-400" />;
+        return isExpanded ? <Triangle className="w-4 h-4 mr-1 text-gray-400" /> : <TriangleRight className="w-4 h-4 mr-1 text-gray-400" />;
     }
   };
 

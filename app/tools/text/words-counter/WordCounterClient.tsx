@@ -157,17 +157,6 @@ export default function WordsCounter() {
                 Whether you're crafting essays, optimizing content for SEO, or analyzing text, the Words Counter delivers valuable insights with ease. It's like having a personal text analyst in your browser!
               </p>
 
-              {/* Image Section */}
-              <div className="my-8">
-                <Image
-                  src="/Images/WordCounterPreview.png"
-                  alt="Screenshot of the Words Counter interface"
-                  width={600}
-                  height={400}
-                  className="rounded-lg shadow-lg w-full h-auto"
-                />
-              </div>
-
               {/* How-To Section */}
               <h2 id="how-to-use" className="text-lg md:text-xl lg:text-2xl font-semibold text-default-700 mb-4 mt-8 flex items-center">
                 <BookOpen className="w-6 h-6 mr-2" />
@@ -213,21 +202,6 @@ export default function WordsCounter() {
                 <li><Type className="w-4 h-4 inline-block mr-1" /> <strong>User-Friendly:</strong> Clean, intuitive design.</li>
               </ul>
 
-              {/* Practical Applications */}
-              <h2 className="text-xl md:text-2xl font-semibold text-default-700 mb-4 mt-8 flex items-center">
-                <Lightbulb className="w-6 h-6 mr-2" />
-                Practical Applications
-              </h2>
-              <p className="text-sm md:text-base text-default-600 mb-4">Use Words Counter for:</p>
-              <ul className="list-disc list-inside space-y-2 text-sm md:text-base text-default-600">
-                <li><strong>Academic Writing:</strong> Track essay word counts.</li>
-                <li><strong>Content Creation:</strong> Meet article length goals.</li>
-                <li><strong>Social Media:</strong> Optimize for character limits.</li>
-                <li><strong>SEO:</strong> Analyze keyword density.</li>
-                <li><strong>Creative Writing:</strong> Overcome writer's block.</li>
-                <li><strong>Editing:</strong> Assess and refine text length.</li>
-                <li><strong>Translation:</strong> Compare character counts.</li>
-              </ul>
               <p className="text-sm md:text-base text-default-600 mt-4">
                 Ready to enhance your writing process? Try Words Counter now for accurate, real-time text insights and take your writing to the next level!
               </p>

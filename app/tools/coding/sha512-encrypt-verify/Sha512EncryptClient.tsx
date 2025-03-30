@@ -341,7 +341,7 @@ export default function SHA512EncryptVerify() {
       </Card>
       </div>
 
-      <Card className="mt-8 bg-default-50 dark:bg-default-100">
+      <Card className="mt-6 bg-default-50 dark:bg-default-100">
         <CardBody>
             <div className="rounded-xl p-2 md:p-4 max-w-4xl mx-auto">
             <h2 className="text-lg md:text-xl lg:text-2xl font-semibold text-default-700 mb-4 flex items-center">
@@ -349,14 +349,12 @@ export default function SHA512EncryptVerify() {
                 What is SHA-512 Hash Generator & Verifier?
             </h2>
             <p className="text-sm md:text-base text-default-600 mb-4">
-                The SHA-512 Hash Generator & Verifier is a robust cryptographic tool that generates 512-bit (64-byte) hash values. 
-                As a member of the SHA-2 family, it provides a high level of security, making it ideal for applications requiring 
-                data integrity verification, digital signatures, password hashing, and more.
+            The SHA-512 Hash Generator & Verifier is a powerful cryptographic service that generates hash values of 512-bits (64 bytes). Part of the SHA-2 family, it offers a high level of security and is suitable for a variety of applications such as verifying data integrity, creating digital signatures, and hashing passwords.
             </p>
 
             <div className="my-8">
                 <Image
-                src="/Images/SHA512HashPreview.png"
+                src="/Images/InfosectionImages/SHA512Preview.png?height=400&width=600"
                 alt="Screenshot of the SHA-512 Hash Generator & Verifier interface"
                 width={600}
                 height={400}

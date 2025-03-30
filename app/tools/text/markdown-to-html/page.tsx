@@ -2,29 +2,30 @@ import { Metadata } from 'next';
 import MarkdownToHtmlClient from './MarkdownToHtmlClient';
 
 export const metadata: Metadata = {
-    title: 'Markdown to HTML Converter | Transform Content | WebToolsCenter',
-    description: 'Convert Markdown to clean, properly formatted HTML with our powerful Markdown to HTML Converter. Ideal for developers, writers, and content creators for efficient web content creation.',
+    title: 'AI-Powered Markdown to HTML Converter | Transform Content | WebToolsCenter',
+    description: 'Convert Markdown to clean, properly formatted HTML with our AI-powered Markdown to HTML Converter. Leverages AI for intelligent content transformation ideal for developers, writers, and content creators.',
     keywords: [
+        'AI markdown converter',
         'markdown to html converter',
-        'markdown converter',
-        'html generator',
-        'content transformation',
+        'AI-powered html generator',
+        'Mistral AI converter',
+        'intelligent content transformation',
         'web development tool',
         'markdown parsing',
-        'html output',
+        'interactive html output',
         'syntax highlighting'
     ],
     openGraph: {
-        title: 'Markdown to HTML Converter | Streamline Content Creation',
-        description: 'Effortlessly transform your Markdown content into clean, properly formatted HTML. Perfect for developers, writers, and content creators.',
+        title: 'AI-Powered Markdown to HTML Converter | Intelligent Content Transformation',
+        description: 'Effortlessly transform your Markdown content into clean, interactive HTML using advanced AI. Perfect for developers, writers, and content creators seeking professional results.',
         type: 'website',
         url: '/tools/text/markdown-to-html-converter',
         siteName: 'WebToolsCenter'
     },
     twitter: {
         card: 'summary_large_image',
-        title: 'Markdown to HTML Converter | Transform Content Easily',
-        description: 'Convert Markdown to HTML with our feature-rich tool. Ideal for developers, writers, and content creators looking to streamline their workflow.',
+        title: 'AI-Powered Markdown to HTML Converter | Intelligent Transformation',
+        description: 'Convert Markdown to HTML with our AI-enhanced tool powered by Mistral AI. Create interactive, professionally styled content with intelligent conversion.',
     },
     robots: {
         index: true,

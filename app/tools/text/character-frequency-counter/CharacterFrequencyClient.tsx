@@ -203,24 +203,13 @@ export default function CharacterFrequencyCounter() {
                 What is the Character Frequency Counter?
               </h2>
               <p className="text-sm md:text-base text-default-600 mb-4">
-                The Character Frequency Counter is an advanced text analysis tool designed for writers, linguists,
-                cryptographers, and data analysts. It goes beyond simple counting, offering detailed insights into the
-                composition of your text with customizable options and{" "}
-                <Link href="#features" className="text-primary hover:underline">
-                  powerful features
-                </Link>
-                . Whether you're analyzing writing styles, decoding messages, or conducting language research, our tool
-                provides the flexibility and precision you need.
+              The Character Frequency Counter is a sophisticated text analysis tool for writers, linguists, cryptographers, and data analysts. It does more than just count characters; it provides detailed insight into your text’s composition with adjustable settings and features. Whether you are examining writing styles, decoding secret messages, or conducting text data research in languages, our tool provides the flexibility, features, and precision you need.Offering both character level analysis and word frequency counting, you can see your text in a new way. It is like having a microscope for your writing: seeing patterns and frequencies you might not see otherwise!
               </p>
-              <p className="text-sm md:text-base text-default-600 mb-4">
-                From character-level analysis to word frequency counting, this tool offers a comprehensive view of your
-                text's structure. It's like having a microscope for your writing, revealing patterns and frequencies
-                that might otherwise go unnoticed!
-              </p>
+        
 
               <div className="my-8">
                 <Image
-                  src="/Images/CharacterFrequencyPreview.png"
+                  src="/Images/InfosectionImages/CharacterFrequencyPreview.png?height=400&width=600" 
                   alt="Screenshot of the Character Frequency Counter interface showing text input area, analysis options, and frequency results"
                   width={600}
                   height={400}
