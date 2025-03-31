@@ -5,6 +5,7 @@ import Providers from './providers';
 import { ThemeProvider } from '@/providers/theme-provider';
 import { UserProvider } from '@auth0/nextjs-auth0/client';
 import { CookieBanner } from '@/components/CookieBanner';
+import GoogleAnalytics from '@/components/GoogleAnalytics';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -20,6 +21,9 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" suppressHydrationWarning>
+      <head>
+        <GoogleAnalytics />
+      </head>
       <body className={inter.className} suppressHydrationWarning>
         <ThemeProvider>
           <UserProvider>
