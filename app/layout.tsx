@@ -5,9 +5,10 @@ import Providers from './providers';
 import { ThemeProvider } from '@/providers/theme-provider';
 import { UserProvider } from '@auth0/nextjs-auth0/client';
 import { CookieBanner } from '@/components/CookieBanner';
-import GoogleAnalytics from '@/components/GoogleAnalytics';
+import Script from 'next/script';
 
 const inter = Inter({ subsets: ['latin'] });
+const GA_TRACKING_ID = process.env.NEXT_PUBLIC_GA_TRACKING_ID;
 
 export const metadata = {
   title: 'WebToolsCenter',
@@ -22,7 +23,27 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
-        <GoogleAnalytics />
+        {/* Google Analytics */}
+        {GA_TRACKING_ID && (
+          <>
+            <Script
+              strategy="afterInteractive"
+              src={`https://www.googletagmanager.com/gtag/js?id=${GA_TRACKING_ID}`}
+            />
+            <Script
+              id="google-analytics"
+              strategy="afterInteractive"
+              dangerouslySetInnerHTML={{
+                __html: `
+                  window.dataLayer = window.dataLayer || [];
+                  function gtag(){dataLayer.push(arguments);}
+                  gtag('js', new Date());
+                  gtag('config', '${GA_TRACKING_ID}');
+                `,
+              }}
+            />
+          </>
+        )}
       </head>
       <body className={inter.className} suppressHydrationWarning>
         <ThemeProvider>
