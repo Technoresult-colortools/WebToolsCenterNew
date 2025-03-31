@@ -1,0 +1,10 @@
+# *
+User-agent: *
+Allow: /
+
+# Host
+Host: https://www.webtoolscenter.com/
+
+# Sitemaps
+Sitemap: https://www.webtoolscenter.com/sitemap.xml
+Sitemap: https://www.webtoolscenter.com/server-sitemap.xml

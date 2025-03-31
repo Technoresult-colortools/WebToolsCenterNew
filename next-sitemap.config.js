@@ -4,12 +4,6 @@ module.exports = {
     generateRobotsTxt: true,
     changefreq: 'weekly',
     priority: 0.7,
-    exclude: ['/server-sitemap.xml'], // Exclude server-side sitemap if you have one
-    robotsTxtOptions: {
-      additionalSitemaps: [
-        'https://www.webtoolscenter.com/server-sitemap.xml', // Only needed if you have a server-side sitemap
-      ],
-    },
     // Transform the URLs if needed
     transform: async (config, path) => {
       // Custom priority for different types of pages
