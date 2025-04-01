@@ -5,7 +5,6 @@ import { Card, CardBody } from "@nextui-org/react"
 import Header from "@/components/Header"
 import Footer from "@/components/Footer"
 import Link from "next/link"
-import { motion } from "framer-motion";
 
 export default function TermsAndConditions() {
   const [isVisible, setIsVisible] = useState(false)
