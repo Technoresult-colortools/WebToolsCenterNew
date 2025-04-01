@@ -42,8 +42,22 @@ export default function LoginPage() {
   const handleSocialLogin = (connection: string, providerName: string) => {
     setIsLoading(true);
     setActiveProvider(providerName);
+    
+    const clientId = process.env.NEXT_PUBLIC_AUTH0_CLIENT_ID;
+    const redirectUri = process.env.NEXT_PUBLIC_AUTH0_PRODUCTION_URL 
+      ? `${process.env.NEXT_PUBLIC_AUTH0_PRODUCTION_URL}/api/auth/callback`
+      : "http://localhost:3000/api/auth/callback";
+    
     try {
-      window.location.href = `https://auth.webtoolscenter.com/authorize?client_id=${process.env.NEXT_PUBLIC_AUTH0_CLIENT_ID}&redirect_uri=${process.env.NEXT_PUBLIC_AUTH0_PRODUCTION_URL}/api/auth/callback&response_type=code&scope=openid profile email&connection=${connection}&prompt=login`;
+      if (!clientId || !redirectUri) {
+        console.error('Missing Auth0 configuration:', { clientId: !!clientId, redirectUri: !!redirectUri });
+        throw new Error("Auth0 configuration is incomplete");
+      }
+      
+      const authUrl = `https://auth.webtoolscenter.com/authorize?client_id=${clientId}&redirect_uri=${encodeURIComponent(redirectUri)}&response_type=code&scope=openid profile email&connection=${connection}&prompt=login`;
+      
+      console.log('Auth URL:', authUrl); // For debugging
+      window.location.href = authUrl;
       toast.success(`Connecting to ${providerName}...`);
     } catch (error) {
       console.error('Social login error:', error);
