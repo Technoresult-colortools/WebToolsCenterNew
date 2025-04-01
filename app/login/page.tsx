@@ -1,18 +1,28 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Card, CardBody, Button } from "@nextui-org/react";
+import { Card, CardBody, Button, Tooltip } from "@nextui-org/react";
 import { useRouter } from 'next/navigation';
-import { FaGoogle, FaGithub, FaTwitter } from 'react-icons/fa';
-import { Cog, } from 'lucide-react';
+import { FaGoogle, FaGithub, FaTwitter, FaFacebook, FaReddit, FaTwitch, FaDiscord } from 'react-icons/fa';
+import { Cog } from 'lucide-react';
 import { useUser } from '@auth0/nextjs-auth0/client';
-import { toast } from 'react-hot-toast';
+import { toast, Toaster } from 'react-hot-toast';
 import { ThemeToggle } from '@/components/ThemeToggle';
 
+// Define types for our providers
+type Provider = {
+  id: string;
+  name: string;
+  icon: React.ComponentType<any>;
+  bgColor: string;
+  hoverColor: string;
+  iconColor: string;
+};
 
 export default function LoginPage() {
   const [isVisible, setIsVisible] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [activeProvider, setActiveProvider] = useState('');
   const router = useRouter();
   const { user } = useUser();
 
@@ -24,106 +34,184 @@ export default function LoginPage() {
     }
   }, [user, router]);
 
-  const handleSocialLogin = (connection: string) => {
+  const handleSocialLogin = (connection: string, providerName: string) => {
     setIsLoading(true);
+    setActiveProvider(providerName);
     try {
-      // Add prompt=none to skip Auth0's login screen and go directly to IdP
-      window.location.href = `/api/auth/login?connection=${connection}&prompt=none&login_hint=webtools.center`;
-      toast.success(`Redirecting to ${connection}...`);
+      window.location.href = `https://auth.webtoolscenter.com/authorize?client_id=${process.env.NEXT_PUBLIC_AUTH0_CLIENT_ID}&redirect_uri=${process.env.NEXT_PUBLIC_AUTH0_PRODUCTION_URL}/api/auth/callback&response_type=code&scope=openid profile email&connection=${connection}&prompt=login`;
+      toast.success(`Connecting to ${providerName}...`);
     } catch (error) {
       console.error('Social login error:', error);
       setIsLoading(false);
+      setActiveProvider('');
       toast.error('Login failed. Please try again.');
     }
   };
 
+  // Social login providers configuration
+  const providers: Provider[] = [
+    { 
+      id: 'google-oauth2', 
+      name: 'Google', 
+      icon: FaGoogle, 
+      bgColor: 'bg-white dark:bg-gray-800', 
+      hoverColor: 'hover:bg-gray-50 dark:hover:bg-gray-700', 
+      iconColor: 'text-red-500' 
+    },
+    { 
+      id: 'twitter', 
+      name: 'X (Twitter)', 
+      icon: FaTwitter, 
+      bgColor: 'bg-white dark:bg-gray-800', 
+      hoverColor: 'hover:bg-gray-50 dark:hover:bg-gray-700', 
+      iconColor: 'text-black dark:text-white' 
+    },
+    { 
+      id: 'github', 
+      name: 'GitHub', 
+      icon: FaGithub, 
+      bgColor: 'bg-white dark:bg-gray-800', 
+      hoverColor: 'hover:bg-gray-50 dark:hover:bg-gray-700', 
+      iconColor: 'text-gray-800 dark:text-white' 
+    },
+    { 
+      id: 'facebook', 
+      name: 'Facebook', 
+      icon: FaFacebook, 
+      bgColor: 'bg-white dark:bg-gray-800', 
+      hoverColor: 'hover:bg-gray-50 dark:hover:bg-gray-700', 
+      iconColor: 'text-blue-600' 
+    },
+    { 
+      id: 'reddit', 
+      name: 'Reddit', 
+      icon: FaReddit, 
+      bgColor: 'bg-white dark:bg-gray-800', 
+      hoverColor: 'hover:bg-gray-50 dark:hover:bg-gray-700', 
+      iconColor: 'text-orange-600' 
+    },
+    { 
+      id: 'twitch', 
+      name: 'Twitch', 
+      icon: FaTwitch, 
+      bgColor: 'bg-white dark:bg-gray-800', 
+      hoverColor: 'hover:bg-gray-50 dark:hover:bg-gray-700', 
+      iconColor: 'text-purple-600' 
+    },
+    { 
+      id: 'discord', 
+      name: 'Discord', 
+      icon: FaDiscord, 
+      bgColor: 'bg-white dark:bg-gray-800', 
+      hoverColor: 'hover:bg-gray-50 dark:hover:bg-gray-700', 
+      iconColor: 'text-indigo-600' 
+    },
+  ];
+
   return (
-    <div className="min-h-screen flex flex-col bg-default-50 dark:bg-default-100">
-      <main className="flex-grow flex items-center justify-center relative px-4 pt-20 pb-32">
-        {/* Theme toggle button - positioned absolutely to top right */}
-        <div className="absolute top-4 right-4 z-20">
-          <ThemeToggle />
-        </div>
+    <div className="min-h-screen flex flex-col items-center justify-center bg-background relative px-4">
+      <Toaster position="top-right" reverseOrder={false} />
+      
+      {/* Background elements */}
+      <div className="absolute inset-0 bg-gradient-to-br from-primary/10 via-secondary/10 to-primary/5 animate-gradient-xy" />
+      <div className="absolute inset-0 bg-[url('/grid.svg')] opacity-10" />
+      
+      {/* Theme toggle */}
+      <div className="fixed top-4 right-4 z-50">
+        <ThemeToggle />
+      </div>
 
-        {/* Animated background elements */}
-        <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-secondary/5 to-primary/5 dark:from-primary/10 dark:via-secondary/10 dark:to-primary/5" />
-        <div className="absolute inset-0 bg-[url('/grid.svg')] opacity-5 dark:opacity-10" />
-
-        <div className={`w-full max-w-md z-10 transform transition-all duration-1000 ${
-          isVisible ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'
-        }`}>
-          {/* Brand Header */}
-          <div className="text-center mb-8">
-            <h1 className="text-4xl font-bold text-default-700 mb-4 tracking-tight flex items-center justify-center">
-              Web<span className="text-primary">Tools</span>Center
-              <span className="inline-block ml-2 relative">
-                <Cog className="w-8 h-8 text-primary animate-spin-slow opacity-75" />
-              </span>
-            </h1>
-            <p className="text-default-500 ">Access all your favorite tools in one place</p>
+      <div className={`w-full max-w-md transform transition-all duration-1000 ${
+        isVisible ? "translate-y-0 opacity-100" : "translate-y-10 opacity-0"
+      }`}>
+        {/* Brand/Logo Section */}
+        <div className="text-center mb-8">
+          <div className="inline-flex items-center justify-center mb-4 p-3 bg-content2/50 backdrop-blur-sm rounded-full shadow-lg">
+            <Cog className="w-8 h-8 text-primary animate-spin-slow" />
           </div>
-
-          <Card className="bg-default-50 dark:bg-default-100 shadow-md">
-            <CardBody className="p-6 space-y-8">
-              <div className="text-center mb-4">
-                <h2 className="text-2xl font-bold text-default-700">Welcome</h2>
-                <p className="text-default-500 mt-1">Continue with your preferred account</p>
-              </div>
-
-              <div className="space-y-4">
-                <Button
-                  onClick={() => handleSocialLogin('google-oauth2')}
-                  className="w-full bg-default-100 hover:bg-default-200 dark:bg-default-200 dark:hover:bg-default-300 text-default-700 dark:text-default-800 border border-default-200 dark:border-default-300 h-14"
-                  startContent={
-                    <div className="bg-white text-blue-600 p-2 rounded-full">
-                      <FaGoogle className="text-lg" />
-                    </div>
-                  }
-                  isDisabled={isLoading}
-                  size="lg"
-                  variant="flat"
-                >
-                  <span className="font-medium">Continue with Google</span>
-                </Button>
-
-                <Button
-                  onClick={() => handleSocialLogin('github')}
-                  className="w-full bg-default-100 hover:bg-default-200 dark:bg-default-200 dark:hover:bg-default-300 text-default-700 dark:text-default-800 border border-default-200 dark:border-default-300 h-14"
-                  startContent={
-                    <div className="bg-white text-gray-900 p-2 rounded-full">
-                      <FaGithub className="text-lg" />
-                    </div>
-                  }
-                  isDisabled={isLoading}
-                  size="lg"
-                  variant="flat"
-                >
-                  <span className="font-medium">Continue with GitHub</span>
-                </Button>
-
-                <Button
-                  onClick={() => handleSocialLogin('twitter')}
-                  className="w-full bg-default-100 hover:bg-default-200 dark:bg-default-200 dark:hover:bg-default-300 text-default-700 dark:text-default-800 border border-default-200 dark:border-default-300 h-14"
-                  startContent={
-                    <div className="bg-white text-blue-400 p-2 rounded-full">
-                      <FaTwitter className="text-lg" />
-                    </div>
-                  }
-                  isDisabled={isLoading}
-                  size="lg"
-                  variant="flat"
-                >
-                  <span className="font-medium">Continue with Twitter</span>
-                </Button>
-              </div>
-
-              <p className="text-center text-xs text-default-500 dark:text-default-400 mt-6">
-                By continuing, you agree to our <a href="#" className="text-primary hover:underline">Terms of Service</a> and <a href="#" className="text-primary hover:underline">Privacy Policy</a>
-              </p>
-            </CardBody>
-          </Card>
+          <h1 className="text-4xl md:text-5xl font-bold text-foreground mb-4">
+            Welcome <span className="text-primary">Back</span>
+          </h1>
+          <p className="text-lg text-default-600 max-w-sm mx-auto">
+            Sign in to access your all-in-one toolkit for web professionals
+          </p>
         </div>
-      </main>
+
+        {/* Login Card */}
+        <Card className="bg-content2/50 backdrop-blur-sm shadow-xl">
+          <CardBody className="p-8">
+            <h2 className="text-2xl font-bold text-foreground mb-6 flex items-center">
+              <Cog className="mr-3 text-primary" />
+              Sign in with a Provider
+            </h2>
+            
+            {/* Main providers */}
+            <div className="space-y-3 mb-6">
+              {providers.slice(0, 4).map((provider) => (
+                <Button
+                  key={provider.id}
+                  onPress={() => handleSocialLogin(provider.id, provider.name)}
+                  className="w-full h-12 rounded-xl transition-all"
+                  startContent={
+                    <div className={`${provider.iconColor} mr-2`}>
+                      <provider.icon size={20} />
+                    </div>
+                  }
+                  endContent={
+                    isLoading && activeProvider === provider.name ? 
+                    <div className="spinner h-5 w-5 border-2 border-t-transparent border-primary rounded-full animate-spin"></div> : 
+                    null
+                  }
+                  isDisabled={isLoading}
+                  variant="bordered"
+                  color="primary"
+                >
+                  <span className="font-medium">Continue with {provider.name}</span>
+                </Button>
+              ))}
+            </div>
+            
+            {/* Divider */}
+            <div className="flex items-center my-6">
+              <div className="flex-grow h-px bg-gray-200 dark:bg-gray-700"></div>
+              <span className="px-3 text-xs text-gray-500 dark:text-gray-400 uppercase tracking-wider">More options</span>
+              <div className="flex-grow h-px bg-gray-200 dark:bg-gray-700"></div>
+            </div>
+            
+            {/* Secondary providers */}
+            <div className="flex justify-center space-x-4">
+              {providers.slice(4).map((provider) => (
+                <Tooltip key={provider.id} content={`Sign in with ${provider.name}`} className='text-default-700'>
+                  <Button
+                    onPress={() => handleSocialLogin(provider.id, provider.name)}
+                    className="w-12 h-12 min-w-12 p-0 rounded-full transition-transform hover:scale-105"
+                    isIconOnly
+                    isDisabled={isLoading}
+                    variant="bordered"
+                    color="primary"
+                  >
+                    {isLoading && activeProvider === provider.name ? (
+                      <div className="spinner h-5 w-5 border-2 border-t-transparent border-primary rounded-full animate-spin"></div>
+                    ) : (
+                      <provider.icon className={`${provider.iconColor} text-xl`} />
+                    )}
+                  </Button>
+                </Tooltip>
+              ))}
+            </div>
+            
+            {/* Terms of Service */}
+            <div className="mt-8 text-center text-xs text-gray-500 dark:text-gray-400">
+              By continuing, you agree to our <a href="https://www.webtoolscenter.com/terms" className="text-primary hover:underline">Terms</a> and <a href="https://www.webtoolscenter.com/privacy" className="text-primary hover:underline">Privacy Policy</a>
+            </div>
+          </CardBody>
+        </Card>
+        
+        {/* Help Link */}
+        <p className="text-center mt-6 text-xs text-gray-500 dark:text-gray-400">
+          Need help? <a href="https://www.webtoolscenter.com/contact" className="text-primary hover:underline">Contact support</a>
+        </p>
+      </div>
     </div>
   );
 }
