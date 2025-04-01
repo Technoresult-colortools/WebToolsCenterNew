@@ -9,11 +9,16 @@ import { useUser } from '@auth0/nextjs-auth0/client';
 import { toast, Toaster } from 'react-hot-toast';
 import { ThemeToggle } from '@/components/ThemeToggle';
 
-// Define types for our providers
+interface IconProps extends React.SVGProps<SVGSVGElement> {
+  // Add any additional props your icons might need here
+  size?: number | string;
+}
+
+// Then use it in your Provider type
 type Provider = {
   id: string;
   name: string;
-  icon: React.ComponentType<any>;
+  icon: React.ComponentType<IconProps>;
   bgColor: string;
   hoverColor: string;
   iconColor: string;
