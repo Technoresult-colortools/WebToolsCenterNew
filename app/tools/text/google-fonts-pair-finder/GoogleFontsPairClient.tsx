@@ -793,14 +793,15 @@ const GoogleFontsPairFinder: React.FC = () => {
               {activeTab === "profile" && (
                 <div className="bg-gradient-to-br from-slate-100 to-slate-200 dark:from-slate-800 dark:to-slate-900 p-6 h-full">
                   <div className="flex flex-col sm:flex-row sm:items-center gap-6 mb-6">
-                    <div className="relative">
-                      <img
-                        src="/Images/GoogleFontsPair/MarioImage.jpg?height=100&width=100"
-                        alt="Profile"
-                        className="w-24 h-24 rounded-full object-cover border-4 border-white dark:border-slate-700 shadow-lg"
-                      />
-                      <span className="absolute bottom-1 right-1 w-4 h-4 bg-green-500 rounded-full border-2 border-white"></span>
-                    </div>
+                  <div className="relative w-24 h-24">
+                    <img
+                      src="/Images/GoogleFontsPair/MarioImage.jpg?height=100&width=100"
+                      alt="Profile"
+                      className="w-full h-full rounded-full object-cover border-4 border-white dark:border-slate-700 shadow-lg"
+                    />
+                    <span className="absolute bottom-1 right-1 w-4 h-4 bg-green-500 rounded-full border-2 border-white"></span>
+                  </div>
+
                     <div>
                       <h2
                         style={{

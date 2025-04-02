@@ -18,7 +18,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       authorizationParams={{
         redirect_uri:
           process.env.NEXT_PUBLIC_AUTH0_PRODUCTION_URL || "http://localhost:3000/api/auth/callback",
-        scope: "openid profile email"
+        scope: "openid profile email",
+        connection: "reddit"
       }}
       
       onRedirectCallback={onRedirectCallback}
