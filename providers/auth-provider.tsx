@@ -1,30 +1,13 @@
 // providers/auth-provider.tsx
 'use client';
 
-import { Auth0Provider } from '@auth0/auth0-react';
-import { useRouter } from 'next/navigation';
+// Use the Next.js Auth0 SDK instead
+import { UserProvider } from '@auth0/nextjs-auth0/client';
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
-  const router = useRouter();
-
-  const onRedirectCallback = (appState: any) => {
-    router.push(appState?.returnTo || '/');
-  };
-
   return (
-    <Auth0Provider
-      domain={process.env.NEXT_PUBLIC_AUTH0_DOMAIN!}
-      clientId={process.env.NEXT_PUBLIC_AUTH0_CLIENT_ID!}
-      authorizationParams={{
-        redirect_uri:
-          process.env.NEXT_PUBLIC_AUTH0_PRODUCTION_URL || "http://localhost:3000/api/auth/callback",
-        scope: "openid profile email",
-        connection: "reddit"
-      }}
-      
-      onRedirectCallback={onRedirectCallback}
-    >
+    <UserProvider>
       {children}
-    </Auth0Provider>
+    </UserProvider>
   );
 };
