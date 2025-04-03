@@ -45,7 +45,7 @@ export default function LoginPage() {
     
     try {
       // Use the SDK's login route with connection parameter
-      window.location.href = `/api/auth/login?connection=${connection}`;
+      window.location.href = `/api/auth/login?connection=${connection}&prompt=none`;
       toast.success(`Connecting to ${providerName}...`);
     } catch (error) {
       console.error('Social login error:', error);
