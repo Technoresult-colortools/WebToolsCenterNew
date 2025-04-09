@@ -6,8 +6,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { 
   faGithub, 
   faTwitter, 
-  faLinkedin, 
-  faDiscord 
+  faFacebook,
+  faInstagram
 } from '@fortawesome/free-brands-svg-icons';
 import { Heart, Coffee } from 'lucide-react';
 
@@ -30,8 +30,8 @@ export default function Footer() {
   const socialLinks = [
     { name: "GitHub", icon: faGithub, href: "https://github.com/Technoresult-colortools/WebToolsCenterNew" },
     { name: "Twitter", icon: faTwitter, href: "https://x.com/webtoolscenter" },
-    { name: "LinkedIn", icon: faLinkedin, href: "https://linkedin.com" },
-    { name: "Discord", icon: faDiscord, href: "https://discord.com" }
+    { name: "Facebook", icon: faFacebook, href: "https://www.facebook.com/people/Webtoolscenter/61567103137363/" },
+    { name: "Instagram", icon: faInstagram, href: "https://www.instagram.com/webtoolscenter/" }
   ];
 
   return (

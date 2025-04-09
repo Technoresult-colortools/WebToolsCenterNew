@@ -26,6 +26,8 @@ import { Search, ChevronDown, X, LogOut, UserIcon } from 'lucide-react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useTheme } from '@/providers/theme-provider';
 import { useUser } from '@auth0/nextjs-auth0/client';
+import Logo from '@/public/logo.svg';
+import Image from 'next/image';
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -126,17 +128,24 @@ export default function Header() {
 
 
 
-      <NavbarContent className="pr-3" justify="start">
-        <NavbarBrand>
-          <NextLink href="/" className="font-bold text-inherit flex items-center">
-            <span className="text-2xl">
-              <span className="dark:text-white text-black">Web</span>
-              <span className="text-primary">Tools</span>
-              <span className="dark:text-white text-black">Center</span>
-            </span>
-          </NextLink>
-        </NavbarBrand>
-      </NavbarContent>
+      <NavbarBrand>
+        <NextLink href="/" className="font-bold text-inherit flex items-center gap-1">
+        <div className="relative w-8 h-8 sm:w-10 sm:h-10">
+            <Image
+              src="/logo.svg"
+              alt="WebToolsCenter Logo"
+              fill
+              className="object-contain"
+              priority
+            />
+          </div>
+          <span className="text-xl sm:text-2xl">
+            <span className="dark:text-white text-black">Web</span>
+            <span className="text-primary">Tools</span>
+            <span className="dark:text-white text-black">Center</span>
+          </span>
+        </NextLink>
+      </NavbarBrand>
 
       <NavbarContent className="hidden lg:flex gap-4 flex-1 justify-center max-w-xl">
         <div className="search-container w-full relative" ref={searchRef}>
