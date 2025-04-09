@@ -74,7 +74,7 @@ Example format: ["#1A1A2E", "#16213E", "#0F3460", "#E94560", "#533483"]
     let colors: string[];
     try {
       // First strategy: look for a complete JSON array
-      let jsonMatch = content.match(/\[\s*"#[0-9A-Fa-f]{6}"\s*(?:,\s*"#[0-9A-Fa-f]{6}"\s*){4}\]/);
+      const jsonMatch = content.match(/\[\s*"#[0-9A-Fa-f]{6}"\s*(?:,\s*"#[0-9A-Fa-f]{6}"\s*){4}\]/);
       
       if (jsonMatch) {
         // Found a properly formatted JSON array

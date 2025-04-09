@@ -28,8 +28,6 @@ import {
   Image,
   Progress,
   Chip,
-  Tabs,
-  Tab
 } from "@nextui-org/react"
 import { toast } from "react-hot-toast"
 import ToolLayout from "@/components/ToolLayout"

@@ -28,9 +28,9 @@ interface GeoFeature {
     id?: string;
     adm0_a3?: string;
     ADM0_A3?: string;
-    [key: string]: any;
+    [key: string]: unknown;
   };
-  [key: string]: any;
+  [key: string]: unknown;
 }
 
 const geoUrl = "https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json";
