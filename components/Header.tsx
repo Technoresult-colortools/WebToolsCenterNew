@@ -26,7 +26,6 @@ import { Search, ChevronDown, X, LogOut, UserIcon } from 'lucide-react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useTheme } from '@/providers/theme-provider';
 import { useUser } from '@auth0/nextjs-auth0/client';
-import Logo from '@/public/logo.svg';
 import Image from 'next/image';
 
 export default function Header() {
