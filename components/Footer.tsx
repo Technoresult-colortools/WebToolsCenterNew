@@ -28,8 +28,8 @@ export default function Footer() {
   const currentYear = new Date().getFullYear();
 
   const socialLinks = [
-    { name: "GitHub", icon: faGithub, href: "https://github.com" },
-    { name: "Twitter", icon: faTwitter, href: "https://twitter.com" },
+    { name: "GitHub", icon: faGithub, href: "https://github.com/Technoresult-colortools/WebToolsCenterNew" },
+    { name: "Twitter", icon: faTwitter, href: "https://x.com/webtoolscenter" },
     { name: "LinkedIn", icon: faLinkedin, href: "https://linkedin.com" },
     { name: "Discord", icon: faDiscord, href: "https://discord.com" }
   ];

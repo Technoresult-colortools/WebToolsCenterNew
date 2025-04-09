@@ -325,6 +325,27 @@ export default function CaseConverter() {
     const [readingTime, setReadingTime] = useState(0);
     const [textStats, setTextStats] = useState({ avgWordLength: '0', sentenceCount: 0 });
     const [availableCaseOptions, setAvailableCaseOptions] = useState(getCaseOptions('en'));
+
+    // Load saved data on component mount
+    useEffect(() => {
+      const savedInputText = localStorage.getItem('caseConverterInputText');
+      const savedOutputText = localStorage.getItem('caseConverterOutputText');
+      const savedCase = localStorage.getItem('caseConverterSelectedCase');
+      const savedLanguage = localStorage.getItem('caseConverterSelectedLanguage');
+      
+      if (savedInputText) setInputText(savedInputText);
+      if (savedOutputText) setOutputText(savedOutputText);
+      if (savedCase) setSelectedCase(savedCase);
+      if (savedLanguage) setSelectedLanguage(savedLanguage);
+    }, []);
+
+    // Save data when it changes
+    useEffect(() => {
+      if (inputText) localStorage.setItem('caseConverterInputText', inputText);
+      if (outputText) localStorage.setItem('caseConverterOutputText', outputText);
+      if (selectedCase) localStorage.setItem('caseConverterSelectedCase', selectedCase);
+      if (selectedLanguage) localStorage.setItem('caseConverterSelectedLanguage', selectedLanguage);
+    }, [inputText, outputText, selectedCase, selectedLanguage]);
   
     // Auto-detect language when input changes
     useEffect(() => {
@@ -398,6 +419,11 @@ export default function CaseConverter() {
       setOutputText('');
       setHistory([]);
       setHistoryIndex(-1);
+      // Also clear localStorage
+      localStorage.removeItem('caseConverterInputText');
+      localStorage.removeItem('caseConverterOutputText');
+      localStorage.removeItem('caseConverterSelectedCase');
+      localStorage.removeItem('caseConverterSelectedLanguage');
       toast.success('Text cleared');
     }, []);
   

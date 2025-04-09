@@ -4,23 +4,29 @@ import type React from "react"
 import { useState, useRef, useEffect } from "react"
 import {
   Search,
-  RotateCcw,
+  RefreshCw,
   AlertCircle,
   Youtube,
   Tag,
-  Info,
   Eye,
   ThumbsUp,
   MessageSquare,
   History,
-  Trash2,
   Download,
-  Lightbulb,
-  ImageIcon,
+  Share2,
+  Clock,
+  Calendar,
+  User,
+  Film,
+  Shield,
+  Settings,
+  Layers,
+  Info,
   BookOpen,
+  Lightbulb,
 } from "lucide-react"
-import { Button, Card, CardBody, CardHeader, Input, Tabs, Tab, Image, Chip, Tooltip } from "@nextui-org/react"
-import { toast, } from "react-hot-toast"
+import { Button, Card, CardBody, CardHeader, Input, Image, Chip, Tooltip, Progress } from "@nextui-org/react"
+import { toast } from "react-hot-toast"
 import NextImage from 'next/image'
 import ToolLayout from "@/components/ToolLayout"
 
@@ -48,6 +54,7 @@ export default function YouTubeMetadataExtractor() {
   const [error, setError] = useState("")
   const [loading, setLoading] = useState(false)
   const [searchHistory, setSearchHistory] = useState<string[]>([])
+  const [showHistory, setShowHistory] = useState(false)
   const inputRef = useRef<HTMLInputElement>(null)
 
   useEffect(() => {
@@ -147,6 +154,13 @@ export default function YouTubeMetadataExtractor() {
     toast.success("Metadata downloaded!")
   }
 
+  const handleShare = () => {
+    if (videoUrl) {
+      navigator.clipboard.writeText(window.location.origin + "?video=" + encodeURIComponent(videoUrl))
+      toast.success("Link copied to clipboard!")
+    }
+  }
+
   const clearSearchHistory = () => {
     setSearchHistory([])
     localStorage.removeItem("metadataSearchHistory")
@@ -173,9 +187,8 @@ export default function YouTubeMetadataExtractor() {
       description="Extract comprehensive metadata from any YouTube video"
       toolId="678f383126f06f912191bcd8"
     >
-
-      <div className="flex flex-col gap-8">
-        <Card className="bg-default-50 dark:bg-default-100">
+      <div className="flex flex-col gap-6">
+        <Card className="bg-gradient-to-r from-blue-950 to-purple-900 text-white shadow-lg">
           <CardBody className="p-6">
             <form onSubmit={handleSubmit} className="space-y-4">
               <div className="flex flex-col md:flex-row gap-4">
@@ -184,212 +197,344 @@ export default function YouTubeMetadataExtractor() {
                   value={videoUrl}
                   onChange={(e) => setVideoUrl(e.target.value)}
                   placeholder="Paste YouTube video URL here..."
-                  size="md"
+                  size="lg"
                   variant="bordered"
-                  startContent={<Youtube className="text-danger" />}
-                  className="flex-1"
+                  startContent={<Youtube className="text-red-500" />}
+                  className="flex-1 text-white"
+                  classNames={{
+                    inputWrapper: "bg-black/30 backdrop-blur-sm border-white/20",
+                    input: "text-white",
+                  }}
                 />
-                <div className="flex gap-2">
+                <Tooltip content="Extract metadata from this YouTube video" className="text-default-700">
                   <Button
-                    color="primary"
+                    color="danger"
                     type="submit"
-                    size="md"
                     isLoading={loading}
-                    startContent={!loading && <Search size={20} />}
+                    startContent={loading ? <RefreshCw className="animate-spin" /> : <Search />}
+                    className="bg-gradient-to-r from-red-500 to-red-600"
+                    size="lg"
                   >
-                    {loading ? "Extracting..." : "Extract"}
+                    {loading ? "Extracting..." : "Extract Metadata"}
                   </Button>
-                  <Button color="danger" size="md" onPress={handleReset} startContent={<RotateCcw size={20} />}>
-                    Reset
+                </Tooltip>
+                <Button
+                  variant="flat"
+                  onClick={handleReset}
+                  startContent={<RefreshCw />}
+                  className="bg-white/10 text-white hover:bg-white/20"
+                  size="lg"
+                >
+                  Reset
+                </Button>
+                {videoUrl && (
+                  <Button
+                    color="success"
+                    onClick={handleShare}
+                    startContent={<Share2 />}
+                    className="bg-gradient-to-r from-green-500 to-green-600"
+                    size="lg"
+                  >
+                    Share
                   </Button>
-                </div>
+                )}
               </div>
             </form>
 
             {error && (
-              <div className="mt-4 p-4 bg-danger-50 text-danger rounded-lg flex items-center gap-2">
-                <AlertCircle size={20} />
+              <div className="bg-red-500/80 backdrop-blur-sm text-white p-4 rounded-xl mt-4 flex items-center">
+                <AlertCircle className="mr-2 flex-shrink-0" />
                 <span>{error}</span>
               </div>
             )}
 
-            {!metadata && (
-              <div className="text-center text-default-500 py-12">
-                <ImageIcon size={48} className="mx-auto mb-4" />
-                <p>Enter a YouTube video URL to extract metadata</p>
+            {loading && (
+              <div className="mt-6">
+                <p className="text-white/70 mb-2">Extracting video metadata...</p>
+                <Progress
+                  size="md"
+                  isIndeterminate
+                  aria-label="Loading..."
+                  className="max-w-full"
+                  classNames={{
+                    indicator: "bg-gradient-to-r from-indigo-500 to-purple-500",
+                  }}
+                />
               </div>
             )}
           </CardBody>
         </Card>
 
         {metadata && (
-          <div className="grid md:grid-cols-2 gap-6">
-            <Card className="bg-default-50 dark:bg-default-100 h-[460px]">
-              <CardHeader className="flex gap-2">
-                <Youtube className="text-danger" />
-                <div className="overflow-hidden">
-                  <h2 className="text-xl font-bold truncate">{metadata.title}</h2>
-                  <p className="text-default-600">Published on {metadata.publishedAt}</p>
-                </div>
-              </CardHeader>
+          <>
+            <Card className="shadow-md border-none bg-default-50/50 backdrop-blur-sm dark:bg-default-100/50">
               <CardBody>
-                <div className="flex flex-col h-full">
-                  <Image
-                    src={metadata.thumbnail || "/placeholder.svg"}
-                    alt={metadata.title}
-                    className="w-full rounded-lg mb-4 object-cover"
-                  />
-                  <div className="grid grid-cols-3 gap-4 mt-auto">
-                    <Tooltip content="Total Views">
+                <div className="flex flex-col md:flex-row gap-6">
+                  <div className="relative rounded-lg overflow-hidden min-w-64">
+                    <Image
+                      src={metadata.thumbnail || "/placeholder.svg"}
+                      alt={metadata.title}
+                      className="w-full md:w-64 object-cover rounded-lg"
+                      radius="lg"
+                      shadow="md"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-end">
+                      <Chip
+                        className="absolute top-2 right-2"
+                        color="danger"
+                        variant="shadow"
+                        startContent={<Youtube size={14} />}
+                      >
+                        YouTube
+                      </Chip>
+                      <Chip
+                        className="absolute bottom-2 right-2"
+                        color="primary"
+                        variant="shadow"
+                        startContent={<Clock size={14} />}
+                      >
+                        {formatDuration(metadata.duration)}
+                      </Chip>
+                    </div>
+                  </div>
+                  <div className="flex-1">
+                    <h3 className="text-xl font-bold mb-3">{metadata.title}</h3>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-2">
                       <div className="flex items-center gap-2">
-                        <Eye className="text-default-500" />
-                        <span>{Number.parseInt(metadata.viewCount).toLocaleString()}</span>
+                        <div className="w-6 h-6 rounded-full bg-indigo-100 dark:bg-indigo-900 flex items-center justify-center">
+                          <User size={14} className="text-indigo-600 dark:text-indigo-300" />
+                        </div>
+                        <p className="text-default-500">
+                          Channel: <span className="font-medium text-default-700">{metadata.channelTitle}</span>
+                        </p>
                       </div>
-                    </Tooltip>
-                    <Tooltip content="Total Likes">
                       <div className="flex items-center gap-2">
-                        <ThumbsUp className="text-default-500" />
-                        <span>{Number.parseInt(metadata.likeCount).toLocaleString()}</span>
+                        <div className="w-6 h-6 rounded-full bg-indigo-100 dark:bg-indigo-900 flex items-center justify-center">
+                          <Eye size={14} className="text-indigo-600 dark:text-indigo-300" />
+                        </div>
+                        <p className="text-default-500">
+                          Views:{" "}
+                          <span className="font-medium text-default-700">
+                            {Number.parseInt(metadata.viewCount).toLocaleString()}
+                          </span>
+                        </p>
                       </div>
-                    </Tooltip>
-                    <Tooltip content="Total Comments">
                       <div className="flex items-center gap-2">
-                        <MessageSquare className="text-default-500" />
-                        <span>{Number.parseInt(metadata.commentCount).toLocaleString()}</span>
+                        <div className="w-6 h-6 rounded-full bg-indigo-100 dark:bg-indigo-900 flex items-center justify-center">
+                          <Calendar size={14} className="text-indigo-600 dark:text-indigo-300" />
+                        </div>
+                        <p className="text-default-500">
+                          Published: <span className="font-medium text-default-700">{metadata.publishedAt}</span>
+                        </p>
                       </div>
-                    </Tooltip>
+                      <div className="flex items-center gap-2">
+                        <div className="w-6 h-6 rounded-full bg-indigo-100 dark:bg-indigo-900 flex items-center justify-center">
+                          <ThumbsUp size={14} className="text-indigo-600 dark:text-indigo-300" />
+                        </div>
+                        <p className="text-default-500">
+                          Likes:{" "}
+                          <span className="font-medium text-default-700">
+                            {Number.parseInt(metadata.likeCount).toLocaleString()}
+                          </span>
+                        </p>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <div className="w-6 h-6 rounded-full bg-indigo-100 dark:bg-indigo-900 flex items-center justify-center">
+                          <Film size={14} className="text-indigo-600 dark:text-indigo-300" />
+                        </div>
+                        <p className="text-default-500">
+                          Definition:{" "}
+                          <span className="font-medium text-default-700">{metadata.definition.toUpperCase()}</span>
+                        </p>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <div className="w-6 h-6 rounded-full bg-indigo-100 dark:bg-indigo-900 flex items-center justify-center">
+                          <MessageSquare size={14} className="text-indigo-600 dark:text-indigo-300" />
+                        </div>
+                        <p className="text-default-500">
+                          Comments:{" "}
+                          <span className="font-medium text-default-700">
+                            {Number.parseInt(metadata.commentCount).toLocaleString()}
+                          </span>
+                        </p>
+                      </div>
+                    </div>
+                    <div className="mt-4 flex gap-2">
+                      <Button color="success" startContent={<Download size={18} />} onClick={downloadMetadata}>
+                        Download Metadata
+                      </Button>
+                    </div>
                   </div>
                 </div>
               </CardBody>
             </Card>
 
-            <Card className="bg-default-50 dark:bg-default-100 h-[460px]">
-              <CardBody className="p-0">
-                <Tabs
-                  aria-label="Video metadata"
-                  className="flex flex-col h-full"
-                  classNames={{
-                    panel: "flex-1 p-4",
-                    tabList: "p-4 pb-0",
-                    cursor: "bg-primary",
-                    tab: "max-w-fit px-4",
-                  }}
-                >
-                  <Tab
-                    key="tags"
-                    title={
-                      <div className="flex items-center gap-2">
-                        <Tag size={18} />
-                        <span>Tags</span>
-                      </div>
-                    }
-                  >
-                    <div className="flex flex-col h-full overflow-hidden">
-                      <div className="flex-1 overflow-y-auto mb-4">
-                        <div className="flex flex-wrap gap-2">
-                          {metadata.tags.map((tag, index) => (
-                            <Chip key={index} variant="flat" size="sm">
-                              {tag}
-                            </Chip>
-                          ))}
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+              <Card className="lg:col-span-2 shadow-md border-none bg-default-50/50 backdrop-blur-sm dark:bg-default-100/50">
+                <CardHeader className="pb-0">
+                  <div className="w-full">
+                    <h3 className="text-xl font-semibold">Video Description</h3>
+                    <p className="text-default-500 text-sm mt-1">Full description text from the video</p>
+                  </div>
+                </CardHeader>
+                <CardBody>
+                  <div className="max-h-96 overflow-y-auto p-4 bg-default-100 rounded-lg whitespace-pre-wrap text-default-600">
+                    {metadata.description || "No description available."}
+                  </div>
+                </CardBody>
+              </Card>
+
+              <Card className="shadow-md border-none bg-default-50/50 backdrop-blur-sm dark:bg-default-100/50">
+                <CardHeader className="pb-0">
+                  <h3 className="text-xl font-semibold">Technical Details</h3>
+                </CardHeader>
+                <CardBody>
+                  <div className="space-y-4">
+                    <div className="p-4 rounded-xl bg-indigo-50 dark:bg-indigo-900/30 backdrop-blur-sm">
+                      <h4 className="text-lg font-medium mb-3 flex items-center gap-2">
+                        <Shield size={18} />
+                        Content Status
+                      </h4>
+                      <div className="space-y-2">
+                        <div className="flex justify-between items-center">
+                          <span className="text-default-600">Privacy Status:</span>
+                          <Chip
+                            color={metadata.privacyStatus === "public" ? "success" : "warning"}
+                            variant="flat"
+                            size="sm"
+                          >
+                            {metadata.privacyStatus.charAt(0).toUpperCase() + metadata.privacyStatus.slice(1)}
+                          </Chip>
+                        </div>
+                        <div className="flex justify-between items-center">
+                          <span className="text-default-600">Licensed Content:</span>
+                          <Chip color={metadata.licensedContent ? "success" : "default"} variant="flat" size="sm">
+                            {metadata.licensedContent ? "Yes" : "No"}
+                          </Chip>
+                        </div>
+                        <div className="flex justify-between items-center">
+                          <span className="text-default-600">Captions:</span>
+                          <Chip color={metadata.caption === "true" ? "success" : "default"} variant="flat" size="sm">
+                            {metadata.caption === "true" ? "Available" : "None"}
+                          </Chip>
                         </div>
                       </div>
-                      <Button
-                        color="success"
-                        className="w-full"
-                        startContent={<Download size={18} />}
-                        onPress={downloadMetadata}
+                    </div>
+
+                    <div className="mt-4">
+                      <h4 className="text-lg font-medium mb-3 flex items-center gap-2">
+                        <Settings size={18} />
+                        Video Settings
+                      </h4>
+                      <div className="space-y-2">
+                        <div className="flex justify-between items-center">
+                          <span className="text-default-600">Duration:</span>
+                          <span className="font-medium">{formatDuration(metadata.duration)}</span>
+                        </div>
+                        <div className="flex justify-between items-center">
+                          <span className="text-default-600">Definition:</span>
+                          <Chip color={metadata.definition === "hd" ? "primary" : "default"} variant="flat" size="sm">
+                            {metadata.definition.toUpperCase()}
+                          </Chip>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </CardBody>
+              </Card>
+            </div>
+
+            <Card className="shadow-md border-none bg-default-50/50 backdrop-blur-sm dark:bg-default-100/50">
+              <CardHeader>
+                <div className="flex flex-col">
+                  <h3 className="text-xl font-semibold">Video Tags</h3>
+                  <p className="text-default-500 mt-1 text-sm">
+                    Keywords associated with this video for search optimization
+                  </p>
+                </div>
+              </CardHeader>
+              <CardBody>
+                <div className="flex flex-wrap gap-2">
+                  {metadata.tags && metadata.tags.length > 0 ? (
+                    metadata.tags.map((tag, index) => (
+                      <Chip
+                        key={index}
+                        variant="flat"
+                        color="primary"
+                        startContent={<Tag size={14} />}
+                        className="bg-primary-100 dark:bg-primary-900/30"
                       >
-                        Download Metadata
-                      </Button>
-                    </div>
-                  </Tab>
-                  <Tab
-                    key="description"
-                    title={
-                      <div className="flex items-center gap-2">
-                        <Info size={18} />
-                        <span>Description</span>
-                      </div>
-                    }
-                  >
-                    <div className="h-full overflow-y-auto">
-                      <div className="whitespace-pre-wrap text-default-600">{metadata.description}</div>
-                    </div>
-                  </Tab>
-                  <Tab
-                    key="details"
-                    title={
-                      <div className="flex items-center gap-2">
-                        <Info size={18} />
-                        <span>Details</span>
-                      </div>
-                    }
-                  >
-                    <div className="h-full overflow-y-auto">
-                      <div className="space-y-2 text-default-600">
-                        <p>
-                          <strong>Channel:</strong> {metadata.channelTitle}
-                        </p>
-                        <p>
-                          <strong>Duration:</strong> {formatDuration(metadata.duration)}
-                        </p>
-                        <p>
-                          <strong>Definition:</strong> {metadata.definition}
-                        </p>
-                        <p>
-                          <strong>Caption:</strong> {metadata.caption}
-                        </p>
-                        <p>
-                          <strong>Licensed Content:</strong> {metadata.licensedContent ? "Yes" : "No"}
-                        </p>
-                        <p>
-                          <strong>Privacy Status:</strong> {metadata.privacyStatus}
-                        </p>
-                      </div>
-                    </div>
-                  </Tab>
-                </Tabs>
+                        {tag}
+                      </Chip>
+                    ))
+                  ) : (
+                    <p className="text-default-500">No tags found for this video.</p>
+                  )}
+                </div>
               </CardBody>
             </Card>
+          </>
+        )}
+
+        {!metadata && !error && !loading && (
+          <div className="text-center text-default-500 py-12">
+            <div className="w-24 h-24 mx-auto mb-6 rounded-full bg-default-100 flex items-center justify-center">
+              <Layers size={48} className="text-default-400" />
+            </div>
+            <p className="text-lg">Enter a YouTube video URL to extract metadata</p>
+            <p className="text-sm mt-2 max-w-md mx-auto">
+              This tool extracts comprehensive metadata from YouTube videos, including tags, description, statistics,
+              and technical details.
+            </p>
           </div>
         )}
 
         {searchHistory.length > 0 && (
-          <Card>
-            <CardHeader className="flex justify-between">
-              <div className="flex items-center gap-2">
-                <History size={20} />
-                <h3 className="text-xl font-bold">Recent Searches</h3>
+          <Card className="shadow-md border-none bg-default-50/50 backdrop-blur-sm dark:bg-default-100/50">
+            <CardHeader
+              className="flex justify-between items-center cursor-pointer"
+              onClick={() => setShowHistory(!showHistory)}
+            >
+              <div className="flex items-center">
+                <History className="mr-2" />
+                <h3 className="text-xl font-semibold">Recent Searches</h3>
               </div>
-              <Button
-                color="danger"
-                variant="flat"
-                size="sm"
-                startContent={<Trash2 size={16} />}
-                onPress={clearSearchHistory}
-              >
-                Clear History
-              </Button>
+              <div className="flex items-center">
+                <Button
+                  color="danger"
+                  variant="light"
+                  size="sm"
+                  onClick={(e) => {
+                    e.stopPropagation()
+                    clearSearchHistory()
+                  }}
+                >
+                  Clear History
+                </Button>
+              </div>
             </CardHeader>
-            <CardBody>
-              <div className="space-y-2">
-                {searchHistory.map((url, index) => (
-                  <Button
-                    key={index}
-                    variant="flat"
-                    className="w-full justify-start"
-                    onPress={() => setVideoUrl(url)}
-                    startContent={<Youtube className="text-danger" />}
-                  >
-                    {url}
-                  </Button>
-                ))}
-              </div>
-            </CardBody>
+            {showHistory && (
+              <CardBody>
+                <div className="space-y-2">
+                  {searchHistory.map((url, index) => (
+                    <Button
+                      key={index}
+                      onClick={() => setVideoUrl(url)}
+                      variant="flat"
+                      className="w-full justify-start"
+                      startContent={<Youtube className="text-red-500" />}
+                    >
+                      {url}
+                    </Button>
+                  ))}
+                </div>
+              </CardBody>
+            )}
           </Card>
         )}
-    </div> 
+      </div>
+
+
 
      {/* Info Section */}
     <Card className="mt-8 bg-default-50 dark:bg-default-100 p-4 md:p-8">

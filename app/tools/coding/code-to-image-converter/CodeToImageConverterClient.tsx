@@ -4,6 +4,7 @@
 
 import type React from "react"
 import { useState, useRef, useEffect, useCallback } from "react"
+import { Selection } from "@nextui-org/react";
 import { Dropdown, DropdownTrigger, DropdownMenu, DropdownItem, Tooltip, Modal, ModalContent, Switch } from "@nextui-org/react"
 import { Card, CardBody, Button, Select, SelectItem, Input, Slider,} from "@nextui-org/react"
 import {
@@ -351,6 +352,29 @@ export default function CodeToImageConverter() {
 
     initializeHighlighter()
   }, [])
+  //For LocalStorage this section will load the user settings
+  useEffect(() => {
+    // Load saved values when component mounts
+    const savedCode = localStorage.getItem('codeToImage_code');
+    const savedTheme = localStorage.getItem('codeToImage_theme');
+    const savedLanguage = localStorage.getItem('codeToImage_language');
+    const savedFileName = localStorage.getItem('codeToImage_fileName');
+    const savedFont = localStorage.getItem('codeToImage_font');
+    const savedFontSize = localStorage.getItem('codeToImage_fontSize');
+    const savedTabSize = localStorage.getItem('codeToImage_tabSize');
+    const savedShadow = localStorage.getItem('codeToImage_shadow');
+    const savedPadding = localStorage.getItem('codeToImage_padding');
+    
+    if (savedCode) setCode(savedCode);
+    if (savedTheme) setSelectedTheme(savedTheme);
+    if (savedLanguage) setSelectedLanguage(savedLanguage);
+    if (savedFileName) setFileName(savedFileName);
+    if (savedFont) setSelectedFont(savedFont);
+    if (savedFontSize) setSelectedFontSize(savedFontSize);
+    if (savedTabSize) setSelectedTabSize(savedTabSize);
+    if (savedShadow) setSelectedShadow(savedShadow);
+    if (savedPadding) setSelectedPadding(savedPadding);
+  }, []);
   //Fullscreenmodal scaldown
 
   useEffect(() => {
@@ -411,11 +435,67 @@ export default function CodeToImageConverter() {
     }
   }, [isFullScreen, code, lineCount]);
 
+   // For theme selection
+const handleThemeChange = useCallback((keys: Selection) => {
+  if (keys === "all") return;
+  const newTheme = Array.from(keys)[0] as string;
+  setSelectedTheme(newTheme);
+  localStorage.setItem('codeToImage_theme', newTheme);
+}, []);
+
+// For language selection
+const handleLanguageChange = useCallback((keys: Selection) => {
+  if (keys === "all") return;
+  const newLanguage = Array.from(keys)[0] as string;
+  setSelectedLanguage(newLanguage);
+  localStorage.setItem('codeToImage_language', newLanguage);
+}, []);
+
+// Font Family
+const handleFontChange = useCallback((keys: Selection) => {
+  if (keys === "all") return;
+  const newFont = typeof keys === "object" && "currentKey" in keys 
+    ? keys.currentKey as string 
+    : Array.from(keys)[0] as string;
+  setSelectedFont(newFont);
+  localStorage.setItem('codeToImage_font', newFont);
+}, []);
+
+// Font Size
+const handleFontSizeChange = useCallback((keys: Selection) => {
+  const newFontSize = Array.from(keys)[0] as string;
+  setSelectedFontSize(newFontSize);
+  localStorage.setItem('codeToImage_fontSize', newFontSize);
+}, []);
+
+// Tab Size
+const handleTabSizeChange = useCallback((keys: Selection) => {
+  const newTabSize = Array.from(keys)[0] as string;
+  setSelectedTabSize(newTabSize);
+  localStorage.setItem('codeToImage_tabSize', newTabSize);
+}, []);
+
+// Shadow
+const handleShadowChange = useCallback((keys: Selection) => {
+  const newShadow = Array.from(keys)[0] as string;
+  setSelectedShadow(newShadow);
+  localStorage.setItem('codeToImage_shadow', newShadow);
+}, []);
+
+// Padding
+const handlePaddingChange = useCallback((value: number | number[]) => {
+  // Convert to string, handling both number and array of numbers
+  const paddingValue = Array.isArray(value) ? value[0].toString() : value.toString();
+  setSelectedPadding(paddingValue);
+  localStorage.setItem('codeToImage_padding', paddingValue);
+}, []);
+
 
   // Completely revised file name handling
   const handleFileNameChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
-    // Directly update the state with the input's value
-    setFileName(e.target.value);
+    const newFileName = e.target.value;
+    setFileName(newFileName);
+    localStorage.setItem('codeToImage_fileName', newFileName);
   }, []);
   // --- END UPDATED File Name Handler ---
 
@@ -429,6 +509,7 @@ export default function CodeToImageConverter() {
     }
 
     setCode(newCode)
+    localStorage.setItem('codeToImage_code', newCode);
     setLineCount(lines)
   }, [])
 
@@ -925,7 +1006,7 @@ export default function CodeToImageConverter() {
               <Select
                 label="Code Theme"
                 selectedKeys={new Set([selectedTheme])}
-                onSelectionChange={(keys) => setSelectedTheme(Array.from(keys)[0] as string)}
+                onSelectionChange={handleThemeChange}
                 disallowEmptySelection
                 variant="bordered"
                 classNames={{
@@ -945,7 +1026,7 @@ export default function CodeToImageConverter() {
                 label="Language"
                 selectedKeys={new Set([selectedLanguage])}
                 disallowEmptySelection
-                onSelectionChange={(keys) => setSelectedLanguage(Array.from(keys)[0] as string)}
+                onSelectionChange={handleLanguageChange}
                 variant="bordered"
                 classNames={{
                   trigger: "bg-default-100 dark:bg-default-200 border-default-300"
@@ -1002,9 +1083,9 @@ export default function CodeToImageConverter() {
                           label="Font Family"
                           selectedKeys={new Set([selectedFont])}
                           disallowEmptySelection
-                          onSelectionChange={(keys) => setSelectedFont(Array.from(keys)[0] as string)}
+                          onSelectionChange={handleFontChange}
                           variant="bordered"
-                          startContent={<Type className="h-4 w-4 text-default-700" /> }
+                          startContent={<Type className="h-4 w-4 text-default-700" />}
                         >
                           {codingFonts.map((font) => (
                             <SelectItem key={font.value} value={font.value} className="text-default-700">
@@ -1018,7 +1099,7 @@ export default function CodeToImageConverter() {
                           label="Font Size"
                           selectedKeys={new Set([selectedFontSize])}
                           disallowEmptySelection
-                          onSelectionChange={(keys) => setSelectedFontSize(Array.from(keys)[0] as string)}
+                          onSelectionChange={handleFontSizeChange}
                           variant="bordered"
                         >
                           {fontSizes.map((size) => (
@@ -1035,7 +1116,7 @@ export default function CodeToImageConverter() {
                           label="Tab Size"
                           selectedKeys={new Set([selectedTabSize])}
                           disallowEmptySelection
-                          onSelectionChange={(keys) => setSelectedTabSize(Array.from(keys)[0] as string)}
+                          onSelectionChange={handleTabSizeChange}
                           variant="bordered"
                         >
                           {tabSizes.map((size) => (
@@ -1050,7 +1131,7 @@ export default function CodeToImageConverter() {
                           label="Shadow"
                           selectedKeys={new Set([selectedShadow])}
                           disallowEmptySelection
-                          onSelectionChange={(keys) => setSelectedShadow(Array.from(keys)[0] as string)}
+                          onSelectionChange={handleShadowChange}
                           variant="bordered"
                         >
                           {shadowOptions.map((option) => (
@@ -1074,7 +1155,7 @@ export default function CodeToImageConverter() {
                           maxValue={200}
                           defaultValue={Number.parseInt(selectedPadding)}
                           value={Number.parseInt(selectedPadding)}
-                          onChange={(value) => setSelectedPadding(value.toString())}
+                          onChange={handlePaddingChange}
                           className="max-w-full"
                           classNames={{
                             track: "bg-default-200 dark:bg-default-700",
