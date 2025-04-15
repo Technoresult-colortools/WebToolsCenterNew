@@ -47,6 +47,7 @@ interface ContentTabProps {
     website: string
     address: string
   }
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   setVCardFields: (fields: any) => void
   
   // Location fields
@@ -55,6 +56,7 @@ interface ContentTabProps {
     longitude: string
     name: string
   }
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   setLocationData: (data: any) => void
   
   // Event fields
@@ -67,6 +69,7 @@ interface ContentTabProps {
     endTime: string
     summary: string
   }
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   setEventData: (data: any) => void
 }
 

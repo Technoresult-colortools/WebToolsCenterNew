@@ -117,6 +117,7 @@ export default function QRCodeGenerator() {
 
   // === Templates ===
   const [selectedTemplate, setSelectedTemplate] = useState<string>("")
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [savedTemplates, setSavedTemplates] = useState<any[]>([])
 
   // Sidebar tab state

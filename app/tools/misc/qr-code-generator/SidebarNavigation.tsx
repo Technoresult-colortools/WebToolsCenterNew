@@ -1,6 +1,6 @@
 import React from "react"
 import { Button } from "@nextui-org/react"
-import { Layout, Grid, Palette, ImageIcon, Info } from "lucide-react"
+import { Layout, Grid, Palette, ImageIcon } from "lucide-react"
 
 interface SidebarNavigationProps {
   activeTab: string

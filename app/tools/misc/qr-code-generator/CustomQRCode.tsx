@@ -2,6 +2,62 @@ import React, { useEffect, useRef } from "react"
 import QRCodeStyling from "qr-code-styling"
 import type { BorderStyle, GradientType } from "./QRCodeGeneratorClient"
 
+// Define types for the QR code library
+interface QRCodeStylingOptions {
+  width: number;
+  height: number;
+  type: "svg" | "canvas";
+  data: string;
+  margin?: number;
+  qrOptions: {
+    errorCorrectionLevel: "L" | "M" | "Q" | "H";
+  };
+  dotsOptions: {
+    type: "square" | "dots" | "rounded" | "classy" | "classy-rounded";
+    color?: string;
+    gradient?: {
+      type: "linear" | "radial";
+      rotation: number;
+      colorStops: Array<{offset: number; color: string}>;
+    };
+  };
+  cornersSquareOptions: {
+    type: "square" | "dot" | "extra-rounded" | "rounded";
+    color?: string;
+    gradient?: {
+      type: "linear" | "radial";
+      rotation: number;
+      colorStops: Array<{offset: number; color: string}>;
+    };
+  };
+  cornersDotOptions: {
+    type: "square" | "dot" | "rounded";
+    color?: string;
+    gradient?: {
+      type: "linear" | "radial";
+      rotation: number;
+      colorStops: Array<{offset: number; color: string}>;
+    };
+  };
+  backgroundOptions: {
+    color: string;
+  };
+  image?: string;
+  imageOptions?: {
+    crossOrigin: "anonymous" | "use-credentials";
+    margin: number;
+    hideBackgroundDots: boolean;
+    imageSize: number;
+  };
+}
+
+// Define QR code instance type
+interface QRCodeStylingInstance {
+  append: (element: HTMLElement) => void;
+  download: (options?: { name?: string, extension?: string }) => void;
+  update: (options: Partial<QRCodeStylingOptions>) => void;
+}
+
 interface CustomQRCodeProps {
   value: string
   size: number
@@ -23,7 +79,7 @@ interface CustomQRCodeProps {
   gradientColors?: string[]
   gradientType?: GradientType
   gradientRotation?: number
-  setQrRef?: (ref: any) => void
+  setQrRef?: (ref: QRCodeStylingInstance) => void
 }
 
 const CustomQRCode: React.FC<CustomQRCodeProps> = ({
@@ -50,10 +106,10 @@ const CustomQRCode: React.FC<CustomQRCodeProps> = ({
   setQrRef,
 }) => {
   const qrCodeRef = useRef<HTMLDivElement>(null)
-  const qrCode = useRef<any>(null)
+  const qrCode = useRef<QRCodeStylingInstance | null>(null)
 
   // Convert our shape types to the library's expected format
-  const getDotsType = (shape: string) => {
+  const getDotsType = (shape: string): "square" | "dots" | "rounded" | "classy" | "classy-rounded" => {
     switch (shape) {
       case "rounded":
         return "rounded"
@@ -69,7 +125,7 @@ const CustomQRCode: React.FC<CustomQRCodeProps> = ({
   }
 
   // Ensure we only return valid types for the library
-  const getCornerSquareType = (shape: string) => {
+  const getCornerSquareType = (shape: string): "square" | "dot" | "extra-rounded" | "rounded" => {
     switch (shape) {
       case "rounded":
         return "rounded"
@@ -85,7 +141,7 @@ const CustomQRCode: React.FC<CustomQRCodeProps> = ({
   }
 
   // Ensure we only return valid types for the library
-  const getCornerDotType = (shape: string) => {
+  const getCornerDotType = (shape: string): "square" | "dot" | "rounded" => {
     switch (shape) {
       case "rounded":
         return "rounded"
@@ -104,14 +160,14 @@ const CustomQRCode: React.FC<CustomQRCodeProps> = ({
     if (!qrCodeRef.current) return
 
     // Configure dots options with proper gradient handling
-    let dotsOptions: any = {
+    const dotsOptions: QRCodeStylingOptions["dotsOptions"] = {
       type: getDotsType(bodyShape),
     }
 
     // This is the key change: Use proper gradient structure
     if (isGradient && gradientColors && gradientColors.length >= 2) {
       dotsOptions.gradient = {
-        type: gradientType,
+        type: gradientType === "linear" ? "linear" : "radial",
         rotation: gradientRotation,
         colorStops: [
           { offset: 0, color: gradientColors[0] },
@@ -123,11 +179,11 @@ const CustomQRCode: React.FC<CustomQRCodeProps> = ({
     }
 
     // Configure eye options with proper gradient/color handling
-    let cornersSquareOptions: any = {
+    const cornersSquareOptions: QRCodeStylingOptions["cornersSquareOptions"] = {
       type: getCornerSquareType(eyeFrameShape),
     }
     
-    let cornersDotOptions: any = {
+    const cornersDotOptions: QRCodeStylingOptions["cornersDotOptions"] = {
       type: getCornerDotType(eyeBallShape),
     }
     
@@ -137,7 +193,7 @@ const CustomQRCode: React.FC<CustomQRCodeProps> = ({
       cornersDotOptions.color = eyeColor;
     } else if (isGradient && gradientColors && gradientColors.length >= 2) {
       cornersSquareOptions.gradient = {
-        type: gradientType,
+        type: gradientType === "linear" ? "linear" : "radial",
         rotation: gradientRotation,
         colorStops: [
           { offset: 0, color: gradientColors[0] },
@@ -145,7 +201,7 @@ const CustomQRCode: React.FC<CustomQRCodeProps> = ({
         ],
       };
       cornersDotOptions.gradient = {
-        type: gradientType,
+        type: gradientType === "linear" ? "linear" : "radial",
         rotation: gradientRotation,
         colorStops: [
           { offset: 0, color: gradientColors[0] },
@@ -158,7 +214,7 @@ const CustomQRCode: React.FC<CustomQRCodeProps> = ({
     }
 
     // Create the QR code configuration object
-    const qrCodeConfig: any = {
+    const qrCodeConfig: QRCodeStylingOptions = {
       width: size,
       height: size,
       type: "svg",
@@ -196,15 +252,15 @@ const CustomQRCode: React.FC<CustomQRCodeProps> = ({
 
     try {
       // Initialize QR code with styling
-      qrCode.current = new QRCodeStyling(qrCodeConfig)
+      qrCode.current = new QRCodeStyling(qrCodeConfig) as QRCodeStylingInstance
 
       // Pass the qrCode reference to parent if needed
-      if (setQrRef) {
+      if (setQrRef && qrCode.current) {
         setQrRef(qrCode.current)
       }
 
       // Clear previous QR code and append the new one
-      if (qrCodeRef.current) {
+      if (qrCodeRef.current && qrCode.current) {
         qrCodeRef.current.innerHTML = ""
         qrCode.current.append(qrCodeRef.current)
       }

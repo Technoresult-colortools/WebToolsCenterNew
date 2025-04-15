@@ -66,7 +66,7 @@ export const QRCodePreview: React.FC<QRCodePreviewProps> = ({
   gradientType,
   gradientRotation,
 }) => {
-  // Local ref to QR code for download functionality
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [qrRef, setQrRef] = useState<any>(null)
 
   const handleDownload = () => {

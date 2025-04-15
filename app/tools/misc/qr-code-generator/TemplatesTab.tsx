@@ -6,7 +6,9 @@ import { Save } from "lucide-react"
 interface TemplatesTabProps {
   selectedTemplate: string
   setSelectedTemplate: (templateId: string) => void
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   qrCodeTemplates: any[]
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   savedTemplates: any[]
   handleSaveTemplate: (templateName: string) => boolean
 }
