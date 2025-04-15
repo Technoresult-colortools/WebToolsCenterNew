@@ -13,24 +13,25 @@ import {
   Tab,
   Select,
   SelectItem,
+  Divider,
 } from "@nextui-org/react"
 import {
   RefreshCw,
   Copy,
-  Eye,
-  EyeOff,
   Shield,
   Info,
-  BookOpen,
-  Lightbulb,
   Key,
   Sliders,
   Lock,
   Settings,
+  Zap,
+  CheckCircle,
+  BookOpen,
+  Lightbulb,
 } from "lucide-react"
 import { toast } from "react-hot-toast"
 import ToolLayout from "@/components/ToolLayout"
-import Image from "next/image"
+import Image from 'next/image';
 
 const CHAR_SETS = {
   lowercase: "abcdefghijklmnopqrstuvwxyz",
@@ -39,9 +40,9 @@ const CHAR_SETS = {
   symbols: "!@#$%^&*()_+-=[]{}|;:,.<>?",
 }
 
-export default function AdvancedPasswordGenerator() {
+export default function FuturisticPasswordGenerator() {
   const [password, setPassword] = useState("")
-  const [length, setLength] = useState(8)
+  const [length, setLength] = useState(16)
   const [useLowercase, setUseLowercase] = useState(true)
   const [useUppercase, setUseUppercase] = useState(true)
   const [useNumbers, setUseNumbers] = useState(true)
@@ -52,12 +53,12 @@ export default function AdvancedPasswordGenerator() {
   const [beginWithLetter, setBeginWithLetter] = useState(false)
   const [noConsecutive, setNoConsecutive] = useState(false)
   const [passwordStrength, setPasswordStrength] = useState("")
-  const [showPassword, setShowPassword] = useState(false)
   const [customCharSet, setCustomCharSet] = useState("")
   const [useCustomCharSet, setUseCustomCharSet] = useState(false)
   const [excludedChars, setExcludedChars] = useState("")
   const [passwordCount, setPasswordCount] = useState(1)
   const [isGenerating, setIsGenerating] = useState(false)
+  const [copied, setCopied] = useState(false)
 
   const generatePassword = useCallback(() => {
     try {
@@ -145,7 +146,7 @@ export default function AdvancedPasswordGenerator() {
         const passwords = Array.from({ length: passwordCount }, generateSinglePassword)
         setPassword(passwords.join("\n"))
         setIsGenerating(false)
-      }, 800) // Delay to show animation
+      }, 600) // Reduce delay for better UX
     } catch (error) {
       console.error("Password generation error:", error)
       toast.error("An error occurred while generating the password")
@@ -214,7 +215,13 @@ export default function AdvancedPasswordGenerator() {
   const handleCopyToClipboard = async () => {
     try {
       await navigator.clipboard.writeText(password)
+      setCopied(true)
       toast.success("Password copied to clipboard!")
+      
+      // Reset copy state after animation
+      setTimeout(() => {
+        setCopied(false)
+      }, 2000)
     } catch (error) {
       console.error("Copy failed:", error)
       toast.error("Failed to copy password")
@@ -239,6 +246,23 @@ export default function AdvancedPasswordGenerator() {
     }
   }
 
+  const getStrengthTextColor = () => {
+    switch (passwordStrength) {
+      case "Very Strong":
+        return "text-success"
+      case "Strong":
+        return "text-success-400" 
+      case "Moderate":
+        return "text-warning"
+      case "Weak":
+        return "text-danger-400"
+      case "Very Weak":
+        return "text-danger"
+      default:
+        return "text-default-500"
+    }
+  }
+
   return (
     <ToolLayout
       title="Password Generator"
@@ -246,122 +270,100 @@ export default function AdvancedPasswordGenerator() {
       toolId="678f383026f06f912191bccb"
     >
       <div className="flex flex-col gap-8">
-        {/* Password Output Section - Redesigned with animation */}
-        <Card className="bg-default-50 dark:bg-default-100 overflow-hidden">
-          <CardBody className="p-6 relative">
-            <div className="flex items-center justify-between mb-4">
-            <h2 className="text-lg sm:text-xl md:text-2xl font-bold text-default-700">Generated Password</h2>
-              <div className="flex items-center space-x-2 bg-default-100 dark:bg-default-200 px-3 py-1 rounded-full">
-                <Shield
-                  className={`${
-                    passwordStrength === "Very Strong"
-                      ? "text-success"
-                      : passwordStrength === "Strong"
-                        ? "text-success-400"
-                        : passwordStrength === "Moderate"
-                          ? "text-warning"
-                          : passwordStrength === "Weak"
-                            ? "text-danger-400"
-                            : "text-danger"
-                  }`}
-                />
-                <span className="text-default-600 font-medium">{passwordStrength}</span>
-              </div>
-            </div>
-
-            <div className="relative rounded-xl overflow-hidden">
-              {/* Password strength indicator */}
-              <div className="h-1 w-full bg-default-200 dark:bg-default-700 absolute top-0 left-0 z-10">
-                <div 
-                  className={`h-full ${getStrengthColor()} transition-all duration-300 ease-in-out`}
-                  style={{ 
-                    width: passwordStrength === "N/A" ? "0%" : 
-                          passwordStrength === "Very Weak" ? "20%" :
-                          passwordStrength === "Weak" ? "40%" :
-                          passwordStrength === "Moderate" ? "60%" :
-                          passwordStrength === "Strong" ? "80%" : "100%" 
-                  }}
-                />
-              </div>
-              
-              {/* Animation overlay during generation */}
-              {isGenerating && (
-                <div className="absolute inset-0 bg-default-100/50 dark:bg-default-800/50 z-20 backdrop-blur-sm flex items-center justify-center">
-                  <div className="flex flex-col items-center">
-                    <RefreshCw className="h-8 w-8 text-primary animate-spin mb-2" />
-                    <p className="text-sm font-medium text-default-700 dark:text-default-300">Generating password...</p>
-                  </div>
-                </div>
-              )}
-              
-              <Textarea 
-                value={password} 
-                readOnly 
-                rows={4} 
-                className="w-full font-mono mt-1"
-                variant="bordered"
-                classNames={{
-                  inputWrapper: [
-                    "border-2", 
-                    "border-default-300", 
-                    "dark:border-default-600", 
-                    "bg-default-100", 
-                    "dark:bg-default-200/50", 
-                    "hover:border-primary-500", 
-                    "dark:hover:border-primary-400",
-                    "overflow-y-auto",
-                    "shadow-sm",
-                    !isGenerating && "transition-all duration-300 ease-in-out",
-                  ],
-                  input: "overflow-y-auto pt-4 pb-2"
-                }}
-                style={{
-                  /* @ts-expect-error: Suppressing TypeScript error for WebkitTextSecurity style property */
-                  WebkitTextSecurity: showPassword ? "none" : "disc",
+        {/* Futuristic Password Display */}
+        <Card className="bg-gradient-to-br from-default-800 to-default-900 border border-default-700 shadow-xl overflow-hidden">
+          <CardBody className="p-0">
+            {/* Top status bar */}
+            <div className="w-full h-2">
+              <div 
+                className={`h-full ${getStrengthColor()} transition-all duration-500 ease-in-out`}
+                style={{ 
+                  width: passwordStrength === "N/A" ? "0%" : 
+                        passwordStrength === "Very Weak" ? "20%" :
+                        passwordStrength === "Weak" ? "40%" :
+                        passwordStrength === "Moderate" ? "60%" :
+                        passwordStrength === "Strong" ? "80%" : "100%" 
                 }}
               />
-              
-              <Button
-                isIconOnly
-                variant="light"
-                className="absolute top-4 right-4 z-10 bg-default-100/70 dark:bg-default-700/70 backdrop-blur-sm"
-                onClick={() => setShowPassword(!showPassword)}
-              >
-                {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
-              </Button>
             </div>
-
-            <div className="mt-4 flex flex-col sm:flex-row items-center justify-end space-y-2 sm:space-y-0 sm:space-x-2">
-            <Button 
-              onClick={handleCopyToClipboard} 
-              color="primary" 
-              variant="flat"
-              startContent={<Copy className="h-4 w-4" />}
-              className="font-medium text-base px-5 py-3 sm:px-4 sm:py-2"
-            >
-              Copy
-            </Button>
-            <Button 
-              onClick={generatePassword} 
-              color="success" 
-              variant="shadow"
-              startContent={<RefreshCw className={`h-4 w-4 ${isGenerating ? 'animate-spin' : ''}`} />}
-              className="font-medium text-base px-5 py-3 sm:px-4 sm:py-2"
-              isLoading={isGenerating}
-            >
-              Generate
-            </Button>
-          </div>
-
+            
+            {/* Main content */}
+            <div className="p-8 flex flex-col items-center justify-center min-h-64">
+              {/* Security status indicator */}
+              <div className="flex items-center gap-2 mb-4">
+                <Shield className={`${getStrengthTextColor()} h-5 w-5`} />
+                <span className={`${getStrengthTextColor()} font-bold text-lg`}>{passwordStrength}</span>
+              </div>
+              
+              {/* Futuristic password display */}
+              <div className="w-full relative flex justify-center items-center">
+                {isGenerating ? (
+                  <div className="flex flex-col items-center py-12">
+                    <RefreshCw className="h-12 w-12 text-primary animate-spin mb-4" />
+                    <p className="text-default-400 font-medium animate-pulse">Generating secure password...</p>
+                  </div>
+                ) : (
+                  <>
+                    {/* Glowing effect behind the password */}
+                    <div className="absolute inset-0 bg-primary/5 blur-xl rounded-full"></div>
+                    
+                    {/* Password display */}
+                    <div className="relative z-10 w-full overflow-hidden">
+                      {passwordCount === 1 ? (
+                        <div className="font-mono text-4xl md:text-5xl text-center text-default-100 break-all tracking-wider py-12 px-4 select-all">
+                          {password}
+                        </div>
+                      ) : (
+                        <div className="font-mono text-xl md:text-2xl text-center text-default-100 break-all tracking-wider py-8 px-4 select-all overflow-auto max-h-64">
+                          {password.split('\n').map((pass, index) => (
+                            <div key={index} className="mb-4">{pass}</div>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  </>
+                )}
+              </div>
+              
+              {/* Action buttons */}
+              <div className="flex gap-4 mt-8">
+                <Button
+                  onClick={handleCopyToClipboard}
+                  color="primary"
+                  variant="shadow"
+                  size="lg"
+                  className="font-medium text-base px-8 transition-all duration-300"
+                  startContent={copied ? <CheckCircle className="h-5 w-5" /> : <Copy className="h-5 w-5" />}
+                  disabled={isGenerating}
+                >
+                  {copied ? "Copied!" : "Copy"}
+                </Button>
+                <Button
+                  onClick={generatePassword}
+                  color="success"
+                  variant="shadow"
+                  size="lg"
+                  className="font-medium text-base px-8 transition-all duration-300"
+                  startContent={<Zap className={`h-5 w-5 ${isGenerating ? 'animate-pulse' : ''}`} />}
+                  isLoading={isGenerating}
+                  spinner={<RefreshCw className="h-5 w-5 animate-spin" />}
+                >
+                  Generate
+                </Button>
+              </div>
+            </div>
           </CardBody>
         </Card>
 
-        {/* Password Settings Section */}
-        <Card className="bg-default-50 dark:bg-default-100">
+        {/* Settings Section */}
+        <Card className="bg-default-50 dark:bg-default-100 border border-default-200 dark:border-default-700">
           <CardBody className="p-6">
-            <h2 className="text-lg sm:text-xl md:text-2xl font-bold text-default-700">Password Settings</h2>
+            <h2 className="text-xl font-bold text-default-700 mb-6 flex items-center">
+              <Sliders className="h-5 w-5 mr-2 text-primary" />
+              Password Settings
+            </h2>
 
-            <Tabs aria-label="Password settings">
+            <Tabs aria-label="Password settings" color="primary" variant="underlined" className="w-full">
               <Tab
                 key="basic"
                 title={
@@ -371,34 +373,49 @@ export default function AdvancedPasswordGenerator() {
                   </div>
                 }
               >
-                <div className="mt-4 space-y-6">
+                <div className="mt-6 space-y-8">
                   <div>
-                    <label htmlFor="length-slider" className="block text-default-700 mb-2">
-                      Password Length: {length}
-                    </label>
+                    <div className="flex justify-between items-center mb-2">
+                      <label htmlFor="length-slider" className="text-default-700 font-medium">
+                        Password Length
+                      </label>
+                      <span className="px-3 py-1 bg-default-100 dark:bg-default-800 rounded-full text-default-700 font-medium">
+                        {length} characters
+                      </span>
+                    </div>
                     <Slider
                       aria-label="Password length"
                       step={1}
                       maxValue={64}
                       minValue={8}
+                      color="primary"
                       value={length}
                       onChange={(value) => setLength(value as number)}
-                      className="max-w-md"
+                      className="max-w-full"
+                      showSteps={true}
+                      marks={[
+                        { value: 8, label: "8" },
+                        { value: 16, label: "16" },
+                        { value: 32, label: "32" },
+                        { value: 64, label: "64" },
+                      ]}
                     />
                   </div>
 
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <Checkbox isSelected={useLowercase} onValueChange={setUseLowercase}>
-                      Include Lowercase
+                  <Divider className="my-4" />
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                    <Checkbox isSelected={useLowercase} onValueChange={setUseLowercase} color="primary">
+                      Include Lowercase (a-z)
                     </Checkbox>
-                    <Checkbox isSelected={useUppercase} onValueChange={setUseUppercase}>
-                      Include Uppercase
+                    <Checkbox isSelected={useUppercase} onValueChange={setUseUppercase} color="primary">
+                      Include Uppercase (A-Z)
                     </Checkbox>
-                    <Checkbox isSelected={useNumbers} onValueChange={setUseNumbers}>
-                      Include Numbers
+                    <Checkbox isSelected={useNumbers} onValueChange={setUseNumbers} color="primary">
+                      Include Numbers (0-9)
                     </Checkbox>
-                    <Checkbox isSelected={useSymbols} onValueChange={setUseSymbols}>
-                      Include Symbols
+                    <Checkbox isSelected={useSymbols} onValueChange={setUseSymbols} color="primary">
+                      Include Symbols (!@#$%)
                     </Checkbox>
                   </div>
                 </div>
@@ -412,33 +429,21 @@ export default function AdvancedPasswordGenerator() {
                   </div>
                 }
               >
-                <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <Checkbox isSelected={requireEveryType} onValueChange={setRequireEveryType}>
-                    Require Every Type
+                <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 gap-6">
+                  <Checkbox isSelected={requireEveryType} onValueChange={setRequireEveryType} color="primary">
+                    Require Every Character Type
                   </Checkbox>
-                  <Checkbox isSelected={beginWithLetter} onValueChange={setBeginWithLetter}>
+                  <Checkbox isSelected={beginWithLetter} onValueChange={setBeginWithLetter} color="primary">
                     Begin With a Letter
                   </Checkbox>
-                  <Checkbox isSelected={noConsecutive} onValueChange={setNoConsecutive}>
+                  <Checkbox isSelected={noConsecutive} onValueChange={setNoConsecutive} color="primary">
                     No Consecutive Characters
                   </Checkbox>
-                </div>
-              </Tab>
-              <Tab
-                key="security"
-                title={
-                  <div className="flex items-center space-x-2">
-                    <Lock className="h-4 w-4" />
-                    <span>Security</span>
-                  </div>
-                }
-              >
-                <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <Checkbox isSelected={excludeSimilar} onValueChange={setExcludeSimilar}>
-                    Exclude Similar Characters
+                  <Checkbox isSelected={excludeSimilar} onValueChange={setExcludeSimilar} color="primary">
+                    Exclude Similar Characters (i,l,1,L,o,0,O)
                   </Checkbox>
-                  <Checkbox isSelected={excludeAmbiguous} onValueChange={setExcludeAmbiguous}>
-                    Exclude Ambiguous Characters
+                  <Checkbox isSelected={excludeAmbiguous} onValueChange={setExcludeAmbiguous} color="primary">
+                    Exclude Ambiguous Characters ({`{}[]()/\\'"~,;.<>`})
                   </Checkbox>
                 </div>
               </Tab>
@@ -490,8 +495,10 @@ export default function AdvancedPasswordGenerator() {
                     </div>
                   </div>
 
+                  <Divider className="my-4" />
+
                   <div>
-                    <Checkbox isSelected={useCustomCharSet} onValueChange={setUseCustomCharSet}>
+                    <Checkbox isSelected={useCustomCharSet} onValueChange={setUseCustomCharSet} color="primary">
                       Use Custom Character Set
                     </Checkbox>
                     {useCustomCharSet && (
@@ -499,21 +506,23 @@ export default function AdvancedPasswordGenerator() {
                         placeholder="Enter custom characters"
                         value={customCharSet}
                         onChange={(e) => setCustomCharSet(e.target.value)}
-                        className="mt-2"
+                        className="mt-4"
                         variant="bordered"
+                        color="primary"
                       />
                     )}
                   </div>
 
                   <div>
-                    <label htmlFor="excluded-chars" className="block text-default-700 mb-2">
+                    <label htmlFor="excluded-chars" className="block text-default-700 font-medium mb-2">
                       Excluded Characters
                     </label>
                     <Input
                       id="excluded-chars"
-                      placeholder="Characters to exclude"
+                      placeholder="Characters to exclude from generation"
                       value={excludedChars}
                       variant="bordered"
+                      color="primary"
                       onChange={(e) => setExcludedChars(e.target.value)}
                     />
                   </div>
@@ -538,7 +547,7 @@ export default function AdvancedPasswordGenerator() {
 
               <div className="my-8">
                 <Image
-                  src="/Images/InfosectionImages/PasswordGeneratorPreview.webp?height=400&width=600"
+                  src="/Images/InfosectionImages/PasswordGeneratorPreview.png?height=400&width=600"
                   alt="Screenshot of the Advanced Password Generator interface showing various password generation options"
                   width={600}
                   height={400}
