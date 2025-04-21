@@ -30,7 +30,7 @@ import {
   Lock,
 } from "lucide-react"
 import ToolLayout from "@/components/ToolLayout"
-import NextImage from "next/image"
+import Image from "next/image"
 
 const conversionMethodOptions = [
   { key: "default", name: "Default" },
@@ -187,7 +187,6 @@ export default function PNGtoSVGConverter() {
       description="Convert PNG files to SVG with customizable options"
       toolId="png-to-svg-converter"
     >
-      <Toaster position="top-right" />
 
       <div className="flex flex-col gap-8">
         {/* Upload Section - Only show when no PNG is loaded */}
@@ -247,7 +246,7 @@ export default function PNGtoSVGConverter() {
                   )}
                 </div>
                 <div className="relative h-64 bg-default-200 dark:bg-default-50 rounded-lg overflow-hidden">
-                  <NextImage src={previewUrl} alt="PNG Preview" fill style={{ objectFit: "contain" }} />
+                  <Image src={previewUrl} alt="PNG Preview" fill style={{ objectFit: "contain" }} />
                 </div>
               </CardBody>
             </Card>
@@ -398,7 +397,7 @@ export default function PNGtoSVGConverter() {
           </p>
 
           <div className="my-8">
-            <NextImage
+            <Image
               src="/Images/PngToSvgPreview.png?height=400&width=600"
               alt="Screenshot of the PNG to SVG Converter interface showing conversion options and a sample converted image"
               width={600}

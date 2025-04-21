@@ -324,6 +324,7 @@ export const allTools: Tool[] = [
     description: "Convert SVG images to PNG format.",
 
   },
+ /* 
   {
     name: "PNG to SVG Converter",
     category: "Image",
@@ -332,6 +333,7 @@ export const allTools: Tool[] = [
     description: "Convert PNG images to SVG format.",
 
   },
+  */
   {
     name: "PNG to WebP Converter",
     category: "Image",

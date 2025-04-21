@@ -32,6 +32,7 @@
     "highlight.js": "^11.11.1",
     "html-to-image": "^1.11.13",
     "html2canvas": "^1.4.1",
+    "imagetracerjs": "^1.2.6",
     "jsbarcode": "^3.11.6",
     "jsrsasign": "^11.1.0",
     "jszip": "^3.10.1",
@@ -58,6 +59,7 @@
     "sharp": "^0.33.5",
     "shiki": "^3.0.0",
     "svg-builder": "^2.0.0",
+    "svgo": "^3.3.2",
     "terser": "^5.38.2",
     "topojson-client": "^3.1.0",
     "uuid": "^11.1.0"
