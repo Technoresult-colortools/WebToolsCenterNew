@@ -14,7 +14,7 @@ import {
   DropdownItem,
   Slider,
 } from "@nextui-org/react"
-import { toast, Toaster } from "react-hot-toast"
+import { toast } from "react-hot-toast"
 import {
   Upload,
   Download,
