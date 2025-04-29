@@ -446,25 +446,37 @@ export default function TextGlitchEffectGenerator() {
                       Glitch Effect
                     </label>
                     <Select
-                        id="glitchEffect"
-                        variant="bordered"
-                        selectedKeys={[glitchEffect]}
-                        onChange={(e) => {
-                            // Cast the value to GlitchEffect type
-                            const newEffect = e.target.value as GlitchEffect;
-                            setGlitchEffect(newEffect);
-                        }}
-                        >
-                        <SelectItem key="rgb-split" value="rgb-split" className="text-default-700">RGB Split</SelectItem>
-                        <SelectItem key="color" value="color" className="text-default-700">Color</SelectItem>
-                        <SelectItem key="noise" value="noise" className="text-default-700">Noise</SelectItem>
-                        <SelectItem key="transformation" value="transformation" className="text-default-700">Transformation</SelectItem>
-                        <SelectItem key="glitch-clip" value="glitch-clip" className="text-default-700">Glitch Clip</SelectItem>
-                        <SelectItem key="distortion" value="distortion" className="text-default-700">Distortion</SelectItem>
-                        <SelectItem key="pixelate" value="pixelate" className="text-default-700">Pixelate</SelectItem>
-                        <SelectItem key="wave" value="wave" className="text-default-700">Wave</SelectItem>
-                        <SelectItem key="custom" value="custom" className="text-default-700">Custom</SelectItem>
-                        </Select>
+                      id="glitchEffect"
+                      variant="bordered"
+                      selectedKeys={[glitchEffect]}
+                      onChange={(e) => {
+                          // Cast the value to GlitchEffect type
+                          const newEffect = e.target.value as GlitchEffect;
+                          setGlitchEffect(newEffect);
+                      }}
+                  >
+                      <SelectItem key="rgb-split" value="rgb-split" className="text-default-700">RGB Split</SelectItem>
+                      <SelectItem key="color" value="color" className="text-default-700">Color</SelectItem>
+                      <SelectItem key="noise" value="noise" className="text-default-700">Noise</SelectItem>
+                      <SelectItem key="transformation" value="transformation" className="text-default-700">Transformation</SelectItem>
+                      <SelectItem key="glitch-clip" value="glitch-clip" className="text-default-700">Glitch Clip</SelectItem>
+                      <SelectItem key="distortion" value="distortion" className="text-default-700">Distortion</SelectItem>
+                      <SelectItem key="pixelate" value="pixelate" className="text-default-700">Pixelate</SelectItem>
+                      <SelectItem key="wave" value="wave" className="text-default-700">Wave</SelectItem>
+                      
+                      {/* New glitch effects */}
+                      <SelectItem key="scan-line" value="scan-line" className="text-default-700">Scan Line</SelectItem>
+                      <SelectItem key="vhs-tracking" value="vhs-tracking" className="text-default-700">VHS Tracking</SelectItem>
+                      <SelectItem key="data-corruption" value="data-corruption" className="text-default-700">Data Corruption</SelectItem>
+                      <SelectItem key="digital-decay" value="digital-decay" className="text-default-700">Digital Decay</SelectItem>
+                      <SelectItem key="terminal-error" value="terminal-error" className="text-default-700">Terminal Error</SelectItem>
+                      <SelectItem key="hologram" value="hologram" className="text-default-700">Hologram</SelectItem>
+                      <SelectItem key="glitch-blur" value="glitch-blur" className="text-default-700">Glitch Blur</SelectItem>
+                      <SelectItem key="crt-shutdown" value="crt-shutdown" className="text-default-700">CRT Shutdown</SelectItem>
+                      <SelectItem key="magnetic-interference" value="magnetic-interference" className="text-default-700">Magnetic Interference</SelectItem>
+                      
+                      <SelectItem key="custom" value="custom" className="text-default-700">Custom</SelectItem>
+                  </Select>
                   </div>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4 items-center">
                     <div className="flex flex-col space-y-4">

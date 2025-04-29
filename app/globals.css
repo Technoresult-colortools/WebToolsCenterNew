@@ -28,6 +28,8 @@ body {
       
 }
 
+
+
 :root {
   --scrollbar-width: 8px;
   --scrollbar-thumb-color: var(--nextui-colors-accents7);
@@ -58,5 +60,21 @@ body::-webkit-scrollbar-thumb {
 
 body::-webkit-scrollbar-thumb:hover {
   background-color: var(--scrollbar-thumb-hover-color);
+}
+
+.styled-scrollbar::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+.styled-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+.styled-scrollbar::-webkit-scrollbar-thumb {
+  background-color: rgba(150, 150, 150, 0.4);
+  border-radius: 10px;
+  border: transparent;
+}
+.dark .styled-scrollbar::-webkit-scrollbar-thumb {
+  background-color: rgba(100, 100, 100, 0.5);
 }
 
