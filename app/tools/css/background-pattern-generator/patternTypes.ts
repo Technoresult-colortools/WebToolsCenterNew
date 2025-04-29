@@ -1,5 +1,5 @@
 // src/components/tools/background-pattern-generator/patternTypes.ts
-import { PatternType, PatternSettings } from './types';
+import { PatternType, } from './types';
 
 export const patternCategories = [
   { id: "basic", name: "Basic Shapes" },

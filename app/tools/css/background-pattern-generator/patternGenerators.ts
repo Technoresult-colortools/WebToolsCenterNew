@@ -1,5 +1,5 @@
 // src/components/tools/background-pattern-generator/patternGenerators.ts
-import { PatternSettings, PatternType } from './types'; // Assuming types.ts exists
+import { PatternSettings, } from './types'; // Assuming types.ts exists
 import { patternTypes } from './patternTypes'; // Import pattern definitions
 
 /**
@@ -133,7 +133,6 @@ function generatePlusesPattern(settings: PatternSettings): string {
     lineWidth = 2,     // Default for the grid line width
     patternColor,      // Color for the Grid Lines
     backgroundColor,   // Will be used for both background and rings
-    secondaryColor,    // Not used (hidden as requested)
     opacity = 1,       // Opacity for the Grid Lines
   } = settings;
 
@@ -202,8 +201,7 @@ function generateBigPlusPattern(settings: PatternSettings): string {
   const {
     patternSize = 32,    // Base size for pattern elements
     patternColor,        // Color for the conic gradients
-    backgroundColor,     // Background color
-    secondaryColor,      // Not used in this pattern
+    backgroundColor,     // Background color 
     opacity = 1,         // Opacity for pattern elements
   } = settings;
 
@@ -258,7 +256,6 @@ background-size: ${totalSize}px ${totalSize}px;
 function generateCheckerboardPattern(settings: PatternSettings): string { // NEW
   const { patternSize = 32, patternColor, backgroundColor, secondaryColor } = settings;
   const size = Math.max(4, patternSize); // Ensure minimum size
-  const halfSize = size / 2;
 
   // Use conic-gradient for simplicity
   return `
@@ -442,10 +439,8 @@ background-size: ${size}px ${size}px;
 function generateZigZag2Pattern(settings: PatternSettings): string {
   const { 
     patternSize = 32, 
-    lineWidth = 8, // Not directly used but kept for API consistency
     patternColor, 
     backgroundColor,
-    secondaryColor, // Not used in this pattern
     direction = 'horizontal', 
     opacity = 1 
   } = settings;
@@ -870,7 +865,7 @@ function generateCircuitPattern(settings: PatternSettings): string {
   ];
 
   // Add extra lines based on density
-  let extraLines: string[] = [];
+  const extraLines: string[] = [];
   // Density 0.0 - 0.2: No extra lines
   if (density > 0.2) { // Add 45deg segment
     extraLines.push(`linear-gradient(45deg, transparent ${quarterSize}px, ${colorWithOpacity} ${quarterSize}px, ${colorWithOpacity} ${quarterSize + effectiveLineWidth}px, transparent ${quarterSize + effectiveLineWidth}px )`);

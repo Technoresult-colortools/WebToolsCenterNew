@@ -1,12 +1,8 @@
 // src/components/tools/background-pattern-generator/PatternControls.tsx
-// src/components/tools/background-pattern-generator/PatternControls.tsx
 "use client"
 
 import React from "react"
-import { Slider, Radio, RadioGroup, Divider, Switch, Accordion, AccordionItem } from "@nextui-org/react"
-// *** IMPORTANT: Make sure types.ts is correctly defined and imported ***
-// import { PatternSettings } from "./types";
-// *** IMPORT the specific PatternType interface ***
+import { Slider, Radio, RadioGroup, Switch, Accordion, AccordionItem } from "@nextui-org/react"
 import { PatternType} from "./types";
 import ColorPicker from "./ColorPicker";
 

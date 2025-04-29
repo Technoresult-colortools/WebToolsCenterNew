@@ -25,7 +25,7 @@ import PatternPreview from "./PatternPreview";
 import PatternControls from "./PatternControls";
 import PatternSelector from "./PatternSelector";
 import CodePanel from "./CodePanel";
-import { patternTypes, patternCategories } from "./patternTypes";
+import { patternTypes, } from "./patternTypes";
 import { PatternType, PatternSettings } from "./types";
 import { generatePatternCSS } from "./patternGenerators";
 
@@ -86,7 +86,7 @@ export default function PatternGenerator() {
     return patternTypes.find(p => p.id === settings.patternType) ?? patternTypes[0];
   }, [settings.patternType]);
 
-  const [selectedCategory, setSelectedCategory] = useState(currentPattern.category);
+  const [, setSelectedCategory] = useState(currentPattern.category);
   useEffect(() => {
       setSelectedCategory(currentPattern.category);
   }, [currentPattern.category]);
@@ -153,7 +153,7 @@ export default function PatternGenerator() {
     const randomPatternDef = patternTypes[Math.floor(Math.random() * patternTypes.length)];
     const randomPatternBaseSettings = getInitialSettingsForPattern(randomPatternDef.id);
 
-    let randomValues: Partial<PatternSettings> = {
+    const randomValues: Partial<PatternSettings> = {
       patternColor: randomHexColor(),
       backgroundColor: randomHexColor(),
     };
