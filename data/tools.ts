@@ -884,6 +884,13 @@ export const allTools: Tool[] = [
 
 },
 {
+  name: 'YouTube Timestamp Link Generator',
+  category: 'Social Media',
+  href: '/tools/social-media/youtube-timestamp-link-generator',
+  icon: faYoutube,
+  description: 'Create and share timestamped links for YouTube videos with custom labels.',
+},
+{
   name: 'YouTube KeyWord Tag Extractor',
   category: 'Social Media',
   href: '/tools/social-media/youtube-tag-extractor',

@@ -29,7 +29,6 @@ import {
   Youtube,
   ChevronDown,
   ChevronUp,
-  Share2,
 } from "lucide-react"
 import { toast } from "react-hot-toast"
 import ToolLayout from "@/components/ToolLayout"
@@ -243,12 +242,6 @@ export default function YouTubeThumbnailDownloader() {
     toast.success("Search history cleared!")
   }
 
-  const handleShare = () => {
-    if (videoUrl) {
-      navigator.clipboard.writeText(window.location.origin + "?video=" + encodeURIComponent(videoUrl))
-      toast.success("Link copied to clipboard!")
-    }
-  }
 
   const handleReset = () => {
     setVideoUrl("")
@@ -306,17 +299,7 @@ export default function YouTubeThumbnailDownloader() {
                 >
                   Reset
                 </Button>
-                {videoUrl && (
-                  <Button
-                    color="success"
-                    onClick={handleShare}
-                    startContent={<Share2 />}
-                    className="bg-gradient-to-r from-green-500 to-green-600"
-                    size="lg"
-                  >
-                    Share
-                  </Button>
-                )}
+               
               </div>
             </form>
 
@@ -365,8 +348,8 @@ export default function YouTubeThumbnailDownloader() {
 
         {!thumbnails.length && !error && !loading && (
           <div className="text-center text-default-500 py-12">
-            <div className="w-24 h-24 mx-auto mb-6 rounded-full bg-default-100 flex items-center justify-center">
-              <ImageIcon size={48} className="text-default-400" />
+          <div className="w-24 h-24 mx-auto mb-6 rounded-full bg-default-100 flex items-center justify-center">
+            <Youtube size={48} className="text-red-500" />
             </div>
             <p className="text-lg">Enter a YouTube video URL to fetch thumbnails</p>
             <p className="text-sm mt-2 max-w-md mx-auto">
