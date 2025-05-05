@@ -558,6 +558,12 @@ export const tools = [
       "href": "/tools/social-media/youtube-region-restriction-finder"
     },
     {
+      "name": 'YouTube Timestamp Link Generator',
+      "category": 'Social Media',
+      "href": '/tools/social-media/youtube-timestamp-link-generator',
+      "description": 'Create and share timestamped links for YouTube videos with custom labels.',
+    },
+    {
       "name": "Open Graph Meta Generator",
       "category": "Social Media",
       "description": "Generate Open Graph meta tags for your website to control how your content appears when shared on social media.",

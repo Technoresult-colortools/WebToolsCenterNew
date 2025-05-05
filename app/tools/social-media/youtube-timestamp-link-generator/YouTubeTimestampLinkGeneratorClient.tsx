@@ -11,8 +11,6 @@ import {
   Progress,
   Chip,
   Tooltip,
-  Tabs,
-  Tab,
   Divider,
   Checkbox,
 } from "@nextui-org/react"
@@ -24,22 +22,16 @@ import {
   Info,
   Lightbulb,
   BookOpen,
-  Download,
-  Clipboard,
   Check,
   Youtube,
   ChevronDown,
   ChevronUp,
-  Share2,
   Link,
-  Plus,
   Trash2,
   PlayCircle,
   Copy,
   Star,
   PlusCircle,
-  PauseCircle, // Added for potential player controls (optional)
-  Play,       // Added for potential player controls (optional)
 } from "lucide-react"
 import { toast } from "react-hot-toast"
 import ToolLayout from "@/components/ToolLayout"
@@ -126,7 +118,6 @@ export default function YouTubeTimestampLinkGenerator() {
   const [timestamps, setTimestamps] = useState<Timestamp[]>([])
   const [videoDetails, setVideoDetails] = useState<VideoDetails | null>(null)
   const [error, setError] = useState("")
-  const [loading, setLoading] = useState(false) // Keep if used elsewhere, otherwise remove
   const [loadingVideo, setLoadingVideo] = useState(false)
   const [searchHistory, setSearchHistory] = useState<string[]>([])
   const [showHistory, setShowHistory] = useState(false)
@@ -193,6 +184,7 @@ export default function YouTubeTimestampLinkGenerator() {
         setError("No video found with this ID.")
         return null
       }
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
       setError(`Failed to fetch video details. ${err.message || 'Please try again.'}`)
       console.error(err)
@@ -369,7 +361,7 @@ export default function YouTubeTimestampLinkGenerator() {
    const generateLink = () => {
     if (!videoDetails) return
 
-    let baseUrl = `https://www.youtube.com/watch?v=${videoDetails.id}`
+    const baseUrl = `https://www.youtube.com/watch?v=${videoDetails.id}`
 
     if (timestamps.length === 0) {
       setGeneratedLink(baseUrl)
@@ -491,7 +483,7 @@ export default function YouTubeTimestampLinkGenerator() {
     <ToolLayout
       title="YouTube Timestamp Link Generator"
       description="Create and share timestamped links for YouTube videos with custom labels, now with interactive time picking!"
-      toolId="youtube-timestamp-generator"
+      toolId="678f383226f06f912191bcdb"
     >
       <div className="flex flex-col gap-6">
         {/* Header Card (Form) */}
@@ -671,6 +663,7 @@ export default function YouTubeTimestampLinkGenerator() {
                          {/* Time Display & Input */}
                          <div className="flex flex-col items-start w-full md:w-auto mb-2 md:mb-0">
                              <Chip
+                             // eslint-disable-next-line @typescript-eslint/no-explicit-any
                                 color={timestamp.color as any}
                                 variant="shadow"
                                 className="min-w-20 justify-center mb-1"
@@ -927,7 +920,7 @@ export default function YouTubeTimestampLinkGenerator() {
             {/* How to Use */}
             <h2 className="text-lg md:text-xl lg:text-2xl font-semibold text-default-700 mb-4 mt-8 flex items-center">
               <BookOpen className="w-6 h-6 mr-2 flex-shrink-0" />
-              How to Use YouTube Timestamp Link Generator
+              How to Use YouTube Timestamp Link Generator?
             </h2>
             <ol className="list-decimal list-inside space-y-2 text-sm md:text-base text-default-600">
               <li>Paste the URL of your YouTube video in the input field</li>

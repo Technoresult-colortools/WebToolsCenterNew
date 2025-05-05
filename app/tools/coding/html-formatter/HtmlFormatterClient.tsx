@@ -8,12 +8,10 @@ import {
   Card,
   CardBody,
   CardHeader,
-  Input,
   Switch,
   Textarea,
   Slider,
   Tooltip,
-  Chip
 } from "@nextui-org/react";
 import { toast } from "react-hot-toast";
 import {
@@ -238,6 +236,7 @@ export default function HTMLFormatter() {
 
       setOutputHTML(formattedCode);
       toast.success("HTML formatted successfully!");
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
       console.error("Formatting error:", error);
       const errorMessage = error?.message
@@ -346,7 +345,7 @@ export default function HTMLFormatter() {
       reader.readAsText(file);
     }
   }, []);
-
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleOptionChange = (option: keyof FormatterOptions, value: any) => {
     let processedValue = value;
     if (option === "indentSize" || option === "wrapLineLength") {
