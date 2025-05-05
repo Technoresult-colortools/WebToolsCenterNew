@@ -58,30 +58,7 @@ const removeHtmlComments = (htmlString: string): string => {
 };
 
 // Helper function to remove CSS/JS style comments /* ... */
-const removeCssJsStyleComments = (htmlString: string): string => {
-  // Create a new DOMParser to parse the HTML
-  const parser = new DOMParser();
-  const doc = parser.parseFromString(htmlString, 'text/html');
-  
-  // Process <style> tags - remove CSS comments
-  const styleTags = doc.querySelectorAll('style');
-  styleTags.forEach(styleTag => {
-    if (styleTag.textContent) {
-      styleTag.textContent = styleTag.textContent.replace(/\/\*[\s\S]*?\*\//g, '');
-    }
-  });
-  
-  // Process <script> tags - remove JS comments
-  const scriptTags = doc.querySelectorAll('script');
-  scriptTags.forEach(scriptTag => {
-    if (scriptTag.textContent) {
-      scriptTag.textContent = scriptTag.textContent.replace(/\/\*[\s\S]*?\*\//g, '');
-    }
-  });
-  
-  // Get the processed HTML as string
-  return new XMLSerializer().serializeToString(doc);
-};
+
 
 // New helper function for direct string-based CSS/JS comment removal
 // This is a fallback approach that doesn't rely on DOM manipulation
@@ -195,7 +172,7 @@ export default function HTMLFormatter() {
         singleQuote: options.singleQuotes,
         tabWidth: options.indentSize,
         printWidth: options.wrapLineLength,
-        htmlWhitespaceSensitivity: "ignore" as "ignore",
+        htmlWhitespaceSensitivity: "ignore" as const,
       };
 
       let processedHtml = inputHTML;

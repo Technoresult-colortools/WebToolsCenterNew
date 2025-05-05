@@ -35,7 +35,6 @@ import {
 } from "lucide-react"
 import { toast } from "react-hot-toast"
 import ToolLayout from "@/components/ToolLayout"
-import Image from "next/image"
 import YouTube from 'react-youtube'; // <-- Import the YouTube component
 import type { YouTubePlayer } from 'react-youtube'; // <-- Import type for player instance
 

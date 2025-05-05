@@ -18,7 +18,6 @@ import {
   Search,
   RefreshCw,
   AlertCircle,
-  ImageIcon,
   Clock,
   Info,
   Lightbulb,

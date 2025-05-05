@@ -3,7 +3,7 @@
 import type React from "react"
 import { useState, useEffect } from "react"
 import { Card, CardBody, Input, Textarea, Button, Link } from "@nextui-org/react"
-import { Send, MessageCircle, Sparkles } from "lucide-react"
+import { Send, MessageCircle } from "lucide-react"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faFacebookF, faTwitter, faInstagram, faGithub } from "@fortawesome/free-brands-svg-icons"
 import Header from "@/components/Header"
