@@ -1,4 +1,4 @@
-//lib/auth0-config.ts
+// lib/auth0-config.ts
 import { ConfigParameters } from '@auth0/nextjs-auth0';
 
 export const auth0Config: ConfigParameters = {
@@ -9,6 +9,7 @@ export const auth0Config: ConfigParameters = {
   clientSecret: process.env.AUTH0_CLIENT_SECRET,
   routes: {
     callback: '/api/auth/callback',
+    // Remove logout property as it's causing a TypeScript error
     postLogoutRedirect: '/',
   },
   authorizationParams: {
@@ -17,6 +18,5 @@ export const auth0Config: ConfigParameters = {
   },
   session: {
     absoluteDuration: 60 * 60 * 24 * 7, // 1 week
-  },
+  }
 };
-

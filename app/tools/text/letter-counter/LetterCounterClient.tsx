@@ -2,7 +2,7 @@
 
 import type React from "react"
 import { useState, useCallback, useEffect } from "react"
-import { Card, CardBody, Button, Textarea } from "@nextui-org/react"
+import { Card, CardBody, Button, Textarea, Tabs, Tab } from "@nextui-org/react"
 import Image from "next/image"
 import Link from "next/link"
 import {
@@ -17,6 +17,9 @@ import {
   Calculator,
   Clock,
   Trash2,
+  ArrowUp,
+  ArrowDown,
+  Layers,
 } from "lucide-react"
 import { toast } from "react-hot-toast"
 import ToolLayout from "@/components/ToolLayout"
@@ -38,16 +41,31 @@ const countParagraphs = (text: string): number => {
   return text.split("\n\n").filter((para) => para.trim() !== "").length
 }
 
-const getLetterFrequency = (text: string): Record<string, number> => {
-  const letterFrequency: Record<string, number> = {}
-  text
-    .toLowerCase()
-    .replace(/[^a-z]/g, "")
-    .split("")
-    .forEach((char) => {
-      letterFrequency[char] = (letterFrequency[char] || 0) + 1
-    })
-  return letterFrequency
+const getLetterFrequency = (text: string): {
+  combined: Record<string, number>
+  uppercase: Record<string, number>
+  lowercase: Record<string, number>
+} => {
+  const combined: Record<string, number> = {}
+  const uppercase: Record<string, number> = {}
+  const lowercase: Record<string, number> = {}
+  
+  // Process all letters
+  text.replace(/[^a-zA-Z]/g, "").split("").forEach((char) => {
+    const lowerChar = char.toLowerCase()
+    
+    // Combined count (case-insensitive)
+    combined[lowerChar] = (combined[lowerChar] || 0) + 1
+    
+    // Separate uppercase and lowercase counts
+    if (char === char.toUpperCase() && char !== char.toLowerCase()) {
+      uppercase[char] = (uppercase[char] || 0) + 1
+    } else {
+      lowercase[char] = (lowercase[char] || 0) + 1
+    }
+  })
+  
+  return { combined, uppercase, lowercase }
 }
 
 const getMostCommonLetter = (letterFrequency: Record<string, number>): string => {
@@ -63,12 +81,21 @@ const estimateReadingTime = (text: string): number => {
 
 export default function LetterCounter() {
   const [inputText, setInputText] = useState("")
-  const [letterFrequency, setLetterFrequency] = useState<Record<string, number>>({})
+  const [letterFrequency, setLetterFrequency] = useState<{
+    combined: Record<string, number>
+    uppercase: Record<string, number>
+    lowercase: Record<string, number>
+  }>({
+    combined: {},
+    uppercase: {},
+    lowercase: {},
+  })
   const [wordCount, setWordCount] = useState(0)
   const [sentenceCount, setSentenceCount] = useState(0)
   const [paragraphCount, setParagraphCount] = useState(0)
   const [mostCommonLetter, setMostCommonLetter] = useState("")
   const [readingTime, setReadingTime] = useState(0)
+  const [activeTab, setActiveTab] = useState("combined")
 
   const analyzeText = useCallback((text: string) => {
     const frequency = getLetterFrequency(text)
@@ -76,7 +103,7 @@ export default function LetterCounter() {
     setWordCount(countWords(text))
     setSentenceCount(countSentences(text))
     setParagraphCount(countParagraphs(text))
-    setMostCommonLetter(getMostCommonLetter(frequency))
+    setMostCommonLetter(getMostCommonLetter(frequency.combined))
     setReadingTime(estimateReadingTime(text))
   }, [])
 
@@ -136,7 +163,7 @@ export default function LetterCounter() {
 
   const handleShowStats = useCallback(() => {
     toast(
-      (t:  { id: string }) => (
+      (t: { id: string }) => (
         <div>
           <p>Words: {wordCount}</p>
           <p>Sentences: {sentenceCount}</p>
@@ -149,6 +176,17 @@ export default function LetterCounter() {
     )
   }, [wordCount, sentenceCount, paragraphCount, mostCommonLetter])
 
+  const getVisibleLetterFrequency = useCallback(() => {
+    switch (activeTab) {
+      case "uppercase":
+        return letterFrequency.uppercase
+      case "lowercase":
+        return letterFrequency.lowercase
+      default:
+        return letterFrequency.combined
+    }
+  }, [activeTab, letterFrequency])
+
   return (
     <ToolLayout
       title="Letter Counter"
@@ -159,7 +197,7 @@ export default function LetterCounter() {
         {/* Input Section */}
         <Card className="bg-default-50 dark:bg-default-100">
           <CardBody className="p-6">
-            <label className="block text-lg font-medium text-default-700 mb-2">Input Text:</label>
+            <label className="block text-lg font-medium text-primary mb-2">Input Text:</label>
             <Textarea
               value={inputText}
               onChange={handleInputChange}
@@ -199,21 +237,62 @@ export default function LetterCounter() {
           </Button>
         </div>
 
-        {/* Letter Frequency Section */}
+         {/* Letter Frequency Section */}
         <Card className="bg-default-50 dark:bg-default-100">
           <CardBody className="p-6">
-            <h2 className="text-xl font-semibold text-default-700 mb-4">Letter Frequency:</h2>
-            <p className="text-sm text-default-600 mb-4">Note: Counts combine uppercase and lowercase letters.</p>
+            <h2 className="text-xl font-semibold text-primary mb-4">Letter Frequency:</h2>
+            
+            <Tabs 
+              aria-label="Letter frequency tabs" 
+              selectedKey={activeTab}
+              onSelectionChange={(key) => setActiveTab(key as string)}
+              className="mb-4"
+            >
+              <Tab 
+                key="combined" 
+                title={
+                  <div className="flex items-center">
+                    <Layers className="w-4 h-4 mr-1" />
+                    Combined
+                  </div>
+                }
+              />
+              <Tab 
+                key="uppercase" 
+                title={
+                  <div className="flex items-center">
+                    <ArrowUp className="w-4 h-4 mr-1" />
+                    Uppercase
+                  </div>
+                }
+              />
+              <Tab 
+                key="lowercase" 
+                title={
+                  <div className="flex items-center">
+                    <ArrowDown className="w-4 h-4 mr-1" />
+                    Lowercase
+                  </div>
+                }
+              />
+            </Tabs>
+            
+            <p className="text-sm text-default-600 dark:text-default-400 mb-4">
+              {activeTab === "combined" 
+                ? "Note: Combined counts merge uppercase and lowercase letters." 
+                : `Note: Showing ${activeTab} letters only.`}
+            </p>
+            
             <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-4">
-              {Object.entries(letterFrequency).map(([letter, count]) => (
+              {Object.entries(getVisibleLetterFrequency()).map(([letter, count]) => (
                 <div
                   key={letter}
-                  className="bg-default-200 dark:bg-default-100 rounded-lg p-3 text-center flex flex-col items-center"
+                  className="bg-default-200 dark:bg-default-800 rounded-lg p-3 text-center flex flex-col items-center border border-default-300 dark:border-default-600 shadow-sm"
                 >
-                  <span className="text-xl font-bold text-default-900">
-                    {letter.toUpperCase()}/{letter.toLowerCase()}
+                  <span className="text-xl font-bold text-default-900 dark:text-default-100">
+                    {letter}
                   </span>
-                  <span className="text-lg text-default-600">{count}</span>
+                  <span className="text-lg text-default-600 dark:text-default-400">{count}</span>
                 </div>
               ))}
             </div>
@@ -222,14 +301,14 @@ export default function LetterCounter() {
 
         {/* Info Section */}
         <Card className="bg-default-50 dark:bg-default-100 p-4 md:p-8">
-          <div className="rounded-xl  p-2 md:p-4 max-w-6xl mx-auto">
+          <div className="rounded-xl p-2 md:p-4 max-w-6xl mx-auto">
             <h2 className="text-2xl font-semibold text-default-700 mb-4 flex items-center">
               <Info className="w-6 h-6 mr-2" />
               What is the Letter Counter?
             </h2>
             <p className="text-default-600 mb-4">
               The Letter Counter is a powerful text analysis tool designed for writers, editors, students, and language
-              enthusiasts. It provides comprehensive insights into your text, including letter frequency, word count,
+              enthusiasts. It provides comprehensive insights into your text, including letter frequency with case sensitivity, word count,
               sentence count, and more. With its{" "}
               <Link href="#how-to-use" className="text-primary hover:underline">
                 user-friendly interface
@@ -254,42 +333,40 @@ export default function LetterCounter() {
             <ol className="list-decimal list-inside space-y-2 text-default-600">
               <li>Enter or paste your text into the input box. You can input up to 5000 characters.</li>
               <li>As you type or paste, the tool automatically analyzes your text in real-time.</li>
+              <li>Use the tabs to toggle between combined, uppercase-only, and lowercase-only letter frequency.</li>
               <li>View the letter frequency chart and text statistics below the input area.</li>
               <li>Use the "Copy Analysis" button to copy the letter frequency data to your clipboard.</li>
               <li>Click "Download" to save a comprehensive JSON file with all analysis data.</li>
               <li>To start fresh, use the "Clear" button to reset the input and analysis.</li>
             </ol>
-
             <h2 className="text-2xl font-semibold text-default-700 mb-4 mt-8 flex items-center">
-              <Lightbulb className="w-6 h-6 mr-2" />
+              <Lightbulb className="w-6 h-6 mr-2 text-warning" />
               Features That Make Us Stand Out
             </h2>
             <ul className="list-disc list-inside space-y-2 text-sm text-default-600">
               <li>
-                <Zap className="w-4 h-4 inline-block mr-1" /> <strong>Real-time analysis:</strong> See results instantly
-                as you type
+                <Zap className="w-4 h-4 inline-block mr-1 text-danger" /> <strong>Case-sensitive letter tracking:</strong> Separate uppercase and lowercase letter counts
               </li>
               <li>
-                <BarChart2 className="w-4 h-4 inline-block mr-1" /> <strong>Comprehensive text statistics:</strong> Get
-                word count, sentence count, and more
+                <Zap className="w-4 h-4 inline-block mr-1 text-danger" /> <strong>Real-time analysis:</strong> See results instantly as you type
               </li>
               <li>
-                <Type className="w-4 h-4 inline-block mr-1" /> <strong>Letter frequency visualization:</strong>{" "}
-                Easy-to-read chart of letter distribution
+                <BarChart2 className="w-4 h-4 inline-block mr-1 text-primary" /> <strong>Comprehensive text statistics:</strong> Get word count, sentence count, and more
               </li>
               <li>
-                <Calculator className="w-4 h-4 inline-block mr-1" /> <strong>Most common letter identification:</strong>{" "}
-                Quickly spot dominant characters
+                <Type className="w-4 h-4 inline-block mr-1 text-secondary" /> <strong>Letter frequency visualization:</strong> Easy-to-read chart of letter distribution
               </li>
               <li>
-                <Clock className="w-4 h-4 inline-block mr-1" /> <strong>Reading time estimation:</strong> Know how long
-                it takes to read your text
+                <Calculator className="w-4 h-4 inline-block mr-1 text-success" /> <strong>Most common letter identification:</strong> Quickly spot dominant characters
               </li>
               <li>
-                <Download className="w-4 h-4 inline-block mr-1" /> <strong>Downloadable analysis:</strong> Save
-                comprehensive results as a JSON file
+                <Clock className="w-4 h-4 inline-block mr-1 text-warning" /> <strong>Reading time estimation:</strong> Know how long it takes to read your text
+              </li>
+              <li>
+                <Download className="w-4 h-4 inline-block mr-1 text-info" /> <strong>Downloadable analysis:</strong> Save comprehensive results as a JSON file
               </li>
             </ul>
+
 
             <p className="text-default-600 mt-4">
               Ready to dive deep into your text? Start using our Letter Counter tool now and unlock insights that will
@@ -303,4 +380,3 @@ export default function LetterCounter() {
     </ToolLayout>
   )
 }
-

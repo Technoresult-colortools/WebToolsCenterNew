@@ -44,7 +44,7 @@ export default function LoginPage() {
     setActiveProvider(providerName);
     
     try {
-      // Use the SDK's login route with connection parameter
+      // Directly use the login API with the connection parameter
       window.location.href = `/api/auth/login?connection=${connection}`;
       toast.success(`Connecting to ${providerName}...`);
     } catch (error) {

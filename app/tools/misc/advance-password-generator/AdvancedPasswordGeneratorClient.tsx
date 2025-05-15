@@ -377,7 +377,7 @@ export default function FuturisticPasswordGenerator() {
                       <label htmlFor="length-slider" className="text-default-700 font-medium">
                         Password Length
                       </label>
-                      <span className="px-3 py-1 bg-default-100 dark:bg-default-800 rounded-full text-default-700 font-medium">
+                      <span className="px-3 py-1 bg-default-200 dark:bg-default-800 rounded-full text-default-700 dark:text-default-200 font-medium">
                         {length} characters
                       </span>
                     </div>

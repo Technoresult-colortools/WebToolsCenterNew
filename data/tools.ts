@@ -124,7 +124,7 @@ export const allTools: Tool[] = [
     category: "Text",
     href: "/tools/text/case-converter",
     icon: faFont,
-    description: "Convert Text Tools to different cases.",
+    description: "Transform your text into any case format with our powerful multi-language case converter tool.",
 
   },
   {
@@ -132,7 +132,7 @@ export const allTools: Tool[] = [
     category: "Text",
     href: "/tools/text/letter-counter",
     icon: faFont,
-    description: "Count the number of letters in Text Tools.",
+    description: "Analyze your text with our advanced Letter Counter tool. Get detailed insights on letter frequency, word count, and more!.",
 
   },
   {
@@ -140,7 +140,7 @@ export const allTools: Tool[] = [
     category: "Text",
     href: "/tools/text/lorem-ipsum-generator",
     icon: faFont,
-    description: "Generate placeholder Text Tools.",
+    description: "Create versatile dummy text for layout design, content testing, and mockups.",
 
   },
   {
