@@ -545,10 +545,10 @@ export default function FuturisticPasswordGenerator() {
 
               <div className="my-8">
                 <Image
-                  src="/Images/InfosectionImages/PasswordGeneratorPreview.png?height=400&width=600"
+                  src="/Images/InfosectionImages/PasswordGeneratorPreview.png?height=200&width=400"
                   alt="Screenshot of the Advanced Password Generator interface showing various password generation options"
-                  width={600}
-                  height={400}
+                  width={400}
+                  height={200}
                   className="rounded-lg shadow-lg w-full h-auto"
                 />
               </div>

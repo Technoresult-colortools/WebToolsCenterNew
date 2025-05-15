@@ -44,13 +44,11 @@ import {
   faSun,
   faTag,
   faMicrochip,
-  faSignature
 } from '@fortawesome/free-solid-svg-icons';
 import {
   faGlide,
   faInstagram,
   faMarkdown,
-  faTwitter,
   faYoutube,
 } from '@fortawesome/free-brands-svg-icons';
 
@@ -322,6 +320,14 @@ export const allTools: Tool[] = [
     href: "/tools/image/svg-to-png-converter",
     icon: faFileImage,
     description: "Convert SVG images to PNG format.",
+
+  },
+  {
+    name: "Image Merger",
+    category: "Image",
+    href: "/tools/image/image-merger",
+    icon: faFileImage,
+    description: "Merge Two Images Online.",
 
   },
   

@@ -79,7 +79,7 @@ export default function WordsCounter() {
 
   React.useEffect(() => {
     updateCounts()
-  }, [text, includeSpaces]) //Updated useEffect dependency
+  }, [text, includeSpaces, updateCounts]) // Added updateCounts to dependencies
 
   return (
     <ToolLayout

@@ -253,10 +253,10 @@ export default function Header() {
           </NavbarItem>
         ) : !user ? (
           <NavbarItem>
-            <Button 
-              as={Link}
-              href="/login"
-              variant="flat" 
+            <Button
+              as={NextLink} // Use NextLink for client-side navigation
+              href="/login"  // <<<< THIS SHOULD BE THE PATH TO YOUR CUSTOM LOGIN PAGE
+              variant="flat"
               color="primary"
               size="sm"
               className="font-medium"
