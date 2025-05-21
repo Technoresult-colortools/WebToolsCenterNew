@@ -1,30 +1,37 @@
 "use client"
 
 import type React from "react"
-import { useState, useCallback, useEffect } from "react"
-import { Card, CardBody, Button, Textarea, Tabs, Tab } from "@nextui-org/react"
-import Image from "next/image"
-import Link from "next/link"
+import { useState, useCallback, useEffect, useMemo } from "react"
+import { Card, CardBody, Button, Textarea, Tabs, Tab, Tooltip, Badge, Progress } from "@nextui-org/react"
 import {
   Copy,
   Download,
-  Info,
-  Lightbulb,
-  BookOpen,
   BarChart2,
-  Type,
-  Zap,
-  Calculator,
-  Clock,
   Trash2,
   ArrowUp,
   ArrowDown,
   Layers,
+  Info,
+  RefreshCw,
+  FileText,
+  Maximize2,
+  Minimize2,
+  SortAsc,
+  SortDesc,
+  Percent,
+  Hash,
+  Type,
+  Clock,
+  AlignLeft,
+  Sparkles,
+  Calculator,
+  Save,
 } from "lucide-react"
 import { toast } from "react-hot-toast"
 import ToolLayout from "@/components/ToolLayout"
+import InfoSection from "./info-section"
 
-const MAX_CHARS = 5000
+const MAX_CHARS = 10000
 
 const countWords = (text: string): number => {
   return text
@@ -38,10 +45,12 @@ const countSentences = (text: string): number => {
 }
 
 const countParagraphs = (text: string): number => {
-  return text.split("\n\n").filter((para) => para.trim() !== "").length
+  return text.split(/\n\n/).filter((para) => para.trim() !== "").length
 }
 
-const getLetterFrequency = (text: string): {
+const getLetterFrequency = (
+  text: string,
+): {
   combined: Record<string, number>
   uppercase: Record<string, number>
   lowercase: Record<string, number>
@@ -49,22 +58,25 @@ const getLetterFrequency = (text: string): {
   const combined: Record<string, number> = {}
   const uppercase: Record<string, number> = {}
   const lowercase: Record<string, number> = {}
-  
+
   // Process all letters
-  text.replace(/[^a-zA-Z]/g, "").split("").forEach((char) => {
-    const lowerChar = char.toLowerCase()
-    
-    // Combined count (case-insensitive)
-    combined[lowerChar] = (combined[lowerChar] || 0) + 1
-    
-    // Separate uppercase and lowercase counts
-    if (char === char.toUpperCase() && char !== char.toLowerCase()) {
-      uppercase[char] = (uppercase[char] || 0) + 1
-    } else {
-      lowercase[char] = (lowercase[char] || 0) + 1
-    }
-  })
-  
+  text
+    .replace(/[^a-zA-Z]/g, "")
+    .split("")
+    .forEach((char) => {
+      const lowerChar = char.toLowerCase()
+
+      // Combined count (case-insensitive)
+      combined[lowerChar] = (combined[lowerChar] || 0) + 1
+
+      // Separate uppercase and lowercase counts
+      if (char === char.toUpperCase() && char !== char.toLowerCase()) {
+        uppercase[char] = (uppercase[char] || 0) + 1
+      } else {
+        lowercase[char] = (lowercase[char] || 0) + 1
+      }
+    })
+
   return { combined, uppercase, lowercase }
 }
 
@@ -77,6 +89,34 @@ const estimateReadingTime = (text: string): number => {
   const wordsPerMinute = 200
   const words = countWords(text)
   return Math.ceil(words / wordsPerMinute)
+}
+
+// Get vowel and consonant counts
+const getVowelConsonantCount = (text: string): { vowels: number; consonants: number } => {
+  const vowels = text.toLowerCase().match(/[aeiou]/g)?.length || 0
+  const consonants = text.toLowerCase().match(/[bcdfghjklmnpqrstvwxyz]/g)?.length || 0
+  return { vowels, consonants }
+}
+
+// Get unique words count
+const getUniqueWordsCount = (text: string): number => {
+  const words = text
+    .toLowerCase()
+    .trim()
+    .split(/\s+/)
+    .filter((word) => word !== "")
+  return new Set(words).size
+}
+
+// Get average word length
+const getAverageWordLength = (text: string): number => {
+  const words = text
+    .trim()
+    .split(/\s+/)
+    .filter((word) => word !== "")
+  if (words.length === 0) return 0
+  const totalLength = words.reduce((sum, word) => sum + word.length, 0)
+  return Number.parseFloat((totalLength / words.length).toFixed(1))
 }
 
 export default function LetterCounter() {
@@ -96,6 +136,16 @@ export default function LetterCounter() {
   const [mostCommonLetter, setMostCommonLetter] = useState("")
   const [readingTime, setReadingTime] = useState(0)
   const [activeTab, setActiveTab] = useState("combined")
+  const [sortOrder, setSortOrder] = useState<"alphabetical" | "frequency">("frequency")
+  const [isFullscreen, setIsFullscreen] = useState(false)
+  const [showPercentages, setShowPercentages] = useState(false)
+  const [analysisTab, setAnalysisTab] = useState("frequency")
+
+  // Advanced statistics
+  const [vowelCount, setVowelCount] = useState(0)
+  const [consonantCount, setConsonantCount] = useState(0)
+  const [uniqueWordsCount, setUniqueWordsCount] = useState(0)
+  const [averageWordLength, setAverageWordLength] = useState(0)
 
   const analyzeText = useCallback((text: string) => {
     const frequency = getLetterFrequency(text)
@@ -105,6 +155,13 @@ export default function LetterCounter() {
     setParagraphCount(countParagraphs(text))
     setMostCommonLetter(getMostCommonLetter(frequency.combined))
     setReadingTime(estimateReadingTime(text))
+
+    // Advanced statistics
+    const { vowels, consonants } = getVowelConsonantCount(text)
+    setVowelCount(vowels)
+    setConsonantCount(consonants)
+    setUniqueWordsCount(getUniqueWordsCount(text))
+    setAverageWordLength(getAverageWordLength(text))
   }, [])
 
   useEffect(() => {
@@ -138,6 +195,10 @@ export default function LetterCounter() {
             paragraphCount,
             mostCommonLetter,
             readingTime,
+            vowelCount,
+            consonantCount,
+            uniqueWordsCount,
+            averageWordLength,
           },
           null,
           2,
@@ -154,7 +215,19 @@ export default function LetterCounter() {
     document.body.removeChild(a)
     URL.revokeObjectURL(url)
     toast.success("Analysis downloaded successfully")
-  }, [inputText, letterFrequency, wordCount, sentenceCount, paragraphCount, mostCommonLetter, readingTime])
+  }, [
+    inputText,
+    letterFrequency,
+    wordCount,
+    sentenceCount,
+    paragraphCount,
+    mostCommonLetter,
+    readingTime,
+    vowelCount,
+    consonantCount,
+    uniqueWordsCount,
+    averageWordLength,
+  ])
 
   const handleClear = useCallback(() => {
     setInputText("")
@@ -164,17 +237,39 @@ export default function LetterCounter() {
   const handleShowStats = useCallback(() => {
     toast(
       (t: { id: string }) => (
-        <div>
-          <p>Words: {wordCount}</p>
-          <p>Sentences: {sentenceCount}</p>
-          <p>Paragraphs: {paragraphCount}</p>
-          <p>Most common letter: {mostCommonLetter}</p>
-          <button onClick={() => toast.dismiss(t.id)}>Dismiss</button>
+        <div className="p-2">
+          <h3 className="font-bold mb-2">Text Statistics</h3>
+          <div className="grid grid-cols-2 gap-x-4 gap-y-1 text-sm">
+            <p>Words: {wordCount}</p>
+            <p>Characters: {inputText.length}</p>
+            <p>Sentences: {sentenceCount}</p>
+            <p>Paragraphs: {paragraphCount}</p>
+            <p>Vowels: {vowelCount}</p>
+            <p>Consonants: {consonantCount}</p>
+            <p>Unique words: {uniqueWordsCount}</p>
+            <p>Avg. word length: {averageWordLength}</p>
+            <p>Most common letter: {mostCommonLetter}</p>
+            <p>Reading time: {readingTime} min</p>
+          </div>
+          <Button size="sm" className="mt-2 w-full" onClick={() => toast.dismiss(t.id)}>
+            Dismiss
+          </Button>
         </div>
       ),
-      { duration: 5000 },
+      { duration: 10000 },
     )
-  }, [wordCount, sentenceCount, paragraphCount, mostCommonLetter])
+  }, [
+    wordCount,
+    inputText.length,
+    sentenceCount,
+    paragraphCount,
+    mostCommonLetter,
+    readingTime,
+    vowelCount,
+    consonantCount,
+    uniqueWordsCount,
+    averageWordLength,
+  ])
 
   const getVisibleLetterFrequency = useCallback(() => {
     switch (activeTab) {
@@ -187,195 +282,511 @@ export default function LetterCounter() {
     }
   }, [activeTab, letterFrequency])
 
+  // Get total count of all letters for percentage calculation
+  const totalLetterCount = useMemo(() => {
+    const freq = getVisibleLetterFrequency()
+    return Object.values(freq).reduce((sum, count) => sum + count, 0)
+  }, [getVisibleLetterFrequency])
+
+  // Sort letter frequency entries
+  const sortedLetterFrequency = useMemo(() => {
+    const freq = getVisibleLetterFrequency()
+    const entries = Object.entries(freq)
+
+    if (sortOrder === "alphabetical") {
+      return entries.sort((a, b) => a[0].localeCompare(b[0]))
+    } else {
+      return entries.sort((a, b) => b[1] - a[1])
+    }
+  }, [getVisibleLetterFrequency, sortOrder])
+
+  // Find the highest frequency for scaling the visualization
+  const maxFrequency = useMemo(() => {
+    const freq = getVisibleLetterFrequency()
+    return Math.max(...Object.values(freq), 0)
+  }, [getVisibleLetterFrequency])
+
+  // Toggle fullscreen mode
+  const toggleFullscreen = () => {
+    setIsFullscreen(!isFullscreen)
+  }
+
+  // Toggle sort order
+  const toggleSortOrder = () => {
+    setSortOrder(sortOrder === "alphabetical" ? "frequency" : "alphabetical")
+  }
+
+  // Generate sample text
+  const generateSampleText = () => {
+    const sampleText =
+      "The quick brown fox jumps over the lazy dog. This pangram contains all the letters of the English alphabet. " +
+      "Amazingly few discotheques provide jukeboxes! How vexingly quick daft zebras jump! Pack my box with five dozen liquor jugs. " +
+      "Sphinx of black quartz, judge my vow. The five boxing wizards jump quickly. Crazy Fredrick bought many very exquisite opal jewels."
+
+    setInputText(sampleText)
+    toast.success("Sample text generated")
+  }
+
   return (
     <ToolLayout
       title="Letter Counter"
       description="Analyze your text with our advanced Letter Counter tool. Get detailed insights on letter frequency, word count, and more!"
       toolId="678f382826f06f912191bc7d"
     >
-      <div className="space-y-8">
-        {/* Input Section */}
-        <Card className="bg-default-50 dark:bg-default-100">
-          <CardBody className="p-6">
-            <label className="block text-lg font-medium text-primary mb-2">Input Text:</label>
-            <Textarea
-              value={inputText}
-              onChange={handleInputChange}
-              variant="bordered"
-              placeholder="Enter your text here for analysis..."
-              minRows={4}
-              size="lg"
-              className="mb-4"
-            />
-            <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 text-sm text-default-600">
-              <div>Words: {wordCount}</div>
-              <div>Characters: {inputText.length}</div>
-              <div>Sentences: {sentenceCount}</div>
-              <div>Paragraphs: {paragraphCount}</div>
-              <div>Most common letter: {mostCommonLetter}</div>
-              <div>Reading time: {readingTime} min</div>
+      <div className={`space-y-6 ${isFullscreen ? "fixed inset-0 z-50 bg-background p-4 overflow-auto" : ""}`}>
+        {isFullscreen && (
+          <div className="flex justify-between items-center">
+            <h2 className="text-xl font-bold">Letter Counter & Text Analyzer</h2>
+            <Button isIconOnly variant="light" onPress={toggleFullscreen}>
+              <Minimize2 size={20} />
+            </Button>
+          </div>
+        )}
+
+        {/* Stats Overview */}
+        <Card className="bg-primary-50 dark:bg-primary-900/20 border-primary-200 dark:border-primary-800">
+          <CardBody className="py-2">
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-2 text-sm">
+              <div className="flex flex-col items-center justify-center p-2">
+                <div className="flex items-center gap-1 text-primary-600 dark:text-primary-400">
+                  <Type size={14} />
+                  <span className="font-medium">Characters</span>
+                </div>
+                <span className="text-lg font-bold">{inputText.length}</span>
+              </div>
+
+              <div className="flex flex-col items-center justify-center p-2">
+                <div className="flex items-center gap-1 text-primary-600 dark:text-primary-400">
+                  <Hash size={14} />
+                  <span className="font-medium">Words</span>
+                </div>
+                <span className="text-lg font-bold">{wordCount}</span>
+              </div>
+
+              <div className="flex flex-col items-center justify-center p-2">
+                <div className="flex items-center gap-1 text-primary-600 dark:text-primary-400">
+                  <AlignLeft size={14} />
+                  <span className="font-medium">Sentences</span>
+                </div>
+                <span className="text-lg font-bold">{sentenceCount}</span>
+              </div>
+
+              <div className="flex flex-col items-center justify-center p-2">
+                <div className="flex items-center gap-1 text-primary-600 dark:text-primary-400">
+                  <FileText size={14} />
+                  <span className="font-medium">Paragraphs</span>
+                </div>
+                <span className="text-lg font-bold">{paragraphCount}</span>
+              </div>
+
+              <div className="flex flex-col items-center justify-center p-2">
+                <div className="flex items-center gap-1 text-primary-600 dark:text-primary-400">
+                  <Sparkles size={14} />
+                  <span className="font-medium">Most Common</span>
+                </div>
+                <span className="text-lg font-bold">{mostCommonLetter || "-"}</span>
+              </div>
+
+              <div className="flex flex-col items-center justify-center p-2">
+                <div className="flex items-center gap-1 text-primary-600 dark:text-primary-400">
+                  <Clock size={14} />
+                  <span className="font-medium">Reading Time</span>
+                </div>
+                <span className="text-lg font-bold">{readingTime} min</span>
+              </div>
             </div>
-            <p className="text-sm text-default-500 mt-2">
-              {inputText.length}/{MAX_CHARS} characters
-            </p>
           </CardBody>
         </Card>
+
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          {/* Input Section */}
+          <Card className="bg-default-50 dark:bg-default-100">
+            <CardBody className="p-4">
+              <div className="flex justify-between items-center mb-2">
+                <h3 className="text-lg font-medium text-primary">Input Text</h3>
+                <div className="flex gap-1">
+                  <Tooltip content="Generate sample text" className="text-default-700">
+                    <Button isIconOnly size="sm" variant="flat" onPress={generateSampleText}>
+                      <RefreshCw size={16} />
+                    </Button>
+                  </Tooltip>
+                  <Tooltip content="Toggle fullscreen" className="text-default-700">
+                    <Button isIconOnly size="sm" variant="flat" onPress={toggleFullscreen}>
+                      <Maximize2 size={16} />
+                    </Button>
+                  </Tooltip>
+                </div>
+              </div>
+
+              <Textarea
+                value={inputText}
+                onChange={handleInputChange}
+                variant="bordered"
+                placeholder="Enter your text here for analysis..."
+                minRows={12}
+                size="lg"
+                className="mb-2"
+              />
+
+              <div className="flex justify-between items-center">
+                <p className="text-sm text-default-500">
+                  {inputText.length}/{MAX_CHARS} characters
+                </p>
+
+                <div className="flex gap-2">
+                  <Button
+                    size="sm"
+                    color="primary"
+                    variant="flat"
+                    onPress={handleClear}
+                    startContent={<Trash2 size={16} />}
+                    isDisabled={!inputText}
+                  >
+                    Clear
+                  </Button>
+                  <Button
+                    size="sm"
+                    color="primary"
+                    onPress={handleShowStats}
+                    startContent={<BarChart2 size={16} />}
+                    isDisabled={!inputText}
+                  >
+                    Show Stats
+                  </Button>
+                </div>
+              </div>
+            </CardBody>
+          </Card>
+
+          {/* Analysis Section */}
+          <Card className="bg-default-50 dark:bg-default-100">
+            <CardBody className="p-4">
+              <Tabs
+                aria-label="Analysis tabs"
+                selectedKey={analysisTab}
+                onSelectionChange={(key) => setAnalysisTab(key as string)}
+                className="mb-4"
+              >
+                <Tab
+                  key="frequency"
+                  title={
+                    <div className="flex items-center gap-1">
+                      <BarChart2 size={16} />
+                      <span>Letter Frequency</span>
+                    </div>
+                  }
+                />
+                <Tab
+                  key="advanced"
+                  title={
+                    <div className="flex items-center gap-1">
+                      <Calculator size={16} />
+                      <span>Advanced Stats</span>
+                    </div>
+                  }
+                />
+              </Tabs>
+
+              {analysisTab === "frequency" ? (
+                <>
+                  <div className="flex justify-between items-center mb-4">
+                    <Tabs
+                      aria-label="Letter frequency tabs"
+                      selectedKey={activeTab}
+                      onSelectionChange={(key) => setActiveTab(key as string)}
+                      size="sm"
+                      classNames={{
+                        tabList: "gap-0",
+                      }}
+                    >
+                      <Tab
+                        key="combined"
+                        title={
+                          <div className="flex items-center gap-1">
+                            <Layers size={14} />
+                            <span>Combined</span>
+                          </div>
+                        }
+                      />
+                      <Tab
+                        key="uppercase"
+                        title={
+                          <div className="flex items-center gap-1">
+                            <ArrowUp size={14} />
+                            <span>Uppercase</span>
+                          </div>
+                        }
+                      />
+                      <Tab
+                        key="lowercase"
+                        title={
+                          <div className="flex items-center gap-1">
+                            <ArrowDown size={14} />
+                            <span>Lowercase</span>
+                          </div>
+                        }
+                      />
+                    </Tabs>
+
+                    <div className="flex gap-2 items-center">
+                      <Tooltip content={showPercentages ? "Show counts" : "Show percentages"} className="text-default-700">
+                        <Button
+                          isIconOnly
+                          size="sm"
+                          variant="flat"
+                          onPress={() => setShowPercentages(!showPercentages)}
+                        >
+                          {showPercentages ? <Hash size={16} /> : <Percent size={16} />}
+                        </Button>
+                      </Tooltip>
+
+                      <Tooltip content={sortOrder === "alphabetical" ? "Sort by frequency" : "Sort alphabetically"} className="text-default-700">
+                        <Button isIconOnly size="sm" variant="flat" onPress={toggleSortOrder}>
+                          {sortOrder === "alphabetical" ? <SortDesc size={16} /> : <SortAsc size={16} />}
+                        </Button>
+                      </Tooltip>
+                    </div>
+                  </div>
+
+                  <div className="mb-2 flex items-center justify-between">
+                    <p className="text-sm text-default-600 dark:text-default-400">
+                      {activeTab === "combined"
+                        ? "Combined counts merge uppercase and lowercase letters"
+                        : `Showing ${activeTab} letters only`}
+                    </p>
+                    <Badge variant="flat" color="primary">
+                      {Object.keys(getVisibleLetterFrequency()).length} unique letters
+                    </Badge>
+                  </div>
+
+                  {totalLetterCount > 0 ? (
+                    <div className="space-y-3 max-h-[400px] overflow-y-auto pr-2">
+                      {sortedLetterFrequency.map(([letter, count]) => {
+                        const percentage = (count / totalLetterCount) * 100
+                        const displayValue = showPercentages ? `${percentage.toFixed(1)}%` : count.toString()
+
+                        return (
+                          <div key={letter} className="flex items-center gap-2">
+                            <div className="w-8 h-8 flex items-center justify-center bg-primary-100 dark:bg-primary-900/30 rounded-md">
+                              <span className="text-lg font-bold text-primary-600 dark:text-primary-400">{letter}</span>
+                            </div>
+                            <Progress
+                              value={count}
+                              maxValue={maxFrequency}
+                              className="flex-1"
+                              size="sm"
+                              color="primary"
+                              showValueLabel={false}
+                              aria-label={`Letter ${letter} frequency`}
+                            />
+                            <div className="w-16 text-right">
+                              <span className="font-medium">{displayValue}</span>
+                            </div>
+                          </div>
+                        )
+                      })}
+                    </div>
+                  ) : (
+                    <div className="flex flex-col items-center justify-center py-12 text-default-400">
+                      <Info size={48} className="mb-4 opacity-50" />
+                      <p className="text-center">Enter text to see letter frequency analysis</p>
+                    </div>
+                  )}
+                </>
+              ) : (
+                <div className="space-y-6">
+                  {/* Character Analysis */}
+                  <div>
+                    <h3 className="text-md font-medium mb-2 flex items-center gap-1">
+                      <Type size={16} className="text-primary-500" />
+                      Character Analysis
+                    </h3>
+                    <div className="grid grid-cols-2 gap-4">
+                      <Card className="bg-default-100/50">
+                        <CardBody className="p-3">
+                          <div className="flex justify-between items-center">
+                            <span className="text-sm">Vowels</span>
+                            <Badge variant="flat" color="primary">
+                              {vowelCount}
+                            </Badge>
+                          </div>
+                          <Progress
+                            value={vowelCount}
+                            maxValue={vowelCount + consonantCount || 1}
+                            className="mt-2"
+                            size="sm"
+                            color="primary"
+                            showValueLabel={false}
+                          />
+                          <p className="text-xs text-default-500 mt-1">
+                            {vowelCount + consonantCount > 0
+                              ? `${((vowelCount / (vowelCount + consonantCount)) * 100).toFixed(1)}% of all letters`
+                              : "No letters detected"}
+                          </p>
+                        </CardBody>
+                      </Card>
+
+                      <Card className="bg-default-100/50">
+                        <CardBody className="p-3">
+                          <div className="flex justify-between items-center">
+                            <span className="text-sm">Consonants</span>
+                            <Badge variant="flat" color="secondary">
+                              {consonantCount}
+                            </Badge>
+                          </div>
+                          <Progress
+                            value={consonantCount}
+                            maxValue={vowelCount + consonantCount || 1}
+                            className="mt-2"
+                            size="sm"
+                            color="secondary"
+                            showValueLabel={false}
+                          />
+                          <p className="text-xs text-default-500 mt-1">
+                            {vowelCount + consonantCount > 0
+                              ? `${((consonantCount / (vowelCount + consonantCount)) * 100).toFixed(1)}% of all letters`
+                              : "No letters detected"}
+                          </p>
+                        </CardBody>
+                      </Card>
+                    </div>
+                  </div>
+
+                  {/* Word Analysis */}
+                  <div>
+                    <h3 className="text-md font-medium mb-2 flex items-center gap-1">
+                      <Hash size={16} className="text-primary-500" />
+                      Word Analysis
+                    </h3>
+                    <div className="grid grid-cols-2 gap-4">
+                      <Card className="bg-default-100/50">
+                        <CardBody className="p-3">
+                          <div className="flex justify-between items-center">
+                            <span className="text-sm">Unique Words</span>
+                            <Badge variant="flat" color="success">
+                              {uniqueWordsCount}
+                            </Badge>
+                          </div>
+                          <Progress
+                            value={uniqueWordsCount}
+                            maxValue={wordCount || 1}
+                            className="mt-2"
+                            size="sm"
+                            color="success"
+                            showValueLabel={false}
+                          />
+                          <p className="text-xs text-default-500 mt-1">
+                            {wordCount > 0
+                              ? `${((uniqueWordsCount / wordCount) * 100).toFixed(1)}% of total words`
+                              : "No words detected"}
+                          </p>
+                        </CardBody>
+                      </Card>
+
+                      <Card className="bg-default-100/50">
+                        <CardBody className="p-3">
+                          <div className="flex justify-between items-center">
+                            <span className="text-sm">Average Word Length</span>
+                            <Badge variant="flat" color="warning">
+                              {averageWordLength}
+                            </Badge>
+                          </div>
+                          <div className="flex items-center gap-1 mt-2">
+                            {[...Array(10)].map((_, i) => (
+                              <div
+                                key={i}
+                                className={`h-4 flex-1 rounded-sm ${
+                                  i < Math.floor(averageWordLength)
+                                    ? "bg-warning-500"
+                                    : i < averageWordLength
+                                      ? "bg-warning-300"
+                                      : "bg-default-200"
+                                }`}
+                              />
+                            ))}
+                          </div>
+                          <p className="text-xs text-default-500 mt-1">
+                            {wordCount > 0 ? `Average characters per word` : "No words detected"}
+                          </p>
+                        </CardBody>
+                      </Card>
+                    </div>
+                  </div>
+
+                  {/* Text Structure */}
+                  <div>
+                    <h3 className="text-md font-medium mb-2 flex items-center gap-1">
+                      <AlignLeft size={16} className="text-primary-500" />
+                      Text Structure
+                    </h3>
+                    <div className="grid grid-cols-2 gap-4">
+                      <Card className="bg-default-100/50">
+                        <CardBody className="p-3">
+                          <div className="flex justify-between items-center">
+                            <span className="text-sm">Words per Sentence</span>
+                            <Badge variant="flat" color="danger">
+                              {sentenceCount > 0 ? (wordCount / sentenceCount).toFixed(1) : 0}
+                            </Badge>
+                          </div>
+                          <p className="text-xs text-default-500 mt-2">
+                            {sentenceCount > 0
+                              ? `${wordCount} words across ${sentenceCount} sentences`
+                              : "No sentences detected"}
+                          </p>
+                        </CardBody>
+                      </Card>
+
+                      <Card className="bg-default-100/50">
+                        <CardBody className="p-3">
+                          <div className="flex justify-between items-center">
+                            <span className="text-sm">Sentences per Paragraph</span>
+                            <Badge variant="flat" color="primary">
+                              {paragraphCount > 0 ? (sentenceCount / paragraphCount).toFixed(1) : 0}
+                            </Badge>
+                          </div>
+                          <p className="text-xs text-default-500 mt-2">
+                            {paragraphCount > 0
+                              ? `${sentenceCount} sentences across ${paragraphCount} paragraphs`
+                              : "No paragraphs detected"}
+                          </p>
+                        </CardBody>
+                      </Card>
+                    </div>
+                  </div>
+                </div>
+              )}
+            </CardBody>
+          </Card>
+        </div>
 
         {/* Action Buttons */}
         <div className="flex flex-wrap justify-center gap-4">
-          <Button color="primary" onClick={handleCopy} startContent={<Copy className="h-4 w-4" />}>
+          <Button color="primary" onClick={handleCopy} startContent={<Copy size={18} />} isDisabled={!inputText}>
             Copy Analysis
           </Button>
-          <Button color="primary" onClick={handleDownload} startContent={<Download className="h-4 w-4" />}>
-            Download
+          <Button
+            color="primary"
+            onClick={handleDownload}
+            startContent={<Download size={18} />}
+            isDisabled={!inputText}
+          >
+            Download Report
           </Button>
-          <Button color="primary" onClick={handleShowStats} startContent={<BarChart2 className="h-4 w-4" />}>
-            Show Stats
-          </Button>
-          <Button color="danger" onClick={handleClear} startContent={<Trash2 className="h-4 w-4" />}>
-            Clear
+          <Button
+            color="primary"
+            onClick={() => {
+              navigator.clipboard.writeText(inputText)
+              toast.success("Text copied to clipboard")
+            }}
+            startContent={<Save size={18} />}
+            isDisabled={!inputText}
+          >
+            Copy Text
           </Button>
         </div>
 
-         {/* Letter Frequency Section */}
-        <Card className="bg-default-50 dark:bg-default-100">
-          <CardBody className="p-6">
-            <h2 className="text-xl font-semibold text-primary mb-4">Letter Frequency:</h2>
-            
-            <Tabs 
-              aria-label="Letter frequency tabs" 
-              selectedKey={activeTab}
-              onSelectionChange={(key) => setActiveTab(key as string)}
-              className="mb-4"
-            >
-              <Tab 
-                key="combined" 
-                title={
-                  <div className="flex items-center">
-                    <Layers className="w-4 h-4 mr-1" />
-                    Combined
-                  </div>
-                }
-              />
-              <Tab 
-                key="uppercase" 
-                title={
-                  <div className="flex items-center">
-                    <ArrowUp className="w-4 h-4 mr-1" />
-                    Uppercase
-                  </div>
-                }
-              />
-              <Tab 
-                key="lowercase" 
-                title={
-                  <div className="flex items-center">
-                    <ArrowDown className="w-4 h-4 mr-1" />
-                    Lowercase
-                  </div>
-                }
-              />
-            </Tabs>
-            
-            <p className="text-sm text-default-600 dark:text-default-400 mb-4">
-              {activeTab === "combined" 
-                ? "Note: Combined counts merge uppercase and lowercase letters." 
-                : `Note: Showing ${activeTab} letters only.`}
-            </p>
-            
-            <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-4">
-              {Object.entries(getVisibleLetterFrequency()).map(([letter, count]) => (
-                <div
-                  key={letter}
-                  className="bg-default-200 dark:bg-default-800 rounded-lg p-3 text-center flex flex-col items-center border border-default-300 dark:border-default-600 shadow-sm"
-                >
-                  <span className="text-xl font-bold text-default-900 dark:text-default-100">
-                    {letter}
-                  </span>
-                  <span className="text-lg text-default-600 dark:text-default-400">{count}</span>
-                </div>
-              ))}
-            </div>
-          </CardBody>
-        </Card>
-
         {/* Info Section */}
-        <Card className="bg-default-50 dark:bg-default-100 p-4 md:p-8">
-          <div className="rounded-xl p-2 md:p-4 max-w-6xl mx-auto">
-            <h2 className="text-2xl font-semibold text-default-700 mb-4 flex items-center">
-              <Info className="w-6 h-6 mr-2" />
-              What is the Letter Counter?
-            </h2>
-            <p className="text-default-600 mb-4">
-              The Letter Counter is a powerful text analysis tool designed for writers, editors, students, and language
-              enthusiasts. It provides comprehensive insights into your text, including letter frequency with case sensitivity, word count,
-              sentence count, and more. With its{" "}
-              <Link href="#how-to-use" className="text-primary hover:underline">
-                user-friendly interface
-              </Link>
-              , you can quickly analyze any piece of text and gain valuable information about its composition.
-            </p>
-
-            <div className="my-8">
-              <Image
-                src="/Images/InfosectionImages/LetterCounterPreview.png?height=400&width=600" 
-                alt="Screenshot of the Letter Counter interface showing text input area and letter frequency analysis"
-                width={600}
-                height={400}
-                className="rounded-lg shadow-lg w-full h-auto"
-              />
-            </div>
-
-            <h2 id="how-to-use" className="text-2xl font-semibold text-default-700 mb-4 mt-8 flex items-center">
-              <BookOpen className="w-6 h-6 mr-2" />
-              How to Use the Letter Counter?
-            </h2>
-            <ol className="list-decimal list-inside space-y-2 text-default-600">
-              <li>Enter or paste your text into the input box. You can input up to 5000 characters.</li>
-              <li>As you type or paste, the tool automatically analyzes your text in real-time.</li>
-              <li>Use the tabs to toggle between combined, uppercase-only, and lowercase-only letter frequency.</li>
-              <li>View the letter frequency chart and text statistics below the input area.</li>
-              <li>Use the "Copy Analysis" button to copy the letter frequency data to your clipboard.</li>
-              <li>Click "Download" to save a comprehensive JSON file with all analysis data.</li>
-              <li>To start fresh, use the "Clear" button to reset the input and analysis.</li>
-            </ol>
-            <h2 className="text-2xl font-semibold text-default-700 mb-4 mt-8 flex items-center">
-              <Lightbulb className="w-6 h-6 mr-2 text-warning" />
-              Features That Make Us Stand Out
-            </h2>
-            <ul className="list-disc list-inside space-y-2 text-sm text-default-600">
-              <li>
-                <Zap className="w-4 h-4 inline-block mr-1 text-danger" /> <strong>Case-sensitive letter tracking:</strong> Separate uppercase and lowercase letter counts
-              </li>
-              <li>
-                <Zap className="w-4 h-4 inline-block mr-1 text-danger" /> <strong>Real-time analysis:</strong> See results instantly as you type
-              </li>
-              <li>
-                <BarChart2 className="w-4 h-4 inline-block mr-1 text-primary" /> <strong>Comprehensive text statistics:</strong> Get word count, sentence count, and more
-              </li>
-              <li>
-                <Type className="w-4 h-4 inline-block mr-1 text-secondary" /> <strong>Letter frequency visualization:</strong> Easy-to-read chart of letter distribution
-              </li>
-              <li>
-                <Calculator className="w-4 h-4 inline-block mr-1 text-success" /> <strong>Most common letter identification:</strong> Quickly spot dominant characters
-              </li>
-              <li>
-                <Clock className="w-4 h-4 inline-block mr-1 text-warning" /> <strong>Reading time estimation:</strong> Know how long it takes to read your text
-              </li>
-              <li>
-                <Download className="w-4 h-4 inline-block mr-1 text-info" /> <strong>Downloadable analysis:</strong> Save comprehensive results as a JSON file
-              </li>
-            </ul>
-
-
-            <p className="text-default-600 mt-4">
-              Ready to dive deep into your text? Start using our Letter Counter tool now and unlock insights that will
-              elevate your writing, editing, and analysis tasks. Whether you're a professional writer, a student, or
-              just curious about the composition of your text, our tool is here to provide you with accurate, instant,
-              and comprehensive text analysis. Try it out and see the difference it can make in your work!
-            </p>
-          </div>
-        </Card>
+        <InfoSection />
       </div>
     </ToolLayout>
   )

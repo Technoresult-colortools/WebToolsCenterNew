@@ -123,73 +123,64 @@ export const allTools: Tool[] = [
     name: "Case Converter",
     category: "Text",
     href: "/tools/text/case-converter",
-    icon: faFont,
+    icon: faTextHeight,
     description: "Transform your text into any case format with our powerful multi-language case converter tool.",
-
   },
   {
     name: "Letter Counter",
     category: "Text",
     href: "/tools/text/letter-counter",
-    icon: faFont,
+    icon: faChartBar,
     description: "Analyze your text with our advanced Letter Counter tool. Get detailed insights on letter frequency, word count, and more!.",
-
   },
   {
     name: "Lorem Ipsum Generator",
     category: "Text",
     href: "/tools/text/lorem-ipsum-generator",
-    icon: faFont,
+    icon: faAlignJustify,
     description: "Create versatile dummy text for layout design, content testing, and mockups.",
-
   },
   {
     name: "Words Counter",
     category: "Text",
     href: "/tools/text/words-counter",
-    icon: faFont,
-    description: "Count the number of words in Text Tools.",
-
+    icon: faChartBar,
+    description: "Count words, analyze text statistics, and transform your content with powerful text tools.",
   },
   {
     name: "Whitespace Remover",
     category: "Text",
     href: "/tools/text/whitespace-remover",
     icon: faEraser,
-    description: "Remove unnecessary whitespace from Text Tools.",
-
+    description: "Advanced text cleaning tool to remove and normalize unwanted white spaces.",
   },
   {
     name: "Google Fonts Pair Finder",
     category: "Text",
     href: "/tools/text/google-fonts-pair-finder",
-    icon: faFont,
-    description: "Find and pair Google Fonts.",
-
+    icon: faLink,
+    description: "Discover the perfect font combinations for your design projects.",
   },
   {
-    name: "Text Reverser",
+    name: "Text Reverser & Word Manipulator",
     category: "Text",
     href: "/tools/text/text-reverser",
-    icon: faFont,
-    description: "Reverse any string of Text Tools.",
-
+    icon: faRandom,
+    description: "Reverse and transform text by characters, words, sentences, or custom patterns.",
   },
   {
-    name: "Character Frequency Counter",
+    name: "Character Frequency Analyzer",
     category: "Text",
     href: "/tools/text/character-frequency-counter",
     icon: faChartBar,
-    description: "Analyze character frequency in Text Tools.",
-
+    description: "Analyze the frequency of characters, words, and phrases in your text with advanced filtering and visualization options.",
   },
   {
     name: "Text to ASCII/Hex/Binary Converter",
     category: "Text",
     href: "/tools/text/text-to-ascii-hex-binary",
     icon: faCode,
-    description: "Convert Text Tools to ASCII, Hex, or Binary.",
-
+    description: "Convert plain text into ASCII, hexadecimal, binary, and more with advanced options and bidirectional conversion.",
   },
   {
     name: "Title Case Converter",
@@ -197,23 +188,20 @@ export const allTools: Tool[] = [
     href: "/tools/text/title-case-converter",
     icon: faTextHeight,
     description: "Convert Text Tools to title case.",
-  
   },
   {
     name: "Duplicate Line Remover",
     category: "Text",
     href: "/tools/text/duplicate-line-remover",
     icon: faScissors,
-    description: "Remove duplicate lines in Text Tools.",
-
+    description: "Clean up your text by removing, keeping, or analyzing duplicate lines with advanced options.",
   },
   {
     name: "HTML Encoder&Decoder",
     category: "Text",
     href: "/tools/text/html-encoder-decoder",
     icon: faCode,
-    description: "Encode or decode HTML entities.",
-
+    description: "Convert between plain text and HTML entities with multiple encoding options.",
   },
   {
     name: "Markdown to HTML Converter",
@@ -221,15 +209,13 @@ export const allTools: Tool[] = [
     href: "/tools/text/markdown-to-html",
     icon: faMarkdown,
     description: "Convert Markdown to HTML.",
-
   },
   {
     name: "Word Scrambler",
     category: "Text",
     href: "/tools/text/word-scrambler",
     icon: faRandom,
-    description: "Scramble words in Text Tools.",
-
+    description: "Shuffle the letters in your text with multiple algorithms and customization options.",
   },
  /* {
     name: "Text to Handwriting Converter",

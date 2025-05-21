@@ -1,24 +1,47 @@
-
 "use client"
 
-import React, { useState, useCallback } from "react"
-import { Card, CardBody, Button, Checkbox, Textarea, Slider, Input, Select, SelectItem, Tooltip, Tabs, Tab } from "@nextui-org/react"
+import { useState, useCallback, useEffect } from "react"
+import {
+  Card,
+  CardBody,
+  Button,
+  Checkbox,
+  Textarea,
+  Slider,
+  Input,
+  Select,
+  SelectItem,
+  Tooltip,
+  Chip,
+  Dropdown,
+  DropdownTrigger,
+  DropdownMenu,
+  DropdownItem,
+  Progress,
+} from "@nextui-org/react"
 import { toast } from "react-hot-toast"
 import ToolLayout from "@/components/ToolLayout"
 import {
   Copy,
   Download,
-  RefreshCw,
-  WrapText,
   Settings,
   Type,
   History,
   BookIcon,
-  Info,
-  BookOpen,
-  Zap
+  Zap,
+  ArrowLeftRight,
+  Loader2,
+  MoreVertical,
+  Shuffle,
+  Undo2,
+  Redo2,
+  ChevronDown,
+  Wand2,
+  Lightbulb,
+  RotateCcw,
+  Trash2,
 } from "lucide-react"
-import Image from "next/image"
+import InfoSection from "./InfoSection"
 
 const MAX_CHARS = 10000
 
@@ -27,16 +50,32 @@ const SCRAMBLE_METHODS = {
   RANDOM: "random",
   REVERSE: "reverse",
   SORTED: "sorted",
-  VOWEL_SWAP: "vowelSwap"
+  VOWEL_SWAP: "vowelSwap",
 } as const
 
-type ScrambleMethod = typeof SCRAMBLE_METHODS[keyof typeof SCRAMBLE_METHODS]
+type ScrambleMethod = (typeof SCRAMBLE_METHODS)[keyof typeof SCRAMBLE_METHODS]
 type DelimiterType = "space" | "newline" | "sentence"
 
 // Words to preserve from scrambling
 const COMMON_WORDS = new Set([
-  "the", "and", "for", "with", "but", "or", "as", "if", "when", "than", 
-  "because", "while", "where", "how", "that", "this", "these", "those"
+  "the",
+  "and",
+  "for",
+  "with",
+  "but",
+  "or",
+  "as",
+  "if",
+  "when",
+  "than",
+  "because",
+  "while",
+  "where",
+  "how",
+  "that",
+  "this",
+  "these",
+  "those",
 ])
 
 interface ScrambleOptions {
@@ -50,84 +89,90 @@ interface ScrambleOptions {
 const scrambleWord = (word: string, method: ScrambleMethod, options: ScrambleOptions): string => {
   // Skip punctuation-only strings
   if (/^[^\w]+$/.test(word)) return word
-  
+
   // Extract punctuation
   const leadingPunct = word.match(/^[^\w]+/) || [""]
   const trailingPunct = word.match(/[^\w]+$/) || [""]
-  
+
   // Get the actual word without punctuation
   const cleanWord = word.replace(/^[^\w]+/, "").replace(/[^\w]+$/, "")
-  
+
   // Skip short words or common words if specified
-  if (cleanWord.length < options.minWordLength || 
-     (options.preserveCommonWords && COMMON_WORDS.has(cleanWord.toLowerCase()))) {
+  if (
+    cleanWord.length < options.minWordLength ||
+    (options.preserveCommonWords && COMMON_WORDS.has(cleanWord.toLowerCase()))
+  ) {
     return word
   }
-  
+
   let scrambled = cleanWord
   const start = options.preserveEnds ? 1 : 0
   const end = options.preserveEnds ? cleanWord.length - 1 : cleanWord.length
-  
+
   if (start >= end) return word // Word too short to scramble with preserved ends
-  
+
   // Middle part to scramble
   const middleChars = cleanWord.slice(start, end).split("")
-  
+
   switch (method) {
     case SCRAMBLE_METHODS.RANDOM:
       const shuffleCount = Math.floor(middleChars.length * options.intensity)
-        for (let i = 0; i < shuffleCount; i++) {
-          const j = Math.floor(Math.random() * middleChars.length)
-          const k = Math.floor(Math.random() * middleChars.length)
-          // Fix the destructuring assignment:
-          const temp = middleChars[j]
-          middleChars[j] = middleChars[k]
-          middleChars[k] = temp
-        }
-      scrambled = (options.preserveEnds ? cleanWord[0] : "") + 
-                  middleChars.join("") + 
-                  (options.preserveEnds ? cleanWord[cleanWord.length - 1] : "")
+      for (let i = 0; i < shuffleCount; i++) {
+        const j = Math.floor(Math.random() * middleChars.length)
+        const k = Math.floor(Math.random() * middleChars.length)
+        // Fix the destructuring assignment:
+        const temp = middleChars[j]
+        middleChars[j] = middleChars[k]
+        middleChars[k] = temp
+      }
+      scrambled =
+        (options.preserveEnds ? cleanWord[0] : "") +
+        middleChars.join("") +
+        (options.preserveEnds ? cleanWord[cleanWord.length - 1] : "")
       break
-      
+
     case SCRAMBLE_METHODS.REVERSE:
-      scrambled = (options.preserveEnds ? cleanWord[0] : "") + 
-                  middleChars.reverse().join("") + 
-                  (options.preserveEnds ? cleanWord[cleanWord.length - 1] : "")
+      scrambled =
+        (options.preserveEnds ? cleanWord[0] : "") +
+        middleChars.reverse().join("") +
+        (options.preserveEnds ? cleanWord[cleanWord.length - 1] : "")
       break
-      
+
     case SCRAMBLE_METHODS.SORTED:
-      scrambled = (options.preserveEnds ? cleanWord[0] : "") + 
-                  [...middleChars].sort().join("") + 
-                  (options.preserveEnds ? cleanWord[cleanWord.length - 1] : "")
+      scrambled =
+        (options.preserveEnds ? cleanWord[0] : "") +
+        [...middleChars].sort().join("") +
+        (options.preserveEnds ? cleanWord[cleanWord.length - 1] : "")
       break
-      
+
     case SCRAMBLE_METHODS.VOWEL_SWAP:
       // Swap vowels with each other, keep consonants
-      const vowels = middleChars.filter(c => /[aeiou]/i.test(c))
+      const vowels = middleChars.filter((c) => /[aeiou]/i.test(c))
       const shuffledVowels = [...vowels]
-        for (let i = 0; i < shuffledVowels.length; i++) {
-          const j = Math.floor(Math.random() * shuffledVowels.length)
-          const k = Math.floor(Math.random() * shuffledVowels.length)
-          // Fix the destructuring assignment:
-          const temp = shuffledVowels[j]
-          shuffledVowels[j] = shuffledVowels[k]
-          shuffledVowels[k] = temp
-        }
-      
+      for (let i = 0; i < shuffledVowels.length; i++) {
+        const j = Math.floor(Math.random() * shuffledVowels.length)
+        const k = Math.floor(Math.random() * shuffledVowels.length)
+        // Fix the destructuring assignment:
+        const temp = shuffledVowels[j]
+        shuffledVowels[j] = shuffledVowels[k]
+        shuffledVowels[k] = temp
+      }
+
       let vowelIndex = 0
-      const newMiddle = middleChars.map(c => {
+      const newMiddle = middleChars.map((c) => {
         if (/[aeiou]/i.test(c)) {
           return shuffledVowels[vowelIndex++]
         }
         return c
       })
-      
-      scrambled = (options.preserveEnds ? cleanWord[0] : "") + 
-                  newMiddle.join("") + 
-                  (options.preserveEnds ? cleanWord[cleanWord.length - 1] : "")
+
+      scrambled =
+        (options.preserveEnds ? cleanWord[0] : "") +
+        newMiddle.join("") +
+        (options.preserveEnds ? cleanWord[cleanWord.length - 1] : "")
       break
   }
-  
+
   // Reattach punctuation
   return leadingPunct[0] + scrambled + trailingPunct[0]
 }
@@ -142,14 +187,21 @@ const separateByDelimiter = (text: string, delimiter: DelimiterType): string[] =
 interface HistoryItem {
   original: string
   scrambled: string
+  timestamp: number
+  method: ScrambleMethod
 }
+
+const MAX_HISTORY = 10
+
+
 
 export default function WordScrambler() {
   // State for text and options
   const [text, setText] = useState("")
   const [scrambledText, setScrambledText] = useState("")
   const [history, setHistory] = useState<HistoryItem[]>([])
-  
+  const [historyIndex, setHistoryIndex] = useState(-1)
+
   // Scramble options
   const [scrambleMethod, setScrambleMethod] = useState<ScrambleMethod>(SCRAMBLE_METHODS.RANDOM)
   const [delimiter, setDelimiter] = useState<DelimiterType>("space")
@@ -158,55 +210,115 @@ export default function WordScrambler() {
   const [preserveCapitalization, setPreserveCapitalization] = useState(true)
   const [intensity, setIntensity] = useState(0.7)
   const [minWordLength, setMinWordLength] = useState(4)
-  
+
   // UI state
-  const [activeTab, setActiveTab] = useState("main")
+  const [isProcessing, setIsProcessing] = useState(false)
+  const [showOptions, setShowOptions] = useState(false)
+  const [showHistory, setShowHistory] = useState(false)
+
+  // Load history from localStorage on component mount
+  useEffect(() => {
+    try {
+      const savedHistory = localStorage.getItem("wordScramblerHistory")
+      if (savedHistory) {
+        const parsedHistory = JSON.parse(savedHistory)
+        if (Array.isArray(parsedHistory)) {
+          setHistory(parsedHistory)
+        }
+      }
+    } catch (error) {
+      console.error("Error loading history:", error)
+    }
+  }, [])
+
+  // Save history to localStorage when it changes
+  useEffect(() => {
+    try {
+      if (history.length > 0) {
+        localStorage.setItem("wordScramblerHistory", JSON.stringify(history))
+      }
+    } catch (error) {
+      console.error("Error saving history:", error)
+    }
+  }, [history])
 
   const handleScramble = useCallback(() => {
     if (!text.trim()) {
       toast.error("Please enter some text to scramble")
       return
     }
-    
-    try {
-      const units = separateByDelimiter(text, delimiter)
-      const options: ScrambleOptions = { 
-        preserveEnds, 
-        intensity, 
-        minWordLength,
-        preserveCommonWords,
-        preserveCapitalization
-      }
-      
-      const scrambledUnits = units.map(unit => {
-        if (delimiter === "space") {
-          // For word-level scrambling
-          return scrambleWord(unit, scrambleMethod, options)
-        } else {
-          // For multi-word units (lines, sentences, etc)
-          const words = unit.split(" ")
-          return words.map(word => scrambleWord(word, scrambleMethod, options)).join(" ")
+
+    setIsProcessing(true)
+
+    // Use setTimeout to prevent UI freeze for large inputs
+    setTimeout(() => {
+      try {
+        const units = separateByDelimiter(text, delimiter)
+        const options: ScrambleOptions = {
+          preserveEnds,
+          intensity,
+          minWordLength,
+          preserveCommonWords,
+          preserveCapitalization,
         }
-      })
-      
-      const result = scrambledUnits.join(delimiter === "space" ? " " : 
-                                         delimiter === "newline" ? "\n" : 
-                                         delimiter === "sentence" ? " " : " ")
-      
-      setScrambledText(result)
-      
-      // Add to history if different from previous
-      if (result !== scrambledText) {
-        setHistory(prev => [{ original: text, scrambled: result }, ...prev].slice(0, 10))
+
+        const scrambledUnits = units.map((unit) => {
+          if (delimiter === "space") {
+            // For word-level scrambling
+            return scrambleWord(unit, scrambleMethod, options)
+          } else {
+            // For multi-word units (lines, sentences, etc)
+            const words = unit.split(" ")
+            return words.map((word) => scrambleWord(word, scrambleMethod, options)).join(" ")
+          }
+        })
+
+        const result = scrambledUnits.join(
+          delimiter === "space" ? " " : delimiter === "newline" ? "\n" : delimiter === "sentence" ? " " : " ",
+        )
+
+        setScrambledText(result)
+
+        // Add to history if different from previous
+        if (result !== scrambledText) {
+          const newHistoryItem = {
+            original: text,
+            scrambled: result,
+            timestamp: Date.now(),
+            method: scrambleMethod,
+          }
+
+          setHistory((prev) => {
+            // If we're not at the end of history, truncate
+            const relevantHistory = historyIndex < prev.length - 1 ? prev.slice(0, historyIndex + 1) : prev
+
+            // Add new item and limit history length
+            const newHistory = [...relevantHistory, newHistoryItem].slice(-MAX_HISTORY)
+            setHistoryIndex(newHistory.length - 1)
+            return newHistory
+          })
+        }
+
+        toast.success("Text scrambled successfully!")
+      } catch (error) {
+        console.error("Scrambling error:", error)
+        toast.error("Something went wrong while scrambling")
+      } finally {
+        setIsProcessing(false)
       }
-      
-      toast.success("Text scrambled successfully!")
-    } catch (error) {
-      console.error("Scrambling error:", error)
-      toast.error("Something went wrong while scrambling")
-    }
-  }, [text, scrambleMethod, delimiter, preserveEnds, preserveCommonWords, 
-      preserveCapitalization, intensity, minWordLength, scrambledText])
+    }, 0)
+  }, [
+    text,
+    scrambleMethod,
+    delimiter,
+    preserveEnds,
+    preserveCommonWords,
+    preserveCapitalization,
+    intensity,
+    minWordLength,
+    scrambledText,
+    historyIndex,
+  ])
 
   const handleCopy = useCallback(() => {
     if (!scrambledText) {
@@ -239,14 +351,40 @@ export default function WordScrambler() {
     setScrambledText("")
     toast.success("Text cleared")
   }, [])
-  
-  const loadFromHistory = useCallback((index: number) => {
-    if (history[index]) {
-      setText(history[index].original)
-      setScrambledText(history[index].scrambled)
-      toast.success("Loaded from history")
+
+  const loadFromHistory = useCallback(
+    (index: number) => {
+      if (history[index]) {
+        setText(history[index].original)
+        setScrambledText(history[index].scrambled)
+        setScrambleMethod(history[index].method)
+        setHistoryIndex(index)
+        toast.success("Loaded from history")
+      }
+    },
+    [history],
+  )
+
+  // History navigation
+  const handleUndo = useCallback(() => {
+    if (historyIndex > 0) {
+      const newIndex = historyIndex - 1
+      loadFromHistory(newIndex)
+      toast.success("Undone to previous state")
+    } else {
+      toast.error("No more history to undo")
     }
-  }, [history])
+  }, [historyIndex, loadFromHistory])
+
+  const handleRedo = useCallback(() => {
+    if (historyIndex < history.length - 1) {
+      const newIndex = historyIndex + 1
+      loadFromHistory(newIndex)
+      toast.success("Redone to next state")
+    } else {
+      toast.error("No more history to redo")
+    }
+  }, [history.length, historyIndex, loadFromHistory])
 
   // Random text examples
   const examples = [
@@ -254,70 +392,139 @@ export default function WordScrambler() {
     "According to research at Cambridge University, it doesn't matter in what order the letters in a word are, the only important thing is that the first and last letter be at the right place.",
     "This sentence demonstrates how scrambled text can still be readable when first and last letters are preserved.",
   ]
-  
+
   const loadExample = useCallback((index: number) => {
     setText(examples[index])
-    setActiveTab("main")
   }, [])
+
+  const formatTimestamp = (timestamp: number) => {
+    const date = new Date(timestamp)
+    return date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })
+  }
+
+  const getMethodName = (method: ScrambleMethod) => {
+    switch (method) {
+      case SCRAMBLE_METHODS.RANDOM:
+        return "Random Shuffle"
+      case SCRAMBLE_METHODS.REVERSE:
+        return "Reverse Letters"
+      case SCRAMBLE_METHODS.SORTED:
+        return "Alphabetical Sort"
+      case SCRAMBLE_METHODS.VOWEL_SWAP:
+        return "Vowel Swap"
+      default:
+        return "Unknown Method"
+    }
+  }
+
+  const getMethodColor = (method: ScrambleMethod) => {
+    switch (method) {
+      case SCRAMBLE_METHODS.RANDOM:
+        return "primary"
+      case SCRAMBLE_METHODS.REVERSE:
+        return "secondary"
+      case SCRAMBLE_METHODS.SORTED:
+        return "success"
+      case SCRAMBLE_METHODS.VOWEL_SWAP:
+        return "warning"
+      default:
+        return "default"
+    }
+  }
 
   return (
     <ToolLayout
       title="Word Scrambler"
       description="Shuffle the letters in your text with multiple algorithms and customization options"
-      toolId="678f382926f06f912191bc89"
+      toolId="word-scrambler"
     >
       <div className="flex flex-col gap-6">
-        <Tabs 
-          selectedKey={activeTab} 
-          onSelectionChange={(key) => setActiveTab(key as string)}
-          color="primary"
-          variant="bordered"
-          classNames={{
-            tabList: "bg-default-200 p-0 rounded-lg",
-            cursor: "bg-primary/40",
-            tab: "py-3",
-          }}
-        >
-          <Tab 
-            key="main" 
-            title={
+        {/* Main Tool Card */}
+        <Card className="bg-default-50 dark:bg-default-100">
+          <CardBody className="p-0 overflow-hidden">
+            {/* Header with tool title and actions */}
+            <div className="bg-default-50 dark:bg-default-100 p-4 flex justify-between items-center border-b border-default-300/50 dark:border-default-900/30">
+              
               <div className="flex items-center gap-2">
-                <Type size={18} />
-                <span>Text</span>
+                <Tooltip content="Undo" placement="top" className="text-default-700">
+                  <Button
+                    isIconOnly
+                    size="sm"
+                    variant="light"
+                    onPress={handleUndo}
+                    isDisabled={historyIndex <= 0 || history.length === 0}
+                  >
+                    <Undo2 size={18} />
+                  </Button>
+                </Tooltip>
+                <Tooltip content="Redo" placement="top" className="text-default-700">
+                  <Button
+                    isIconOnly
+                    size="sm"
+                    variant="light"
+                    onPress={handleRedo}
+                    isDisabled={historyIndex >= history.length - 1 || history.length === 0}
+                  >
+                    <Redo2 size={18} />
+                  </Button>
+                </Tooltip>
+                <Dropdown>
+                  <DropdownTrigger>
+                    <Button isIconOnly size="sm" variant="light">
+                      <MoreVertical size={18} />
+                    </Button>
+                  </DropdownTrigger>
+                  <DropdownMenu aria-label="Actions">
+                    <DropdownItem
+                      key="clear"
+                      startContent={<Trash2 size={16} />}
+                      onPress={handleClear}
+                      isDisabled={!text && !scrambledText}
+                      className="text-danger"
+                    >
+                      Clear All
+                    </DropdownItem>
+                    <DropdownItem
+                      key="example"
+                      startContent={<BookIcon size={16} />}
+                      onPress={() => loadExample(Math.floor(Math.random() * examples.length))}
+                      className="text-default-700"
+                    >
+                      Load Example
+                    </DropdownItem>
+                    <DropdownItem
+                      key="toggle-options"
+                      startContent={<Settings size={16} />}
+                      onPress={() => setShowOptions(!showOptions)}
+                      className="text-default-700"
+                    >
+                      {showOptions ? "Hide Options" : "Show Options"}
+                    </DropdownItem>
+                    <DropdownItem
+                      key="toggle-history"
+                      startContent={<History size={16} />}
+                      onPress={() => setShowHistory(!showHistory)}
+                      className="text-default-700"
+                    >
+                      {showHistory ? "Hide History" : "Show History"}
+                    </DropdownItem>
+                  </DropdownMenu>
+                </Dropdown>
               </div>
-            }
-          >
-            <Card className="bg-default-50 dark:bg-default-100">
-              <CardBody className="p-6">
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                  {/* Input Section */}
-                  <div className="flex flex-col gap-3">
-                    <div className="flex justify-between items-center">
-                      <h3 className="text-md font-medium">Input Text</h3>
-                      <div className="flex gap-2">
-                        <Tooltip content="Load an example" className="text-default-700">
-                          <Button 
-                            isIconOnly 
-                            variant="light" 
-                            size="sm"
-                            onPress={() => loadExample(Math.floor(Math.random() * examples.length))}
-                          >
-                            <BookIcon size={18} />
-                          </Button>
-                        </Tooltip>
-                        <Tooltip content="Clear text" className="text-default-700">
-                          <Button 
-                            isIconOnly 
-                            variant="light" 
-                            size="sm"
-                            color="danger"
-                            onPress={handleClear}
-                          >
-                            <RefreshCw size={18} />
-                          </Button>
-                        </Tooltip>
-                      </div>
+            </div>
+
+            {/* Main content area */}
+            <div className="p-6">
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                {/* Input Section */}
+                <div className="flex flex-col gap-3">
+                  <div className="flex items-center gap-2 mb-1">
+                    <div className="bg-success-100 dark:bg-success-900/30 p-1.5 rounded-md">
+                      <Type size={16} className="text-primary-600 dark:text-primary-600" />
                     </div>
+                    <h3 className="text-md font-semibold text-primary-600 dark:text-primary-400">Input Text</h3>
+                  </div>
+                  <div className="relative">
                     <Textarea
                       value={text}
                       onValueChange={setText}
@@ -326,412 +533,382 @@ export default function WordScrambler() {
                       className="w-full"
                       variant="bordered"
                       maxLength={MAX_CHARS}
+                      isDisabled={isProcessing}
                     />
-                    <p className="text-xs text-default-500">
-                      {text.length}/{MAX_CHARS} characters
-                    </p>
+                    <div className="absolute bottom-2 right-2 text-xs text-default-400">
+                      {text.length}/{MAX_CHARS}
+                    </div>
                   </div>
-                  
-                  {/* Output Section */}
-                  <div className="flex flex-col gap-3">
-                    <div className="flex justify-between items-center">
-                      <h3 className="text-md font-medium">Scrambled Text</h3>
-                      <div className="flex gap-2">
-                        <Tooltip content="Copy to clipboard" className="text-default-700">
-                          <Button 
-                            isIconOnly 
-                            variant="light" 
-                            size="sm"
-                            isDisabled={!scrambledText}
-                            onPress={handleCopy}
-                          >
-                            <Copy size={18} />
-                          </Button>
-                        </Tooltip>
-                        <Tooltip content="Download as text file" className="text-default-700">
-                          <Button 
-                            isIconOnly 
-                            variant="light" 
-                            size="sm"
-                            isDisabled={!scrambledText}
-                            onPress={handleDownload}
-                          >
-                            <Download size={18} />
-                          </Button>
-                        </Tooltip>
+
+                  <div className="flex flex-col sm:flex-row justify-between items-center mt-1 gap-3 sm:gap-0">
+                    <div className="flex gap-2 w-full sm:w-auto justify-center sm:justify-start">
+                      <Button
+                        size="sm"
+                        color="danger"
+                        variant="flat"
+                        onPress={handleClear}
+                        isDisabled={!text}
+                        startContent={<RotateCcw size={14} />}
+                        className="flex-1 sm:flex-initial"
+                      >
+                        Clear
+                      </Button>
+                      <Button
+                        size="sm"
+                        color="secondary"
+                        variant="flat"
+                        onPress={() => loadExample(Math.floor(Math.random() * examples.length))}
+                        startContent={<BookIcon size={14} />}
+                        className="flex-1 sm:flex-initial"
+                      >
+                        Example
+                      </Button>
+                    </div>
+                    <Button
+                      size="sm"
+                      color="primary"
+                      onPress={handleScramble}
+                      isDisabled={isProcessing || !text.trim()}
+                      startContent={
+                        isProcessing ? <Loader2 className="animate-spin" size={14} /> : <Shuffle size={14} />
+                      }
+                      className="w-full sm:w-auto mt-2 sm:mt-0"
+                    >
+                      {isProcessing ? "Processing..." : "Scramble"}
+                    </Button>
+                  </div>
+                </div>
+
+                {/* Output Section */}
+                <div className="flex flex-col gap-3">
+                  <div className="flex items-center gap-2 mb-1">
+                    <div className="bg-success-100 dark:bg-success-900/30 p-1.5 rounded-md">
+                      <Zap size={16} className="text-success-600 dark:text-success-400" />
+                    </div>
+                    <h3 className="text-md font-semibold text-success-600 dark:text-success-400">Scrambled Result</h3>
+                  </div>
+                  <Textarea
+                    value={scrambledText}
+                    isReadOnly
+                    placeholder="Scrambled text will appear here..."
+                    minRows={10}
+                    className="w-full"
+                    variant="bordered"
+                  />
+
+                  <div className="flex flex-col sm:flex-row justify-between items-center mt-1 gap-3 sm:gap-0">
+                    <div className="flex gap-2 w-full sm:w-auto justify-center sm:justify-start">
+                      <Button
+                        size="sm"
+                        color="primary"
+                        onPress={handleCopy}
+                        isDisabled={!scrambledText}
+                        startContent={<Copy size={14} />}
+                        className="flex-1 sm:flex-initial"
+                      >
+                        Copy
+                      </Button>
+                      <Button
+                        size="sm"
+                        color="primary"
+                        variant="flat"
+                        onPress={handleDownload}
+                        isDisabled={!scrambledText}
+                        startContent={<Download size={14} />}
+                        className="flex-1 sm:flex-initial"
+                      >
+                        Download
+                      </Button>
+                    </div>
+                    <Button
+                      size="sm"
+                      color="secondary"
+                      variant="flat"
+                      onPress={() => {
+                        setText(scrambledText)
+                        toast.success("Scrambled text applied to input")
+                      }}
+                      isDisabled={!scrambledText}
+                      startContent={<ArrowLeftRight size={14} />}
+                      className="w-full sm:w-auto mt-2 sm:mt-0"
+                    >
+                      Apply to Input
+                    </Button>
+                  </div>
+                </div>
+              </div>
+
+              {/* Quick Options Bar */}
+              <div className="mt-6 flex flex-wrap items-center gap-3 p-3 bg-default-200/80 dark:bg-default-300/20 rounded-xl shadow-md">
+                <div className="flex items-center gap-2">
+                  <div className="bg-default-50 dark:bg-default-100 p-1.5 rounded-md ">
+                    <Wand2 size={16} className="text-primary-600 dark:text-primary-400" />
+                  </div>
+                  <span className="text-sm font-medium">Quick Options:</span>
+                </div>
+
+                <Select
+                  selectedKeys={[scrambleMethod]}
+                  onChange={(e) => setScrambleMethod(e.target.value as ScrambleMethod)}
+                  className="w-40 min-w-0"
+                  size="sm"
+                  variant="flat"
+                  aria-label="Scramble Method"
+                  classNames={{
+                    trigger: "bg-white dark:bg-gray-800 shadow-sm",
+                  }}
+                >
+                  <SelectItem key={SCRAMBLE_METHODS.RANDOM} value={SCRAMBLE_METHODS.RANDOM} className="text-default-700">
+                    Random Shuffle
+                  </SelectItem>
+                  <SelectItem key={SCRAMBLE_METHODS.REVERSE} value={SCRAMBLE_METHODS.REVERSE} className="text-default-700">
+                    Reverse Letters
+                  </SelectItem>
+                  <SelectItem key={SCRAMBLE_METHODS.SORTED} value={SCRAMBLE_METHODS.SORTED} className="text-default-700">
+                    Alphabetical Sort
+                  </SelectItem>
+                  <SelectItem key={SCRAMBLE_METHODS.VOWEL_SWAP} value={SCRAMBLE_METHODS.VOWEL_SWAP} className="text-default-700">
+                    Vowel Swap
+                  </SelectItem>
+                </Select>
+
+                <Select
+                  selectedKeys={[delimiter]}
+                  onChange={(e) => setDelimiter(e.target.value as DelimiterType)}
+                  className="w-40 min-w-0"
+                  size="sm"
+                  variant="flat"
+                  aria-label="Scramble Unit"
+                  classNames={{
+                    trigger: "bg-white dark:bg-gray-800 shadow-sm",
+                  }}
+                >
+                  <SelectItem key="space" value="space" className="text-default-700">
+                    Words
+                  </SelectItem>
+                  <SelectItem key="newline" value="newline" className="text-default-700">
+                    Lines
+                  </SelectItem>
+                  <SelectItem key="sentence" value="sentence" className="text-default-700">
+                    Sentences
+                  </SelectItem>
+                </Select>
+
+                <Checkbox isSelected={preserveEnds} onValueChange={setPreserveEnds} size="sm" color="secondary">
+                  <span className="text-sm">Preserve First/Last</span>
+                </Checkbox>
+
+                <Button
+                  size="sm"
+                  variant="flat"
+                  color="secondary"
+                  endContent={<ChevronDown size={14} />}
+                  onPress={() => setShowOptions(!showOptions)}
+                >
+                  {showOptions ? "Hide Advanced" : "Show Advanced"}
+                </Button>
+              </div>
+
+              {/* Advanced Options Panel (collapsible) */}
+              {showOptions && (
+                <div className="mt-4 p-4 bg-default-50 dark:bg-default-100 rounded-xl border border-default-200/50 dark:border-default-800/30 shadow-md">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                      <h3 className="text-md font-medium mb-3 flex items-center gap-2">
+                        <Settings size={16} className="text-primary-500" />
+                        <span>Scrambling Settings</span>
+                      </h3>
+
+                      <div className="space-y-8">
+                        <div>
+                          <p className="text-sm mb-2 flex items-center justify-between">
+                            <span>Scramble Intensity: {intensity.toFixed(2)}</span>
+                            <span className="text-xs text-default-400">
+                              {intensity < 0.3 ? "Low" : intensity < 0.7 ? "Medium" : "High"}
+                            </span>
+                          </p>
+                          <Slider
+                            step={0.01}
+                            maxValue={1}
+                            minValue={0}
+                            value={intensity}
+                            onChange={(value) => setIntensity(Number(value))}
+                            className="max-w-md"
+                            color="secondary"
+                            showSteps={false}
+                            marks={[
+                              { value: 0, label: "Low" },
+                              { value: 0.5, label: "Medium" },
+                              { value: 1, label: "High" },
+                            ]}
+                          />
+                        </div>
+
+                        <Input
+                          type="number"
+                          label="Minimum Word Length"
+                          value={minWordLength.toString()}
+                          onChange={(e) => setMinWordLength(Number(e.target.value))}
+                          min={0}
+                          max={20}
+                          className="max-w-xs"
+                          variant="bordered"
+                          size="sm"
+                          description="Words shorter than this will not be scrambled"
+                        />
                       </div>
                     </div>
-                    <Textarea
-                      value={scrambledText}
-                      readOnly
-                      placeholder="Scrambled text will appear here..."
-                      minRows={10}
-                      className="w-full"
-                      variant="bordered"
-                    />
-                    
-                  </div>
-                </div>
-              </CardBody>
-            </Card>
-          </Tab>
-          
-          <Tab 
-            key="settings" 
-            title={
-              <div className="flex items-center gap-2">
-                <Settings size={18} />
-                <span>Options</span>
-              </div>
-            }
-          >
-            <Card className="bg-default-50 dark:bg-default-100">
-              <CardBody className="p-6">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
-                  <div className="space-y-4">
-                    <h3 className="text-lg font-medium">Scrambling Method</h3>
-                    
-                    <Select
-                      label="Algorithm"
-                      selectedKeys={[scrambleMethod]}
-                      onChange={(e) => setScrambleMethod(e.target.value as ScrambleMethod)}
-                      className="max-w-xs"
-                      variant="bordered"
-                    >
-                      <SelectItem key={SCRAMBLE_METHODS.RANDOM} value={SCRAMBLE_METHODS.RANDOM} className="text-default-700">
-                        Random Shuffle
-                      </SelectItem>
-                      <SelectItem key={SCRAMBLE_METHODS.REVERSE} value={SCRAMBLE_METHODS.REVERSE} className="text-default-700">
-                        Reverse Letters
-                      </SelectItem>
-                      <SelectItem key={SCRAMBLE_METHODS.SORTED} value={SCRAMBLE_METHODS.SORTED} className="text-default-700">
-                        Alphabetical Sort
-                      </SelectItem>
-                      <SelectItem key={SCRAMBLE_METHODS.VOWEL_SWAP} value={SCRAMBLE_METHODS.VOWEL_SWAP} className="text-default-700">
-                        Vowel Swap
-                      </SelectItem>
-                    </Select>
-                    
-                    <Select
-                      label="Scramble Unit"
-                      selectedKeys={[delimiter]}
-                      onChange={(e) => setDelimiter(e.target.value as DelimiterType)}
-                      className="max-w-xs"
-                      variant="bordered"
-                    >
-                      <SelectItem key="space" value="space" className="text-default-700">Words (Space Separated)</SelectItem>
-                      <SelectItem key="newline" value="newline" className="text-default-700">Lines</SelectItem>
-                      <SelectItem key="sentence" value="sentence" className="text-default-700">Sentences</SelectItem>
-                    </Select>
-                    
+
                     <div>
-                      <p className="text-sm mb-2">Scramble Intensity: {intensity.toFixed(2)}</p>
-                      <Slider
-                        step={0.01}
-                        maxValue={1}
-                        minValue={0}
-                        value={intensity}
-                        onChange={(value) => setIntensity(Number(value))}
-                        className="max-w-md"
-                        showSteps={true}
-                        marks={[
-                          { value: 0, label: "Low" },
-                          { value: 0.5, label: "Medium" },
-                          { value: 1, label: "High" }
-                        ]}
-                      />
-                    </div>
-                  </div>
-                  
-                  <div className="space-y-4">
-                    <h3 className="text-lg font-medium">Word Options</h3>
-                    
-                    <Input
-                      type="number"
-                      label="Minimum Word Length to Scramble"
-                      value={minWordLength.toString()}
-                      onChange={(e) => setMinWordLength(Number(e.target.value))}
-                      min={0}
-                      max={20}
-                      className="max-w-xs"
-                    />
-                    
-                    <div className="space-y-2">
-                      <Checkbox 
-                        isSelected={preserveEnds} 
-                        onValueChange={setPreserveEnds}
-                      >
-                        Preserve first and last letter
-                      </Checkbox>
-                      
-                      <Checkbox 
-                        isSelected={preserveCommonWords} 
-                        onValueChange={setPreserveCommonWords}
-                      >
-                        Don't scramble common words (the, and, for, etc.)
-                      </Checkbox>
-                      
-                      <Checkbox 
-                        isSelected={preserveCapitalization} 
-                        onValueChange={setPreserveCapitalization}
-                      >
-                        Preserve capitalization
-                      </Checkbox>
+                      <h3 className="text-md font-medium mb-3 flex items-center gap-2">
+                        <Lightbulb size={16} className="text-success-500" />
+                        <span>Preservation Options</span>
+                      </h3>
+
+                      <div className="space-y-3">
+                        <Checkbox isSelected={preserveEnds} onValueChange={setPreserveEnds} color="primary">
+                          Preserve first and last letter
+                          <p className="text-xs text-default-500 ml-6">
+                            Keeps the first and last letters of each word intact
+                          </p>
+                        </Checkbox>
+
+                        <Checkbox
+                          isSelected={preserveCommonWords}
+                          onValueChange={setPreserveCommonWords}
+                          color="primary"
+                        >
+                          Don't scramble common words
+                          <p className="text-xs text-default-500 ml-6">
+                            Keeps words like "the", "and", "for", etc. unchanged
+                          </p>
+                        </Checkbox>
+
+                        <Checkbox
+                          isSelected={preserveCapitalization}
+                          onValueChange={setPreserveCapitalization}
+                          color="primary"
+                        >
+                          Preserve capitalization
+                          <p className="text-xs text-default-500 ml-6">Maintains the original capitalization pattern</p>
+                        </Checkbox>
+                      </div>
                     </div>
                   </div>
                 </div>
-              </CardBody>
-            </Card>
-          </Tab>
-          
-          <Tab 
-            key="history" 
-            title={
-              <div className="flex items-center gap-2">
-                <History size={18} />
-                <span>History</span>
-              </div>
-            }
-          >
-            <Card className="bg-default-50 dark:bg-default-100">
-              <CardBody className="p-6">
-                {history.length > 0 ? (
-                  <div className="space-y-4">
-                    {history.map((item, index) => (
-                      <Card key={index} className="bg-content1 shadow-none">
-                        <CardBody className="p-4">
-                          <div className="flex justify-between items-start gap-4">
-                            <div className="flex-1">
-                              <h4 className="text-sm font-medium mb-1">Original</h4>
-                              <p className="text-sm text-default-600 line-clamp-1">{item.original}</p>
-                              <h4 className="text-sm font-medium mt-3 mb-1">Scrambled</h4>
-                              <p className="text-sm text-default-600 line-clamp-1">{item.scrambled}</p>
+              )}
+
+              {/* History Panel (collapsible) */}
+              {showHistory && (
+                <div className="mt-4 p-4 bg-default-50 dark:bg-default-100 rounded-xl border border-default-200/50 dark:border-default-800/30 shadow-sm">
+                  <div className="flex items-center justify-between mb-3">
+                    <h3 className="text-md font-medium flex items-center gap-2">
+                      <History size={16} className="text-primary-500" />
+                      <span>Scrambling History</span>
+                    </h3>
+                    {history.length > 0 && (
+                      <Button
+                        size="sm"
+                        variant="flat"
+                        color="danger"
+                        onPress={() => {
+                          setHistory([])
+                          setHistoryIndex(-1)
+                          localStorage.removeItem("wordScramblerHistory")
+                          toast.success("History cleared")
+                        }}
+                        startContent={<Trash2 size={14} />}
+                      >
+                        Clear History
+                      </Button>
+                    )}
+                  </div>
+
+                  {history.length > 0 ? (
+                    <div className="space-y-3 max-h-60 overflow-y-auto pr-1">
+                      {history.map((item, index) => (
+                        <Card
+                          key={index}
+                          className={`${
+                            index === historyIndex
+                              ? "bg-primary-100/50 dark:bg-primary-900/20 border-2 border-primary-300 dark:border-primary-700"
+                              : "bg-default-50 dark:bg-default-100"
+                          } shadow-sm`}
+                          isPressable
+                          onPress={() => loadFromHistory(index)}
+                        >
+                          <CardBody className="p-3">
+                            <div className="flex justify-between items-start gap-2">
+                              <div className="flex-1">
+                                <div className="flex items-center gap-2 mb-2">
+                                  <Chip
+                                    size="sm"
+                                    color={getMethodColor(item.method) as "primary" | "secondary" | "success" | "warning" | "default"}
+                                    variant="flat"
+                                    className="text-xs"
+                                  >
+                                    {getMethodName(item.method)}
+                                  </Chip>
+                                  <span className="text-xs text-default-400">{formatTimestamp(item.timestamp)}</span>
+                                </div>
+                                <div className="grid grid-cols-2 gap-2">
+                                  <div>
+                                    <p className="text-xs text-default-500 mb-1">Original:</p>
+                                    <p className="text-xs text-default-700 line-clamp-1 font-mono bg-white/50 dark:bg-gray-800/50 p-1 rounded">
+                                      {item.original}
+                                    </p>
+                                  </div>
+                                  <div>
+                                    <p className="text-xs text-default-500 mb-1">Scrambled:</p>
+                                    <p className="text-xs text-default-700 line-clamp-1 font-mono bg-white/50 dark:bg-gray-800/50 p-1 rounded">
+                                      {item.scrambled}
+                                    </p>
+                                  </div>
+                                </div>
+                              </div>
+                              <Button
+                                size="sm"
+                                color="primary"
+                                variant="flat"
+                                isIconOnly
+                                onPress={() => loadFromHistory(index)}
+                              >
+                                <ArrowLeftRight size={14} />
+                              </Button>
                             </div>
-                            <Button 
-                              size="sm" 
-                              variant="flat" 
-                              color="primary"
-                              onPress={() => loadFromHistory(index)}
-                            >
-                              Load
-                            </Button>
-                          </div>
-                        </CardBody>
-                      </Card>
-                    ))}
-                  </div>
-                ) : (
-                  <div className="text-center py-8">
-                    <History size={24} className="mx-auto mb-2 text-default-400" />
-                    <p className="text-default-500">No history yet. Scramble some text to see it here.</p>
-                  </div>
-                )}
-              </CardBody>
-            </Card>
-          </Tab>
-        </Tabs>
-        
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-          <Button 
-            color="primary" 
-            variant="flat"
-            fullWidth
-            onPress={handleScramble}
-            startContent={<WrapText size={18} />}
-          >
-            Scramble
-          </Button>
-          <Button 
-            color="success" 
-            variant="flat"
-            fullWidth
-            isDisabled={!scrambledText}
-            onPress={handleCopy}
-            startContent={<Copy size={18} />}
-          >
-            Copy
-          </Button>
-          <Button 
-            color="primary" 
-            variant="flat"
-            fullWidth
-            isDisabled={!scrambledText}
-            onPress={handleDownload}
-            startContent={<Download size={18} />}
-          >
-            Download
-          </Button>
-          <Button 
-            color="danger" 
-            variant="flat"
-            fullWidth
-            isDisabled={!text && !scrambledText}
-            onPress={handleClear}
-            startContent={<RefreshCw size={18} />}
-          >
-            Clear
-          </Button>
-        </div>
+                          </CardBody>
+                        </Card>
+                      ))}
+                    </div>
+                  ) : (
+                    <div className="text-center py-8 text-default-500 bg-default-50 dark:bg-default-100 rounded-lg">
+                      <History size={32} className="mx-auto mb-2 opacity-50" />
+                      <p>No history yet</p>
+                      <p className="text-sm mt-2">Scramble some text to see your history here</p>
+                    </div>
+                  )}
+                </div>
+              )}
 
-        <Card className=" bg-default-50 dark:bg-default-100 p-4 md:p-8">
-      <div className="rounded-xl p-2 md:p-4 max-w-4xl mx-auto">
-        <h2 className="text-lg md:text-xl lg:text-2xl font-semibold text-default-700 mb-4 flex items-center">
-          <Info className="w-6 h-6 mr-2" />
-          What is the Word Scrambler?
-        </h2>
-        <p className="text-sm md:text-base text-default-600 mb-4">
-          The Word Scrambler is a versatile text transformation tool that shuffles letters within words or larger text
-          units using various algorithms. It allows you to create readable yet scrambled text by preserving key elements
-          like first and last letters while rearranging the letters in between.
-        </p>
-        <p className="text-sm md:text-base text-default-600 mb-4">
-          This tool is perfect for creating puzzles, demonstrating reading comprehension phenomena, testing cognitive
-          abilities, or simply having fun with text transformation. With multiple algorithms and customization options,
-          you can control exactly how your text gets scrambled.
-        </p>
+              {/* Processing indicator */}
+              {isProcessing && (
+                <div className="mt-4">
+                  <Progress
+                    size="sm"
+                    isIndeterminate
+                    color="primary"
+                    className="max-w-md mx-auto"
+                    aria-label="Processing..."
+                  />
+                </div>
+              )}
+            </div>
+          </CardBody>
+        </Card>
 
-        <div className="my-8">
-          <Image
-            src="/Images/InfosectionImages/WordScramblerPreview1.png?height=400&width=600"
-            alt="Screenshot of the Word Scrambler tool showing the interface with input text and scrambled output"
-            width={600}
-            height={400}
-            className="rounded-lg shadow-lg w-full h-auto"
-          />
-        </div>
-        <div className="my-8">
-          <Image
-            src="/Images/InfosectionImages/WordScramblerPreview2.png?height=400&width=600"
-            alt="Screenshot of the Word Scrambler tool showing the interface with input text and scrambled output"
-            width={600}
-            height={400}
-            className="rounded-lg shadow-lg w-full h-auto"
-          />
-        </div>
-
-        <h2
-          id="how-to-use"
-          className="text-lg md:text-xl lg:text-2xl font-semibold text-default-700 mb-4 mt-8 flex items-center"
-        >
-          <BookOpen className="w-6 h-6 mr-2" />
-          How to Use the Word Scrambler?
-        </h2>
-        <ol className="list-decimal list-inside space-y-2 text-sm md:text-base">
-          <li>
-            <strong>Enter your text</strong> - Type or paste text into the input area, or click the book icon to load a
-            random example.
-          </li>
-          <li>
-            <strong>Configure scrambling options</strong> - Go to the Options tab to select your preferred scrambling
-            method, unit size, and other settings:
-            <ul className="list-disc list-inside ml-6 mt-1 text-sm text-default-600">
-              <li>Choose a scrambling algorithm (Random Shuffle, Reverse Letters, Alphabetical Sort, or Vowel Swap)</li>
-              <li>Select the scrambling unit (Words, Lines, or Sentences)</li>
-              <li>Adjust the scrambling intensity using the slider</li>
-              <li>Set the minimum word length to scramble</li>
-              <li>Toggle options like preserving first and last letters</li>
-            </ul>
-          </li>
-          <li>
-            <strong>Click the Scramble button</strong> - Process your text using the current settings to generate
-            scrambled output.
-          </li>
-          <li>
-            <strong>View the result</strong> - See your scrambled text in the output area on the right side.
-          </li>
-          <li>
-            <strong>Save or share your work</strong> - Use the Copy button to copy the scrambled text to your clipboard
-            or Download to save it as a text file.
-          </li>
-          <li>
-            <strong>Access your history</strong> - Switch to the History tab to view and reload previous scrambling
-            operations.
-          </li>
-        </ol>
-
-        <h2 className="text-lg md:text-xl lg:text-2xl font-semibold text-default-700 mb-4 mt-8 flex items-center">
-          <Zap className="w-6 h-6 mr-2" />
-          Key Features
-        </h2>
-        <ul className="list-disc list-inside space-y-2 text-xs md:text-sm">
-          <li>
-            <strong>Multiple Scrambling Algorithms:</strong> Choose from Random Shuffle, Reverse Letters, Alphabetical
-            Sort, or Vowel Swap to create different scrambling effects.
-          </li>
-          <li>
-            <strong>Flexible Unit Selection:</strong> Scramble at the word, line, or sentence level depending on your
-            needs.
-          </li>
-          <li>
-            <strong>Adjustable Intensity:</strong> Control how thoroughly the text is scrambled with a simple slider.
-          </li>
-          <li>
-            <strong>Preservation Options:</strong> Keep first and last letters intact to maintain readability, preserve
-            common words, and maintain original capitalization.
-          </li>
-          <li>
-            <strong>Minimum Word Length:</strong> Specify the minimum length of words to be scrambled, leaving shorter
-            words untouched.
-          </li>
-          <li>
-            <strong>History Tracking:</strong> Access your previous scrambling operations to compare different
-            approaches or recover earlier versions.
-          </li>
-          <li>
-            <strong>Example Texts:</strong> Load pre-written examples to quickly see how the scrambler works with
-            different types of content.
-          </li>
-          <li>
-            <strong>Export Options:</strong> Copy scrambled text to clipboard or download as a text file for easy
-            sharing and use in other applications.
-          </li>
-        </ul>
-
-        <h2 className="text-lg md:text-xl lg:text-2xl font-semibold text-default-700 mb-4 mt-8 flex items-center">
-          <Settings className="w-6 h-6 mr-2" />
-          Scrambling Methods Explained
-        </h2>
-        <ul className="list-disc list-inside space-y-2 text-xs md:text-sm">
-          <li>
-            <strong>Random Shuffle:</strong> Randomly rearranges the letters within each word (or unit), creating a
-            jumbled effect while optionally preserving the first and last letters.
-          </li>
-          <li>
-            <strong>Reverse Letters:</strong> Flips the order of letters within each word (or unit), turning "scramble"
-            into "elbmarcs" (or "slbmrace" if preserving ends).
-          </li>
-          <li>
-            <strong>Alphabetical Sort:</strong> Rearranges the letters in alphabetical order within each word (or unit),
-            turning "scramble" into "abcelmrs" (or "sacblmre" if preserving ends).
-          </li>
-          <li>
-            <strong>Vowel Swap:</strong> Keeps consonants in place but shuffles the positions of vowels within each word
-            (or unit), creating text that maintains some readability while still being scrambled.
-          </li>
-          <li>
-            <strong>Scramble Intensity:</strong> Controls how thoroughly the letters are shuffled. Lower intensity means
-            fewer letter positions are changed, while higher intensity creates more randomization.
-          </li>
-          <li>
-            <strong>Preserve First and Last Letters:</strong> When enabled, keeps the first and last letters of each
-            word in their original positions, which significantly improves the readability of scrambled text.
-          </li>
-          <li>
-            <strong>Common Word Preservation:</strong> When enabled, common words like "the," "and," "for," etc. are
-            left unscrambled to maintain better readability of the overall text.
-          </li>
-        </ul>
-
-        <p className="text-sm md:text-base text-default-600 mt-4">
-          Ready to transform your text in creative and interesting ways? Start using our Word Scrambler now and discover
-          how scrambled text can still be surprisingly readable or deliberately challenging. Whether you're creating
-          educational materials, conducting reading experiments, or just having fun with language, our tool gives you
-          complete control over how your text gets scrambled.
-        </p>
-      </div>
-    </Card>
+        {/* Info Section */}
+        <InfoSection />
       </div>
     </ToolLayout>
   )
 }
-

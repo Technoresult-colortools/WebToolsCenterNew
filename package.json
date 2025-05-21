@@ -26,6 +26,7 @@
     "crypto-js": "^4.2.0",
     "d3-geo": "^3.1.1",
     "date-fns": "^4.1.0",
+    "diff-match-patch": "^1.0.5",
     "dompurify": "^3.2.3",
     "formidable": "^3.5.2",
     "framer-motion": "^11.16.4",
@@ -72,6 +73,7 @@
   "devDependencies": {
     "@eslint/eslintrc": "^3",
     "@types/crypto-js": "^4.2.2",
+    "@types/diff-match-patch": "^1.0.36",
     "@types/dompurify": "^3.0.5",
     "@types/html2canvas": "^0.5.35",
     "@types/jsrsasign": "^10.5.15",

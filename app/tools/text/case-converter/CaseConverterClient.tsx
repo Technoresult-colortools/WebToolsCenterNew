@@ -1,206 +1,378 @@
-'use client';
+"use client"
 
-import React, { useState, useCallback, useEffect } from 'react';
-import { Card, CardBody, Button, Select, SelectItem, Textarea } from "@nextui-org/react";
-import { Copy, Download, Info, Lightbulb, BookOpen, RefreshCw, Undo2, Space, Slice, RefreshCcw, Type, Trash2, AlignJustify, SplitSquareHorizontal, Scissors, ZapIcon, Calculator, Clock, Globe } from 'lucide-react';
-import { toast } from 'react-hot-toast';
-import ToolLayout from '@/components/ToolLayout';
-import Image from 'next/image';
-import Link from 'next/link';
+import type React from "react"
 
-const MAX_CHARS = 5000;
+import { useState, useCallback, useEffect } from "react"
+import {
+  Card,
+  CardBody,
+  CardHeader,
+  CardFooter,
+  Button,
+  Textarea,
+  Tabs,
+  Tab,
+  Chip,
+  Progress,
+  Switch,
+  Select,
+  SelectItem,
+  Divider,
+  Tooltip,
+  Badge,
+} from "@nextui-org/react"
+import {
+  Copy,
+  Download,
+  FileText,
+  Trash2,
+  Settings2,
+  Braces,
+  ArrowRightLeft,
+  Type,
+  Hash,
+  Undo2,
+  Space,
+  Slice,
+  SplitSquareHorizontal,
+  RefreshCw,
+  Globe,
+  AlignJustify,
+  Keyboard,
+  Zap,
+  Calculator,
+  Clock,
+  Scissors,
+  Baseline,
+  Heading1,
+  Heading2,
+  CaseSensitive,
+  CaseLowerIcon,
+  CaseUpperIcon,
+  Indent,
+  Minus,
+  Maximize2,
+  Minimize2,
+  RotateCcw,
+  Wand2,
+  Layers,
+  Check,
+  History,
+} from "lucide-react"
+import { toast } from "react-hot-toast"
+import ToolLayout from "@/components/ToolLayout"
+import InfoSection from "./InfoSection"
 
-const languageRules: Record<string, {
-  titleCase: (word: string) => string;
-  excludedWords: Set<string>;
-  name: string;
-}> = {
+const MAX_CHARS = 10000 // Increased character limit
+
+// Language rules for case conversion
+const languageRules: Record<
+  string,
+  {
+    titleCase: (word: string) => string
+    excludedWords: Set<string>
+    name: string
+  }
+> = {
   en: {
     titleCase: (word: string) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase(),
-    excludedWords: new Set(['a', 'an', 'the', 'and', 'but', 'or', 'for', 'nor', 'on', 'at', 'to', 'from', 'by', 'with', 'in', 'of']),
-    name: "English"
+    excludedWords: new Set([
+      "a",
+      "an",
+      "the",
+      "and",
+      "but",
+      "or",
+      "for",
+      "nor",
+      "on",
+      "at",
+      "to",
+      "from",
+      "by",
+      "with",
+      "in",
+      "of",
+    ]),
+    name: "English",
   },
   es: {
     titleCase: (word: string) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase(),
-    excludedWords: new Set(['el', 'la', 'los', 'las', 'un', 'una', 'unos', 'unas', 'y', 'o', 'para', 'por', 'en', 'de', 'a', 'con']),
-    name: "Spanish"
+    excludedWords: new Set([
+      "el",
+      "la",
+      "los",
+      "las",
+      "un",
+      "una",
+      "unos",
+      "unas",
+      "y",
+      "o",
+      "para",
+      "por",
+      "en",
+      "de",
+      "a",
+      "con",
+    ]),
+    name: "Spanish",
   },
   fr: {
     titleCase: (word: string) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase(),
-    excludedWords: new Set(['le', 'la', 'les', 'un', 'une', 'des', 'et', 'ou', 'pour', 'par', 'en', 'de', 'à', 'avec']),
-    name: "French"
+    excludedWords: new Set(["le", "la", "les", "un", "une", "des", "et", "ou", "pour", "par", "en", "de", "à", "avec"]),
+    name: "French",
   },
   de: {
     // German capitalizes all nouns, but we can't reliably detect nouns without NLP
     // So we just capitalize the first letter of each word for title case
     titleCase: (word: string) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase(),
-    excludedWords: new Set(['der', 'die', 'das', 'ein', 'eine', 'und', 'oder', 'für', 'von', 'mit', 'in', 'auf', 'zu']),
-    name: "German"
+    excludedWords: new Set(["der", "die", "das", "ein", "eine", "und", "oder", "für", "von", "mit", "in", "auf", "zu"]),
+    name: "German",
   },
   it: {
     titleCase: (word: string) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase(),
-    excludedWords: new Set(['il', 'lo', 'la', 'i', 'gli', 'le', 'un', 'uno', 'una', 'e', 'o', 'per', 'di', 'a', 'da', 'in', 'con']),
-    name: "Italian"
+    excludedWords: new Set([
+      "il",
+      "lo",
+      "la",
+      "i",
+      "gli",
+      "le",
+      "un",
+      "uno",
+      "una",
+      "e",
+      "o",
+      "per",
+      "di",
+      "a",
+      "da",
+      "in",
+      "con",
+    ]),
+    name: "Italian",
   },
   pt: {
     titleCase: (word: string) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase(),
-    excludedWords: new Set(['o', 'a', 'os', 'as', 'um', 'uma', 'uns', 'umas', 'e', 'ou', 'para', 'por', 'em', 'de', 'com']),
-    name: "Portuguese"
+    excludedWords: new Set([
+      "o",
+      "a",
+      "os",
+      "as",
+      "um",
+      "uma",
+      "uns",
+      "umas",
+      "e",
+      "ou",
+      "para",
+      "por",
+      "em",
+      "de",
+      "com",
+    ]),
+    name: "Portuguese",
   },
   ru: {
     titleCase: (word: string) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase(),
-    excludedWords: new Set(['и', 'или', 'но', 'а', 'в', 'на', 'с', 'из', 'по', 'о', 'к', 'у']),
-    name: "Russian"
+    excludedWords: new Set(["и", "или", "но", "а", "в", "на", "с", "из", "по", "о", "к", "у"]),
+    name: "Russian",
   },
   zh: {
     // Chinese doesn't have case, but we keep the function for consistency
     titleCase: (word: string) => word,
     excludedWords: new Set([]),
-    name: "Chinese"
+    name: "Chinese",
   },
   ja: {
     // Japanese doesn't have case, but we keep the function for consistency
     titleCase: (word: string) => word,
     excludedWords: new Set([]),
-    name: "Japanese"
+    name: "Japanese",
   },
   ar: {
     titleCase: (word: string) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase(),
-    excludedWords: new Set(['في', 'من', 'إلى', 'على', 'و', 'أو', 'مع']),
-    name: "Arabic"
-  }
-};
+    excludedWords: new Set(["في", "من", "إلى", "على", "و", "أو", "مع"]),
+    name: "Arabic",
+  },
+}
 
 // Detect language based on characters and common words
 const detectLanguage = (text: string): string => {
-  if (!text.trim()) return 'en';
-  
+  if (!text.trim()) return "en"
+
   // Check for non-latin character sets
   const charSets = {
     zh: /[\u4E00-\u9FFF]/g, // Chinese
     ja: /[\u3040-\u309F\u30A0-\u30FF]/g, // Japanese
     ru: /[\u0400-\u04FF]/g, // Cyrillic
     ar: /[\u0600-\u06FF]/g, // Arabic
-  };
-  
-  for (const [lang, regex] of Object.entries(charSets)) {
-    if (regex.test(text)) return lang;
   }
-  
+
+  for (const [lang, regex] of Object.entries(charSets)) {
+    if (regex.test(text)) return lang
+  }
+
   // Check for common words in different languages
   const commonWords = {
-    en: ['the', 'and', 'is', 'in', 'to', 'it', 'that', 'for'],
-    es: ['el', 'la', 'los', 'y', 'es', 'en', 'que', 'por'],
-    fr: ['le', 'la', 'les', 'et', 'est', 'dans', 'que', 'pour'],
-    de: ['der', 'die', 'das', 'und', 'ist', 'in', 'zu', 'für'],
-    it: ['il', 'la', 'e', 'è', 'che', 'per', 'non', 'con'],
-    pt: ['o', 'a', 'e', 'é', 'que', 'para', 'não', 'em'],
-  };
-  
-  const words = text.toLowerCase().split(/\s+/);
-  const langScores = {} as {[key: string]: number};
-  
+    en: ["the", "and", "is", "in", "to", "it", "that", "for"],
+    es: ["el", "la", "los", "y", "es", "en", "que", "por"],
+    fr: ["le", "la", "les", "et", "est", "dans", "que", "pour"],
+    de: ["der", "die", "das", "und", "ist", "in", "zu", "für"],
+    it: ["il", "la", "e", "è", "che", "per", "non", "con"],
+    pt: ["o", "a", "e", "é", "que", "para", "não", "em"],
+  }
+
+  const words = text.toLowerCase().split(/\s+/)
+  const langScores: Record<string, number> = {}
+
   for (const [lang, wordList] of Object.entries(commonWords)) {
-    langScores[lang] = 0;
+    langScores[lang] = 0
     for (const word of words) {
       if (wordList.includes(word)) {
-        langScores[lang]++;
+        langScores[lang]++
       }
     }
   }
-  
-  const maxLang = Object.entries(langScores).reduce((max, [lang, score]) => 
-    score > max[1] ? [lang, score] : max, ['en', 0]);
-  
-  return maxLang[1] > 0 ? maxLang[0] : 'en';
-};
+
+  const maxLang = Object.entries(langScores).reduce(
+    (max, [lang, score]) => (score > max[1] ? [lang, score] : max),
+    ["en", 0],
+  )
+
+  return maxLang[1] > 0 ? maxLang[0] : "en"
+}
 
 // Language-aware case conversion
-function convertCase(text: string, caseType: string, language: string = 'en'): string {
+function convertCase(text: string, caseType: string, language = "en"): string {
   // Use language rules if available, fallback to English
-  const rules = languageRules[language as keyof typeof languageRules] || languageRules.en;
-  
+  const rules = languageRules[language as keyof typeof languageRules] || languageRules.en
+
   switch (caseType) {
-    case 'lower':
-      return text.toLowerCase();
-      
-    case 'upper':
-      return text.toUpperCase();
-      
-    case 'title':
+    case "lower":
+      return text.toLowerCase()
+
+    case "upper":
+      return text.toUpperCase()
+
+    case "title":
       // Language-aware title case
-      return text.split(' ').map((word, index, arr) => {
-        // Always capitalize first and last word
-        if (index === 0 || index === arr.length - 1) {
-          return rules.titleCase(word);
-        }
-        // For excluded words, only capitalize if they're not in the exclusion list
-        return rules.excludedWords.has(word.toLowerCase()) ? word.toLowerCase() : rules.titleCase(word);
-      }).join(' ');
-      
-    case 'sentence':
+      return text
+        .split(" ")
+        .map((word, index, arr) => {
+          // Always capitalize first and last word
+          if (index === 0 || index === arr.length - 1) {
+            return rules.titleCase(word)
+          }
+          // For excluded words, only capitalize if they're not in the exclusion list
+          return rules.excludedWords.has(word.toLowerCase()) ? word.toLowerCase() : rules.titleCase(word)
+        })
+        .join(" ")
+
+    case "sentence":
       // Language-aware sentence case
-      return text.split('. ').map(sentence => {
-        if (!sentence.trim()) return sentence;
-        return sentence.charAt(0).toUpperCase() + sentence.slice(1).toLowerCase();
-      }).join('. ');
-      
-    case 'camel':
+      return text
+        .split(". ")
+        .map((sentence) => {
+          if (!sentence.trim()) return sentence
+          return sentence.charAt(0).toUpperCase() + sentence.slice(1).toLowerCase()
+        })
+        .join(". ")
+
+    case "camel":
       // For languages without spaces like Chinese/Japanese, we can't really do camelCase
-      if (language === 'zh' || language === 'ja') {
-        toast(`CamelCase isn't applicable to ${rules.name}`);
-        return text;
+      if (language === "zh" || language === "ja") {
+        toast(`CamelCase isn't applicable to ${rules.name}`)
+        return text
       }
-      return text.replace(/(?:^\w|[A-Z]|\b\w)/g, (word, index) => 
-        index === 0 ? word.toLowerCase() : word.toUpperCase()
-      ).replace(/\s+/g, '');
-      
-    case 'pascal':
-      if (language === 'zh' || language === 'ja') {
-        toast(`PascalCase isn't applicable to ${rules.name}`);
-        return text;
+      return text
+        .replace(/(?:^\w|[A-Z]|\b\w)/g, (word, index) => (index === 0 ? word.toLowerCase() : word.toUpperCase()))
+        .replace(/\s+/g, "")
+
+    case "pascal":
+      if (language === "zh" || language === "ja") {
+        toast(`PascalCase isn't applicable to ${rules.name}`)
+        return text
       }
-      return text.replace(/(?:^\w|[A-Z]|\b\w)/g, (word) => word.toUpperCase()).replace(/\s+/g, '');
-      
-    case 'snake':
-      if (language === 'zh' || language === 'ja') {
-        toast(`snake_case isn't applicable to ${rules.name}`);
-        return text;
+      return text.replace(/(?:^\w|[A-Z]|\b\w)/g, (word) => word.toUpperCase()).replace(/\s+/g, "")
+
+    case "snake":
+      if (language === "zh" || language === "ja") {
+        toast(`snake_case isn't applicable to ${rules.name}`)
+        return text
       }
-      return text.toLowerCase().replace(/[^a-zA-Z0-9\u0400-\u04FF\u0600-\u06FF\u3040-\u309F\u30A0-\u30FF\u4E00-\u9FFF]+/g, '_');
-      
-    case 'kebab':
-      if (language === 'zh' || language === 'ja') {
-        toast(`kebab-case isn't applicable to ${rules.name}`);
-        return text;
+      return text
+        .toLowerCase()
+        .replace(/[^a-zA-Z0-9\u0400-\u04FF\u0600-\u06FF\u3040-\u309F\u30A0-\u30FF\u4E00-\u9FFF]+/g, "_")
+
+    case "kebab":
+      if (language === "zh" || language === "ja") {
+        toast(`kebab-case isn't applicable to ${rules.name}`)
+        return text
       }
-      return text.toLowerCase().replace(/[^a-zA-Z0-9\u0400-\u04FF\u0600-\u06FF\u3040-\u309F\u30A0-\u30FF\u4E00-\u9FFF]+/g, '-');
-      
-    case 'toggle':
+      return text
+        .toLowerCase()
+        .replace(/[^a-zA-Z0-9\u0400-\u04FF\u0600-\u06FF\u3040-\u309F\u30A0-\u30FF\u4E00-\u9FFF]+/g, "-")
+
+    case "toggle":
       // Toggle case should work for most alphabets
-      return text.split('').map(char => 
-        char === char.toUpperCase() ? char.toLowerCase() : char.toUpperCase()
-      ).join('');
-      
-    case 'alternate':
+      return text
+        .split("")
+        .map((char) => (char === char.toUpperCase() ? char.toLowerCase() : char.toUpperCase()))
+        .join("")
+
+    case "alternate":
       // Alternate case works for languages with spaces
-      if (language === 'zh' || language === 'ja') {
-        toast(`Alternate case isn't applicable to ${rules.name}`);
-        return text;
+      if (language === "zh" || language === "ja") {
+        toast(`Alternate case isn't applicable to ${rules.name}`)
+        return text
       }
-      return text.split(' ').map((word, index) => 
-        index % 2 === 0 ? word.toLowerCase() : word.toUpperCase()
-      ).join(' ');
-      
-    case 'dot':
-      if (language === 'zh' || language === 'ja') {
-        toast(`dot.case isn't applicable to ${rules.name}`);
-        return text;
+      return text
+        .split(" ")
+        .map((word, index) => (index % 2 === 0 ? word.toLowerCase() : word.toUpperCase()))
+        .join(" ")
+
+    case "dot":
+      if (language === "zh" || language === "ja") {
+        toast(`dot.case isn't applicable to ${rules.name}`)
+        return text
       }
-      return text.toLowerCase().replace(/[^a-zA-Z0-9\u0400-\u04FF\u0600-\u06FF\u3040-\u309F\u30A0-\u30FF\u4E00-\u9FFF]+/g, '.');
-      
+      return text
+        .toLowerCase()
+        .replace(/[^a-zA-Z0-9\u0400-\u04FF\u0600-\u06FF\u3040-\u309F\u30A0-\u30FF\u4E00-\u9FFF]+/g, ".")
+
+    case "constant":
+      if (language === "zh" || language === "ja") {
+        toast(`CONSTANT_CASE isn't applicable to ${rules.name}`)
+        return text
+      }
+      return text
+        .toUpperCase()
+        .replace(/[^a-zA-Z0-9\u0400-\u04FF\u0600-\u06FF\u3040-\u309F\u30A0-\u30FF\u4E00-\u9FFF]+/g, "_")
+
+    case "path":
+      if (language === "zh" || language === "ja") {
+        toast(`path/case isn't applicable to ${rules.name}`)
+        return text
+      }
+      return text
+        .toLowerCase()
+        .replace(/[^a-zA-Z0-9\u0400-\u04FF\u0600-\u06FF\u3040-\u309F\u30A0-\u30FF\u4E00-\u9FFF]+/g, "/")
+
+    case "sentence-no-period":
+      // Sentence case without ending period
+      return text
+        .split(". ")
+        .map((sentence) => {
+          if (!sentence.trim()) return sentence
+          return sentence.charAt(0).toUpperCase() + sentence.slice(1).toLowerCase()
+        })
+        .join(". ")
+        .replace(/\.$/, "")
+
     default:
-      return text;
+      return text
   }
 }
 
@@ -216,47 +388,50 @@ const languages = [
   { value: "zh", label: "中文" },
   { value: "ja", label: "日本語" },
   { value: "ar", label: "العربية" },
-  { value: "auto", label: "Auto Detect" }
-];
+  { value: "auto", label: "Auto Detect" },
+]
 
 // Helper function for case options based on language
 const getCaseOptions = (language: string) => {
   const commonOptions = [
-    { value: "lower", label: "lowercase" },
-    { value: "upper", label: "UPPERCASE" },
-    { value: "title", label: "Title Case" },
-    { value: "sentence", label: "Sentence case" },
-    { value: "toggle", label: "ToGgLe CaSe" },
-  ];
-  
+    { value: "lower", label: "lowercase", icon: <CaseLowerIcon className="w-4 h-4" /> },
+    { value: "upper", label: "UPPERCASE", icon: <CaseUpperIcon className="w-4 h-4" /> },
+    { value: "title", label: "Title Case", icon: <Heading1 className="w-4 h-4" /> },
+    { value: "sentence", label: "Sentence case", icon: <Heading2 className="w-4 h-4" /> },
+    { value: "toggle", label: "ToGgLe CaSe", icon: <CaseSensitive className="w-4 h-4" /> },
+  ]
+
   // For languages that don't use spaces like Chinese or Japanese,
   // we don't show options that depend on word boundaries
-  if (language === 'zh' || language === 'ja') {
-    return commonOptions;
+  if (language === "zh" || language === "ja") {
+    return commonOptions
   }
-  
+
   return [
     ...commonOptions,
-    { value: "camel", label: "camelCase" },
-    { value: "pascal", label: "PascalCase" },
-    { value: "snake", label: "snake_case" },
-    { value: "kebab", label: "kebab-case" },
-    { value: "alternate", label: "Alternate WORDS" },
-    { value: "dot", label: "dot.case" }
-  ];
-};
+    { value: "camel", label: "camelCase", icon: <Baseline className="w-4 h-4" /> },
+    { value: "pascal", label: "PascalCase", icon: <Type className="w-4 h-4" /> },
+    { value: "snake", label: "snake_case", icon: <Minus className="w-4 h-4" /> },
+    { value: "kebab", label: "kebab-case", icon: <Minus className="w-4 h-4" /> },
+    { value: "alternate", label: "Alternate WORDS", icon: <AlignJustify className="w-4 h-4" /> },
+    { value: "dot", label: "dot.case", icon: <Braces className="w-4 h-4" /> },
+    { value: "constant", label: "CONSTANT_CASE", icon: <Keyboard className="w-4 h-4" /> },
+    { value: "path", label: "path/case", icon: <Layers className="w-4 h-4" /> },
+    { value: "sentence-no-period", label: "Sentence without period", icon: <Heading2 className="w-4 h-4" /> },
+  ]
+}
 
 const countWords = (text: string, language: string): number => {
-  if (language === 'zh' || language === 'ja') {
+  if (language === "zh" || language === "ja") {
     // Estimate word count for character-based languages
-    return Math.ceil(text.length / 2);
+    return Math.ceil(text.length / 2)
   }
-  return text.trim().split(/\s+/).filter(Boolean).length;
-};
+  return text.trim().split(/\s+/).filter(Boolean).length
+}
 
-const countCharacters = (text: string, excludeSpaces: boolean = false): number => {
-  return excludeSpaces ? text.replace(/\s/g, '').length : text.length;
-};
+const countCharacters = (text: string, excludeSpaces = false): number => {
+  return excludeSpaces ? text.replace(/\s/g, "").length : text.length
+}
 
 // Update estimateReadingTime function
 const estimateReadingTime = (text: string, language: string): number => {
@@ -270,478 +445,1454 @@ const estimateReadingTime = (text: string, language: string): number => {
     ru: 160,
     zh: 140, // Character-based languages are read differently
     ja: 150,
-    ar: 155
-  };
-  
-  const wpm = wordsPerMinute[language] || 200;
-  const words = countWords(text, language);
-  return Math.ceil(words / wpm);
-};
+    ar: 155,
+  }
+
+  const wpm = wordsPerMinute[language] || 200
+  const words = countWords(text, language)
+  return Math.ceil(words / wpm)
+}
 
 const getTextStatistics = (text: string, language: string) => {
   if (!text.trim()) {
     return {
-      avgWordLength: '0',
-      sentenceCount: 0
-    };
+      avgWordLength: "0",
+      sentenceCount: 0,
+      paragraphCount: 0,
+      longestWord: "",
+      shortestWord: "",
+      uniqueWords: 0,
+    }
   }
-  
+
   // Handle different language sentence patterns
-  let sentenceSplitter = /[.!?]+/;
-  if (language === 'zh') sentenceSplitter = /[。！？]+/;
-  if (language === 'ja') sentenceSplitter = /[。！？、]+/;
-  
+  let sentenceSplitter = /[.!?]+/
+  if (language === "zh") sentenceSplitter = /[。！？]+/
+  if (language === "ja") sentenceSplitter = /[。！？、]+/
+
   // Words in character-based languages function differently
-  let words = [];
-  let avgWordLength = 0;
-  
-  if (language === 'zh' || language === 'ja') {
+  let words: string[] = []
+  let avgWordLength = 0
+  let longestWord = ""
+  let shortestWord = ""
+  let uniqueWords = 0
+
+  if (language === "zh" || language === "ja") {
     // Characters are closer to "words" in these languages
-    words = text.split('');
-    avgWordLength = 1; // Character is a unit
+    words = text.split("")
+    avgWordLength = 1 // Character is a unit
+    longestWord = ""
+    shortestWord = ""
+    uniqueWords = new Set(words).size
   } else {
-    words = text.trim().split(/\s+/).filter(Boolean);
-    avgWordLength = words.length ? words.reduce((sum, word) => sum + word.length, 0) / words.length : 0;
+    words = text.trim().split(/\s+/).filter(Boolean)
+    avgWordLength = words.length ? words.reduce((sum, word) => sum + word.length, 0) / words.length : 0
+
+    // Find longest and shortest words
+    if (words.length) {
+      longestWord = words.reduce((longest, word) => (word.length > longest.length ? word : longest), "")
+      shortestWord = words.reduce((shortest, word) => (word.length < shortest.length ? word : shortest), words[0])
+      uniqueWords = new Set(words.map((w) => w.toLowerCase())).size
+    }
   }
-  
-  const sentences = text.split(sentenceSplitter).filter(Boolean);
-  
+
+  const sentences = text.split(sentenceSplitter).filter(Boolean)
+  const paragraphs = text.split(/\n\s*\n/).filter(Boolean)
+
   return {
     avgWordLength: avgWordLength.toFixed(2),
-    sentenceCount: sentences.length
-  };
-};
+    sentenceCount: sentences.length,
+    paragraphCount: paragraphs.length,
+    longestWord,
+    shortestWord,
+    uniqueWords,
+  }
+}
 
 export default function CaseConverter() {
-    const [inputText, setInputText] = useState('');
-    const [outputText, setOutputText] = useState('');
-    const [selectedCase, setSelectedCase] = useState("");
-    const [selectedLanguage, setSelectedLanguage] = useState("en");
-    const [detectedLanguage, setDetectedLanguage] = useState("en");
-    const [history, setHistory] = useState<string[]>([]);
-    const [historyIndex, setHistoryIndex] = useState(-1);
-    const [wordCount, setWordCount] = useState(0);
-    const [charCount, setCharCount] = useState(0);
-    const [readingTime, setReadingTime] = useState(0);
-    const [textStats, setTextStats] = useState({ avgWordLength: '0', sentenceCount: 0 });
-    const [availableCaseOptions, setAvailableCaseOptions] = useState(getCaseOptions('en'));
+  // Basic state
+  const [inputText, setInputText] = useState("")
+  const [outputText, setOutputText] = useState("")
+  const [activeTab, setActiveTab] = useState("convert")
+  const [isProcessing, setIsProcessing] = useState(false)
+  const [showDiff, setShowDiff] = useState(false)
 
-    // Load saved data on component mount
-    useEffect(() => {
-      const savedInputText = localStorage.getItem('caseConverterInputText');
-      const savedOutputText = localStorage.getItem('caseConverterOutputText');
-      const savedCase = localStorage.getItem('caseConverterSelectedCase');
-      const savedLanguage = localStorage.getItem('caseConverterSelectedLanguage');
-      
-      if (savedInputText) setInputText(savedInputText);
-      if (savedOutputText) setOutputText(savedOutputText);
-      if (savedCase) setSelectedCase(savedCase);
-      if (savedLanguage) setSelectedLanguage(savedLanguage);
-    }, []);
+  // Conversion options
+  const [selectedCase, setSelectedCase] = useState("")
+  const [selectedLanguage, setSelectedLanguage] = useState("en")
+  const [detectedLanguage, setDetectedLanguage] = useState("en")
+  const [availableCaseOptions, setAvailableCaseOptions] = useState(getCaseOptions("en"))
 
-    // Save data when it changes
-    useEffect(() => {
-      if (inputText) localStorage.setItem('caseConverterInputText', inputText);
-      if (outputText) localStorage.setItem('caseConverterOutputText', outputText);
-      if (selectedCase) localStorage.setItem('caseConverterSelectedCase', selectedCase);
-      if (selectedLanguage) localStorage.setItem('caseConverterSelectedLanguage', selectedLanguage);
-    }, [inputText, outputText, selectedCase, selectedLanguage]);
-  
-    // Auto-detect language when input changes
-    useEffect(() => {
-      if (inputText.trim() && selectedLanguage === 'auto') {
-        const detectedLang = detectLanguage(inputText);
-        setDetectedLanguage(detectedLang);
-        setAvailableCaseOptions(getCaseOptions(detectedLang));
-        updateTextStats(inputText, detectedLang);
-      } else {
-        setDetectedLanguage(selectedLanguage);
-        setAvailableCaseOptions(getCaseOptions(selectedLanguage));
-        updateTextStats(inputText, selectedLanguage);
-      }
-    }, [inputText, selectedLanguage]);
-    
-    // Update case options when language changes
-    useEffect(() => {
-      setAvailableCaseOptions(getCaseOptions(selectedLanguage === 'auto' ? detectedLanguage : selectedLanguage));
-    }, [selectedLanguage, detectedLanguage]);
-    
-    const updateTextStats = (text: string, lang: string) => {
-      setWordCount(countWords(text, lang));
-      setCharCount(countCharacters(text, true));
-      setReadingTime(estimateReadingTime(text, lang));
-      setTextStats(getTextStatistics(text, lang));
-    };
-  
-    const addToHistory = useCallback((text: string) => {
-      setHistory(prev => [...prev, text]);
-      setHistoryIndex(prev => prev + 1);
-    }, []);
-  
-    const handleConvert = useCallback(() => {
-      const langToUse = selectedLanguage === 'auto' ? detectedLanguage : selectedLanguage;
-      const converted = convertCase(inputText, selectedCase, langToUse);
-      setOutputText(converted);
-      addToHistory(converted);
-      toast.success('Text converted successfully');
-    }, [inputText, selectedCase, selectedLanguage, detectedLanguage, addToHistory]);
-  
-    const handleCopy = useCallback(() => {
-      navigator.clipboard.writeText(outputText);
-      toast.success('Copied to clipboard');
-    }, [outputText]);
-  
-    const handleInputChange = useCallback((e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-      const text = e.target.value;
-      if (text.length <= MAX_CHARS) {
-        setInputText(text);
-      } else {
-        setInputText(text.slice(0, MAX_CHARS));
-        toast.error(`Character limit of ${MAX_CHARS} reached`);
-      }
-    }, []);
-  
-    const handleDownload = useCallback(() => {
-      const blob = new Blob([outputText], { type: 'text/plain' });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = 'converted_text.txt';
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-      URL.revokeObjectURL(url);
-      toast.success('Text downloaded successfully');
-    }, [outputText]);
-  
-    const handleClear = useCallback(() => {
-      setInputText('');
-      setOutputText('');
-      setHistory([]);
-      setHistoryIndex(-1);
-      // Also clear localStorage
-      localStorage.removeItem('caseConverterInputText');
-      localStorage.removeItem('caseConverterOutputText');
-      localStorage.removeItem('caseConverterSelectedCase');
-      localStorage.removeItem('caseConverterSelectedLanguage');
-      toast.success('Text cleared');
-    }, []);
-  
-    const handleReverse = useCallback(() => {
-      const reversed = outputText.split('').reverse().join('');
-      setOutputText(reversed);
-      addToHistory(reversed);
-      toast.success('Text reversed');
-    }, [outputText, addToHistory]);
-  
-    const handleRemoveSpaces = useCallback(() => {
-      const noSpaces = outputText.replace(/\s+/g, '');
-      setOutputText(noSpaces);
-      addToHistory(noSpaces);
-      toast.success('Spaces removed');
-    }, [outputText, addToHistory]);
-  
-    const handleTrim = useCallback(() => {
-      const trimmed = outputText
-        .replace(/^\s+/gm, '')
-        .replace(/\s+$/gm, '')
-        .replace(/\n\s*\n\s*\n/g, '\n\n');
-      setOutputText(trimmed);
-      addToHistory(trimmed);
-      toast.success('Text trimmed');
-    }, [outputText, addToHistory]);
-  
-    const handleCapitalizeWords = useCallback(() => {
-      const langToUse = selectedLanguage === 'auto' ? detectedLanguage : selectedLanguage;
-      // Handle differently for character-based languages
-      let capitalized = outputText;
-      
-      if (langToUse === 'zh' || langToUse === 'ja') {
-        toast(`Word capitalization isn't applicable to ${languageRules[langToUse as keyof typeof languageRules].name}`);
-      } else {
-        capitalized = outputText.replace(/\b\w/g, char => char.toUpperCase());
-        setOutputText(capitalized);
-        addToHistory(capitalized);
-        toast.success('Words capitalized');
-      }
-    }, [outputText, addToHistory, selectedLanguage, detectedLanguage]);
-  
-    const handleRemoveDuplicateLines = useCallback(() => {
-      const uniqueLines = Array.from(new Set(outputText.split('\n'))).join('\n');
-      setOutputText(uniqueLines);
-      addToHistory(uniqueLines);
-      toast.success('Duplicate lines removed');
-    }, [outputText, addToHistory]);
-  
-    const handleUndo = useCallback(() => {
-      if (historyIndex > 0) {
-        setHistoryIndex(prev => prev - 1);
-        setOutputText(history[historyIndex - 1]);
-        toast.success('Undo successful');
-      } else {
-        toast.error('No more undo history');
-      }
-    }, [history, historyIndex]);
-    
-    // Language auto-detection function
-    const handleAutoDetect = useCallback(() => {
-      if (!inputText.trim()) {
-        toast.error('Please enter some text to detect language');
-        return;
-      }
-      
-      const detectedLang = detectLanguage(inputText);
-      setDetectedLanguage(detectedLang);
-      setSelectedLanguage('auto');
-      const langName = languageRules[detectedLang as keyof typeof languageRules]?.name || 'Unknown';
-      toast.success(`Detected language: ${langName}`);
-    }, [inputText]);
+  // Advanced options
 
-    return (
-      <ToolLayout
-        title="Case Converter"
-        description="Transform your text into any case format with our powerful multi-language case converter tool. Support for camelCase, PascalCase, snake_case, and more across 10+ languages!"
-        toolId="678f33831fa2b06f4b7ef590"
-      >
-        <div className="flex flex-col gap-8">
-          {/* Input Section */}
-          <Card className="bg-default-50 dark:bg-default-100">
-            <CardBody className="p-6">
-              <label className="block text-lg font-medium text-default-700 mb-2">Input Text:</label>
-              <Textarea
-                value={inputText}
-                onChange={handleInputChange}
-                placeholder="Enter your text here..."
-                minRows={4}
-                size="lg"
-                className="mb-2"
-                variant="bordered"
-              />
-              
-              <div className="mt-4 grid grid-cols-2 gap-2 text-sm text-default-600">
-                <div>Words: {wordCount}</div>
-                <div>Characters (no spaces): {charCount}</div>
-                <div>Reading time: {readingTime} min</div>
-                <div>Sentences: {textStats.sentenceCount}</div>
-                <div>Avg. word length: {textStats.avgWordLength}</div>
-                {selectedLanguage === 'auto' && detectedLanguage !== 'en' && (
-                  <div>Detected: {languageRules[detectedLanguage as keyof typeof languageRules]?.name || 'Unknown'}</div>
-                )}
-              </div>
-              
-              <p className="text-sm text-default-500 mt-2">
+  const [respectAcronyms, setRespectAcronyms] = useState(true)
+  const [trimWhitespace, setTrimWhitespace] = useState(false)
+  const [normalizeSpaces, setNormalizeSpaces] = useState(false)
+
+  // History
+  const [history, setHistory] = useState<string[]>([])
+  const [historyIndex, setHistoryIndex] = useState(-1)
+
+  // Stats
+  const [wordCount, setWordCount] = useState(0)
+  const [charCount, setCharCount] = useState(0)
+  const [charCountWithSpaces, setCharCountWithSpaces] = useState(0)
+  const [readingTime, setReadingTime] = useState(0)
+  const [textStats, setTextStats] = useState({
+    avgWordLength: "0",
+    sentenceCount: 0,
+    paragraphCount: 0,
+    longestWord: "",
+    shortestWord: "",
+    uniqueWords: 0,
+  })
+
+  // Load saved data on component mount
+  useEffect(() => {
+    const savedInputText = localStorage.getItem("caseConverterInputText")
+    const savedOutputText = localStorage.getItem("caseConverterOutputText")
+    const savedCase = localStorage.getItem("caseConverterSelectedCase")
+    const savedLanguage = localStorage.getItem("caseConverterSelectedLanguage")
+
+    if (savedInputText) setInputText(savedInputText)
+    if (savedOutputText) setOutputText(savedOutputText)
+    if (savedCase) setSelectedCase(savedCase)
+    if (savedLanguage) setSelectedLanguage(savedLanguage)
+  }, [])
+
+  // Save data when it changes
+  useEffect(() => {
+    if (inputText) localStorage.setItem("caseConverterInputText", inputText)
+    if (outputText) localStorage.setItem("caseConverterOutputText", outputText)
+    if (selectedCase) localStorage.setItem("caseConverterSelectedCase", selectedCase)
+    if (selectedLanguage) localStorage.setItem("caseConverterSelectedLanguage", selectedLanguage)
+  }, [inputText, outputText, selectedCase, selectedLanguage])
+
+  // Auto-detect language when input changes
+  useEffect(() => {
+    if (inputText.trim() && selectedLanguage === "auto") {
+      const detectedLang = detectLanguage(inputText)
+      setDetectedLanguage(detectedLang)
+      setAvailableCaseOptions(getCaseOptions(detectedLang))
+      updateTextStats(inputText, detectedLang)
+    } else {
+      setDetectedLanguage(selectedLanguage)
+      setAvailableCaseOptions(getCaseOptions(selectedLanguage))
+      updateTextStats(inputText, selectedLanguage)
+    }
+  }, [inputText, selectedLanguage])
+
+  // Update case options when language changes
+  useEffect(() => {
+    setAvailableCaseOptions(getCaseOptions(selectedLanguage === "auto" ? detectedLanguage : selectedLanguage))
+  }, [selectedLanguage, detectedLanguage])
+
+  const updateTextStats = (text: string, lang: string) => {
+    setWordCount(countWords(text, lang))
+    setCharCount(countCharacters(text, true))
+    setCharCountWithSpaces(countCharacters(text, false))
+    setReadingTime(estimateReadingTime(text, lang))
+    setTextStats(getTextStatistics(text, lang))
+  }
+
+  const addToHistory = useCallback(
+    (text: string) => {
+      // Only add to history if it's different from the last entry
+      if (history.length === 0 || history[history.length - 1] !== text) {
+        setHistory((prev) => [...prev, text])
+        setHistoryIndex((prev) => prev + 1)
+      }
+    },
+    [history],
+  )
+
+  const handleConvert = useCallback(() => {
+    if (!inputText.trim()) {
+      toast.error("Please enter some text to convert")
+      return
+    }
+
+    if (!selectedCase) {
+      toast.error("Please select a case conversion type")
+      return
+    }
+
+    setIsProcessing(true)
+
+    // Use setTimeout to prevent UI blocking for large texts
+    setTimeout(() => {
+      try {
+        const langToUse = selectedLanguage === "auto" ? detectedLanguage : selectedLanguage
+        let textToConvert = inputText
+
+        // Apply pre-processing if options are enabled
+        if (trimWhitespace) {
+          textToConvert = textToConvert.trim()
+        }
+
+        if (normalizeSpaces) {
+          textToConvert = textToConvert.replace(/\s+/g, " ")
+        }
+
+        // Handle acronyms if option is enabled
+        if (respectAcronyms) {
+          // Store acronyms (all caps words) to restore them later
+          const acronyms: Record<string, string> = {}
+          if (selectedCase !== "upper" && selectedCase !== "constant") {
+            const acronymRegex = /\b[A-Z]{2,}\b/g
+            const matches = textToConvert.match(acronymRegex)
+            if (matches) {
+              matches.forEach((acronym, index) => {
+                const placeholder = `__ACRONYM_${index}__`
+                acronyms[placeholder] = acronym
+                textToConvert = textToConvert.replace(new RegExp(`\\b${acronym}\\b`, "g"), placeholder)
+              })
+            }
+          }
+
+          // Convert the text
+          let converted = convertCase(textToConvert, selectedCase, langToUse)
+
+          // Restore acronyms
+          Object.entries(acronyms).forEach(([placeholder, acronym]) => {
+            converted = converted.replace(new RegExp(placeholder, "g"), acronym)
+          })
+
+          setOutputText(converted)
+        } else {
+          // Simple conversion without acronym handling
+          const converted = convertCase(textToConvert, selectedCase, langToUse)
+          setOutputText(converted)
+        }
+
+        addToHistory(outputText)
+        toast.success("Text converted successfully")
+      } catch (error) {
+        console.error("Error converting text:", error)
+        toast.error("Error converting text")
+      } finally {
+        setIsProcessing(false)
+      }
+    }, 10)
+  }, [
+    inputText,
+    selectedCase,
+    selectedLanguage,
+    detectedLanguage,
+    trimWhitespace,
+    normalizeSpaces,
+    respectAcronyms,
+    addToHistory,
+    outputText,
+  ])
+
+  const handleCopy = useCallback(() => {
+    if (!outputText) {
+      toast.error("No text to copy")
+      return
+    }
+    navigator.clipboard.writeText(outputText)
+    toast.success("Copied to clipboard")
+  }, [outputText])
+
+  const handleInputChange = useCallback((e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const text = e.target.value
+    if (text.length <= MAX_CHARS) {
+      setInputText(text)
+    } else {
+      setInputText(text.slice(0, MAX_CHARS))
+      toast.error(`Character limit of ${MAX_CHARS} reached`)
+    }
+  }, [])
+
+  const handleDownload = useCallback(() => {
+    if (!outputText) {
+      toast.error("No text to download")
+      return
+    }
+    const blob = new Blob([outputText], { type: "text/plain" })
+    const url = URL.createObjectURL(blob)
+    const a = document.createElement("a")
+    a.href = url
+    a.download = "converted_text.txt"
+    document.body.appendChild(a)
+    a.click()
+    document.body.removeChild(a)
+    URL.revokeObjectURL(url)
+    toast.success("Text downloaded successfully")
+  }, [outputText])
+
+  const handleClear = useCallback(() => {
+    setInputText("")
+    setOutputText("")
+    setHistory([])
+    setHistoryIndex(-1)
+    // Also clear localStorage
+    localStorage.removeItem("caseConverterInputText")
+    localStorage.removeItem("caseConverterOutputText")
+    localStorage.removeItem("caseConverterSelectedCase")
+    localStorage.removeItem("caseConverterSelectedLanguage")
+    toast.success("Text cleared")
+  }, [])
+
+  const handleReverse = useCallback(() => {
+    if (!outputText) {
+      toast.error("No text to reverse")
+      return
+    }
+    const reversed = outputText.split("").reverse().join("")
+    setOutputText(reversed)
+    addToHistory(reversed)
+    toast.success("Text reversed")
+  }, [outputText, addToHistory])
+
+  const handleRemoveSpaces = useCallback(() => {
+    if (!outputText) {
+      toast.error("No text to process")
+      return
+    }
+    const noSpaces = outputText.replace(/\s+/g, "")
+    setOutputText(noSpaces)
+    addToHistory(noSpaces)
+    toast.success("Spaces removed")
+  }, [outputText, addToHistory])
+
+  const handleTrim = useCallback(() => {
+    if (!outputText) {
+      toast.error("No text to trim")
+      return
+    }
+    const trimmed = outputText
+      .replace(/^\s+/gm, "")
+      .replace(/\s+$/gm, "")
+      .replace(/\n\s*\n\s*\n/g, "\n\n")
+    setOutputText(trimmed)
+    addToHistory(trimmed)
+    toast.success("Text trimmed")
+  }, [outputText, addToHistory])
+
+  const handleCapitalizeWords = useCallback(() => {
+    if (!outputText) {
+      toast.error("No text to capitalize")
+      return
+    }
+    const langToUse = selectedLanguage === "auto" ? detectedLanguage : selectedLanguage
+    // Handle differently for character-based languages
+    let capitalized = outputText
+
+    if (langToUse === "zh" || langToUse === "ja") {
+      toast(`Word capitalization isn't applicable to ${languageRules[langToUse as keyof typeof languageRules].name}`)
+    } else {
+      capitalized = outputText.replace(/\b\w/g, (char) => char.toUpperCase())
+      setOutputText(capitalized)
+      addToHistory(capitalized)
+      toast.success("Words capitalized")
+    }
+  }, [outputText, addToHistory, selectedLanguage, detectedLanguage])
+
+  const handleRemoveDuplicateLines = useCallback(() => {
+    if (!outputText) {
+      toast.error("No text to process")
+      return
+    }
+    const uniqueLines = Array.from(new Set(outputText.split("\n"))).join("\n")
+    setOutputText(uniqueLines)
+    addToHistory(uniqueLines)
+    toast.success("Duplicate lines removed")
+  }, [outputText, addToHistory])
+
+  const handleUndo = useCallback(() => {
+    if (historyIndex > 0) {
+      setHistoryIndex((prev) => prev - 1)
+      setOutputText(history[historyIndex - 1])
+      toast.success("Undo successful")
+    } else {
+      toast.error("No more undo history")
+    }
+  }, [history, historyIndex])
+
+  const handleRedo = useCallback(() => {
+    if (historyIndex < history.length - 1) {
+      setHistoryIndex((prev) => prev + 1)
+      setOutputText(history[historyIndex + 1])
+      toast.success("Redo successful")
+    } else {
+      toast.error("No more redo history")
+    }
+  }, [history, historyIndex])
+
+  // Language auto-detection function
+  const handleAutoDetect = useCallback(() => {
+    if (!inputText.trim()) {
+      toast.error("Please enter some text to detect language")
+      return
+    }
+
+    const detectedLang = detectLanguage(inputText)
+    setDetectedLanguage(detectedLang)
+    setSelectedLanguage("auto")
+    const langName = languageRules[detectedLang as keyof typeof languageRules]?.name || "Unknown"
+    toast.success(`Detected language: ${langName}`)
+  }, [inputText])
+
+  // Apply output back to input
+  const handleApplyToInput = useCallback(() => {
+    if (!outputText) {
+      toast.error("No converted text to apply")
+      return
+    }
+    setInputText(outputText)
+    toast.success("Converted text applied to input")
+  }, [outputText])
+
+  // Generate a visual diff between original and converted text
+  const generateDiff = useCallback(() => {
+    if (!inputText || !outputText) {
+      return "No text to compare"
+    }
+
+    // Simple character-by-character diff for demonstration
+    const originalChars = inputText.split("")
+    const convertedChars = outputText.split("")
+
+    let diffHtml = ""
+    let i = 0,
+      j = 0
+
+    while (i < originalChars.length || j < convertedChars.length) {
+      if (i < originalChars.length && j < convertedChars.length && originalChars[i] === convertedChars[j]) {
+        // Characters match
+        diffHtml += originalChars[i]
+        i++
+        j++
+      } else if (j < convertedChars.length && (i >= originalChars.length || originalChars[i] !== convertedChars[j])) {
+        // Character added or changed in converted text
+        diffHtml += `<span style="background-color: #d4edda; color: #155724;">+${convertedChars[j]}</span>`
+        j++
+      } else {
+        // Character removed from original text
+        diffHtml += `<span style="background-color: #f8d7da; color: #721c24;">-${originalChars[i]}</span>`
+        i++
+      }
+    }
+
+    return diffHtml
+  }, [inputText, outputText])
+
+  // Additional text manipulation functions
+  const handleRemoveLineBreaks = useCallback(() => {
+    if (!outputText) {
+      toast.error("No text to process")
+      return
+    }
+    const noLineBreaks = outputText.replace(/\n/g, " ")
+    setOutputText(noLineBreaks)
+    addToHistory(noLineBreaks)
+    toast.success("Line breaks removed")
+  }, [outputText, addToHistory])
+
+  const handleRemoveExtraSpaces = useCallback(() => {
+    if (!outputText) {
+      toast.error("No text to process")
+      return
+    }
+    const normalizedSpaces = outputText.replace(/\s+/g, " ")
+    setOutputText(normalizedSpaces)
+    addToHistory(normalizedSpaces)
+    toast.success("Extra spaces removed")
+  }, [outputText, addToHistory])
+
+  const handleSortLines = useCallback(() => {
+    if (!outputText) {
+      toast.error("No text to sort")
+      return
+    }
+    const lines = outputText.split("\n")
+    const sortedLines = lines.sort()
+    setOutputText(sortedLines.join("\n"))
+    addToHistory(sortedLines.join("\n"))
+    toast.success("Lines sorted alphabetically")
+  }, [outputText, addToHistory])
+
+  const handleSortLinesByLength = useCallback(() => {
+    if (!outputText) {
+      toast.error("No text to sort")
+      return
+    }
+    const lines = outputText.split("\n")
+    const sortedLines = lines.sort((a, b) => a.length - b.length)
+    setOutputText(sortedLines.join("\n"))
+    addToHistory(sortedLines.join("\n"))
+    toast.success("Lines sorted by length")
+  }, [outputText, addToHistory])
+
+  const handleRemoveEmptyLines = useCallback(() => {
+    if (!outputText) {
+      toast.error("No text to process")
+      return
+    }
+    const nonEmptyLines = outputText
+      .split("\n")
+      .filter((line) => line.trim() !== "")
+      .join("\n")
+    setOutputText(nonEmptyLines)
+    addToHistory(nonEmptyLines)
+    toast.success("Empty lines removed")
+  }, [outputText, addToHistory])
+
+  const handleAddLineNumbers = useCallback(() => {
+    if (!outputText) {
+      toast.error("No text to process")
+      return
+    }
+    const lines = outputText.split("\n")
+    const numberedLines = lines.map((line, index) => `${index + 1}. ${line}`)
+    setOutputText(numberedLines.join("\n"))
+    addToHistory(numberedLines.join("\n"))
+    toast.success("Line numbers added")
+  }, [outputText, addToHistory])
+
+  return (
+    <ToolLayout
+      title="Case Converter & Text Transformer"
+      description="Transform text into any case format with multi-language support for camelCase, PascalCase, snake_case, and more"
+      toolId="678f33831fa2b06f4b7ef590"
+    >
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        {/* Input Panel */}
+        <Card className="lg:col-span-6 bg-default-50 dark:bg-default-100">
+          <CardHeader className="flex justify-between items-center pb-0">
+            <h2 className="text-xl font-semibold text-primary-600 dark:text-primary-400 flex items-center">
+              <FileText size={20} className="mr-2" /> Input Text
+            </h2>
+            <div className="flex items-center gap-2">
+              <Chip color="primary" variant="flat" size="sm" startContent={<Hash size={14} />}>
+                {charCountWithSpaces} chars
+              </Chip>
+              <Chip color="secondary" variant="flat" size="sm" startContent={<Type size={14} />}>
+                {wordCount} words
+              </Chip>
+            </div>
+          </CardHeader>
+          <CardBody className="py-3">
+            <Textarea
+              value={inputText}
+              onChange={handleInputChange}
+              placeholder="Enter or paste your text here to convert..."
+              minRows={12}
+              maxRows={20}
+              className="w-full"
+              variant="bordered"
+              classNames={{
+                inputWrapper: "bg-default-100/50",
+              }}
+            />
+            <div className="flex justify-between items-center mt-2">
+              <div className="text-xs text-default-500">
                 {inputText.length}/{MAX_CHARS} characters
-              </p>
-  
-              <div className="flex gap-4 mt-4">
-                <Select
-                  label="Select a case"
-                  className="flex-1"
-                  variant="bordered"
-                  selectedKeys={[selectedCase]}
-                  onChange={(e) => setSelectedCase(e.target.value)}
-                  classNames={{
-                    trigger: "bg-default-100 data-[hover=true]:bg-default-200",
-                  }}
-                >
-                  {availableCaseOptions.map((option) => (
-                    <SelectItem key={option.value} value={option.value} className="text-default-700">
-                      {option.label}
-                    </SelectItem>
-                  ))}
-                </Select>
-  
-                <Select
-                  label="Select language"
-                  className="flex-1"
-                  variant="bordered"
-                  selectedKeys={[selectedLanguage]}
-                  onChange={(e) => setSelectedLanguage(e.target.value)}
-                  classNames={{
-                    trigger: "bg-default-100 data-[hover=true]:bg-default-200",
-                  }}
-                  startContent={<Globe className="h-4 w-4" />}
-                >
-                  {languages.map((lang) => (
-                    <SelectItem key={lang.value} value={lang.value} className="text-default-700">
-                      {lang.label}
-                    </SelectItem>
-                  ))}
-                </Select>
               </div>
-  
-              <div className="flex gap-4 mt-4">
-                <Button
-                  onClick={handleAutoDetect}
-                  className="flex-1"
-                  color="secondary"
-                  startContent={<Globe className="h-5 w-5" />}
-                >
-                  Detect Language
-                </Button>
-              
-                <Button
-                  onClick={handleConvert}
-                  className="flex-1"
-                  color="primary"
-                  startContent={<RefreshCcw className="h-5 w-5" />}
-                  isDisabled={!inputText.trim() || !selectedCase}
-                >
-                  Convert
-                </Button>
-              </div>
-            </CardBody>
-          </Card>
-  
-          {/* Action Buttons */}
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-2">
-            <Button color="primary" onClick={handleCopy} startContent={<Copy className="h-4 w-4" />} isDisabled={!outputText}>
+              <Button
+                color="danger"
+                variant="light"
+                onPress={handleClear}
+                startContent={<Trash2 size={14} />}
+                size="sm"
+                isDisabled={!inputText.trim()}
+              >
+                Clear
+              </Button>
+            </div>
+            <Progress
+              value={(inputText.length / MAX_CHARS) * 100}
+              color={inputText.length > MAX_CHARS * 0.9 ? "danger" : "primary"}
+              size="sm"
+              className="mt-2"
+            />
+          </CardBody>
+        </Card>
+
+        {/* Output Panel */}
+        <Card className="lg:col-span-6 bg-default-50 dark:bg-default-100">
+          <CardHeader className="flex justify-between items-center pb-0">
+            <h2 className="text-xl font-semibold text-success-600 dark:text-success-400 flex items-center">
+              <Type size={20} className="mr-2" /> Converted Text
+            </h2>
+            <div className="flex items-center gap-2">
+              {selectedLanguage === "auto" && detectedLanguage !== "en" && (
+                <Badge content="Auto" color="secondary" size="sm">
+                  <Chip color="secondary" variant="flat" size="sm">
+                    {languageRules[detectedLanguage as keyof typeof languageRules]?.name || "Unknown"}
+                  </Chip>
+                </Badge>
+              )}
+              {outputText && (
+                <Chip color="success" variant="flat" size="sm" startContent={<Clock size={14} />}>
+                  ~{readingTime} min read
+                </Chip>
+              )}
+            </div>
+          </CardHeader>
+          <CardBody className="py-3">
+            {showDiff ? (
+              <div
+                className="w-full min-h-[300px] p-3 border-2 border-default-200 dark:border-default-700 rounded-lg bg-default-100/50 overflow-auto"
+                dangerouslySetInnerHTML={{ __html: generateDiff() }}
+              />
+            ) : (
+              <Textarea
+                value={outputText}
+                readOnly
+                placeholder="Converted text will appear here..."
+                minRows={12}
+                maxRows={20}
+                className="w-full"
+                variant="bordered"
+                classNames={{
+                  inputWrapper: "bg-default-100/50",
+                }}
+              />
+            )}
+            <div className="flex justify-between items-center mt-2">
+              <Switch
+                size="sm"
+                isSelected={showDiff}
+                onValueChange={setShowDiff}
+                isDisabled={!outputText || !inputText}
+                classNames={{
+                  label: "text-xs",
+                }}
+              >
+                Show diff view
+              </Switch>
+              <Button
+                color="primary"
+                variant="light"
+                onPress={handleApplyToInput}
+                startContent={<ArrowRightLeft size={14} />}
+                size="sm"
+                isDisabled={!outputText}
+              >
+                Apply to Input
+              </Button>
+            </div>
+          </CardBody>
+          <CardFooter className="flex flex-wrap gap-2 justify-start pt-0">
+            <Button
+              color="primary"
+              variant="flat"
+              onPress={handleCopy}
+              startContent={<Copy size={16} />}
+              isDisabled={!outputText}
+              size="sm"
+            >
               Copy
-            </Button>
-            <Button color="primary" onClick={handleDownload} startContent={<Download className="h-4 w-4" />} isDisabled={!outputText}>
-              Download
-            </Button>
-            <Button color="primary" onClick={handleReverse} startContent={<Undo2 className="h-4 w-4" />} isDisabled={!outputText}>
-              Reverse
-            </Button>
-            <Button color="primary" onClick={handleRemoveSpaces} startContent={<Space className="h-4 w-4" />} isDisabled={!outputText}>
-              No Spaces
-            </Button>
-            <Button color="primary" onClick={handleTrim} startContent={<Slice className="h-4 w-4" />} isDisabled={!outputText}>
-              Trim
-            </Button>
-            <Button color="primary" onClick={handleCapitalizeWords} startContent={<Type className="h-4 w-4" />} isDisabled={!outputText}>
-              Capitalize
             </Button>
             <Button
               color="primary"
-              onClick={handleRemoveDuplicateLines}
-              startContent={<SplitSquareHorizontal className="h-4 w-4" />}
+              variant="flat"
+              onPress={handleDownload}
+              startContent={<Download size={16} />}
               isDisabled={!outputText}
+              size="sm"
             >
-              Unique Lines
-            </Button>
-            <Button color="danger" onClick={handleClear} startContent={<Trash2 className="h-4 w-4" />} isDisabled={!inputText && !outputText}>
-              Clear
+              Download
             </Button>
             <Button
-              color="default"
-              onClick={handleUndo}
+              color="secondary"
+              variant="flat"
+              onPress={handleUndo}
+              startContent={<RotateCcw size={16} />}
               isDisabled={historyIndex <= 0}
-              startContent={<RefreshCw className="h-4 w-4" />}
+              size="sm"
             >
               Undo
             </Button>
-          </div>
-  
-          {/* Output Section */}
-          <Card className="bg-default-50 dark:bg-default-100">
-            <CardBody className="p-6">
-              <label className="block text-lg font-medium text-default-700 mb-2">Output Text:</label>
-              <Textarea value={outputText} isReadOnly minRows={4} size="lg" className="mb-4" variant="bordered" />
-            </CardBody>
-          </Card>
-        </div>
-
-        {/* Info Section */}
-        <Card className="mt-8 bg-default-50 dark:bg-default-100 p-4 md:p-8">
-       
-            <div className="rounded-xl  p-2 md:p-4 max-w-6xl mx-auto">
-              <h2 className="text-lg md:text-xl lg:text-2xl font-semibold text-default-700 mb-4 flex items-center">
-                <Info className="w-6 h-6 mr-2" />
-                What is the Case Converter?
-              </h2>
-              <p className="text-sm md:text-base text-default-600 mb-4">
-              The Case Converter is an adaptable text transformation utility made especially for writers, developers, and all other content creators. The Case Converter is packed with a large variety of text case conversions and manipulation functionalities in one easy to use web application. Whether you're changing text case quickly for coding conventions, to format content or for creative writing, the Case Converter has your needs covered.
-              </p>
-              <p className="text-sm md:text-base text-default-600 mb-4">
-              With multiple case options and some other text manipulation functionality, it's a bit like having a Swiss Army knife for text editing in your hands. End text re-formatting manually, and say hello to an efficient process.
-              </p>
-
-              <div className="my-8">
-                <Image 
-                  src="/Images/InfosectionImages/CaseconverterPreview.png?height=400&width=600" 
-                  alt="Screenshot of the Case Converter interface showing various case conversion options and text manipulation tools" 
-                  width={600} 
-                  height={400} 
-                  className="rounded-lg shadow-lg w-full h-auto"
-                />
-              </div>
-
-              <h2 id="how-to-use" className="text-lg md:text-xl lg:text-2xl font-semibold text-default-700 mb-4 mt-8 flex items-center">
-                <BookOpen className="w-6 h-6 mr-2" />
-                How to Use the Case Converter?
-              </h2>
-              <p className="text-sm md:text-base text-default-600 mb-4">
-                Using our Case Converter is as easy as 1-2-3. Here's a quick guide to get you started:
-              </p>
-              <ol className="list-decimal list-inside space-y-2 text-sm md:text-base">
-                <li>Enter or paste your text into the input box. Don't worry about the current formatting - we'll take care of that!</li>
-                <li>Choose your desired case conversion from the <Link href="#case-types" className="text-primary hover:underline">dropdown menu</Link>. We offer everything from lowercase to camelCase and beyond.</li>
-                <li>Click the "Convert" button and watch as your text is instantly transformed.</li>
-                <li>Need more tweaks? Use our additional <Link href="#text-tools" className="text-primary hover:underline">text manipulation tools</Link> to further refine your text.</li>
-                <li>Copy your converted text to the clipboard with a single click, or download it as a text file.</li>
-                <li>Experiment freely! Our undo/redo feature lets you try different options without losing your work.</li>
-              </ol>
-
-              <h2 id="case-types" className="text-lg md:text-xl lg:text-2xl font-semibold text-default-700 mb-4 mt-8 flex items-center">
-                <Type className="w-6 h-6 mr-2" />
-                Supported Case Types
-              </h2>
-              <p className="text-sm md:text-base text-default-600 mb-4">
-                Our Case Converter supports a wide range of text case transformations to suit every need:
-              </p>
-              <ul className="list-disc list-inside space-y-2 text-xs md:text-sm">
-                <li><strong>lowercase</strong>: Convert all characters to lowercase</li>
-                <li><strong>UPPERCASE</strong>: Transform all characters to uppercase</li>
-                <li><strong>Title Case</strong>: Capitalize the first letter of each word</li>
-                <li><strong>Sentence case</strong>: Capitalize the first letter of each sentence</li>
-                <li><strong>camelCase</strong>: Join words and capitalize each word after the first</li>
-                <li><strong>PascalCase</strong>: Similar to camelCase, but capitalize the first word too</li>
-                <li><strong>snake_case</strong>: Replace spaces with underscores and use all lowercase</li>
-                <li><strong>kebab-case</strong>: Replace spaces with hyphens and use all lowercase</li>
-                <li><strong>ToGgLe CaSe</strong>: Alternate between uppercase and lowercase for each character</li>
-                <li><strong>Alternate CASE</strong>: Alternate between lowercase and uppercase for each word</li>
-                <li><strong>dot.case</strong>: Replace spaces with dots and use all lowercase</li>
-              </ul>
-
-              <h2 id="text-tools" className="text-lg md:text-xl lg:text-2xl font-semibold text-default-700 mb-4 mt-8 flex items-center">
-                <Scissors className="w-6 h-6 mr-2" />
-                Additional Text Manipulation Tools
-              </h2>
-              <p className="text-sm md:text-base text-default-600 mb-4">
-                Beyond case conversion, our tool offers several handy text manipulation features:
-              </p>
-              <ul className="list-disc list-inside space-y-2 text-xs md:text-sm">
-                <li><strong>Reverse Text</strong>: Flip your text backwards</li>
-                <li><strong>Remove Spaces</strong>: Eliminate all spaces from your text</li>
-                <li><strong>Trim</strong>: Remove leading and trailing whitespace, and reduce multiple line breaks</li>
-                <li><strong>Capitalize Words</strong>: Capitalize the first letter of every word</li>
-                <li><strong>Remove Duplicate Lines</strong>: Keep only unique lines in your text</li>
-              </ul>
-
-              <h2 className="text-lg md:text-xl lg:text-2xl font-semibold text-default-700 mb-4 mt-8 flex items-center">
-                <Lightbulb className="w-6 h-6 mr-2" />
-                Features That Make Us Stand Out
-              </h2>
-              <ul className="list-disc list-inside space-y-2 text-xs md:text-sm">
-                <li><ZapIcon className="w-4 h-4 inline-block mr-1" /> <strong>Lightning-fast conversions</strong>: Transform your text instantly</li>
-                <li><RefreshCw className="w-4 h-4 inline-block mr-1" /> <strong>Undo/Redo functionality</strong>: Experiment without fear</li>
-                <li><AlignJustify className="w-4 h-4 inline-block mr-1" /> <strong>Multiple case types</strong>: 11 different case conversions to choose from</li>
-                <li><Scissors className="w-4 h-4 inline-block mr-1" /> <strong>Additional text tools</strong>: Go beyond simple case conversion</li>
-                <li><Type className="w-4 h-4 inline-block mr-1" /> <strong>Character count</strong>: Keep track of your text length</li>
-                <li><Calculator className="w-4 h-4 inline-block mr-1" /> <strong>Text statistics</strong>: Get word count, character count, and more</li>
-                <li><Clock className="w-4 h-4 inline-block mr-1" /> <strong>Reading time estimation</strong>: Know how long it takes to read your text</li>
-              </ul>
-
-              <p className="text-sm md:text-base text-default-600 mt-4">
-                Ready to transform your text with ease? Dive into our Case Converter and experience the power of efficient text manipulation. Whether you're a coder adhering to naming conventions, a writer perfecting your prose, or just someone who loves playing with text, our tool is here to make your life easier. Start converting and see the difference for yourself!
-              </p>
-            </div>
-
+            <Button
+              color="secondary"
+              variant="flat"
+              onPress={handleRedo}
+              startContent={<RefreshCw size={16} />}
+              isDisabled={historyIndex >= history.length - 1}
+              size="sm"
+            >
+              Redo
+            </Button>
+          </CardFooter>
         </Card>
 
-     </ToolLayout>
-  );
-}
+        {/* Options Panel */}
+        <Card className="lg:col-span-12 bg-default-50 dark:bg-default-100">
+          <CardHeader className="pb-0">
+            <Tabs
+              selectedKey={activeTab}
+              onSelectionChange={(key: React.Key) => setActiveTab(String(key))}
+              color="primary"
+              size="sm"
+              variant="underlined"
+              className="w-full"
+              classNames={{
+                tab: "h-8 px-2 sm:px-3",
+                tabList: "w-full justify-start sm:justify-center",
+                tabContent: "text-xs sm:text-sm",
+              }}
+            >
+              <Tab
+                key="convert"
+                title={
+                  <div className="flex items-center gap-1">
+                    <Type size={14} />
+                    <span className="hidden sm:inline">Case Conversion</span>
+                    <span className="sm:hidden">Convert</span>
+                  </div>
+                }
+              />
 
+              <Tab
+                key="advanced"
+                title={
+                  <div className="flex items-center gap-1">
+                    <Settings2 size={14} />
+                    <span className="hidden sm:inline">Advanced Options</span>
+                    <span className="sm:hidden">Advanced</span>
+                  </div>
+                }
+              />
+
+              <Tab
+                key="tools"
+                title={
+                  <div className="flex items-center gap-1">
+                    <Scissors size={14} />
+                    <span className="hidden sm:inline">Text Tools</span>
+                    <span className="sm:hidden">Tools</span>
+                  </div>
+                }
+              />
+
+              <Tab
+                key="stats"
+                title={
+                  <div className="flex items-center gap-1">
+                    <Calculator size={14} />
+                    <span className="hidden sm:inline">Text Statistics</span>
+                    <span className="sm:hidden">Stats</span>
+                  </div>
+                }
+              />
+
+              <Tab
+                key="history"
+                title={
+                  <div className="flex items-center gap-1">
+                    <History size={14} />
+                    <span className="hidden sm:inline">History</span>
+                    <span className="sm:hidden">History</span>
+                  </div>
+                }
+              />
+            </Tabs>
+
+          </CardHeader>
+          <CardBody className="py-3 px-4">
+            {activeTab === "convert" && (
+              <div className="space-y-4">
+                <h3 className="text-md font-semibold text-default-700">Case Conversion Options</h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="bg-default-100/50 p-3 rounded-lg">
+                    <h4 className="text-sm font-medium text-default-700 mb-2">Select Case Type</h4>
+                    <Select
+                      label="Choose how to convert your text"
+                      selectedKeys={[selectedCase]}
+                      onChange={(e) => setSelectedCase(e.target.value)}
+                      className="max-w-full"
+                      variant="bordered"
+                      size="sm"
+                      startContent={
+                        availableCaseOptions.find((option) => option.value === selectedCase)?.icon || (
+                          <Type className="w-4 h-4" />
+                        )
+                      }
+                    >
+                      {availableCaseOptions.map((option) => (
+                        <SelectItem
+                          key={option.value}
+                          value={option.value}
+                          startContent={option.icon}
+                          className="text-default-700"
+                        >
+                          {option.label}
+                        </SelectItem>
+                      ))}
+                    </Select>
+
+                    <div className="mt-4">
+                      <h4 className="text-sm font-medium text-default-700 mb-2">Language Settings</h4>
+                      <Select
+                        label="Select language or auto-detect"
+                        selectedKeys={[selectedLanguage]}
+                        onChange={(e) => setSelectedLanguage(e.target.value)}
+                        className="max-w-full"
+                        variant="bordered"
+                        size="sm"
+                        startContent={<Globe className="w-4 h-4" />}
+                      >
+                        {languages.map((lang) => (
+                          <SelectItem key={lang.value} value={lang.value} className="text-default-700">
+                            {lang.label}
+                          </SelectItem>
+                        ))}
+                      </Select>
+                    </div>
+
+                    <Button
+                      color="secondary"
+                      variant="flat"
+                      onPress={handleAutoDetect}
+                      startContent={<Globe className="w-4 h-4" />}
+                      size="sm"
+                      className="mt-2"
+                      isDisabled={!inputText.trim()}
+                    >
+                      Detect Language
+                    </Button>
+                  </div>
+
+                  <div className="bg-default-100/50 p-3 rounded-lg">
+                    <h4 className="text-sm font-medium text-default-700 mb-2">Conversion Preview</h4>
+                    <div className="text-xs text-default-600 space-y-2">
+                      <div className="flex items-center">
+                        <Maximize2 className="w-3 h-3 mr-1 text-primary-500" />
+                        <span>Original: "The Quick Brown Fox Jumps Over The Lazy Dog"</span>
+                      </div>
+                      <div className="flex items-center">
+                        <Minimize2 className="w-3 h-3 mr-1 text-success-500" />
+                        <span>
+                          {selectedCase === "lower"
+                            ? 'Converted: "the quick brown fox jumps over the lazy dog"'
+                            : selectedCase === "upper"
+                              ? 'Converted: "THE QUICK BROWN FOX JUMPS OVER THE LAZY DOG"'
+                              : selectedCase === "title"
+                                ? 'Converted: "The Quick Brown Fox Jumps Over The Lazy Dog"'
+                                : selectedCase === "sentence"
+                                  ? 'Converted: "The quick brown fox jumps over the lazy dog"'
+                                  : selectedCase === "camel"
+                                    ? 'Converted: "theQuickBrownFoxJumpsOverTheLazyDog"'
+                                    : selectedCase === "pascal"
+                                      ? 'Converted: "TheQuickBrownFoxJumpsOverTheLazyDog"'
+                                      : selectedCase === "snake"
+                                        ? 'Converted: "the_quick_brown_fox_jumps_over_the_lazy_dog"'
+                                        : selectedCase === "kebab"
+                                          ? 'Converted: "the-quick-brown-fox-jumps-over-the-lazy-dog"'
+                                          : selectedCase === "toggle"
+                                            ? 'Converted: "tHE qUICK bROWN fOX jUMPS oVER tHE lAZY dOG"'
+                                            : selectedCase === "alternate"
+                                              ? 'Converted: "the QUICK brown FOX jumps OVER the LAZY dog"'
+                                              : selectedCase === "dot"
+                                                ? 'Converted: "the.quick.brown.fox.jumps.over.the.lazy.dog"'
+                                                : selectedCase === "constant"
+                                                  ? 'Converted: "THE_QUICK_BROWN_FOX_JUMPS_OVER_THE_LAZY_DOG"'
+                                                  : selectedCase === "path"
+                                                    ? 'Converted: "the/quick/brown/fox/jumps/over/the/lazy/dog"'
+                                                    : "Select a case type to see preview"}
+                        </span>
+                      </div>
+                    </div>
+
+                    <Divider className="my-3" />
+
+                    <div className="space-y-2">
+                      <Switch isSelected={respectAcronyms} onValueChange={setRespectAcronyms} size="sm">
+                        Preserve acronyms (e.g., NASA, FBI)
+                      </Switch>
+                      <Switch isSelected={trimWhitespace} onValueChange={setTrimWhitespace} size="sm">
+                        Trim leading/trailing whitespace
+                      </Switch>
+                      <Switch isSelected={normalizeSpaces} onValueChange={setNormalizeSpaces} size="sm">
+                        Normalize multiple spaces
+                      </Switch>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="flex justify-center mt-4">
+                  <Button
+                    color="primary"
+                    onPress={handleConvert}
+                    startContent={isProcessing ? null : <Zap size={18} />}
+                    isLoading={isProcessing}
+                    size="md"
+                    className="px-8"
+                    isDisabled={!inputText.trim() || !selectedCase}
+                  >
+                    {isProcessing ? "Processing..." : "Convert Text"}
+                  </Button>
+                </div>
+              </div>
+            )}
+
+            {activeTab === "advanced" && (
+              <div className="space-y-4">
+                <h3 className="text-md font-semibold text-default-700">Advanced Text Transformation</h3>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  <div className="bg-default-100/50 p-3 rounded-lg">
+                    <h4 className="text-sm font-medium text-default-700 mb-2">Text Manipulation</h4>
+                    <div className="space-y-2">
+                      <Button
+                        color="primary"
+                        variant="flat"
+                        onPress={handleReverse}
+                        startContent={<Undo2 size={16} />}
+                        isDisabled={!outputText}
+                        size="sm"
+                        className="w-full"
+                      >
+                        Reverse Text
+                      </Button>
+                      <Button
+                        color="primary"
+                        variant="flat"
+                        onPress={handleRemoveSpaces}
+                        startContent={<Space size={16} />}
+                        isDisabled={!outputText}
+                        size="sm"
+                        className="w-full"
+                      >
+                        Remove All Spaces
+                      </Button>
+                      <Button
+                        color="primary"
+                        variant="flat"
+                        onPress={handleRemoveExtraSpaces}
+                        startContent={<Minus size={16} />}
+                        isDisabled={!outputText}
+                        size="sm"
+                        className="w-full"
+                      >
+                        Remove Extra Spaces
+                      </Button>
+                      <Button
+                        color="primary"
+                        variant="flat"
+                        onPress={handleRemoveLineBreaks}
+                        startContent={<Layers size={16} />}
+                        isDisabled={!outputText}
+                        size="sm"
+                        className="w-full"
+                      >
+                        Remove Line Breaks
+                      </Button>
+                    </div>
+                  </div>
+
+                  <div className="bg-default-100/50 p-3 rounded-lg">
+                    <h4 className="text-sm font-medium text-default-700 mb-2">Line Operations</h4>
+                    <div className="space-y-2">
+                      <Button
+                        color="secondary"
+                        variant="flat"
+                        onPress={handleTrim}
+                        startContent={<Slice size={16} />}
+                        isDisabled={!outputText}
+                        size="sm"
+                        className="w-full"
+                      >
+                        Trim Whitespace
+                      </Button>
+                      <Button
+                        color="secondary"
+                        variant="flat"
+                        onPress={handleRemoveDuplicateLines}
+                        startContent={<SplitSquareHorizontal size={16} />}
+                        isDisabled={!outputText}
+                        size="sm"
+                        className="w-full"
+                      >
+                        Remove Duplicate Lines
+                      </Button>
+                      <Button
+                        color="secondary"
+                        variant="flat"
+                        onPress={handleRemoveEmptyLines}
+                        startContent={<Scissors size={16} />}
+                        isDisabled={!outputText}
+                        size="sm"
+                        className="w-full"
+                      >
+                        Remove Empty Lines
+                      </Button>
+                      <Button
+                        color="secondary"
+                        variant="flat"
+                        onPress={handleAddLineNumbers}
+                        startContent={<Hash size={16} />}
+                        isDisabled={!outputText}
+                        size="sm"
+                        className="w-full"
+                      >
+                        Add Line Numbers
+                      </Button>
+                    </div>
+                  </div>
+
+                  <div className="bg-default-100/50 p-3 rounded-lg">
+                    <h4 className="text-sm font-medium text-default-700 mb-2">Sorting & Formatting</h4>
+                    <div className="space-y-2">
+                      <Button
+                        color="success"
+                        variant="flat"
+                        onPress={handleSortLines}
+                        startContent={<AlignJustify size={16} />}
+                        isDisabled={!outputText}
+                        size="sm"
+                        className="w-full"
+                      >
+                        Sort Lines Alphabetically
+                      </Button>
+                      <Button
+                        color="success"
+                        variant="flat"
+                        onPress={handleSortLinesByLength}
+                        startContent={<Indent size={16} />}
+                        isDisabled={!outputText}
+                        size="sm"
+                        className="w-full"
+                      >
+                        Sort Lines by Length
+                      </Button>
+                      <Button
+                        color="success"
+                        variant="flat"
+                        onPress={handleCapitalizeWords}
+                        startContent={<Type size={16} />}
+                        isDisabled={!outputText}
+                        size="sm"
+                        className="w-full"
+                      >
+                        Capitalize Each Word
+                      </Button>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="flex justify-center mt-4">
+                  <Button
+                    color="primary"
+                    onPress={handleConvert}
+                    startContent={isProcessing ? null : <Wand2 size={18} />}
+                    isLoading={isProcessing}
+                    size="md"
+                    className="px-8"
+                    isDisabled={!inputText.trim() || !selectedCase}
+                  >
+                    {isProcessing ? "Processing..." : "Convert with Advanced Options"}
+                  </Button>
+                </div>
+              </div>
+            )}
+
+            {activeTab === "tools" && (
+              <div className="space-y-4">
+                <h3 className="text-md font-semibold text-default-700">Text Transformation Tools</h3>
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+                  <Tooltip content="Copy text to clipboard" className="text-default-700">
+                    <Button
+                      color="primary"
+                      variant="flat"
+                      onPress={handleCopy}
+                      startContent={<Copy size={16} />}
+                      isDisabled={!outputText}
+                      size="sm"
+                      className="w-full"
+                    >
+                      Copy
+                    </Button>
+                  </Tooltip>
+
+                  <Tooltip content="Download text as file" className="text-default-700">
+                    <Button
+                      color="primary"
+                      variant="flat"
+                      onPress={handleDownload}
+                      startContent={<Download size={16} />}
+                      isDisabled={!outputText}
+                      size="sm"
+                      className="w-full"
+                    >
+                      Download
+                    </Button>
+                  </Tooltip>
+
+                  <Tooltip content="Reverse character order" className="text-default-700">
+                    <Button
+                      color="primary"
+                      variant="flat"
+                      onPress={handleReverse}
+                      startContent={<Undo2 size={16} />}
+                      isDisabled={!outputText}
+                      size="sm"
+                      className="w-full"
+                    >
+                      Reverse
+                    </Button>
+                  </Tooltip>
+
+                  <Tooltip content="Remove all spaces" className="text-default-700">
+                    <Button
+                      color="primary"
+                      variant="flat"
+                      onPress={handleRemoveSpaces}
+                      startContent={<Space size={16} />}
+                      isDisabled={!outputText}
+                      size="sm"
+                      className="w-full"
+                    >
+                      No Spaces
+                    </Button>
+                  </Tooltip>
+
+                  <Tooltip content="Trim whitespace from start/end" className="text-default-700">
+                    <Button
+                      color="primary"
+                      variant="flat"
+                      onPress={handleTrim}
+                      startContent={<Slice size={16} />}
+                      isDisabled={!outputText}
+                      size="sm"
+                      className="w-full"
+                    >
+                      Trim
+                    </Button>
+                  </Tooltip>
+
+                  <Tooltip content="Capitalize first letter of each word" className="text-default-700">
+                    <Button
+                      color="primary"
+                      variant="flat"
+                      onPress={handleCapitalizeWords}
+                      startContent={<Type size={16} />}
+                      isDisabled={!outputText}
+                      size="sm"
+                      className="w-full"
+                    >
+                      Capitalize
+                    </Button>
+                  </Tooltip>
+
+                  <Tooltip content="Remove duplicate lines" className="text-default-700">
+                    <Button
+                      color="primary"
+                      variant="flat"
+                      onPress={handleRemoveDuplicateLines}
+                      startContent={<SplitSquareHorizontal size={16} />}
+                      isDisabled={!outputText}
+                      size="sm"
+                      className="w-full"
+                    >
+                      Unique Lines
+                    </Button>
+                  </Tooltip>
+
+                  <Tooltip content="Clear all text" className="text-default-700">
+                    <Button
+                      color="danger"
+                      variant="flat"
+                      onPress={handleClear}
+                      startContent={<Trash2 size={16} />}
+                      isDisabled={!inputText && !outputText}
+                      size="sm"
+                      className="w-full"
+                    >
+                      Clear All
+                    </Button>
+                  </Tooltip>
+
+                  <Tooltip content="Remove all line breaks" className="text-default-700">
+                    <Button
+                      color="secondary"
+                      variant="flat"
+                      onPress={handleRemoveLineBreaks}
+                      startContent={<Layers size={16} />}
+                      isDisabled={!outputText}
+                      size="sm"
+                      className="w-full"
+                    >
+                      No Breaks
+                    </Button>
+                  </Tooltip>
+
+                  <Tooltip content="Remove multiple spaces" className="text-default-700">
+                    <Button
+                      color="secondary"
+                      variant="flat"
+                      onPress={handleRemoveExtraSpaces}
+                      startContent={<Minus size={16} />}
+                      isDisabled={!outputText}
+                      size="sm"
+                      className="w-full"
+                    >
+                      Fix Spaces
+                    </Button>
+                  </Tooltip>
+
+                  <Tooltip content="Sort lines alphabetically" className="text-default-700">
+                    <Button
+                      color="secondary"
+                      variant="flat"
+                      onPress={handleSortLines}
+                      startContent={<AlignJustify size={16} />}
+                      isDisabled={!outputText}
+                      size="sm"
+                      className="w-full"
+                    >
+                      Sort Lines
+                    </Button>
+                  </Tooltip>
+
+                  <Tooltip content="Sort lines by length" className="text-default-700">
+                    <Button
+                      color="secondary"
+                      variant="flat"
+                      onPress={handleSortLinesByLength}
+                      startContent={<Indent size={16} />}
+                      isDisabled={!outputText}
+                      size="sm"
+                      className="w-full"
+                    >
+                      Sort by Length
+                    </Button>
+                  </Tooltip>
+                </div>
+
+                <div className="flex justify-center mt-4" >
+                  <Button
+                    color="primary"
+                    onPress={handleApplyToInput}
+                    startContent={<ArrowRightLeft size={18} />}
+                    size="md"
+                    className="px-8"
+                    isDisabled={!outputText}
+                  >
+                    Apply to Input for Further Processing
+                  </Button>
+                </div>
+              </div>
+            )}
+
+            {activeTab === "stats" && (
+              <div className="space-y-4">
+                <h3 className="text-md font-semibold text-default-700">Text Statistics</h3>
+
+                {!inputText.trim() ? (
+                  <div className="text-center py-8 text-default-400">
+                    <FileText size={32} className="mx-auto mb-2 opacity-50" />
+                    <p>Enter some text to see statistics</p>
+                  </div>
+                ) : (
+                  <>
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+                      <div className="bg-default-100/50 p-3 rounded-lg">
+                        <div className="text-xs text-default-500 mb-1">Characters (with spaces)</div>
+                        <div className="text-lg font-semibold">{charCountWithSpaces}</div>
+                      </div>
+
+                      <div className="bg-default-100/50 p-3 rounded-lg">
+                        <div className="text-xs text-default-500 mb-1">Characters (no spaces)</div>
+                        <div className="text-lg font-semibold">{charCount}</div>
+                      </div>
+
+                      <div className="bg-default-100/50 p-3 rounded-lg">
+                        <div className="text-xs text-default-500 mb-1">Words</div>
+                        <div className="text-lg font-semibold">{wordCount}</div>
+                      </div>
+
+                      <div className="bg-default-100/50 p-3 rounded-lg">
+                        <div className="text-xs text-default-500 mb-1">Sentences</div>
+                        <div className="text-lg font-semibold">{textStats.sentenceCount}</div>
+                      </div>
+
+                      <div className="bg-default-100/50 p-3 rounded-lg">
+                        <div className="text-xs text-default-500 mb-1">Paragraphs</div>
+                        <div className="text-lg font-semibold">{textStats.paragraphCount}</div>
+                      </div>
+
+                      <div className="bg-default-100/50 p-3 rounded-lg">
+                        <div className="text-xs text-default-500 mb-1">Reading Time</div>
+                        <div className="text-lg font-semibold">{readingTime} min</div>
+                      </div>
+
+                      <div className="bg-default-100/50 p-3 rounded-lg">
+                        <div className="text-xs text-default-500 mb-1">Avg. Word Length</div>
+                        <div className="text-lg font-semibold">{textStats.avgWordLength}</div>
+                      </div>
+
+                      <div className="bg-default-100/50 p-3 rounded-lg">
+                        <div className="text-xs text-default-500 mb-1">Unique Words</div>
+                        <div className="text-lg font-semibold">{textStats.uniqueWords}</div>
+                        <div className="text-xs text-default-400">
+                          {wordCount > 0 ? `${Math.round((textStats.uniqueWords / wordCount) * 100)}% of total` : ""}
+                        </div>
+                      </div>
+                    </div>
+
+                    {(textStats.longestWord || textStats.shortestWord) && (
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+                        {textStats.longestWord && (
+                          <div className="bg-default-100/50 p-3 rounded-lg">
+                            <div className="text-xs text-default-500 mb-1">Longest Word</div>
+                            <div className="text-md font-medium">{textStats.longestWord}</div>
+                            <div className="text-xs text-default-400 mt-1">
+                              {textStats.longestWord.length} characters
+                            </div>
+                          </div>
+                        )}
+
+                        {textStats.shortestWord && (
+                          <div className="bg-default-100/50 p-3 rounded-lg">
+                            <div className="text-xs text-default-500 mb-1">Shortest Word</div>
+                            <div className="text-md font-medium">{textStats.shortestWord}</div>
+                            <div className="text-xs text-default-400 mt-1">
+                              {textStats.shortestWord.length} characters
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    )}
+
+                    {selectedLanguage === "auto" && detectedLanguage !== "en" && (
+                      <div className="bg-default-100/50 p-3 rounded-lg mt-4">
+                        <div className="text-xs text-default-500 mb-1">Detected Language</div>
+                        <div className="text-md font-medium flex items-center">
+                          <Globe className="w-4 h-4 mr-1 text-primary-500" />
+                          {languageRules[detectedLanguage as keyof typeof languageRules]?.name || "Unknown"}
+                        </div>
+                      </div>
+                    )}
+                  </>
+                )}
+
+                <div className="flex justify-center mt-4">
+                  <Button
+                    color="primary"
+                    onPress={handleAutoDetect}
+                    startContent={<Globe size={18} />}
+                    size="md"
+                    className="px-8 mr-2"
+                    isDisabled={!inputText.trim()}
+                  >
+                    Detect Language
+                  </Button>
+                  <Button
+                    color="primary"
+                    onPress={handleConvert}
+                    startContent={<Zap size={18} />}
+                    size="md"
+                    className="px-8"
+                    isDisabled={!inputText.trim() || !selectedCase}
+                  >
+                    Convert Text
+                  </Button>
+                </div>
+              </div>
+            )}
+
+            {activeTab === "history" && (
+              <div className="space-y-4">
+                <h3 className="text-md font-semibold text-default-700">Conversion History</h3>
+
+                {history.length === 0 ? (
+                  <div className="text-center py-8 text-default-400">
+                    <History size={32} className="mx-auto mb-2 opacity-50" />
+                    <p>No conversion history yet</p>
+                    <p className="text-xs mt-2">Convert some text to see your history</p>
+                  </div>
+                ) : (
+                  <>
+                    <div className="flex justify-between items-center">
+                      <div className="text-sm text-default-600">
+                        {history.length} conversion{history.length !== 1 ? "s" : ""} in history
+                      </div>
+                      <div className="flex gap-2">
+                        <Button
+                          color="danger"
+                          variant="light"
+                          size="sm"
+                          startContent={<Trash2 size={14} />}
+                          onPress={() => {
+                            setHistory([])
+                            setHistoryIndex(-1)
+                            toast.success("History cleared")
+                          }}
+                        >
+                          Clear History
+                        </Button>
+                      </div>
+                    </div>
+
+                    <div className="space-y-2 max-h-[300px] overflow-y-auto">
+                      {history.map((item, index) => (
+                        <div
+                          key={index}
+                          className={`p-2 rounded-lg text-sm ${
+                            index === historyIndex
+                              ? "bg-primary-100 dark:bg-primary-900/30 border-l-4 border-primary-500"
+                              : "bg-default-100/50"
+                          }`}
+                        >
+                          <div className="flex justify-between items-center">
+                            <div className="font-medium flex items-center">
+                              {index === historyIndex && <Check size={14} className="mr-1 text-primary-500" />}
+                              Conversion #{index + 1}
+                            </div>
+                            <Button
+                              size="sm"
+                              variant="light"
+                              color="primary"
+                              isIconOnly
+                              onPress={() => {
+                                setOutputText(item)
+                                setHistoryIndex(index)
+                                toast.success(`Restored conversion #${index + 1}`)
+                              }}
+                            >
+                              <RotateCcw size={14} />
+                            </Button>
+                          </div>
+                          <div className="mt-1 text-default-600 truncate">{item.substring(0, 100)}</div>
+                        </div>
+                      ))}
+                    </div>
+                  </>
+                )}
+
+                <div className="flex justify-center mt-4">
+                  <Button
+                    color="secondary"
+                    onPress={handleUndo}
+                    startContent={<RotateCcw size={16} />}
+                    size="sm"
+                    className="mr-2"
+                    isDisabled={historyIndex <= 0}
+                  >
+                    Undo
+                  </Button>
+                  <Button
+                    color="secondary"
+                    onPress={handleRedo}
+                    startContent={<RefreshCw size={16} />}
+                    size="sm"
+                    isDisabled={historyIndex >= history.length - 1}
+                  >
+                    Redo
+                  </Button>
+                </div>
+              </div>
+            )}
+          </CardBody>
+        </Card>
+      </div>
+
+      {/* Info Section */}
+      <InfoSection />
+    </ToolLayout>
+  )
+}

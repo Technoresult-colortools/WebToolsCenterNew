@@ -23,9 +23,9 @@ import {
   Chip,
 } from "@nextui-org/react"
 import Image from "next/image"
-import Link from "next/link"
-import { Copy, Download, RefreshCw, Shuffle, Info, Lightbulb, BookOpen, Type, Filter, Settings, Heart, Clock, Book, User, HeartHandshake, MapPin, Phone, Mail, Briefcase, FileText, CreditCard, AlignLeft } from "lucide-react"
+import { Copy, Download, RefreshCw, Shuffle, Type, Filter, Settings, Heart, Clock, Book, User, HeartHandshake, MapPin, Phone, Mail, Briefcase, FileText, CreditCard, AlignLeft } from "lucide-react"
 import { toast } from "react-hot-toast"
+import InfoSection from "./InfoSection"
 import ToolLayout from "@/components/ToolLayout"
 
 type FontSettings = {
@@ -794,9 +794,11 @@ const GoogleFontsPairFinder: React.FC = () => {
                 <div className="bg-gradient-to-br from-slate-100 to-slate-200 dark:from-slate-800 dark:to-slate-900 p-6 h-full">
                   <div className="flex flex-col sm:flex-row sm:items-center gap-6 mb-6">
                   <div className="relative w-24 h-24">
-                    <img
-                      src="/Images/GoogleFontsPair/MarioImage.jpg?height=100&width=100"
+                    <Image
+                      src="/Images/GoogleFontsPair/MarioImage.jpg"
                       alt="Profile"
+                      width={100}
+                      height={100}
                       className="w-full h-full rounded-full object-cover border-4 border-white dark:border-slate-700 shadow-lg"
                     />
                     <span className="absolute bottom-1 right-1 w-4 h-4 bg-green-500 rounded-full border-2 border-white"></span>
@@ -950,9 +952,11 @@ const GoogleFontsPairFinder: React.FC = () => {
                 <div className="bg-gradient-to-br from-slate-100 to-slate-200 dark:from-slate-800 dark:to-slate-900 p-6 h-full flex items-center justify-center">
                   <div className="w-full max-w-sm overflow-hidden rounded-xl bg-white dark:bg-slate-800 shadow-lg">
                     <div className="relative">
-                      <img
-                        src="/Images/GoogleFontsPair/Typography.jpg?height=200&width=400"
+                      <Image
+                        src="/Images/GoogleFontsPair/Typography.jpg"
                         alt="Card"
+                        width={400}
+                        height={200}
                         className="w-full h-48 object-cover"
                       />
                       <div className="absolute top-4 right-4 bg-white/90 dark:bg-slate-900/90 backdrop-blur-sm rounded-full p-1">
@@ -1055,121 +1059,8 @@ const GoogleFontsPairFinder: React.FC = () => {
         {/* Modal for showing font pair usage */}
         <ShowFontsPair />
       
-
-        <Card className="bg-default-50 dark:bg-default-100">
-      <CardBody className="p-6">
-        <div className="rounded-xl p-2 md:p-4 max-w-4xl mx-auto">
-          <h2 className="text-xl md:text-2xl font-semibold text-default-700 mb-4 flex items-center">
-            <Info className="w-6 h-6 mr-2" />
-            What is the Google Fonts Pair Finder?
-          </h2>
-          <p className="text-sm md:text-base text-default-600 mb-4">
-            The Google Fonts Pair Finder is an innovative tool designed for designers, developers, and typography
-            enthusiasts. It simplifies the process of finding harmonious font combinations from Google's extensive font
-            library. With customizable options and{" "}
-            <Link href="#features" className="text-primary hover:underline">
-              powerful features
-            </Link>
-            , our tool helps you create visually appealing and readable designs for your web projects, print materials,
-            or any typographic needs.
-          </p>
-          <p className="text-sm md:text-base text-default-600 mb-4">
-            Whether you're working on a website, creating a brand identity, or just exploring typography, this tool
-            offers a comprehensive way to experiment with font pairings. It's like having a typographic playground at
-            your fingertips, revealing beautiful combinations you might never have considered!
-          </p>
-
-          <div className="my-8">
-            <Image
-              src="/Images/InfosectionImages/GoogleFontpairPreview.png?height=400&width=600" 
-              alt="Screenshot of the Google Fonts Pair Finder interface showing font selection, preview area, and pairing options"
-              width={600}
-              height={400}
-              className="rounded-lg shadow-lg w-full h-auto"
-            />
-          </div>
-
-          <h2
-            id="how-to-use"
-            className="text-xl md:text-2xl font-semibold text-default-700 mb-4 mt-8 flex items-center"
-          >
-            <BookOpen className="w-6 h-6 mr-2" />
-            How to Use the Google Fonts Pair Finder?
-          </h2>
-          <ol className="list-decimal list-inside space-y-2 text-sm md:text-base text-default-600">
-            <li>Choose a heading font from the extensive Google Fonts library.</li>
-            <li>Select a complementary body font to pair with your heading.</li>
-            <li>Adjust font sizes, weights, and styles to fine-tune your combination.</li>
-            <li>Use the preview area to see your font pair in action with different content types.</li>
-            <li>Experiment with the "Random Pair" feature for inspiration.</li>
-            <li>Filter fonts by category or popularity to narrow down your choices.</li>
-            <li>Copy the CSS for your chosen font pair to use in your projects.</li>
-            <li>Use the "Font Details" option to learn more about each selected font.</li>
-          </ol>
-
-          <h2 id="features" className="text-xl md:text-2xl font-semibold text-default-700 mb-4 mt-8 flex items-center">
-            <Lightbulb className="w-6 h-6 mr-2" />
-            Key Features
-          </h2>
-          <ul className="list-disc list-inside space-y-2 text-sm md:text-base text-default-600">
-            <li>
-              <strong>Extensive Font Library:</strong> Access to the complete Google Fonts collection.
-            </li>
-            <li>
-              <strong>Intelligent Pairing:</strong> Suggestions for complementary heading and body font combinations.
-            </li>
-            <li>
-              <strong>Real-time Preview:</strong> See your font choices instantly in various content layouts.
-            </li>
-            <li>
-              <strong>Customization Options:</strong> Adjust font size, weight, line height, and letter spacing.
-            </li>
-            <li>
-              <strong>Random Pair Generator:</strong> Discover unexpected and inspiring font combinations.
-            </li>
-            <li>
-              <strong>Font Filtering:</strong> Narrow down choices by category, popularity, or specific attributes.
-            </li>
-            <li>
-              <strong>CSS Export:</strong> Easily copy the CSS for your chosen font pair.
-            </li>
-            <li>
-              <strong>Font Details:</strong> Access comprehensive information about each font.
-            </li>
-          </ul>
-
-          <h2 className="text-xl md:text-2xl font-semibold text-default-700 mb-4 mt-8 flex items-center">
-            <Filter className="w-6 h-6 mr-2" />
-            Advanced Options Explained
-          </h2>
-          <ul className="list-disc list-inside space-y-2 text-sm md:text-base text-default-600">
-            <li>
-              <strong>Font Categories:</strong> Filter fonts by serif, sans-serif, display, handwriting, or monospace.
-            </li>
-            <li>
-              <strong>Popularity Filter:</strong> Focus on widely-used fonts or explore less common options.
-            </li>
-            <li>
-              <strong>Weight and Style:</strong> Experiment with different font weights and italic styles.
-            </li>
-            <li>
-              <strong>Line Height and Letter Spacing:</strong> Fine-tune the spacing for optimal readability.
-            </li>
-            <li>
-              <strong>Preview Modes:</strong> Test your fonts in profile, article, and card layouts.
-            </li>
-          </ul>
-
-
-          <p className="text-sm md:text-base text-default-600 mt-4">
-            Ready to elevate your typography game? Start using our Google Fonts Pair Finder now and discover the perfect
-            font combinations for your projects. Whether you're a professional designer, a hobbyist, or just someone who
-            appreciates good typography, our tool provides the inspiration and functionality you need to create visually
-            stunning designs. Try it out and see how the right font pairing can transform your work!
-          </p>
-        </div>
-      </CardBody>
-    </Card>
+        <InfoSection />
+      
       </div>
     </ToolLayout>
   );
