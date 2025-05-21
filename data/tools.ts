@@ -257,7 +257,7 @@ export const allTools: Tool[] = [
     category: "Image",
     href: "/tools/image/image-average-color-finder",
     icon: faPalette,
-    description: "Find the average color of an image.",
+    description: "Analyze images to find their average and dominant colors effortlessly.",
 
   },
   {
@@ -813,7 +813,7 @@ export const allTools: Tool[] = [
   category: 'Misc',
   href: '/tools/misc/unit-converter',
   icon: faExchangeAlt,
-  description: 'Convert between different units of measurement.',
+  description: 'Quickly and accurately convert between various units of measurement.',
 
 },
 {

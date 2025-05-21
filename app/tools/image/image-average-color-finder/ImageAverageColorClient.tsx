@@ -2,11 +2,11 @@
 
 import type React from "react"
 import { useState, useRef, useEffect } from "react"
-import { Card, CardBody, Button, Slider } from "@nextui-org/react"
-import { Upload, X, Download, Droplet, Palette, Info, BookOpen, Lightbulb } from "lucide-react"
-import { toast, Toaster } from "react-hot-toast"
+import { Card, Button, Slider, Tooltip, Chip, CardBody } from "@nextui-org/react"
+import { Upload, X, Download, Palette, Copy, RefreshCw, Maximize2, Minimize2 } from "lucide-react"
+import { toast,  } from "react-hot-toast"
 import ToolLayout from "@/components/ToolLayout"
-import NextImage from 'next/image'
+import InfoSection from "./info-section"
 
 interface Color {
   hex: string
@@ -20,6 +20,8 @@ export default function ImageAverageColorFinder() {
   const [dominantColors, setDominantColors] = useState<Color[]>([])
   const [sampleSize, setSampleSize] = useState(5)
   const [isDragging, setIsDragging] = useState(false)
+  const [isFullscreen, setIsFullscreen] = useState(false)
+  const [isAnalyzing, setIsAnalyzing] = useState(false)
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const fileInputRef = useRef<HTMLInputElement>(null)
 
@@ -31,8 +33,21 @@ export default function ImageAverageColorFinder() {
   }
 
   const processFile = (file: File) => {
+    if (!file.type.startsWith("image/")) {
+      toast.error("Please upload an image file")
+      return
+    }
+
+    setIsAnalyzing(true)
     const reader = new FileReader()
-    reader.onload = (e) => setImageSrc(e.target?.result as string)
+    reader.onload = (e) => {
+      setImageSrc(e.target?.result as string)
+      toast.success("Image uploaded successfully")
+    }
+    reader.onerror = () => {
+      toast.error("Error reading file")
+      setIsAnalyzing(false)
+    }
     reader.readAsDataURL(file)
   }
 
@@ -67,6 +82,7 @@ export default function ImageAverageColorFinder() {
   useEffect(() => {
     if (imageSrc && canvasRef.current) {
       const img = new Image()
+      img.crossOrigin = "anonymous"
       img.onload = () => {
         const canvas = canvasRef.current!
         canvas.width = img.width
@@ -74,10 +90,15 @@ export default function ImageAverageColorFinder() {
         const ctx = canvas.getContext("2d")!
         ctx.drawImage(img, 0, 0, img.width, img.height)
         calculateColors()
+        setIsAnalyzing(false)
+      }
+      img.onerror = () => {
+        toast.error("Error loading image")
+        setIsAnalyzing(false)
       }
       img.src = imageSrc
     }
-  }, [imageSrc, sampleSize]) // Added sampleSize dependency to recalculate when changed
+  }, [imageSrc, sampleSize])
 
   const calculateColors = () => {
     if (!canvasRef.current) return
@@ -93,6 +114,9 @@ export default function ImageAverageColorFinder() {
     const colorMap: { [key: string]: number } = {}
 
     for (let i = 0; i < data.length; i += 4) {
+      // Skip transparent pixels
+      if (data[i + 3] < 128) continue
+
       r += data[i]
       g += data[i + 1]
       b += data[i + 2]
@@ -134,9 +158,9 @@ export default function ImageAverageColorFinder() {
     const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex)
     return result
       ? {
-          r: parseInt(result[1], 16),
-          g: parseInt(result[2], 16),
-          b: parseInt(result[3], 16),
+          r: Number.parseInt(result[1], 16),
+          g: Number.parseInt(result[2], 16),
+          b: Number.parseInt(result[3], 16),
         }
       : null
   }
@@ -180,6 +204,16 @@ export default function ImageAverageColorFinder() {
     setImageSrc(null)
     setAverageColor(null)
     setDominantColors([])
+    toast.success("Reset successful")
+  }
+
+  const copyColorToClipboard = (color: string) => {
+    navigator.clipboard.writeText(color)
+    toast.success(`Copied ${color} to clipboard`)
+  }
+
+  const toggleFullscreen = () => {
+    setIsFullscreen(!isFullscreen)
   }
 
   const downloadColorPalette = () => {
@@ -189,45 +223,44 @@ export default function ImageAverageColorFinder() {
     const colorHeight = 120 * scale // Height of each color block
     const hexHeight = 40 * scale // Height for hex code section
 
-    
     // Calculate dimensions with padding
-    canvas.width = (800 * scale) + (padding * 2)
-    canvas.height = colorHeight + hexHeight + (padding * 2)
-    
+    canvas.width = 800 * scale + padding * 2
+    canvas.height = colorHeight + hexHeight + padding * 2
+
     const ctx = canvas.getContext("2d")!
     ctx.scale(scale, scale)
-    
+
     // Fill background
     ctx.fillStyle = "#ffffff"
     ctx.fillRect(0, 0, canvas.width, canvas.height)
-    
+
     const colors = [averageColor!, ...dominantColors]
     const colorWidth = 800 / colors.length
-    
+
     // Draw a subtle grid pattern in the background
     ctx.strokeStyle = "#f0f0f0"
     ctx.lineWidth = 0.5
-    for (let x = padding; x <= canvas.width/scale - padding; x += 20) {
+    for (let x = padding; x <= canvas.width / scale - padding; x += 20) {
       ctx.beginPath()
       ctx.moveTo(x, padding)
       ctx.lineTo(x, colorHeight + padding)
       ctx.stroke()
     }
-    
+
     // Draw color blocks with rounded corners and shadows
     colors.forEach((color, index) => {
-      const x = (index * colorWidth) + padding
+      const x = index * colorWidth + padding
       const y = padding
       const width = colorWidth - 10
       const height = colorHeight / scale
       const radius = 8
-  
+
       // Draw shadow
-      ctx.shadowColor = 'rgba(0, 0, 0, 0.1)'
+      ctx.shadowColor = "rgba(0, 0, 0, 0.1)"
       ctx.shadowBlur = 10
       ctx.shadowOffsetX = 0
       ctx.shadowOffsetY = 4
-      
+
       // Draw rounded rectangle
       ctx.beginPath()
       ctx.moveTo(x + radius, y)
@@ -240,85 +273,96 @@ export default function ImageAverageColorFinder() {
       ctx.lineTo(x, y + radius)
       ctx.quadraticCurveTo(x, y, x + radius, y)
       ctx.closePath()
-      
+
       // Fill color
       ctx.fillStyle = color.hex
       ctx.fill()
-      
+
       // Reset shadow
-      ctx.shadowColor = 'transparent'
-      
+      ctx.shadowColor = "transparent"
+
       // Add hex code label
       const hexY = y + height + 30
-      const centerX = x + (width / 2)
-      
+      const centerX = x + width / 2
+
       // Draw hex code background
       const hexText = color.hex.toUpperCase()
       ctx.font = "bold 14px Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif"
       const textWidth = ctx.measureText(hexText).width
       const labelPadding = 12
-      const labelWidth = textWidth + (labelPadding * 2)
+      const labelWidth = textWidth + labelPadding * 2
       const labelHeight = 28
       const labelRadius = 6
-      
+
       // Calculate text brightness and choose contrasting colors
       const { r, g, b } = color.rgb
       const brightness = (r * 299 + g * 587 + b * 114) / 1000
-      const labelBg = brightness > 128 ? color.hex : '#ffffff'
-      const textColor = brightness > 128 ? '#000000' : color.hex
-      
+      const labelBg = brightness > 128 ? color.hex : "#ffffff"
+      const textColor = brightness > 128 ? "#000000" : color.hex
+
       // Draw label background
       ctx.fillStyle = labelBg
       ctx.beginPath()
-      ctx.roundRect(
-        centerX - (labelWidth / 2),
-        hexY - (labelHeight / 2),
-        labelWidth,
-        labelHeight,
-        labelRadius
-      )
+      ctx.roundRect(centerX - labelWidth / 2, hexY - labelHeight / 2, labelWidth, labelHeight, labelRadius)
       ctx.fill()
-      
+
       // Draw hex code
       ctx.fillStyle = textColor
-      ctx.textAlign = 'center'
-      ctx.textBaseline = 'middle'
+      ctx.textAlign = "center"
+      ctx.textBaseline = "middle"
       ctx.fillText(hexText, centerX, hexY)
     })
-    
+
     // Add title
-    ctx.fillStyle = '#000000'
+    ctx.fillStyle = "#000000"
     ctx.font = "bold 16px Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif"
-    ctx.textAlign = 'left'
-    ctx.fillText('COLOR PALETTE', padding, padding - 15)
-    
+    ctx.textAlign = "left"
+    ctx.fillText("COLOR PALETTE", padding, padding - 15)
+
     // Add date
-    const date = new Date().toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'short',
-      day: 'numeric'
+    const date = new Date().toLocaleDateString("en-US", {
+      year: "numeric",
+      month: "short",
+      day: "numeric",
     })
     ctx.font = "12px Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif"
-    ctx.textAlign = 'right'
-    ctx.fillText(date, canvas.width/scale - padding, padding - 15)
-    
+    ctx.textAlign = "right"
+    ctx.fillText(date, canvas.width / scale - padding, padding - 15)
+
     // Download the palette
     const link = document.createElement("a")
-    link.download = `color-palette-${date.toLowerCase().replace(/\s/g, '-')}.png`
+    link.download = `color-palette-${date.toLowerCase().replace(/\s/g, "-")}.png`
     link.href = canvas.toDataURL("image/png")
     link.click()
     toast.success("Color palette downloaded successfully")
   }
-  
 
   const ColorBox = ({ color }: { color: Color }) => (
     <div className="flex flex-col items-center">
-      <div 
-        className="w-16 h-16 rounded-lg shadow-md border border-default-400 dark:border-default-700"
-        style={{ backgroundColor: color.hex }}
-      ></div>
+      <div className="relative group">
+        <div
+          className="w-16 h-16 rounded-lg shadow-md border border-default-400 dark:border-default-700 transition-transform group-hover:scale-105"
+          style={{ backgroundColor: color.hex }}
+        ></div>
+        <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+          <Button
+            isIconOnly
+            size="sm"
+            variant="flat"
+            className="bg-white/80 dark:bg-black/50"
+            onClick={() => copyColorToClipboard(color.hex)}
+          >
+            <Copy size={14} />
+          </Button>
+        </div>
+      </div>
       <div className="mt-2 space-y-1 text-center">
-        <p className="text-sm font-medium">{color.hex}</p>
+        <p
+          className="text-sm font-medium cursor-pointer hover:underline"
+          onClick={() => copyColorToClipboard(color.hex)}
+        >
+          {color.hex}
+        </p>
         <p className="text-xs text-default-600">
           rgb({color.rgb.r}, {color.rgb.g}, {color.rgb.b})
         </p>
@@ -328,21 +372,35 @@ export default function ImageAverageColorFinder() {
       </div>
     </div>
   )
+
   return (
     <ToolLayout
       title="Image Average Color Finder"
       description="Analyze images to find their average and dominant colors effortlessly. Perfect for designers, artists, and anyone looking to create cohesive color palettes for their projects"
       toolId="678f382a26f06f912191bc8e"
     >
-      <Toaster position="top-right" />
+     
       <div className="flex flex-col gap-8">
         <Card>
           <CardBody className="p-6 bg-default-50 dark:bg-default-100">
-          <h2 className="text-xl sm:text-1xl md:text-2xl font-bold text-default-700 mb-4">Upload an Image</h2>
+            <div className="flex justify-between items-center mb-4">
+              <h2 className="text-xl sm:text-1xl md:text-2xl font-bold text-default-700">Upload an Image</h2>
+              {imageSrc && (
+                <Button
+                  isIconOnly
+                  color="primary"
+                  variant="light"
+                  aria-label="Toggle fullscreen"
+                  onClick={toggleFullscreen}
+                >
+                  {isFullscreen ? <Minimize2 size={20} /> : <Maximize2 size={20} />}
+                </Button>
+              )}
+            </div>
 
             {!imageSrc ? (
               <label
-                className={`flex flex-col items-center justify-center h-64 px-4 py-6 bg-default-100 text-primary rounded-lg shadow-lg tracking-wide uppercase border-2 ${
+                className={`flex flex-col items-center justify-center h-64 px-4 py-6 bg-default-100 text-primary rounded-lg shadow-lg tracking-wide border-2 ${
                   isDragging ? "border-primary bg-primary-100" : "border-primary border-dashed"
                 } cursor-pointer hover:bg-primary-100 hover:text-primary-600 transition duration-300`}
                 onDragEnter={handleDragEnter}
@@ -354,12 +412,22 @@ export default function ImageAverageColorFinder() {
                 <span className="mt-2 text-sm sm:text-base md:text-md leading-normal text-center block">
                   {isDragging ? "Drop image here" : "Select a file or drag and drop"}
                 </span>
-
+                <p className="mt-2 text-xs text-default-500">Supports JPG, PNG, GIF, WebP, and SVG</p>
                 <input ref={fileInputRef} type="file" className="hidden" onChange={handleFileChange} accept="image/*" />
               </label>
             ) : (
               <div className="relative">
-                <div className="relative h-64  border border-default-400 dark:border-default-700 md:h-96 bg-default-100 rounded-lg overflow-hidden">
+                <div
+                  className={`relative border border-default-400 dark:border-default-700 bg-default-100 rounded-lg overflow-hidden ${isFullscreen ? "h-[80vh]" : "h-64 md:h-96"}`}
+                >
+                  {isAnalyzing ? (
+                    <div className="absolute inset-0 flex items-center justify-center bg-default-200/50">
+                      <div className="flex flex-col items-center gap-2">
+                        <RefreshCw size={32} className="animate-spin text-primary" />
+                        <p className="text-sm text-default-700">Analyzing image...</p>
+                      </div>
+                    </div>
+                  ) : null}
                   <img src={imageSrc || "/placeholder.svg"} alt="Uploaded" className="w-full h-full object-contain" />
                 </div>
                 <Button
@@ -379,39 +447,67 @@ export default function ImageAverageColorFinder() {
         {averageColor && (
           <Card>
             <CardBody className="p-6 bg-default-50 dark:bg-default-100">
-              <div className="flex flex-col md:flex-row items-start md:items-center justify-between mb-4">
+              <div className="flex flex-col md:flex-row items-start md:items-center justify-between mb-6">
                 <h2 className="text-2xl font-bold text-default-700 mb-2 md:mb-0">Color Analysis</h2>
-                <Button color="primary" onPress={downloadColorPalette} startContent={<Download size={18} />}>
+                <Button
+                  color="primary"
+                  onPress={downloadColorPalette}
+                  startContent={<Download size={18} />}
+                  
+                >
                   Download Palette
                 </Button>
               </div>
-              <div className="flex flex-col md:flex-row md:items-center mb-4">
-                <Droplet className="w-5 h-5 mr-2 text-default-700" />
-                <span className="font-medium text-default-700 mr-2">Average Color:</span>
-                <div className="w-6 h-6 rounded border border-default-400 dark:border-default-700 mr-2" style={{ backgroundColor: averageColor.hex }}></div>
-                <span className="text-default-700">{averageColor.hex}</span>
-              </div>
-              <div>
-                <p className="text-default-600 text-sm">
-                  RGB: {averageColor.rgb.r}, {averageColor.rgb.g}, {averageColor.rgb.b}
-                </p>
-                <p className="text-default-600 text-sm">
-                  HSL: {averageColor.hsl.h}°, {averageColor.hsl.s}%, {averageColor.hsl.l}%
-                </p>
-              </div>
-              <div className="mt-4">
-                <div className="flex items-center mb-2">
-                  <Palette className="w-5 h-5 inline-block mr-2 text-default-700" />
-                  <span className="font-medium text-default-700">Dominant Colors:</span>
+
+              <div className="p-4 bg-primary-100 dark:bg-primary-200/40 rounded-lg mb-6">
+                <div className="flex flex-col md:flex-row md:items-center gap-4">
+                  <div className="flex items-center gap-2">
+                    <Tooltip content="Average Color" className="text-default-700">
+                      <div
+                        className="w-12 h-12 rounded-full border-4 border-white dark:border-default-800 shadow-lg cursor-pointer"
+                        style={{ backgroundColor: averageColor.hex }}
+                        onClick={() => copyColorToClipboard(averageColor.hex)}
+                      ></div>
+                    </Tooltip>
+                    <div>
+                      <div className="flex items-center gap-2">
+                        <h3 className="font-semibold text-default-700">Average Color</h3>
+                        <Chip
+                          size="sm"
+                          variant="flat"
+                          className="cursor-pointer"
+                          onClick={() => copyColorToClipboard(averageColor.hex)}
+                        >
+                          {averageColor.hex}
+                        </Chip>
+                      </div>
+                      <div className="flex flex-wrap gap-x-4 text-xs text-default-500">
+                        <span>
+                          RGB: {averageColor.rgb.r}, {averageColor.rgb.g}, {averageColor.rgb.b}
+                        </span>
+                        <span>
+                          HSL: {averageColor.hsl.h}°, {averageColor.hsl.s}%, {averageColor.hsl.l}%
+                        </span>
+                      </div>
+                    </div>
+                  </div>
                 </div>
-                <div className="grid grid-cols-3 md:grid-cols-5 gap-2 mt-2">
+              </div>
+
+              <div className="mb-6">
+                <div className="flex items-center mb-4">
+                  <Palette className="w-5 h-5 inline-block mr-2 text-default-700" />
+                  <span className="font-medium text-default-700 text-lg">Dominant Colors</span>
+                </div>
+                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4 mt-2">
                   {dominantColors.map((color, index) => (
-                   <ColorBox key={index} color={color} />
+                    <ColorBox key={index} color={color} />
                   ))}
                 </div>
               </div>
-              <div className="mt-4">
-                <label htmlFor="sample-size" className="block text-sm font-medium text-default-700 mb-1">
+
+              <div className="mt-6 p-4 bg-success-100 dark:bg-success-200/40 rounded-lg">
+                <label htmlFor="sample-size" className="block text-sm font-medium text-default-700 mb-2">
                   Number of Dominant Colors: {sampleSize}
                 </label>
                 <Slider
@@ -423,73 +519,22 @@ export default function ImageAverageColorFinder() {
                   value={sampleSize}
                   onChange={(value) => setSampleSize(value as number)}
                   className="max-w-md"
+                  showSteps={true}
+                  marks={[
+                    { value: 1, label: "1" },
+                    { value: 5, label: "5" },
+                    { value: 10, label: "10" },
+                  ]}
                 />
               </div>
             </CardBody>
           </Card>
         )}
-         <canvas ref={canvasRef} style={{ display: "none" }} />
 
-         <Card className="mt-8 bg-default-50 dark:bg-default-100 p-4 md:p-8">
-            <div className="rounded-xl p-2 md:p-4 max-w-4xl mx-auto">
-                <h2 className="text-lg md:text-xl lg:text-2xl font-semibold text-default-700 mb-4 flex items-center">
-                <Info className="w-6 h-6 mr-2" />
-                What is the Image Average Color Finder?
-                </h2>
-                <p className="text-sm md:text-base text-default-600 mb-4">
-                The Image Average Color Finder is a powerful tool designed to analyze images and extract their color
-                information. It calculates the average color of the entire image and identifies the dominant colors
-                present. This tool is invaluable for designers, artists, and anyone working with color palettes in
-                their projects.
-                </p>
+        <canvas ref={canvasRef} style={{ display: "none" }} />
 
-                <div className="my-8">
-                <NextImage
-                    src="/Images/InfosectionImages/ImageAverageColorPreview.png?height=400&width=600"
-                    alt="Screenshot of the Image Average Color Finder interface"
-                    width={600}
-                    height={400}
-                    className="rounded-lg shadow-lg w-full h-auto"
-                />
-                </div>
-
-                <h2 id="how-to-use" className="text-lg md:text-xl lg:text-2xl font-semibold text-default-700 mb-4 mt-8 flex items-center">
-                <BookOpen className="w-6 h-6 mr-2" />
-                How to Use the Image Average Color Finder?
-                </h2>
-                <ol className="list-decimal list-inside space-y-2 text-sm md:text-base">
-                <li>Upload an image by dragging and dropping it or clicking to browse your files.</li>
-                <li>View the calculated average color with its HEX, RGB, and HSL values.</li>
-                <li>Explore the dominant colors extracted from the image.</li>
-                <li>Adjust the number of dominant colors using the slider (1-10 colors).</li>
-                <li>Download the color palette as an image file for use in other applications.</li>
-                <li>To analyze a different image, upload a new one or use the reset button.</li>
-                </ol>
-
-                <h2 className="text-lg md:text-xl lg:text-2xl font-semibold text-default-700 mb-4 mt-8 flex items-center">
-                <Lightbulb className="w-6 h-6 mr-2" />
-                Key Features
-                </h2>
-                <ul className="list-disc list-inside space-y-2 text-sm md:text-base">
-                <li>Accurate calculation of the average color from uploaded images</li>
-                <li>Identification and display of dominant colors in the image</li>
-                <li>Adjustable number of dominant colors (1-10) for detailed analysis</li>
-                <li>Color information provided in HEX, RGB, and HSL formats</li>
-                <li>Downloadable color palette for easy integration with other tools</li>
-                <li>Responsive design for seamless use on desktop and mobile devices</li>
-                <li>Real-time updates as you adjust the number of dominant colors</li>
-                <li>Simple and intuitive user interface for effortless color analysis</li>
-                <li>Drag and drop functionality for easy image uploading</li>
-                </ul>
-
-                <p className="text-sm md:text-base text-default-600 mt-4">
-                Are you ready to detect colors in your images? Now start using our image average color finding device and unlock the power of color analysis for your projects. Whether you are working on a professional design or eager about colors in your favorite photos, our tool provides the required insight for you. Try it and see how it can increase your color selection process and inspire your creative work!
-                </p>
-            </div>
-            </Card>
+        <InfoSection />
       </div>
-
     </ToolLayout>
   )
 }
-
