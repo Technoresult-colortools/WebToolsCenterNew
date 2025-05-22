@@ -182,6 +182,7 @@ export const allTools: Tool[] = [
     icon: faCode,
     description: "Convert plain text into ASCII, hexadecimal, binary, and more with advanced options and bidirectional conversion.",
   },
+  /*
   {
     name: "Title Case Converter",
     category: "Text Tools",
@@ -189,6 +190,7 @@ export const allTools: Tool[] = [
     icon: faTextHeight,
     description: "Convert Text Tools to title case.",
   },
+  */
   {
     name: "Duplicate Line Remover",
     category: "Text",
@@ -208,7 +210,7 @@ export const allTools: Tool[] = [
     category: "Text",
     href: "/tools/text/markdown-to-html",
     icon: faMarkdown,
-    description: "Convert Markdown to HTML.",
+    description: "Convert Markdown to HTML with interactive buttons using AI.",
   },
   {
     name: "Word Scrambler",
@@ -230,10 +232,10 @@ export const allTools: Tool[] = [
   // Image Tools
   {
     name: "Image Cropper",
-    category: "Image Tools",
+    category: "Image",
     href: "/tools/image/image-cropper",
     icon: faCropAlt,
-    description: "Crop and resize images online.",
+    description: "Crop, rotate, and adjust your images with precision for web and mobile.",
 
   },
   {

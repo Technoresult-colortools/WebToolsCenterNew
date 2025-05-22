@@ -2,10 +2,11 @@
 import React, { useState, useRef, useEffect } from "react"
 import { Card, CardBody, Button, Textarea, Tabs, Tab, Spinner, Input } from "@nextui-org/react"
 import { toast } from "react-hot-toast"
-import { Copy, Download, RefreshCw, Code, Eye, Upload, Cpu, FileCode, FileText, Info, BookOpen, Zap, Settings } from "lucide-react"
+import { Copy, Download, RefreshCw, Code, Eye, Upload, Cpu, FileCode, FileText, } from "lucide-react"
 import ToolLayout from "@/components/ToolLayout"
 import DOMPurify from "dompurify"
-import Image from "next/image"
+
+import InfoSection from "./info-section"
 
 export default function MarkdownConverter() {
   const [markdown, setMarkdown] = useState<string>("")
@@ -592,137 +593,8 @@ ${sanitized}
             </Tabs>
           </CardBody>
         </Card>
-        <Card className="mt-8 bg-default-50 dark:bg-default-100 p-4 md:p-8">
-          <div className="rounded-xl p-2 md:p-4 max-w-4xl mx-auto">
-            <h2 className="text-lg md:text-xl lg:text-2xl font-semibold text-default-700 mb-4 flex items-center">
-              <Info className="w-6 h-6 mr-2" />
-              What is the Markdown to HTML Converter?
-            </h2>
-            <p className="text-sm md:text-base text-default-600 mb-4">
-            The Markdown to HTML Converter is an AI-driven tool that takes your Markdown text and converts it into clean, styled HTML. With AI capabilities, this Markdown converter does not simply translate the Markdown syntax, but instead dynamically interprets your Markdown content and produces semantically correct HTML, styled properly and even incorporates interactive elements.
-            </p>
-            <p className="text-sm md:text-base text-default-600 mb-4">
-            No matter if you're a content creator, developers, technical writer, or educator, this tool allows you to turn your markdown documents into web-ready HTML in no time, all while keeping your formatting, links, images (and other assets), as well as interactive buttons, making this output safe and cleaned and/or sanitized output.
-            </p>
-
-            <div className="my-8">
-              <Image
-                 src="/Images/InfosectionImages/MarkdowntoHTMLPreview.png?height=400&width=600" 
-                alt="Screenshot of the Markdown to HTML Converter showing the interface with markdown input and HTML output"
-                width={600}
-                height={400}
-                className="rounded-lg shadow-lg w-full h-auto"
-              />
-            </div>
-
-            <h2
-              id="how-to-use"
-              className="text-lg md:text-xl lg:text-2xl font-semibold text-default-700 mb-4 mt-8 flex items-center"
-            >
-              <BookOpen className="w-6 h-6 mr-2" />
-              How to Use the Markdown to HTML Converter?
-            </h2>
-            <ol className="list-decimal list-inside space-y-2 text-sm md:text-base">
-              <li>
-                <strong>Input your Markdown</strong> - Type or paste your Markdown text into the editor, or use the "Import
-                File" button to upload a .md, .markdown, or .txt file.
-              </li>
-              <li>
-                <strong>Convert to HTML</strong> - Click the "Convert Now" button to process your Markdown. The AI will
-                analyze your content and generate appropriate HTML.
-              </li>
-              <li>
-                <strong>View the HTML code</strong> - Switch to the "HTML" tab to see the generated HTML code that you can
-                copy or download.
-              </li>
-              <li>
-                <strong>Preview the result</strong> - Switch to the "Preview" tab to see how your HTML will look when
-                rendered in a browser.
-              </li>
-              <li>
-                <strong>Save your work</strong> - Use the "Copy HTML" button to copy the code to your clipboard or
-                "Download" to save it as an HTML file.
-              </li>
-              <li>
-                <strong>View in browser</strong> - Click "Open in New Window" in the Preview tab to see the full page in a
-                new browser window.
-              </li>
-            </ol>
-
-            <h2 className="text-lg md:text-xl lg:text-2xl font-semibold text-default-700 mb-4 mt-8 flex items-center">
-              <Zap className="w-6 h-6 mr-2" />
-              Key Features
-            </h2>
-            <ul className="list-disc list-inside space-y-2 text-xs md:text-sm">
-              <li>
-                <strong>AI-Powered Conversion:</strong> Uses AI to intelligently convert Markdown to semantically
-                correct HTML.
-              </li>
-              <li>
-                <strong>Interactive Elements:</strong> Supports special syntax for creating interactive buttons in your HTML
-                output.
-              </li>
-              <li>
-                <strong>Real-time Preview:</strong> See exactly how your HTML will look when rendered in a browser.
-              </li>
-              <li>
-                <strong>Secure Output:</strong> All HTML is sanitized using DOMPurify to prevent XSS attacks while
-                preserving functionality.
-              </li>
-              <li>
-                <strong>File Import/Export:</strong> Upload Markdown files and download the converted HTML with a single
-                click.
-              </li>
-              <li>
-                <strong>Syntax Highlighting:</strong> The HTML output includes styling for code blocks with proper syntax
-                highlighting.
-              </li>
-              <li>
-                <strong>Responsive Design:</strong> The generated HTML is styled to look great on all devices with a clean,
-                modern appearance.
-              </li>
-              <li>
-                <strong>Custom Styling:</strong> The HTML includes a comprehensive stylesheet that makes your content look
-                professional.
-              </li>
-            </ul>
-
-            <h2 className="text-lg md:text-xl lg:text-2xl font-semibold text-default-700 mb-4 mt-8 flex items-center">
-              <Settings className="w-6 h-6 mr-2" />
-              Special Features Explained
-            </h2>
-            <ul className="list-disc list-inside space-y-2 text-xs md:text-sm">
-              <li>
-                <strong>Interactive Buttons:</strong> Create clickable buttons using the syntax{" "}
-                <code>[Button Text](button:action)</code> which will be converted to HTML buttons that show an alert with
-                the specified action when clicked.
-              </li>
-              <li>
-                <strong>Secure Sanitization:</strong> The converter uses DOMPurify to remove potentially harmful HTML while
-                preserving legitimate interactive elements and styling.
-              </li>
-              <li>
-                <strong>Comprehensive Styling:</strong> The HTML output includes CSS for typography, code blocks, tables,
-                blockquotes, buttons, and more to ensure your content looks professional.
-              </li>
-              <li>
-                <strong>Icon Support:</strong> The generated HTML includes support for Lucide icons if you reference them in
-                your Markdown.
-              </li>
-              <li>
-                <strong>Responsive Preview:</strong> The preview iframe allows you to see exactly how your content will
-                appear when published online.
-              </li>
-            </ul>
-
-            <p className="text-sm md:text-base text-default-600 mt-4">
-              Ready to transform your Markdown content into beautiful, interactive HTML? Start using our AI-powered Markdown
-              to HTML Converter now and experience the perfect blend of simplicity and power. Whether you're creating
-              content for the web, documentation, or interactive tutorials, our tool makes the conversion process seamless
-              and produces professional results every time.
-            </p>
-          </div>
-        </Card>
+         {/* Info Section */}
+                <InfoSection />
       </div>
     </ToolLayout>
   )
