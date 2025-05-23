@@ -15,6 +15,7 @@ import {
   ModalContent,
   Select,
   SelectItem,
+  Progress,
 } from "@nextui-org/react"
 import {
   Download,
@@ -43,6 +44,9 @@ import {
   Eye,
   X,
   FileImage,
+  Camera,
+  LinkIcon,
+  AlertCircle,
 } from "lucide-react"
 import { toast } from "react-hot-toast"
 import ReactCrop, { type Crop as CropType, centerCrop, makeAspectCrop } from "react-image-crop"
@@ -125,18 +129,52 @@ export default function ImageCropper() {
   const [historyIndex, setHistoryIndex] = useState(-1)
   const [fileName, setFileName] = useState("cropped-image")
   const [isPreviewFullscreen, setIsPreviewFullscreen] = useState(false)
+  const [uploadMethod, setUploadMethod] = useState<"device" | "url" | "camera">("device")
+  const [imageUrl, setImageUrl] = useState("")
+  const [isUploading, setIsUploading] = useState(false)
+  const [uploadProgress, setUploadProgress] = useState(0)
+  const [dragActive, setDragActive] = useState(false)
 
   // Refs
   const imgRef = useRef<HTMLImageElement>(null)
   const previewCanvasRef = useRef<HTMLCanvasElement>(null)
+  const fileInputRef = useRef<HTMLInputElement>(null)
+  const cameraInputRef = useRef<HTMLInputElement>(null)
 
-  // Handle image upload
+  // Handle image upload from device
   const onSelectFile = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
       const file = e.target.files[0]
-      const reader = new FileReader()
-      reader.addEventListener("load", () => {
-        const imageUrl = reader.result?.toString() || ""
+      processFile(file)
+    }
+  }
+
+  // Process the selected file
+  const processFile = (file: File) => {
+    // Simulate upload progress
+    setIsUploading(true)
+    setUploadProgress(0)
+
+    const progressInterval = setInterval(() => {
+      setUploadProgress((prev) => {
+        if (prev >= 100) {
+          clearInterval(progressInterval)
+          return 100
+        }
+        return prev + 10
+      })
+    }, 100)
+
+    const reader = new FileReader()
+    reader.addEventListener("load", () => {
+      const imageUrl = reader.result?.toString() || ""
+
+      // Clear the interval when the file is loaded
+      clearInterval(progressInterval)
+      setUploadProgress(100)
+
+      setTimeout(() => {
+        setIsUploading(false)
         setImgSrc(imageUrl)
         setOriginalImgSrc(imageUrl)
 
@@ -159,8 +197,113 @@ export default function ImageCropper() {
 
         // Clear preview
         setPreviewUrl("")
+      }, 500)
+    })
+    reader.readAsDataURL(file)
+  }
+
+  // Handle image upload from URL
+  const handleUrlUpload = () => {
+    if (!imageUrl) {
+      toast.error("Please enter an image URL")
+      return
+    }
+
+    setIsUploading(true)
+    setUploadProgress(0)
+
+    // Simulate upload progress
+    const progressInterval = setInterval(() => {
+      setUploadProgress((prev) => {
+        if (prev >= 90) {
+          clearInterval(progressInterval)
+          return 90
+        }
+        return prev + 10
       })
-      reader.readAsDataURL(file)
+    }, 100)
+
+    // Create a new image to test if the URL is valid
+    const img = new Image()
+    img.crossOrigin = "anonymous"
+    img.onload = () => {
+      clearInterval(progressInterval)
+      setUploadProgress(100)
+
+      setTimeout(() => {
+        setIsUploading(false)
+        setImgSrc(imageUrl)
+        setOriginalImgSrc(imageUrl)
+
+        // Set filename from URL
+        const urlParts = imageUrl.split("/")
+        const nameWithExt = urlParts[urlParts.length - 1]
+        const nameWithoutExt = nameWithExt.split("?")[0].replace(/\.[^/.]+$/, "")
+        setFileName(nameWithoutExt || "cropped-image")
+
+        // Reset crop and adjustments
+        setCrop(undefined)
+        setRotation(0)
+        setScale(1)
+        setFlipHorizontal(false)
+        setFlipVertical(false)
+        setBrightness(100)
+        setContrast(100)
+
+        // Clear history
+        setHistory([])
+        setHistoryIndex(-1)
+
+        // Clear preview
+        setPreviewUrl("")
+
+        // Clear URL input
+        setImageUrl("")
+      }, 500)
+    }
+
+    img.onerror = () => {
+      clearInterval(progressInterval)
+      setIsUploading(false)
+      setUploadProgress(0)
+      toast.error("Failed to load image from URL. Make sure the URL is correct and the image is accessible.")
+    }
+
+    img.src = imageUrl
+  }
+
+  // Handle drag events
+  const handleDrag = (e: React.DragEvent) => {
+    e.preventDefault()
+    e.stopPropagation()
+
+    if (e.type === "dragenter" || e.type === "dragover") {
+      setDragActive(true)
+    } else if (e.type === "dragleave") {
+      setDragActive(false)
+    }
+  }
+
+  // Handle drop event
+  const handleDrop = (e: React.DragEvent) => {
+    e.preventDefault()
+    e.stopPropagation()
+    setDragActive(false)
+
+    if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
+      const file = e.dataTransfer.files[0]
+      if (file.type.startsWith("image/")) {
+        processFile(file)
+      } else {
+        toast.error("Please drop an image file")
+      }
+    }
+  }
+
+  // Handle camera capture
+  const handleCameraCapture = () => {
+    if (cameraInputRef.current) {
+      cameraInputRef.current.click()
     }
   }
 
@@ -488,89 +631,243 @@ export default function ImageCropper() {
     setIsPreviewFullscreen(true)
   }
 
-// Render fullscreen preview modal   
-const renderFullscreenPreview = () => (
-  <Modal
-    isOpen={isPreviewFullscreen}
-    onOpenChange={setIsPreviewFullscreen}
-    size="full"
-    classNames={{
-      base: "bg-black/50 backdrop-blur-md",
-      wrapper: "max-w-full h-full",
-    }}
-    motionProps={{
-      variants: {
-        enter: {
-          y: 0,
-          opacity: 1,
-          transition: {
-            duration: 0.3,
-            ease: "easeOut",
+  // Render fullscreen preview modal
+  const renderFullscreenPreview = () => (
+    <Modal
+      isOpen={isPreviewFullscreen}
+      onOpenChange={setIsPreviewFullscreen}
+      size="full"
+      classNames={{
+        base: "bg-black/50 backdrop-blur-md",
+        wrapper: "max-w-full h-full",
+      }}
+      motionProps={{
+        variants: {
+          enter: {
+            y: 0,
+            opacity: 1,
+            transition: {
+              duration: 0.3,
+              ease: "easeOut",
+            },
+          },
+          exit: {
+            y: -20,
+            opacity: 0,
+            transition: {
+              duration: 0.2,
+              ease: "easeIn",
+            },
           },
         },
-        exit: {
-          y: -20,
-          opacity: 0,
-          transition: {
-            duration: 0.2,
-            ease: "easeIn",
-          },
-        },
-      },
-    }}
-  >
-    <ModalContent>
-      {(onClose) => (
-        <div className="relative w-full h-full flex items-center justify-center">
-          <div className="w-[90%] h-[90%] bg-white/10 backdrop-blur-sm rounded-lg overflow-hidden shadow-xl relative">
-            <Button
-              isIconOnly
-              variant="flat"
-              color="danger"
-              onPress={onClose}
-              className="absolute top-4 right-4 z-50"
-            >
-              <X className="w-6 h-6" />
-            </Button>
-            <div className="absolute inset-0 flex items-center justify-center">
-              <img
-                src={previewUrl || "/placeholder.svg"}
-                alt="Preview"
-                className="max-w-full max-h-full object-contain"
-              />
-            </div>
-            {/* Download options in fullscreen view */}
-            <div className="absolute bottom-4 right-4 flex gap-2">
-              <Select
-                label="Format"
-                variant="bordered"
-                selectedKeys={[exportFormat]}
-                onChange={(e) => setExportFormat(e.target.value)}
-                className="w-32"
-              >
-                {exportFormats.map((format) => (
-                  <SelectItem key={format.value} value={format.value} className="text-default-700">
-                    {format.label}
-                  </SelectItem>
-                ))}
-              </Select>
+      }}
+    >
+      <ModalContent>
+        {(onClose) => (
+          <div className="relative w-full h-full flex items-center justify-center">
+            <div className="w-[90%] h-[90%] bg-white/10 backdrop-blur-sm rounded-lg overflow-hidden shadow-xl relative">
               <Button
-                color="primary"
-                size="md"
-                variant="light"
-                onPress={handleDownload}
-                startContent={<Download size={18} />}
-               
+                isIconOnly
+                variant="flat"
+                color="danger"
+                onPress={onClose}
+                className="absolute top-4 right-4 z-50"
               >
-                Download
+                <X className="w-6 h-6" />
               </Button>
+              <div className="absolute inset-0 flex items-center justify-center">
+                <img
+                  src={previewUrl || "/placeholder.svg"}
+                  alt="Preview"
+                  className="max-w-full max-h-full object-contain"
+                />
+              </div>
+              {/* Download options in fullscreen view */}
+              <div className="absolute bottom-4 right-4 flex gap-2">
+                <Select
+                  label="Format"
+                  variant="bordered"
+                  selectedKeys={[exportFormat]}
+                  onChange={(e) => setExportFormat(e.target.value)}
+                  className="w-32"
+                >
+                  {exportFormats.map((format) => (
+                    <SelectItem key={format.value} value={format.value} className="text-default-700">
+                      {format.label}
+                    </SelectItem>
+                  ))}
+                </Select>
+                <Button
+                  color="primary"
+                  size="md"
+                  variant="light"
+                  onPress={handleDownload}
+                  startContent={<Download size={18} />}
+                >
+                  Download
+                </Button>
+              </div>
             </div>
           </div>
+        )}
+      </ModalContent>
+    </Modal>
+  )
+
+  // Render upload section
+  const renderUploadSection = () => (
+    <div
+      className={`flex flex-col items-center justify-center p-4 sm:p-8 border-2 border-dashed rounded-lg min-h-[300px] transition-all duration-200 ${
+        dragActive
+          ? "border-primary-500 bg-primary-100/30 dark:bg-primary-900/20"
+          : "border-default-300 hover:border-primary-300 hover:bg-default-100/50"
+      }`}
+      onDragEnter={handleDrag}
+      onDragLeave={handleDrag}
+      onDragOver={handleDrag}
+      onDrop={handleDrop}
+    >
+      {isUploading ? (
+        <div className="w-full max-w-md">
+          <div className="flex flex-col items-center mb-4">
+            <div className="relative w-16 h-16 mb-4">
+              <div className="absolute inset-0 rounded-full border-4 border-primary-200 dark:border-primary-800"></div>
+              <svg className="absolute inset-0 w-full h-full" viewBox="0 0 100 100">
+                <circle
+                  className="text-primary-500"
+                  strokeWidth="8"
+                  strokeDasharray={`${uploadProgress}, 100`}
+                  strokeLinecap="round"
+                  stroke="currentColor"
+                  fill="transparent"
+                  r="46"
+                  cx="50"
+                  cy="50"
+                  transform="rotate(-90, 50, 50)"
+                />
+              </svg>
+              <div className="absolute inset-0 flex items-center justify-center text-sm font-medium text-primary-500">
+                {uploadProgress}%
+              </div>
+            </div>
+            <p className="text-default-600 text-center">Uploading image...</p>
+          </div>
+          <Progress
+            value={uploadProgress}
+            color="primary"
+            size="md"
+            radius="sm"
+            classNames={{
+              track: "h-3",
+              indicator: "h-3",
+            }}
+          />
         </div>
+      ) : (
+        <>
+          <div className="mb-6 flex flex-col items-center">
+            <div className="w-20 h-20 rounded-full bg-primary-100 dark:bg-primary-900/30 flex items-center justify-center mb-4">
+              <ImageIcon size={36} className="text-primary-500" />
+            </div>
+            <h3 className="text-lg font-medium text-default-700 mb-1">Upload an Image</h3>
+            <p className="text-sm text-default-500 text-center max-w-md">
+              Drag & drop an image here, or choose one of the options below
+            </p>
+          </div>
+
+          <div className="flex flex-wrap gap-2 justify-center mb-6">
+            <Button
+              color={uploadMethod === "device" ? "primary" : "default"}
+              variant={uploadMethod === "device" ? "solid" : "flat"}
+              onPress={() => setUploadMethod("device")}
+              startContent={<Upload size={18} />}
+              className="min-w-[120px]"
+            >
+              Device
+            </Button>
+            <Button
+              color={uploadMethod === "url" ? "primary" : "default"}
+              variant={uploadMethod === "url" ? "solid" : "flat"}
+              onPress={() => setUploadMethod("url")}
+              startContent={<LinkIcon size={18} />}
+              className="min-w-[120px]"
+            >
+              URL
+            </Button>
+            <Button
+              color={uploadMethod === "camera" ? "primary" : "default"}
+              variant={uploadMethod === "camera" ? "solid" : "flat"}
+              onPress={() => setUploadMethod("camera")}
+              startContent={<Camera size={18} />}
+              className="min-w-[120px]"
+            >
+              Camera
+            </Button>
+          </div>
+
+          {uploadMethod === "device" && (
+            <div className="w-full max-w-md">
+              <Button
+                color="primary"
+                variant="flat"
+                onPress={() => fileInputRef.current?.click()}
+                startContent={<Upload size={18} />}
+                className="w-full"
+              >
+                Choose File
+              </Button>
+              <input ref={fileInputRef} type="file" accept="image/*" onChange={onSelectFile} className="hidden" />
+              <p className="text-xs text-default-500 text-center mt-2">Supported formats: JPG, PNG, WebP, GIF</p>
+            </div>
+          )}
+
+          {uploadMethod === "url" && (
+            <div className="w-full max-w-md">
+              <div className="flex gap-2 mb-2">
+                <input
+                  type="text"
+                  value={imageUrl}
+                  onChange={(e) => setImageUrl(e.target.value)}
+                  placeholder="https://example.com/image.jpg"
+                  className="flex-1 p-2 rounded-md border border-default-300 bg-default-100 dark:bg-default-200/50"
+                />
+                <Button color="primary" onPress={handleUrlUpload}>
+                  Load
+                </Button>
+              </div>
+              <div className="flex items-start gap-2 text-xs text-default-500">
+                <AlertCircle size={14} className="mt-0.5 flex-shrink-0" />
+                <p>Make sure the URL is publicly accessible and points directly to an image file</p>
+              </div>
+            </div>
+          )}
+
+          {uploadMethod === "camera" && (
+            <div className="w-full max-w-md">
+              <Button
+                color="primary"
+                variant="flat"
+                onPress={handleCameraCapture}
+                startContent={<Camera size={18} />}
+                className="w-full"
+              >
+                Take Photo
+              </Button>
+              <input
+                ref={cameraInputRef}
+                type="file"
+                accept="image/*"
+                capture="environment"
+                onChange={onSelectFile}
+                className="hidden"
+              />
+              <p className="text-xs text-default-500 text-center mt-2">This will open your device camera</p>
+            </div>
+          )}
+        </>
       )}
-    </ModalContent>
-  </Modal>
-);
+    </div>
+  )
 
   return (
     <ToolLayout
@@ -597,39 +894,24 @@ const renderFullscreenPreview = () => (
             <Card className="bg-default-50 dark:bg-default-100 h-full">
               <CardBody className="p-4">
                 <div className="flex justify-between items-center mb-4">
-                <h3 className="text-md font-medium text-primary-500">Image Editor</h3>
-                <div className="flex gap-1">
+                  <h3 className="text-md font-medium text-primary-500">Image Editor</h3>
+                  <div className="flex gap-1">
                     <Button
-                    isIconOnly
-                    size="sm"
-                    color="primary"
-                    variant="light"
-                    onPress={openFullscreenPreview}  // ✅ Now calls the function that opens the modal
-                    aria-label="Toggle fullscreen"
+                      isIconOnly
+                      size="sm"
+                      color="primary"
+                      variant="light"
+                      onPress={openFullscreenPreview}
+                      aria-label="Toggle fullscreen"
+                      isDisabled={!previewUrl}
                     >
-                    <Maximize2 size={18} />
+                      <Maximize2 size={18} />
                     </Button>
-                </div>
+                  </div>
                 </div>
 
                 {!imgSrc ? (
-                  <div className="flex flex-col items-center justify-center p-8 border-2 border-dashed border-default-300 rounded-lg min-h-[400px]">
-                    <ImageIcon size={48} className="text-default-400 mb-4" />
-                    <p className="text-sm sm:text-base text-default-600 mb-2 sm:mb-4 text-center sm:text-left">
-                    Upload an image to start cropping
-                    </p>
-
-                    <Button color="primary" as="label" htmlFor="image-upload" startContent={<Upload size={18} />}>
-                      Upload Image
-                      <input
-                        id="image-upload"
-                        type="file"
-                        accept="image/*"
-                        onChange={onSelectFile}
-                        className="hidden"
-                      />
-                    </Button>
-                  </div>
+                  renderUploadSection()
                 ) : (
                   <div className="flex flex-col items-center">
                     <div className="relative max-w-full overflow-hidden mb-4 border border-default-200 rounded-lg">
@@ -679,22 +961,23 @@ const renderFullscreenPreview = () => (
                       <Button color="danger" variant="flat" onPress={handleClear} startContent={<Trash2 size={18} />}>
                         Clear
                       </Button>
-                      <Button
-                        color="primary"
-                        as="label"
-                        htmlFor="image-upload-2"
-                        variant="flat"
-                        startContent={<Upload size={18} />}
-                      >
-                        New Image
+                      <div className="relative">
+                        <Button
+                          color="primary"
+                          variant="flat"
+                          startContent={<Upload size={18} />}
+                          onPress={() => fileInputRef.current?.click()}
+                        >
+                          New Image
+                        </Button>
                         <input
-                          id="image-upload-2"
+                          ref={fileInputRef}
                           type="file"
                           accept="image/*"
                           onChange={onSelectFile}
                           className="hidden"
                         />
-                      </Button>
+                      </div>
                       <div className="ml-auto">
                         <Tooltip content="Redo">
                           <Button
