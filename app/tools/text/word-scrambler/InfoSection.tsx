@@ -24,7 +24,11 @@ import {
   ListChecks,   // For "Choose scrambling method"
   Eye,          // For "Tips for Best Results" / Readability
   Layers,       // For "Intensity" control
-  Wand2,        // For general "magic" of scrambling or advanced tips
+  Wand2,
+  Settings,
+  Filter,
+  UploadCloud,
+  Share2,        // For general "magic" of scrambling or advanced tips
 } from "lucide-react"
 
 export default function InfoSection() {
@@ -64,31 +68,81 @@ export default function InfoSection() {
           <BookOpen className="w-6 h-6 mr-2 text-primary-500" />
           How to Use the Word Scrambler?
         </h2>
-        <ol className="list-decimal list-inside space-y-2 text-default-600">
-          <li>
-            <strong className="flex items-center">
-              <ClipboardPaste className="w-4 h-4 mr-1.5 text-blue-500" /> Input your text:
-            </strong> Enter or paste the text you want to scramble into the input area.
+
+        <ol className="list-none space-y-4 text-default-600">
+          <li className="flex items-start gap-3">
+            <span className="flex-shrink-0 w-6 h-6 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center text-sm font-medium">
+              1
+            </span>
+            <div className="flex-1">
+              <div className="flex items-center gap-2 mb-1">
+                <UploadCloud className="w-4 h-4 text-blue-500 flex-shrink-0" />
+                <strong className="text-default-700">Input your text:</strong>
+              </div>
+              <p className="text-default-600 ml-6">
+                Enter or paste the text you want to scramble into the input area.
+              </p>
+            </div>
           </li>
-          <li>
-            <strong className="flex items-center">
-              <ListChecks className="w-4 h-4 mr-1.5 text-green-500" /> Choose a scrambling method:
-            </strong> Select from quick options like Random Shuffle, Reverse Letters, etc.
+
+          <li className="flex items-start gap-3">
+            <span className="flex-shrink-0 w-6 h-6 bg-green-100 text-green-600 rounded-full flex items-center justify-center text-sm font-medium">
+              2
+            </span>
+            <div className="flex-1">
+              <div className="flex items-center gap-2 mb-1">
+                <Filter className="w-4 h-4 text-green-500 flex-shrink-0" />
+                <strong className="text-default-700">Choose a scrambling method:</strong>
+              </div>
+              <p className="text-default-600 ml-6">
+                Select from quick options like Random Shuffle, Reverse Letters, or other available modes.
+              </p>
+            </div>
           </li>
-          <li>
-            <strong className="flex items-center">
-              <Settings2 className="w-4 h-4 mr-1.5 text-orange-500" /> Adjust advanced options (if available):
-            </strong> Fine-tune settings like preserving end letters or scrambling intensity.
+
+          <li className="flex items-start gap-3">
+            <span className="flex-shrink-0 w-6 h-6 bg-orange-100 text-orange-600 rounded-full flex items-center justify-center text-sm font-medium">
+              3
+            </span>
+            <div className="flex-1">
+              <div className="flex items-center gap-2 mb-1">
+                <Settings className="w-4 h-4 text-orange-500 flex-shrink-0" />
+                <strong className="text-default-700">Adjust advanced options:</strong>
+              </div>
+              <p className="text-default-600 ml-6">
+                Fine-tune settings like preserving end letters or adjusting the scrambling intensity.
+              </p>
+            </div>
           </li>
-          <li>
-            <strong className="flex items-center">
-              <Shuffle className="w-4 h-4 mr-1.5 text-purple-500" /> Click "Scramble":
-            </strong> Process your text to apply the chosen transformation.
+
+          <li className="flex items-start gap-3">
+            <span className="flex-shrink-0 w-6 h-6 bg-purple-100 text-purple-600 rounded-full flex items-center justify-center text-sm font-medium">
+              4
+            </span>
+            <div className="flex-1">
+              <div className="flex items-center gap-2 mb-1">
+                <Zap className="w-4 h-4 text-purple-500 flex-shrink-0" />
+                <strong className="text-default-700">Scramble your text:</strong>
+              </div>
+              <p className="text-default-600 ml-6">
+                Click the "Scramble" button to apply the chosen transformation to your text.
+              </p>
+            </div>
           </li>
-          <li>
-            <strong className="flex items-center">
-              <Copy className="w-4 h-4 mr-1.5 text-red-500" /> Copy or Download:
-            </strong> Use the utility buttons to get your scrambled text.
+
+          <li className="flex items-start gap-3">
+            <span className="flex-shrink-0 w-6 h-6 bg-red-100 text-red-600 rounded-full flex items-center justify-center text-sm font-medium">
+              5
+            </span>
+            <div className="flex-1">
+              <div className="flex items-center gap-2 mb-1">
+                <Share2 className="w-4 h-4 text-red-500 flex-shrink-0" />
+                <strong className="text-default-700">Copy or Download:</strong>
+              </div>
+              <p className="text-default-600 ml-6">
+                Use the utility buttons to copy the scrambled text to your clipboard or download it as a file.
+              </p>
+            </div>
           </li>
         </ol>
 
@@ -128,30 +182,53 @@ export default function InfoSection() {
           <Lightbulb className="w-6 h-6 mr-2 text-primary-500" />
           Key Features
         </h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4 text-sm text-default-600">
-          <div className="flex items-start">
-            <Shuffle className="w-4 h-4 mr-2 mt-0.5 text-primary-500" />
-            <div><strong>Multiple Scrambling Algorithms:</strong> Choose from various methods like random shuffle, reverse, sort, etc.</div>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4 text-default-600">
+          <div className="flex items-start gap-3">
+            <Shuffle className="w-5 h-5 mt-0.5 text-primary-500 flex-shrink-0" />
+            <div>
+              <strong className="text-default-700">Multiple Scrambling Algorithms:</strong>
+              <span className="block mt-1">Choose from various methods like random shuffle, reverse, sort, etc.</span>
+            </div>
           </div>
-          <div className="flex items-start">
-            <Settings2 className="w-4 h-4 mr-2 mt-0.5 text-secondary-500" />
-            <div><strong>Customizable Options:</strong> Control over preserving first/last letters, case sensitivity, and scrambling intensity.</div>
+          
+          <div className="flex items-start gap-3">
+            <Settings2 className="w-5 h-5 mt-0.5 text-secondary-500 flex-shrink-0" />
+            <div>
+              <strong className="text-default-700">Customizable Options:</strong>
+              <span className="block mt-1">Control over preserving first/last letters, case sensitivity, and scrambling intensity.</span>
+            </div>
           </div>
-          <div className="flex items-start">
-            <Type className="w-4 h-4 mr-2 mt-0.5 text-success-500" />
-            <div><strong>Handles Various Text Inputs:</strong> Works with single words, sentences, or entire paragraphs.</div>
+          
+          <div className="flex items-start gap-3">
+            <Type className="w-5 h-5 mt-0.5 text-success-500 flex-shrink-0" />
+            <div>
+              <strong className="text-default-700">Handles Various Text Inputs:</strong>
+              <span className="block mt-1">Works with single words, sentences, or entire paragraphs.</span>
+            </div>
           </div>
-          <div className="flex items-start">
-            <Eye className="w-4 h-4 mr-2 mt-0.5 text-warning-500" />
-            <div><strong>Readability Controls:</strong> Options like "Preserve Ends" help maintain some legibility.</div>
+          
+          <div className="flex items-start gap-3">
+            <Eye className="w-5 h-5 mt-0.5 text-warning-500 flex-shrink-0" />
+            <div>
+              <strong className="text-default-700">Readability Controls:</strong>
+              <span className="block mt-1">Options like "Preserve Ends" help maintain some legibility.</span>
+            </div>
           </div>
-          <div className="flex items-start">
-            <Zap className="w-4 h-4 mr-2 mt-0.5 text-danger-500" />
-            <div><strong>Quick Transformation:</strong> Scrambles text instantly with a click.</div>
+          
+          <div className="flex items-start gap-3">
+            <Zap className="w-5 h-5 mt-0.5 text-danger-500 flex-shrink-0" />
+            <div>
+              <strong className="text-default-700">Quick Transformation:</strong>
+              <span className="block mt-1">Scrambles text instantly with a click.</span>
+            </div>
           </div>
-          <div className="flex items-start">
-            <Copy className="w-4 h-4 mr-2 mt-0.5 text-primary-500" />
-            <div><strong>Easy Export:</strong> Copy the scrambled text to your clipboard or download as a file.</div>
+          
+          <div className="flex items-start gap-3">
+            <Copy className="w-5 h-5 mt-0.5 text-primary-500 flex-shrink-0" />
+            <div>
+              <strong className="text-default-700">Easy Export:</strong>
+              <span className="block mt-1">Copy the scrambled text to your clipboard or download as a file.</span>
+            </div>
           </div>
         </div>
 
@@ -202,7 +279,7 @@ export default function InfoSection() {
           <Zap className="w-6 h-6 mr-2 text-primary-500" />
           Tips for Best Results & Advanced Use
         </h2>
-        <div className="bg-default-100/50 dark:bg-default-200/20 p-5 rounded-lg">
+        <div className="bg-default-200/50 dark:bg-default-300/20 p-5 rounded-lg shadow-md">
           <ul className="space-y-3 text-default-600">
             <li className="flex items-start">
               <div className="bg-primary-100 dark:bg-primary-900/30 p-1 rounded-full mr-3 mt-0.5">

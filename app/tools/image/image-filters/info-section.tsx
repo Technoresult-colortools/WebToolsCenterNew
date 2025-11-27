@@ -36,7 +36,11 @@ import {
   CheckSquare, // How to use: Multiple Filters Mode toggle
   Heart,       // How to use: Favorite
   Copy,        // How to use: Save as base
-  Settings2    // Could also be used for filter types or key features sections
+  Settings2,    // Could also be used for filter types or key features sections
+  FileDiff,
+  Settings,
+  Filter,
+  UploadCloud
 } from "lucide-react"
 
 export default function InfoSectionImageFilters() {
@@ -88,33 +92,127 @@ export default function InfoSectionImageFilters() {
           <BookOpen className="w-6 h-6 mr-2 text-primary-500" />
           How to Use the Image Filters Tool?
         </h2>
-        <ol className="list-decimal list-inside space-y-2 text-default-600">
-          <li>
-            <strong className="flex items-center"><ImageUp className="w-4 h-4 mr-2 text-primary-500" /> Upload an image:</strong> Click on the designated area or drag and drop a file.
+
+        <ol className="list-none space-y-4 text-default-600">
+          <li className="flex items-start gap-3">
+            <span className="flex-shrink-0 w-6 h-6 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center text-sm font-medium">
+              1
+            </span>
+            <div className="flex-1">
+              <div className="flex items-center gap-2 mb-1">
+                <UploadCloud className="w-4 h-4 text-blue-500 flex-shrink-0" />
+                <strong className="text-default-700">Upload your image:</strong>
+              </div>
+              <p className="text-default-600 ml-6">
+                Click on the designated area or drag and drop an image file to begin.
+              </p>
+            </div>
           </li>
-          <li>
-            <strong className="flex items-center"><Palette className="w-4 h-4 mr-2 text-secondary-500" /> Choose a filter:</strong> Browse through filter categories and select a filter thumbnail to apply it instantly.
+
+          <li className="flex items-start gap-3">
+            <span className="flex-shrink-0 w-6 h-6 bg-green-100 text-green-600 rounded-full flex items-center justify-center text-sm font-medium">
+              2
+            </span>
+            <div className="flex-1">
+              <div className="flex items-center gap-2 mb-1">
+                <Filter className="w-4 h-4 text-green-500 flex-shrink-0" />
+                <strong className="text-default-700">Apply and adjust filters:</strong>
+              </div>
+              <div className="ml-6 space-y-2">
+                <div className="flex items-start gap-2">
+                  <Palette className="w-3 h-3 mt-0.5 text-gray-500 flex-shrink-0" />
+                  <div>
+                    <strong className="text-default-700">Choose a Filter:</strong>
+                    <span className="text-default-600 ml-1">Browse categories and select a thumbnail to apply it.</span>
+                  </div>
+                </div>
+                <div className="flex items-start gap-2">
+                  <SlidersHorizontal className="w-3 h-3 mt-0.5 text-gray-500 flex-shrink-0" />
+                  <div>
+                    <strong className="text-default-700">Adjust Intensity:</strong>
+                    <span className="text-default-600 ml-1">Use the slider to fine-tune the strength of the filter.</span>
+                  </div>
+                </div>
+              </div>
+            </div>
           </li>
-          <li>
-            <strong className="flex items-center"><SlidersHorizontal className="w-4 h-4 mr-2 text-success-500" /> Adjust intensity:</strong> Use the slider to fine-tune the strength of the selected filter.
+
+          <li className="flex items-start gap-3">
+            <span className="flex-shrink-0 w-6 h-6 bg-orange-100 text-orange-600 rounded-full flex items-center justify-center text-sm font-medium">
+              3
+            </span>
+            <div className="flex-1">
+              <div className="flex items-center gap-2 mb-1">
+                <Settings className="w-4 h-4 text-orange-500 flex-shrink-0" />
+                <strong className="text-default-700">Use advanced features:</strong>
+              </div>
+              <div className="ml-6 space-y-2">
+                 <div className="flex items-start gap-2">
+                  <CheckSquare className="w-3 h-3 mt-0.5 text-gray-500 flex-shrink-0" />
+                  <div>
+                    <strong className="text-default-700">Stack Filters:</strong>
+                    <span className="text-default-600 ml-1">Enable Multiple Filters Mode to combine effects.</span>
+                  </div>
+                </div>
+                <div className="flex items-start gap-2">
+                  <Heart className="w-3 h-3 mt-0.5 text-gray-500 flex-shrink-0" />
+                  <div>
+                    <strong className="text-default-700">Favorite Filters:</strong>
+                    <span className="text-default-600 ml-1">Mark filters for quick access in a "Favorites" category.</span>
+                  </div>
+                </div>
+              </div>
+            </div>
           </li>
-          <li>
-            <strong className="flex items-center"><GitCompareArrows className="w-4 h-4 mr-2 text-warning-500" /> Toggle view:</strong> Switch between the original and filtered image using the "Show Original" / "Show Filtered" button, or use a side-by-side compare feature if available.
+
+          <li className="flex items-start gap-3">
+            <span className="flex-shrink-0 w-6 h-6 bg-purple-100 text-purple-600 rounded-full flex items-center justify-center text-sm font-medium">
+              4
+            </span>
+            <div className="flex-1">
+              <div className="flex items-center gap-2 mb-1">
+                <Eye className="w-4 h-4 text-purple-500 flex-shrink-0" />
+                <strong className="text-default-700">Review and manage edits:</strong>
+              </div>
+               <div className="ml-6 space-y-2">
+                <div className="flex items-start gap-2">
+                  <FileDiff className="w-3 h-3 mt-0.5 text-gray-500 flex-shrink-0" />
+                  <div>
+                    <strong className="text-default-700">Compare View:</strong>
+                    <span className="text-default-600 ml-1">Toggle between the original and filtered image.</span>
+                  </div>
+                </div>
+                <div className="flex items-start gap-2">
+                  <RotateCcw className="w-3 h-3 mt-0.5 text-gray-500 flex-shrink-0" />
+                  <div>
+                    <strong className="text-default-700">Manage History:</strong>
+                    <span className="text-default-600 ml-1">Use Undo/Redo to navigate your editing history.</span>
+                  </div>
+                </div>
+                 <div className="flex items-start gap-2">
+                  <Copy className="w-3 h-3 mt-0.5 text-gray-500 flex-shrink-0" />
+                  <div>
+                    <strong className="text-default-700">Set New Base:</strong>
+                    <span className="text-default-600 ml-1">Save the current state as the new "original" for further edits.</span>
+                  </div>
+                </div>
+              </div>
+            </div>
           </li>
-          <li>
-            <strong className="flex items-center"><CheckSquare className="w-4 h-4 mr-2 text-danger-500" /> Enable Multiple Filters Mode:</strong> Stack multiple filters for unique, complex effects.
-          </li>
-          <li>
-            <strong className="flex items-center"><Heart className="w-4 h-4 mr-2 text-primary-500" /> Favorite filters:</strong> Mark frequently used filters for quick access in a "Favorites" category.
-          </li>
-          <li>
-            <strong className="flex items-center"><RotateCcw className="w-4 h-4 mr-1 text-secondary-500" /><RotateCw className="w-4 h-4 mr-2 text-secondary-500" /> Manage edits:</strong> Use Undo/Redo buttons to navigate your editing history.
-          </li>
-          <li>
-            <strong className="flex items-center"><Copy className="w-4 h-4 mr-2 text-success-500" /> Set new base:</strong> Save your current filtered state as the new "original" image for further editing.
-          </li>
-          <li>
-            <strong className="flex items-center"><Download className="w-4 h-4 mr-2 text-warning-500" /> Export image:</strong> Save the final edited image in your desired format (e.g., PNG, JPEG, WebP).
+
+          <li className="flex items-start gap-3">
+            <span className="flex-shrink-0 w-6 h-6 bg-red-100 text-red-600 rounded-full flex items-center justify-center text-sm font-medium">
+              5
+            </span>
+            <div className="flex-1">
+              <div className="flex items-center gap-2 mb-1">
+                <Share2 className="w-4 h-4 text-red-500 flex-shrink-0" />
+                <strong className="text-default-700">Export your image:</strong>
+              </div>
+              <p className="text-default-600 ml-6">
+                Save the final edited image in your desired format (e.g., PNG, JPEG, WebP).
+              </p>
+            </div>
           </li>
         </ol>
 
@@ -122,108 +220,138 @@ export default function InfoSectionImageFilters() {
           <Wand2 className="w-6 h-6 mr-2 text-primary-500" />
           Supported Filter Types & Adjustments
         </h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4 text-sm text-default-600">
-          <div className="flex items-start">
-            <Sun className="w-4 h-4 mr-2 mt-0.5 text-primary-500" />
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4 text-default-600">
+          <div className="flex items-start gap-3">
+            <Sun className="w-5 h-5 mt-0.5 text-primary-500 flex-shrink-0" />
             <div>
-              <strong>Basic Adjustments:</strong> Control fundamental aspects like Brightness, Contrast, Saturation, and Exposure.
+              <strong className="text-default-700">Basic Adjustments:</strong>
+              <span className="block mt-1">Control fundamental aspects like Brightness, Contrast, Saturation, and Exposure.</span>
             </div>
           </div>
-          <div className="flex items-start">
-            <Palette className="w-4 h-4 mr-2 mt-0.5 text-secondary-500" />
+          
+          <div className="flex items-start gap-3">
+            <Palette className="w-5 h-5 mt-0.5 text-secondary-500 flex-shrink-0" />
             <div>
-              <strong>Artistic & Classic Filters:</strong> Apply popular styles such as Grayscale, Sepia, Vintage, Invert, and Posterize.
+              <strong className="text-default-700">Artistic & Classic Filters:</strong>
+              <span className="block mt-1">Apply popular styles such as Grayscale, Sepia, Vintage, Invert, and Posterize.</span>
             </div>
           </div>
-          <div className="flex items-start">
-            <Droplets className="w-4 h-4 mr-2 mt-0.5 text-success-500" />
+          
+          <div className="flex items-start gap-3">
+            <Droplets className="w-5 h-5 mt-0.5 text-success-500 flex-shrink-0" />
             <div>
-              <strong>Color Manipulation:</strong> Adjust Hue, apply Duotone effects, Color Tint, or manipulate specific color channels.
+              <strong className="text-default-700">Color Manipulation:</strong>
+              <span className="block mt-1">Adjust Hue, apply Duotone effects, Color Tint, or manipulate specific color channels.</span>
             </div>
           </div>
-          <div className="flex items-start">
-            <Aperture className="w-4 h-4 mr-2 mt-0.5 text-warning-500" />
+          
+          <div className="flex items-start gap-3">
+            <Aperture className="w-5 h-5 mt-0.5 text-warning-500 flex-shrink-0" />
             <div>
-              <strong>Blur & Sharpen Effects:</strong> Add Gaussian Blur, Box Blur, or sharpen details to enhance focus or create depth.
+              <strong className="text-default-700">Blur & Sharpen Effects:</strong>
+              <span className="block mt-1">Add Gaussian Blur, Box Blur, or sharpen details to enhance focus or create depth.</span>
             </div>
           </div>
-          <div className="flex items-start">
-            <Sparkles className="w-4 h-4 mr-2 mt-0.5 text-danger-500" />
+          
+          <div className="flex items-start gap-3">
+            <Sparkles className="w-5 h-5 mt-0.5 text-danger-500 flex-shrink-0" />
             <div>
-              <strong>Creative Effects:</strong> Experiment with Pixelate, Vignette, Noise, Glitch, Custom Drop Shadows, and more unique transformations.
+              <strong className="text-default-700">Creative Effects:</strong>
+              <span className="block mt-1">Experiment with Pixelate, Vignette, Noise, Glitch, Custom Drop Shadows, and more unique transformations.</span>
             </div>
           </div>
-          <div className="flex items-start">
-            <Settings2 className="w-4 h-4 mr-2 mt-0.5 text-primary-500" />
+          
+          <div className="flex items-start gap-3">
+            <Settings2 className="w-5 h-5 mt-0.5 text-primary-500 flex-shrink-0" />
             <div>
-              <strong>Distortion & Texture:</strong> Apply filters like Swirl, Bulge, or add texture overlays for artistic flair.
+              <strong className="text-default-700">Distortion & Texture:</strong>
+              <span className="block mt-1">Apply filters like Swirl, Bulge, or add texture overlays for artistic flair.</span>
             </div>
           </div>
         </div>
 
-        <h2 className="text-2xl font-semibold text-default-700 mb-4 mt-8 flex items-center">
+        <h2 id="key-features" className="text-2xl font-semibold text-default-700 mb-4 mt-8 flex items-center">
           <Lightbulb className="w-6 h-6 mr-2 text-primary-500" />
           Key Features
         </h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4 text-sm text-default-600">
-          <div className="flex items-start">
-            <Layers className="w-4 h-4 mr-2 mt-0.5 text-primary-500" />
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4 text-default-600">
+          <div className="flex items-start gap-3">
+            <Layers className="w-5 h-5 mt-0.5 text-primary-500 flex-shrink-0" />
             <div>
-              <strong>Extensive Filter Library:</strong> A diverse collection of basic, artistic, and advanced effects to suit any style.
+              <strong className="text-default-700">Extensive Filter Library:</strong>
+              <span className="block mt-1">A diverse collection of basic, artistic, and advanced effects to suit any style.</span>
             </div>
           </div>
-          <div className="flex items-start">
-            <Eye className="w-4 h-4 mr-2 mt-0.5 text-secondary-500" />
+          
+          <div className="flex items-start gap-3">
+            <Eye className="w-5 h-5 mt-0.5 text-secondary-500 flex-shrink-0" />
             <div>
-              <strong>Real-Time Instant Preview:</strong> See changes applied to your image immediately as you select filters or adjust settings.
+              <strong className="text-default-700">Real-Time Instant Preview:</strong>
+              <span className="block mt-1">See changes applied to your image immediately as you select filters or adjust settings.</span>
             </div>
           </div>
-          <div className="flex items-start">
-            <Layers className="w-4 h-4 mr-2 mt-0.5 text-success-500" /> {/* Re-using Layers icon is fine for related concepts */}
+          
+          <div className="flex items-start gap-3">
+            <Layers className="w-5 h-5 mt-0.5 text-success-500 flex-shrink-0" />
             <div>
-              <strong>Multiple Filters Mode:</strong> Layer and combine multiple filters to create unique and sophisticated visual effects.
+              <strong className="text-default-700">Multiple Filters Mode:</strong>
+              <span className="block mt-1">Layer and combine multiple filters to create unique and sophisticated visual effects.</span>
             </div>
           </div>
-          <div className="flex items-start">
-            <SlidersHorizontal className="w-4 h-4 mr-2 mt-0.5 text-warning-500" />
+          
+          <div className="flex items-start gap-3">
+            <SlidersHorizontal className="w-5 h-5 mt-0.5 text-warning-500 flex-shrink-0" />
             <div>
-              <strong>Precise Intensity Control:</strong> Fine-tune the strength of each applied filter for subtle or dramatic results.
+              <strong className="text-default-700">Precise Intensity Control:</strong>
+              <span className="block mt-1">Fine-tune the strength of each applied filter for subtle or dramatic results.</span>
             </div>
           </div>
-          <div className="flex items-start">
-            <GitCompareArrows className="w-4 h-4 mr-2 mt-0.5 text-danger-500" />
+          
+          <div className="flex items-start gap-3">
+            <GitCompareArrows className="w-5 h-5 mt-0.5 text-danger-500 flex-shrink-0" />
             <div>
-              <strong>Comparison Tools:</strong> Easily toggle between original and edited versions, or use side-by-side views for detailed comparison.
+              <strong className="text-default-700">Comparison Tools:</strong>
+              <span className="block mt-1">Easily toggle between original and edited versions, or use side-by-side views for detailed comparison.</span>
             </div>
           </div>
-          <div className="flex items-start">
-            <Star className="w-4 h-4 mr-2 mt-0.5 text-primary-500" />
+          
+          <div className="flex items-start gap-3">
+            <Star className="w-5 h-5 mt-0.5 text-primary-500 flex-shrink-0" />
             <div>
-              <strong>Favorites System:</strong> Save your most-used filters for quick and easy access in future editing sessions.
+              <strong className="text-default-700">Favorites System:</strong>
+              <span className="block mt-1">Save your most-used filters for quick and easy access in future editing sessions.</span>
             </div>
           </div>
-          <div className="flex items-start">
-            <History className="w-4 h-4 mr-2 mt-0.5 text-secondary-500" />
+
+          <div className="flex items-start gap-3">
+            <History className="w-5 h-5 mt-0.5 text-secondary-500 flex-shrink-0" />
             <div>
-              <strong>Non-Destructive Editing History:</strong> Full undo/redo functionality allows you to experiment freely and revert changes.
+              <strong className="text-default-700">Non-Destructive Editing History:</strong>
+              <span className="block mt-1">Full undo/redo functionality allows you to experiment freely and revert changes.</span>
             </div>
           </div>
-          <div className="flex items-start">
-            <Smartphone className="w-4 h-4 mr-2 mt-0.5 text-success-500" />
+
+          <div className="flex items-start gap-3">
+            <Smartphone className="w-5 h-5 mt-0.5 text-success-500 flex-shrink-0" />
             <div>
-              <strong>Responsive & Accessible Design:</strong> Seamlessly use the tool on desktops, tablets, and mobile devices.
+              <strong className="text-default-700">Responsive & Accessible Design:</strong>
+              <span className="block mt-1">Seamlessly use the tool on desktops, tablets, and mobile devices.</span>
             </div>
           </div>
-          <div className="flex items-start">
-            <LogIn className="w-4 h-4 mr-2 mt-0.5 text-warning-500" /> {/* Or UserCheck with a slash through it if such an icon exists */}
+
+          <div className="flex items-start gap-3">
+            <LogIn className="w-5 h-5 mt-0.5 text-warning-500 flex-shrink-0" />
             <div>
-              <strong>No Account Required:</strong> Start editing instantly without the need for registration or login.
+              <strong className="text-default-700">No Account Required:</strong>
+              <span className="block mt-1">Start editing instantly without the need for registration or login.</span>
             </div>
           </div>
-           <div className="flex items-start">
-            <Download className="w-4 h-4 mr-2 mt-0.5 text-danger-500" />
+
+          <div className="flex items-start gap-3">
+            <Download className="w-5 h-5 mt-0.5 text-danger-500 flex-shrink-0" />
             <div>
-              <strong>Multiple Export Formats:</strong> Save your final creations in popular image formats like PNG, JPEG, or WebP.
+              <strong className="text-default-700">Multiple Export Formats:</strong>
+              <span className="block mt-1">Save your final creations in popular image formats like PNG, JPEG, or WebP.</span>
             </div>
           </div>
         </div>

@@ -19,8 +19,6 @@ import {
   Copy,
   Maximize2,
   X,
-  Sliders,
-  Palette,
   ImageIcon,
   Circle,
   Square,
@@ -37,12 +35,7 @@ import {
   CircleDotDashed,
   Hash,
   Flower2,
-  Info,
-  Lightbulb,
   Shell,
-  Code,
-  Eye,
-  BookOpen,
   FlowerIcon,
   SquareAsterisk,
   LucideDna,
@@ -53,7 +46,7 @@ import {
 import { toast } from "react-hot-toast"
 import ToolLayout from "@/components/ToolLayout"
 import { type PatternType, generatePattern } from "./patternGenerators"
-import Image from "next/image"
+import InfoSectionSVGPattern from "./info-section"
 
 type ExportFormat = "svg" | "png"
 type ExportSize =
@@ -836,118 +829,7 @@ export default function SvgPatternGenerator() {
       </div>
 
     {/* Info Section */}
-    <Card className="mt-6 bg-default-50 dark:bg-default-100 p-4 md:p-8">
-      <div className="rounded-xl p-2 md:p-4 max-w-4xl mx-auto">
-        <h2 className="text-xl md:text-2xl font-semibold text-default-700 mb-4 flex items-center">
-          <Info className="w-6 h-6 mr-2" />
-          What is the SVG Pattern Generator?
-        </h2>
-        <p className="text-sm md:text-base text-default-600 mb-4">
-        The SVG pattern generator is a powerful and versatile tool designed to create unique, repeated vector patterns for various design purposes. Whether you are a web designer, graphic artist, or someone is looking to add visual interest to your projects, this device easily provides an introspection interface to craft the custom, scalable vector graphics.
-        </p>
-        <p className="text-sm md:text-base text-default-600 mb-4">
-        With a wide range of adjustable parameters and real -time previews, you can fix your patterns to fully fit your design needs. The generator offers options for different patterns, color adaptation and even custom image uploads, which allows for versatile applications in web design, digital art, print material and more.
-        </p>
-
-        <div className="my-8">
-          <Image
-            src="/Images/InfosectionImages/SVGPatternGeneratorPreview.png?height=400&width=600"
-            alt="Screenshot of the SVG Pattern Generator interface showing pattern customization options and a preview"
-            width={600}
-            height={400}
-            className="rounded-lg shadow-lg w-full h-auto"
-          />
-        </div>
-
-        <h2
-          id="how-to-use"
-          className="text-xl md:text-2xl font-semibold text-default-700 mb-4 mt-8 flex items-center"
-        >
-          <BookOpen className="w-6 h-6 mr-2" />
-          How to Use the SVG Pattern Generator?
-        </h2>
-        <ol className="list-decimal list-inside space-y-2 text-sm md:text-base text-default-600">
-          <li>Select a pattern type from the dropdown menu or upload a custom image.</li>
-          <li>Adjust the "Size" slider to control the overall size of the pattern elements.</li>
-          <li>Use the "Spacing" slider to determine the distance between pattern elements.</li>
-          <li>Modify "Rotation" to change the angle of the pattern elements.</li>
-          <li>Adjust "Opacity" to control the transparency of the pattern.</li>
-          <li>Use "Complexity" to add more intricate details to certain pattern types.</li>
-          <li>Adjust "Stroke Width" for patterns with line elements.</li>
-          <li>Choose colors for the pattern, secondary elements, and background using the color pickers.</li>
-          <li>Select an export size preset or enter custom dimensions.</li>
-          <li>Choose between SVG and PNG export formats.</li>
-          <li>Click "Randomize" to generate new pattern ideas quickly.</li>
-          <li>Use the export options to download your pattern or copy the SVG code.</li>
-        </ol>
-
-        <h2 className="text-xl md:text-2xl font-semibold text-default-700 mb-4 mt-8 flex items-center">
-          <Lightbulb className="w-6 h-6 mr-2" />
-          Key Features
-        </h2>
-        <ul className="list-disc list-inside space-y-2 text-sm md:text-base text-default-600">
-          <li>
-            <Grid className="w-4 h-4 inline-block mr-1" /> <strong>Multiple Pattern Types:</strong> Choose from a
-            variety of pattern styles including geometric shapes, lines, and complex designs
-          </li>
-          <li>
-            <Sliders className="w-4 h-4 inline-block mr-1" /> <strong>Customizable Parameters:</strong> Fine-tune
-            size, spacing, rotation, opacity, complexity, and stroke width
-          </li>
-          <li>
-            <Palette className="w-4 h-4 inline-block mr-1" /> <strong>Color Options:</strong> Customize pattern
-            color, secondary color, and background color
-          </li>
-          <li>
-            <ImageIcon className="w-4 h-4 inline-block mr-1" /> <strong>Custom Image Upload:</strong> Use your own
-            images to create unique patterns
-          </li>
-          <li>
-            <RefreshCw className="w-4 h-4 inline-block mr-1" /> <strong>Randomization:</strong> Quickly generate new
-            patterns with random settings
-          </li>
-          <li>
-            <Download className="w-4 h-4 inline-block mr-1" /> <strong>Multiple Export Options:</strong> Save as SVG
-            or PNG in various preset sizes or custom dimensions
-          </li>
-          <li>
-            <Code className="w-4 h-4 inline-block mr-1" /> <strong>SVG Code Access:</strong> Copy the raw SVG code
-            for easy integration into your projects
-          </li>
-          <li>
-            <Eye className="w-4 h-4 inline-block mr-1" /> <strong>Real-time Preview:</strong> See changes instantly
-            as you adjust parameters
-          </li>
-          <li>
-            <Maximize2 className="w-4 h-4 inline-block mr-1" /> <strong>Full-screen Preview:</strong> Examine your
-            pattern in detail with an expanded view
-          </li>
-        </ul>
-
-        <h2 className="text-xl md:text-2xl font-semibold text-default-700 mb-4 mt-8 flex items-center">
-          <Lightbulb className="w-6 h-6 mr-2" />
-          Creative Tips and Tricks
-        </h2>
-        <ul className="list-disc list-inside space-y-2 text-sm md:text-base text-default-600">
-          <li>Combine different pattern types with similar settings for layered, complex designs.</li>
-          <li>Use high opacity for bold, striking patterns, or low opacity for subtle background textures.</li>
-          <li>Experiment with extreme size and spacing values to create unique, abstract patterns.</li>
-          <li>Try rotating your pattern at different angles to find interesting orientations.</li>
-          <li>Use custom image uploads with geometric patterns for creative masking effects.</li>
-          <li>Combine patterns with solid color shapes in your designs for contrast and visual interest.</li>
-          <li>Use the SVG code to create animated patterns in web projects using CSS or JavaScript.</li>
-          <li>Experiment with the complexity and stroke width to achieve different artistic styles.</li>
-        </ul>
-
-        <p className="text-sm md:text-base text-default-600 mt-6">
-          Ready to transform your designs with captivating patterns? Our SVG Pattern Generator offers endless
-          possibilities for your creative projects. Whether you're designing for web, print, or digital media, this
-          tool provides the flexibility and power you need to bring your ideas to life. Start experimenting with
-          patterns now and take your designs to the next level!
-        </p>
-      </div>
-    </Card>
-
+    <InfoSectionSVGPattern />
 
 
     {/* Fullscreen Modal */}

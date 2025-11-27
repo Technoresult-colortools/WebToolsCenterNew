@@ -384,7 +384,7 @@ export default function ImageAverageColorFinder() {
         <Card>
           <CardBody className="p-6 bg-default-50 dark:bg-default-100">
             <div className="flex justify-between items-center mb-4">
-              <h2 className="text-xl sm:text-1xl md:text-2xl font-bold text-default-700">Upload an Image</h2>
+              <h2 className="text-xl sm:text-1xl md:text-2xl font-bold text-primary">Upload an Image</h2>
               {imageSrc && (
                 <Button
                   isIconOnly

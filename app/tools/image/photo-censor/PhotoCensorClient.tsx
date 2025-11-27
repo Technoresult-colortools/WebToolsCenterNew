@@ -20,6 +20,7 @@ import {
   Loader2,
 } from "lucide-react"
 import ToolLayout from "@/components/ToolLayout"
+import InfoSectionPhotoCensor from "./info-section"
 
 type CensorType = "blur" | "pixelate" | "black"
 
@@ -299,7 +300,7 @@ const PhotoCensor: React.FC = () => {
       <div className="flex flex-col gap-6">
         <Card className="bg-default-50 dark:bg-default-100">
           <CardBody className="p-6">
-          <h2 className="text-xl sm:text-1xl md:text-2xl font-bold text-default-700 mb-4">Upload an Image</h2>
+          <h2 className="text-xl sm:text-1xl md:text-2xl font-bold text-primary mb-4">Upload an Image</h2>
             <label className="flex flex-col items-center justify-center h-32 px-4 py-6 bg-default-100 text-primary rounded-lg shadow-md tracking-wide uppercase border-2 border-primary border-dashed cursor-pointer hover:bg-primary-100 hover:text-primary-600 transition duration-300">
               <Upload size={32} />
               <span className="mt-2 text-sm sm:text-base md:text-md leading-normal text-center block">Select a file or drag and drop</span>
@@ -409,7 +410,7 @@ const PhotoCensor: React.FC = () => {
 
                   <Button
                     color="success"
-                    onClick={applyCensor}
+                    onPress={applyCensor}
                     isDisabled={isProcessing}
                     startContent={isProcessing ? <Loader2 className="animate-spin" /> : null}
                   >
@@ -420,7 +421,7 @@ const PhotoCensor: React.FC = () => {
                 <div className="flex flex-wrap gap-4">
                   <Button
                     color="primary"
-                    onClick={handleDownload}
+                    onPress={handleDownload}
                     isDisabled={!image || isProcessing}
                     startContent={<Download size={18} />}
                   >
@@ -429,7 +430,7 @@ const PhotoCensor: React.FC = () => {
                   <Button
                     color="danger"
                     variant="flat"
-                    onClick={handleReset}
+                    onPress={handleReset}
                     isDisabled={isProcessing}
                     startContent={<RefreshCw size={18} />}
                   >
@@ -443,114 +444,7 @@ const PhotoCensor: React.FC = () => {
 
         <canvas ref={canvasRef} style={{ display: "none" }} />
 
-        <Card className="bg-default-50 dark:bg-default-100">
-          <CardBody className="p-6">
-            <div className="rounded-xl p-2 md:p-4 max-w-4xl mx-auto">
-              <h2 className="text-lg md:text-xl lg:text-2xl font-semibold text-default-700 mb-4 flex items-center">
-                <Info className="w-6 h-6 mr-2" />
-                What is the Photo Censor Tool?
-              </h2>
-              <p className="text-default-600 mb-4">
-              Photo sensor tool is a powerful and user friendly application designed to help protect sensitive information in your images. Whether you are protecting personal data, complying with privacy rules, or adding creative effects to your photos, our equipment provides a spontaneous solution for selective image censoring.
-              </p>
-              <p className="text-default-600 mb-4">
-              With three versatile sensoring methods - the levels of spots, pixels, and black -outs - and adjustable intensity, you have complete control over how you obscure some parts of your images. Our intuitive interface allows for the exact field selection and real -time preview, ensuring that you get the result you need.
-              </p>
-
-              <div className="my-8">
-                <NextImage
-                  src="/Images/InfosectionImages/PhotoCensorPreview.png?height=400&width=600"
-                  alt="Screenshot of the Photo Censor Tool interface showing censoring options and a sample censored image"
-                  width={600}
-                  height={400}
-                  className="rounded-lg shadow-lg w-full h-auto"
-                />
-              </div>
-
-              <h2
-                id="how-to-use"
-                className="text-lg md:text-xl lg:text-2xl font-semibold text-default-700 mb-4 mt-8 flex items-center"
-              >
-                <BookOpen className="w-6 h-6 mr-2" />
-                How to Use the Photo Censor Tool?
-              </h2>
-              <ol className="list-decimal list-inside text-default-600 space-y-2 text-sm md:text-base">
-                <li>Upload your image by clicking on the designated area or dragging and dropping a file.</li>
-                <li>
-                  Once uploaded, click and drag (or touch and drag on mobile) on the image to select the area you want
-                  to censor.
-                </li>
-                <li>Choose your preferred censoring method: Blur, Pixelate, or Black-out.</li>
-                <li>For Blur and Pixelate options, adjust the intensity using the slider.</li>
-                <li>Click "Apply Censoring" to apply the effect to the selected area.</li>
-                <li>Repeat steps 2-5 to censor multiple areas if needed.</li>
-                <li>Once satisfied, click "Download Censored Image" to save your edited image.</li>
-                <li>Use the "Reset" button to start over with a new image or adjust your settings.</li>
-              </ol>
-
-              <h2 className="text-lg md:text-xl lg:text-2xl font-semibold text-default-700 mb-4 mt-8 flex items-center">
-                <Lightbulb className="w-6 h-6 mr-2" />
-                Key Features
-              </h2>
-              <ul className="list-disc list-inside text-default-600 space-y-2 text-sm md:text-base">
-                <li>
-                  <Scissors className="w-4 h-4 inline-block mr-1" /> <strong>Precise Area Selection:</strong> Click and
-                  drag (or touch and drag on mobile) to select exactly what you want to censor
-                </li>
-                <li>
-                  <Eye className="w-4 h-4 inline-block mr-1" /> <strong>Multiple Censoring Methods:</strong> Choose
-                  between Blur, Pixelate, and Black-out
-                </li>
-                <li>
-                  <SlidersHorizontal className="w-4 h-4 inline-block mr-1" /> <strong>Adjustable Intensity:</strong>{" "}
-                  Fine-tune the strength of blur and pixelation effects
-                </li>
-                <li>
-                  <RefreshCw className="w-4 h-4 inline-block mr-1" /> <strong>Real-time Preview:</strong> See the
-                  censoring effect immediately as you apply it
-                </li>
-                <li>
-                  <Lock className="w-4 h-4 inline-block mr-1" /> <strong>Privacy-Focused:</strong> All processing is
-                  done locally in your browser for maximum security
-                </li>
-                <li>
-                  <Download className="w-4 h-4 inline-block mr-1" /> <strong>Easy Download:</strong> Save your censored
-                  image with a single click
-                </li>
-                <li>
-                  <RefreshCw className="w-4 h-4 inline-block mr-1" /> <strong>Reset Functionality:</strong> Easily start
-                  over or make adjustments
-                </li>
-                <li>
-                  <Smartphone className="w-4 h-4 inline-block mr-1" /> <strong>Mobile-Friendly:</strong> Works
-                  seamlessly on both desktop and mobile devices
-                </li>
-              </ul>
-
-              <h2 className="text-lg md:text-xl lg:text-2xl font-semibold text-default-700 mb-4 mt-8 flex items-center">
-                <Lightbulb className="w-6 h-6 mr-2" />
-                Creative Tips and Tricks
-              </h2>
-              <ul className="list-disc list-inside text-default-600 space-y-2 text-sm md:text-base">
-                <li>Use the Blur effect at low intensity to create a soft focus effect on backgrounds.</li>
-                <li>Combine different censoring methods on the same image for varied visual effects.</li>
-                <li>Pixelate small areas to create an interesting, retro-style focal point in your image.</li>
-                <li>Use the Black-out feature to create silhouettes or high-contrast areas in your photos.</li>
-                <li>Experiment with censoring shapes to create unique, abstract designs within your images.</li>
-                <li>Use the tool to highlight specific areas by censoring the surrounding parts of the image.</li>
-                <li>Create a "reveal" effect by censoring most of an image and leaving key parts visible.</li>
-              </ul>
-
-              
-              <p className="text-default-600 mt-6">
-              Are you ready to start sensoring your images with accurate and creativity? Our photo provides sensor tool
-                The correct balance of functionality and ease of use. Whether you are protecting sensitive information or
-                Searching for new artistic techniques, this device provides the flexibility for you. Now try and search it
-                How easy it can be to edit your images with confidence!
-              </p>
-            </div>
-          </CardBody>
-        </Card>
+        <InfoSectionPhotoCensor />
       </div>
     </ToolLayout>
   )

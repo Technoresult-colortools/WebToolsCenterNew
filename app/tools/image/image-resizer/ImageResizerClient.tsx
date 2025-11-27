@@ -37,6 +37,7 @@ import {
   Settings
 } from "lucide-react"
 import ToolLayout from "@/components/ToolLayout"
+import InfoSectionImageResizer from "./info-section"
 
 const formatOptions = [
   { key: "png", label: "PNG" },
@@ -236,13 +237,13 @@ export default function EnhancedImageResizer() {
   return (
     <ToolLayout
       title="Image Resizer"
-      description="Quickly and easily resize your images with advanced options. Perfect for social media, web use, or any other platform requiring specific dimensions with optimal quality."
+      description="Resize images to specific dimensions effortlessly. Choose from PNG, JPEG, or WebP formats and preserve quality for web use and social media."
       toolId="678f382a26f06f912191bc8d"
     >
       <div className="flex flex-col gap-6">
         <Card className="bg-default-50 dark:bg-default-100">
           <CardBody className="p-6">
-            <h2 className="text-xl sm:text-1xl md:text-2xl font-bold text-default-700 mb-4">Upload an Image</h2>
+            <h2 className="text-xl sm:text-1xl md:text-2xl font-bold text-primary mb-4">Upload an Image</h2>
             {!imageSrc ? (
               <label
                 className="flex flex-col items-center justify-center h-64 px-4 py-6 bg-default-100 text-primary rounded-lg shadow-lg tracking-wide uppercase border-2 border-primary border-dashed cursor-pointer hover:bg-primary-100 hover:text-primary-600 transition duration-300"
@@ -493,7 +494,7 @@ export default function EnhancedImageResizer() {
                           </p>
                         </div>
                         <div className="flex justify-center md:justify-end items-center">
-                          <Button onClick={handleDownload} color="primary" size="lg">
+                          <Button onPress={handleDownload} color="primary" size="lg">
                             <Download className="h-5 w-5 mr-2" />
                             Download Image
                           </Button>
@@ -509,95 +510,8 @@ export default function EnhancedImageResizer() {
 
         <canvas ref={canvasRef} style={{ display: "none" }} />
         
-        <Card className="mt-8 bg-default-50 dark:bg-default-100 p-4 md:p-8">
-       
-            <div className="rounded-xl p-2 md:p-4 max-w-4xl mx-auto">
-              <h2 className="text-lg md:text-xl lg:text-2xl font-semibold text-default-700 mb-4 flex items-center">
-                <Info className="w-6 h-6 mr-2" />
-                About Image Resizer
-              </h2>
-              <p className="text-sm md:text-base text-default-600 mb-4">
-              The image resigning is a powerful tool designed to help you shape your images with quick and easily accurate and flexibility. Whether you are preparing images for web usage, social media, or any other purpose requiring specific dimensions, this tool facilitates you many features to get accurate results.
-              </p>
-              <p className="text-sm md:text-base text-default-600 mb-4">
-              With support to the ability to preserve many image formats, adjustable quality settings, social media presets, and aspect ratio, our image resisor meets both casual users and professionals who demand control over their image output.
-              </p>
-
-              <div className="my-8">
-                <NextImage
-                  src="/Images/InfosectionImages/ImageResizerPreview.png?height=400&width=600"
-                  alt="Screenshot of the Enhanced Image Resizer interface showing various resizing options and a sample resized image"
-                  width={600}
-                  height={400}
-                  className="rounded-lg shadow-lg w-full h-auto"
-                />
-              </div>
-
-              <h2 className="text-lg md:text-xl lg:text-2xl font-semibold text-default-700 mb-4 mt-8 flex items-center">
-                <Lightbulb className="w-6 h-6 mr-2" />
-                Key Features of Image Resizer
-              </h2>
-              <ul className="list-disc list-inside text-default-600 space-y-2 text-sm md:text-base">
-                <li><strong>Social media presets</strong> for platforms like Instagram, Facebook, Twitter, LinkedIn, and YouTube</li>
-                <li>Support for various image formats (PNG, JPEG, WebP)</li>
-                <li>Precise width and height adjustments</li>
-                <li>Option to preserve aspect ratio for proportional resizing</li>
-                <li>Quick dimension swapping for easy orientation changes</li>
-                <li>Multiple output formats: PNG, JPEG, and WebP</li>
-                <li>Adjustable quality settings for optimized file sizes</li>
-                <li>Real-time preview of resized images</li>
-                <li>High-quality resizing algorithm for crisp results</li>
-                <li>Easy one-click download of resized images</li>
-                <li>Reset functionality to quickly start over</li>
-                <li>Responsive design for use on various devices</li>
-                <li>Tabbed interface for simplified workflow</li>
-              </ul>
-
-              <h2 className="text-lg md:text-xl lg:text-2xl font-semibold text-default-700 mb-4 mt-8 flex items-center">
-                <BookOpen className="w-6 h-6 mr-2" />
-                How to Use Enhanced Image Resizer?
-              </h2>
-              <ol className="list-decimal list-inside text-default-600 space-y-2 text-sm md:text-base">
-                <li>Click the "Select an image file" button or drag and drop an image onto the designated area.</li>
-                <li>Once uploaded, you'll see a preview of the original image in the "Preview & Info" tab.</li>
-                <li>Switch to the "Resize Settings" tab to configure your image.</li>
-                <li>Choose a social media preset from the grid of platform options, or customize dimensions manually.</li>
-                <li>For custom dimensions, use the width and height inputs to set your desired dimensions.</li>
-                <li>Toggle the "Preserve aspect ratio" checkbox to maintain the image's proportions if needed.</li>
-                <li>Select your preferred output format (PNG, JPEG, or WebP) and adjust quality as needed.</li>
-                <li>Click "Resize Image" to generate your resized image.</li>
-                <li>The app will automatically switch to the "Result" tab showing your final image.</li>
-                <li>Click "Download Image" to save the result to your device.</li>
-                <li>Use the "Reset Settings" button at any time to revert all settings and start over.</li>
-              </ol>
-
-          <h2 className="text-lg md:text-xl lg:text-2xl font-semibold text-default-700 mb-4 mt-8 flex items-center">
-            <Lightbulb className="w-6 h-6 mr-2" />
-            Tips and Best Practices
-          </h2>
-          <ul className="list-disc list-inside text-default-600 space-y-2 text-sm md:text-base">
-            <li>Use the "Preserve aspect ratio" option to avoid image distortion when resizing.</li>
-            <li>For images with text or sharp edges, PNG format often provides the best quality.</li>
-            <li>JPEG is ideal for photographs and images with many colors, offering good compression.</li>
-            <li>WebP often provides the best balance between quality and file size for web use.</li>
-            <li>Experiment with the quality slider to find the optimal balance between image quality and file size.</li>
-            <li>When enlarging images, be aware that it may result in some loss of quality or pixelation.</li>
-            <li>For social media platforms, research the recommended image sizes for optimal display.</li>
-            <li>
-              Use the "Swap Dimensions" button to quickly create both landscape and portrait versions of your image.
-            </li>
-            <li>Always preview your resized image before downloading to ensure it meets your requirements.</li>
-            <li>Consider the intended use of your image when choosing between quality and file size.</li>
-          </ul>
-          <p className="text-sm md:text-base text-default-600 mt-6">
-          Image redevelopment is a versatile tool that completes a wide range of image shaping. whether
-            You need a professional designer, a social media manager, or just someone needs to change the shape of images
-            Sometimes, this tool provides flexibility and accuracy that you need to achieve every correct result.
-            Time. Start shaping your images with confidence and ease!
-          </p>
-        </div>
-
-    </Card>
+         {/* Info Section */}
+        <InfoSectionImageResizer />
       </div>
       
     </ToolLayout>

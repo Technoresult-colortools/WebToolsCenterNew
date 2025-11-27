@@ -7,21 +7,13 @@ import {
   Download,
   ImageIcon,
   AlertCircle,
-  Info,
-  BookOpen,
-  Lightbulb,
   FileText,
   Trash2,
   Grid,
   List,
   Upload as UploadIcon,
   Image as ImagePlus,
-  Scissors,
   SlidersHorizontal,
-  Eye,
-  Lock,
-  RefreshCw,
-  Smartphone,
 } from "lucide-react"
 import ToolLayout from "@/components/ToolLayout"
 import { toast } from "react-hot-toast"
@@ -42,6 +34,7 @@ import {
   Divider
 } from "@nextui-org/react"
 import NextImage from "next/image"
+import InfoSectionBase64ToImage from "./info-section";
 
 interface ConvertedImage {
   name: string
@@ -426,134 +419,7 @@ export default function Base64ToImageConverter() {
         </CardBody>
       </Card>
 
-      <Card className="mt-8 bg-default-50 dark:bg-default-100">
-        <CardBody className="p-6">
-          <div className="rounded-xl p-2 md:p-4 max-w-4xl mx-auto">
-            <h2 className="text-xl md:text-2xl font-semibold text-default-700 mb-4 flex items-center">
-              <Info className="w-6 h-6 mr-2" />
-              What is the Base64 to Image Converter?
-            </h2>
-            <p className="text-sm md:text-base text-default-600 mb-4">
-            The Base64 to image converter is a powerful and user -friendly device designed to replace the base 64 encoded strings back into viewed image files. This conversion process is required for developers, designers and anyone working with an encoded image data, who needs to quickly imagine or remove the original image.
-            </p>
-            <p className="text-sm md:text-base text-default-600 mb-4">
-            Base64 Encoding is a method of representing binary data using a set of 64 characters, which is usually used to embed image data within text-based formats such as HTML, CSS or JSON. Our tool reverse this process, allowing you to easily see, download, download, or change back to your original image format for further process.
-            </p>
-
-            <div className="my-8 flex flex-wrap gap-4">
-              <NextImage
-                  src="/Images/InfosectionImages/Base64ImagePreview1.png?height=400&width=600"
-                  alt="Screenshot of the Image Color Picker interface showing image upload area, color selection tools, and color analysis results"
-                  width={600}
-                  height={400}
-                  className="rounded-lg shadow-lg w-full sm:w-1/2 h-auto"
-              />
-              <NextImage
-                  src="/Images/InfosectionImages/Base64ImagePreview.png?height=400&width=600"
-                  alt="Description of the second image"
-                  width={600}
-                  height={400}
-                  className="rounded-lg shadow-lg w-full sm:w-1/2 h-auto"
-              />
-          </div>
-
-
-            <h2
-              id="how-to-use"
-              className="text-xl md:text-2xl font-semibold text-default-700 mb-4 mt-8 flex items-center"
-            >
-              <BookOpen className="w-6 h-6 mr-2" />
-              How to Use the Base64 to Image Converter?
-            </h2>
-            <ol className="list-decimal list-inside space-y-2 text-sm md:text-base text-default-600">
-              <li>Click on the "Input Base64" tab.</li>
-              <li>Paste your Base64 encoded string into the text area provided.</li>
-              <li>Click the "Convert to Image" button to process your input.</li>
-              <li>This tool will automatically convert your Base64 string to an image.</li>
-              <li>Switch to the "Converted Images" tab to view and manage your converted images.</li>
-              <li>For each converted image, you can:</li>
-              <ul className="list-disc list-inside ml-6 space-y-2 text-sm md:text-base text-default-600">
-                <li>Copy the image URL to your clipboard.</li>
-                <li>Download the image file.</li>
-                <li>View a preview of the image.</li>
-                <li>Remove individual images as needed.</li>
-              </ul>
-              <li>Use the "Sort By" dropdown to organize your converted images.</li>
-              <li>Use the "Clear All" button to remove all converted images and start fresh.</li>
-            </ol>
-
-            <h2 className="text-xl md:text-2xl font-semibold text-default-700 mb-4 mt-8 flex items-center">
-              <Lightbulb className="w-6 h-6 mr-2" />
-              Key Features
-            </h2>
-            <ul className="list-disc list-inside text-default-600 space-y-2 text-sm md:text-base">
-              <li>
-                <Upload className="w-4 h-4 inline-block mr-1" /> <strong>Easy Input:</strong> Simple text area for
-                pasting Base64 strings
-              </li>
-              <li>
-                <Scissors className="w-4 h-4 inline-block mr-1" /> <strong>Multiple Conversions:</strong> Convert and
-                manage multiple Base64 strings in one session
-              </li>
-              <li>
-                <SlidersHorizontal className="w-4 h-4 inline-block mr-1" /> <strong>Image Preview:</strong> View
-                converted images instantly in the browser
-              </li>
-              <li>
-                <Eye className="w-4 h-4 inline-block mr-1" /> <strong>Copy URL:</strong> Easily copy the data URL of
-                converted images
-              </li>
-              <li>
-                <Download className="w-4 h-4 inline-block mr-1" /> <strong>Easy Download:</strong> Download converted
-                images with a single click
-              </li>
-              <li>
-                <Lock className="w-4 h-4 inline-block mr-1" /> <strong>Secure Conversion:</strong> All processing is
-                done client-side for maximum privacy
-              </li>
-              <li>
-                <RefreshCw className="w-4 h-4 inline-block mr-1" /> <strong>Sorting Options:</strong> Organize converted
-                images by name, size, or type
-              </li>
-              <li>
-                <Smartphone className="w-4 h-4 inline-block mr-1" /> <strong>Responsive Design:</strong> Use on any
-                device, from desktop to mobile
-              </li>
-            </ul>
-
-            <h2 className="text-xl md:text-2xl font-semibold text-default-700 mb-4 mt-8 flex items-center">
-              <Lightbulb className="w-6 h-6 mr-2" />
-              Tips for Optimal Use
-            </h2>
-            <ul className="list-disc list-inside text-default-600 space-y-2 text-sm md:text-base">
-              <li>Ensure your Base64 string is complete and doesn't contain any extra characters.</li>
-              <li>If your Base64 string includes a extra characters delete it.</li>
-              <li>
-                If your Base64 string includes a data URL prefix (e.g., "data:image/png;base64,"), you can include or
-                exclude it - our converter handles both formats.
-              </li>
-              <li>
-                For large Base64 strings, consider splitting them into smaller chunks if you encounter any performance
-                issues.
-              </li>
-              <li>Always verify the converted image to ensure it matches your expectations.</li>
-              <li>
-                Remember that Base64 encoding increases the data size by approximately 33%, so the resulting image file
-                size may be smaller than the Base64 string length.
-              </li>
-              <li>If you're working with multiple images, use the sorting feature to organize them efficiently.</li>
-            </ul>
-
-            <p className="text-sm md:text-base text-default-600 mt-6">
-              Ready to decode your Base64 strings and bring your images to life? Our Base64 to Image Converter offers a
-              perfect balance of simplicity and powerful features. Whether you're a developer debugging encoded images,
-              a designer working with data URIs, or anyone needing to quickly visualize Base64 encoded images, this tool
-              provides the flexibility and ease of use you need. Try it now and experience the convenience in your
-              projects!
-            </p>
-          </div>
-        </CardBody>
-      </Card>
+      <InfoSectionBase64ToImage />
     </ToolLayout>
   )
 }

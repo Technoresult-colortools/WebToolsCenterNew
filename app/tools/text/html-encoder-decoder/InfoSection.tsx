@@ -23,7 +23,11 @@ import {
   Hash,         // For Numeric entities (Decimal/Hex)
   Type,         // For Named entities
     // If export to JSON is a feature
-  Eye,          // For "View & Use Output" in How to Use
+  Eye,
+  UploadCloud,
+  Filter,
+  Settings,
+  Share2,          // For "View & Use Output" in How to Use
 } from "lucide-react"
 
 export default function InfoSection() {
@@ -31,7 +35,7 @@ export default function InfoSection() {
   const previewImageSrc = "/Images/InfosectionImages/HTMLEncodePreview1.png?height=400&width=800"; // Placeholder, update this
 
   return (
-    <Card className="bg-default-50 dark:bg-default-100 p-4 md:p-8 mt-8">
+    <Card className="bg-default-50 dark:bg-default-100 p-4 md:p-8">
       <div className="rounded-xl p-2 md:p-4 max-w-6xl mx-auto">
         <h2 className="text-2xl font-semibold text-default-700 mb-4 flex items-center">
           <Info className="w-6 h-6 mr-2 text-primary-500" />
@@ -57,37 +61,111 @@ export default function InfoSection() {
 
         <h2 id="how-to-use" className="text-2xl font-semibold text-default-700 mb-4 mt-8 flex items-center">
           <BookOpen className="w-6 h-6 mr-2 text-primary-500" />
-          How to Use HTML Encoder/Decoder?
+          How to Use the HTML Encoder/Decoder?
         </h2>
-        <ol className="list-decimal list-inside space-y-2 text-default-600">
-          <li>
-            <strong className="flex items-center">
-              <ClipboardPaste className="w-4 h-4 mr-1.5 text-blue-500" /> Input Text:
-            </strong> Paste or type text/HTML into the input area.
+
+        <ol className="list-none space-y-4 text-default-600">
+          <li className="flex items-start gap-3">
+            <span className="flex-shrink-0 w-6 h-6 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center text-sm font-medium">
+              1
+            </span>
+            <div className="flex-1">
+              <div className="flex items-center gap-2 mb-1">
+                <UploadCloud className="w-4 h-4 text-blue-500 flex-shrink-0" />
+                <strong className="text-default-700">Input your text:</strong>
+              </div>
+              <p className="text-default-600 ml-6">
+                Paste or type the text or HTML code you want to process into the input area.
+              </p>
+            </div>
           </li>
-          <li>
-            <strong className="flex items-center">
-              <Repeat className="w-4 h-4 mr-1.5 text-green-500" /> Select Mode:
-            </strong> Choose <code className="text-xs bg-default-200 dark:bg-default-700 px-1 rounded">Encode</code> (text to entities) or <code className="text-xs bg-default-200 dark:bg-default-700 px-1 rounded">Decode</code> (entities to text).
+
+          <li className="flex items-start gap-3">
+            <span className="flex-shrink-0 w-6 h-6 bg-green-100 text-green-600 rounded-full flex items-center justify-center text-sm font-medium">
+              2
+            </span>
+            <div className="flex-1">
+              <div className="flex items-center gap-2 mb-1">
+                <Filter className="w-4 h-4 text-green-500 flex-shrink-0" />
+                <strong className="text-default-700">Select the operation mode:</strong>
+              </div>
+              <p className="text-default-600 ml-6">
+                Choose "Encode" to convert characters into HTML entities, or "Decode" to convert entities back into characters.
+              </p>
+            </div>
           </li>
-          <li>
-            <strong className="flex items-center">
-              <Settings2 className="w-4 h-4 mr-1.5 text-orange-500" /> Configure Encoding Options:
-            </strong>
-            <ul className="list-disc list-inside ml-6 text-sm mt-1">
-              <li>Select <code className="text-xs bg-default-200 dark:bg-default-700 px-1 rounded">Encoding Type</code> (Named, Decimal, Hexadecimal).</li>
-              <li>Toggle options for newlines, quotes, non-ASCII characters.</li>
-            </ul>
+
+          <li className="flex items-start gap-3">
+            <span className="flex-shrink-0 w-6 h-6 bg-orange-100 text-orange-600 rounded-full flex items-center justify-center text-sm font-medium">
+              3
+            </span>
+            <div className="flex-1">
+              <div className="flex items-center gap-2 mb-1">
+                <Settings className="w-4 h-4 text-orange-500 flex-shrink-0" />
+                <strong className="text-default-700">Configure processing options:</strong>
+              </div>
+              <div className="ml-6 space-y-2">
+                <div className="flex items-start gap-2">
+                  <Settings2 className="w-3 h-3 mt-0.5 text-gray-500 flex-shrink-0" />
+                  <div>
+                    <strong className="text-default-700">Encoding Type:</strong>
+                    <span className="text-default-600 ml-1">Select from Named, Decimal, or Hexadecimal entities.</span>
+                  </div>
+                </div>
+                <div className="flex items-start gap-2">
+                  <ListChecks className="w-3 h-3 mt-0.5 text-gray-500 flex-shrink-0" />
+                  <div>
+                    <strong className="text-default-700">Character Options:</strong>
+                    <span className="text-default-600 ml-1">Choose how to handle newlines, quotes, and non-ASCII characters.</span>
+                  </div>
+                </div>
+              </div>
+            </div>
           </li>
-          <li>
-            <strong className="flex items-center">
-              <Wand2 className="w-4 h-4 mr-1.5 text-purple-500" /> Process:
-            </strong> Click "Encode"/"Decode" or enable "Auto Process".
+
+          <li className="flex items-start gap-3">
+            <span className="flex-shrink-0 w-6 h-6 bg-purple-100 text-purple-600 rounded-full flex items-center justify-center text-sm font-medium">
+              4
+            </span>
+            <div className="flex-1">
+              <div className="flex items-center gap-2 mb-1">
+                <Zap className="w-4 h-4 text-purple-500 flex-shrink-0" />
+                <strong className="text-default-700">Process the text:</strong>
+              </div>
+              <p className="text-default-600 ml-6">
+                Click the "Encode" or "Decode" button. For real-time results, enable the "Auto Process" option.
+              </p>
+            </div>
           </li>
-          <li>
-            <strong className="flex items-center">
-              <Eye className="w-4 h-4 mr-1.5 text-red-500" /> View & Use Output:
-            </strong> Result appears in the output area. Copy or download.
+
+          <li className="flex items-start gap-3">
+            <span className="flex-shrink-0 w-6 h-6 bg-red-100 text-red-600 rounded-full flex items-center justify-center text-sm font-medium">
+              5
+            </span>
+            <div className="flex-1">
+              <div className="flex items-center gap-2 mb-1">
+                <Eye className="w-4 h-4 text-red-500 flex-shrink-0" />
+                <strong className="text-default-700">View the result:</strong>
+              </div>
+              <p className="text-default-600 ml-6">
+                The converted text will appear in the output area, ready for you to review.
+              </p>
+            </div>
+          </li>
+
+          <li className="flex items-start gap-3">
+            <span className="flex-shrink-0 w-6 h-6 bg-yellow-100 text-yellow-600 rounded-full flex items-center justify-center text-sm font-medium">
+              6
+            </span>
+            <div className="flex-1">
+              <div className="flex items-center gap-2 mb-1">
+                <Share2 className="w-4 h-4 text-yellow-500 flex-shrink-0" />
+                <strong className="text-default-700">Copy or download:</strong>
+              </div>
+              <p className="text-default-600 ml-6">
+                Use the provided buttons to copy the output to your clipboard or download it as a text file.
+              </p>
+            </div>
           </li>
         </ol>
 

@@ -22,7 +22,10 @@ import {
   Wand2,     // For Tips section title
   SlidersHorizontal, // For Tips
   Eye,       // For Tips
-  Sparkles   // For Tips
+  Sparkles,   // For Tips
+  Share2,
+  Settings,
+  UploadCloud
 } from "lucide-react"
 import Link from "next/link" // Added for image link
 
@@ -62,24 +65,94 @@ export default function InfoSection() {
           <BookOpen className="w-6 h-6 mr-2 text-primary-500" />
           How to Use the Image Average Color Finder?
         </h2>
-        <ol className="list-decimal list-inside space-y-2 text-default-600">
-          <li>
-            <strong>Upload an image:</strong> Drag and drop your image file onto the designated area, or click to browse and select from your device.
+
+        <ol className="list-none space-y-4 text-default-600">
+          <li className="flex items-start gap-3">
+            <span className="flex-shrink-0 w-6 h-6 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center text-sm font-medium">
+              1
+            </span>
+            <div className="flex-1">
+              <div className="flex items-center gap-2 mb-1">
+                <UploadCloud className="w-4 h-4 text-blue-500 flex-shrink-0" />
+                <strong className="text-default-700">Upload your image:</strong>
+              </div>
+              <p className="text-default-600 ml-6">
+                Drag and drop a file, or click to browse and select an image from your device.
+              </p>
+            </div>
           </li>
-          <li>
-            <strong>View Average Color:</strong> Once uploaded, the tool will instantly display the calculated average color of the image, along with its HEX, RGB, and HSL values.
+
+          <li className="flex items-start gap-3">
+            <span className="flex-shrink-0 w-6 h-6 bg-green-100 text-green-600 rounded-full flex items-center justify-center text-sm font-medium">
+              2
+            </span>
+            <div className="flex-1">
+              <div className="flex items-center gap-2 mb-1">
+                <Eye className="w-4 h-4 text-green-500 flex-shrink-0" />
+                <strong className="text-default-700">Explore the results:</strong>
+              </div>
+              <div className="ml-6 space-y-2">
+                <div className="flex items-start gap-2">
+                  <FileText className="w-3 h-3 mt-0.5 text-gray-500 flex-shrink-0" />
+                  <div>
+                    <strong className="text-default-700">Average Color:</strong>
+                    <span className="text-default-600 ml-1">View the calculated average color in HEX, RGB, and HSL formats.</span>
+                  </div>
+                </div>
+                <div className="flex items-start gap-2">
+                  <Palette className="w-3 h-3 mt-0.5 text-gray-500 flex-shrink-0" />
+                  <div>
+                    <strong className="text-default-700">Dominant Colors:</strong>
+                    <span className="text-default-600 ml-1">See a palette of the most prominent colors from the image.</span>
+                  </div>
+                </div>
+              </div>
+            </div>
           </li>
-          <li>
-            <strong>Explore Dominant Colors:</strong> See a palette of the most prominent colors extracted from your image.
+
+          <li className="flex items-start gap-3">
+            <span className="flex-shrink-0 w-6 h-6 bg-orange-100 text-orange-600 rounded-full flex items-center justify-center text-sm font-medium">
+              3
+            </span>
+            <div className="flex-1">
+              <div className="flex items-center gap-2 mb-1">
+                <Settings className="w-4 h-4 text-orange-500 flex-shrink-0" />
+                <strong className="text-default-700">Adjust the palette:</strong>
+              </div>
+              <p className="text-default-600 ml-6">
+                Use the slider to change the number of dominant colors displayed (from 1 to 10).
+              </p>
+            </div>
           </li>
-          <li>
-            <strong>Adjust Dominant Colors:</strong> Use the slider to change the number of dominant colors displayed (from 1 to 10) to refine your palette.
+
+          <li className="flex items-start gap-3">
+            <span className="flex-shrink-0 w-6 h-6 bg-purple-100 text-purple-600 rounded-full flex items-center justify-center text-sm font-medium">
+              4
+            </span>
+            <div className="flex-1">
+              <div className="flex items-center gap-2 mb-1">
+                <Share2 className="w-4 h-4 text-purple-500 flex-shrink-0" />
+                <strong className="text-default-700">Download your palette:</strong>
+              </div>
+              <p className="text-default-600 ml-6">
+                Click the download button to save the generated color palette as an image file.
+              </p>
+            </div>
           </li>
-          <li>
-            <strong>Download Palette:</strong> Click the download button to save the generated color palette (average and dominant colors) as an image file for use in your projects.
-          </li>
-          <li>
-            <strong>Analyze Another Image:</strong> To process a new image, simply upload another file. The tool will reset and analyze the new image.
+          
+          <li className="flex items-start gap-3">
+            <span className="flex-shrink-0 w-6 h-6 bg-red-100 text-red-600 rounded-full flex items-center justify-center text-sm font-medium">
+              5
+            </span>
+            <div className="flex-1">
+              <div className="flex items-center gap-2 mb-1">
+                <Zap className="w-4 h-4 text-red-500 flex-shrink-0" />
+                <strong className="text-default-700">Analyze another image:</strong>
+              </div>
+              <p className="text-default-600 ml-6">
+                To process a new image, simply upload another file to reset the tool.
+              </p>
+            </div>
           </li>
         </ol>
 
@@ -87,84 +160,106 @@ export default function InfoSection() {
           <Palette className="w-6 h-6 mr-2 text-primary-500" />
           Color Information Displayed
         </h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4 text-sm text-default-600">
-          <div className="flex items-start">
-            <Droplet className="w-4 h-4 mr-2 mt-0.5 text-primary-500" />
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4 text-default-600">
+          <div className="flex items-start gap-3">
+            <Droplet className="w-5 h-5 mt-0.5 text-primary-500 flex-shrink-0" />
             <div>
-              <strong>Average Color:</strong> The overall mean color calculated from all pixels in the image. Provided in HEX, RGB, and HSL formats for versatile application.
+              <strong className="text-default-700">Average Color:</strong>
+              <span className="block mt-1">The overall mean color calculated from all pixels in the image. Provided in HEX, RGB, and HSL formats for versatile application.</span>
             </div>
           </div>
-          <div className="flex items-start">
-            <Palette className="w-4 h-4 mr-2 mt-0.5 text-secondary-500" />
+          
+          <div className="flex items-start gap-3">
+            <Palette className="w-5 h-5 mt-0.5 text-secondary-500 flex-shrink-0" />
             <div>
-              <strong>Dominant Color Palette:</strong> A curated selection of the most frequently occurring and visually significant colors within the image.
+              <strong className="text-default-700">Dominant Color Palette:</strong>
+              <span className="block mt-1">A curated selection of the most frequently occurring and visually significant colors within the image.</span>
             </div>
           </div>
-          <div className="flex items-start">
-            <Settings2 className="w-4 h-4 mr-2 mt-0.5 text-success-500" />
+          
+          <div className="flex items-start gap-3">
+            <Settings2 className="w-5 h-5 mt-0.5 text-success-500 flex-shrink-0" />
             <div>
-              <strong>Adjustable Palette Size:</strong> Customize the number of dominant colors (from 1 up to 10) to tailor the complexity of the extracted palette.
+              <strong className="text-default-700">Adjustable Palette Size:</strong>
+              <span className="block mt-1">Customize the number of dominant colors (from 1 up to 10) to tailor the complexity of the extracted palette.</span>
             </div>
           </div>
-          <div className="flex items-start">
-            <Download className="w-4 h-4 mr-2 mt-0.5 text-warning-500" />
+          
+          <div className="flex items-start gap-3">
+            <Download className="w-5 h-5 mt-0.5 text-warning-500 flex-shrink-0" />
             <div>
-              <strong>Downloadable Palette Image:</strong> Export the complete color information (average and dominant colors with their values) as a convenient image file.
+              <strong className="text-default-700">Downloadable Palette Image:</strong>
+              <span className="block mt-1">Export the complete color information (average and dominant colors with their values) as a convenient image file.</span>
             </div>
           </div>
         </div>
 
-        <h2 className="text-2xl font-semibold text-default-700 mb-4 mt-8 flex items-center">
+        <h2 id="key-features" className="text-2xl font-semibold text-default-700 mb-4 mt-8 flex items-center">
           <Lightbulb className="w-6 h-6 mr-2 text-primary-500" />
           Key Features
         </h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4 text-sm text-default-600">
-          <div className="flex items-start">
-            <Droplet className="w-4 h-4 mr-2 mt-0.5 text-primary-500" />
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4 text-default-600">
+          <div className="flex items-start gap-3">
+            <Droplet className="w-5 h-5 mt-0.5 text-primary-500 flex-shrink-0" />
             <div>
-              <strong>Accurate Average Color:</strong> Precise calculation of the image's average color using efficient algorithms.
+              <strong className="text-default-700">Accurate Average Color:</strong>
+              <span className="block mt-1">Precise calculation of the image's average color using efficient algorithms.</span>
             </div>
           </div>
-          <div className="flex items-start">
-            <Palette className="w-4 h-4 mr-2 mt-0.5 text-secondary-500" />
+          
+          <div className="flex items-start gap-3">
+            <Palette className="w-5 h-5 mt-0.5 text-secondary-500 flex-shrink-0" />
             <div>
-              <strong>Dominant Color Extraction:</strong> Sophisticated identification and display of the most prominent colors in the image.
+              <strong className="text-default-700">Dominant Color Extraction:</strong>
+              <span className="block mt-1">Sophisticated identification and display of the most prominent colors in the image.</span>
             </div>
           </div>
-          <div className="flex items-start">
-            <Settings2 className="w-4 h-4 mr-2 mt-0.5 text-success-500" />
+          
+          <div className="flex items-start gap-3">
+            <Settings2 className="w-5 h-5 mt-0.5 text-success-500 flex-shrink-0" />
             <div>
-              <strong>Customizable Palette Size:</strong> Fine-tune the number of dominant colors (1-10) for tailored color analysis.
+              <strong className="text-default-700">Customizable Palette Size:</strong>
+              <span className="block mt-1">Fine-tune the number of dominant colors (1-10) for tailored color analysis.</span>
             </div>
           </div>
-          <div className="flex items-start">
-            <Braces className="w-4 h-4 mr-2 mt-0.5 text-warning-500" />
+          
+          <div className="flex items-start gap-3">
+            <Braces className="w-5 h-5 mt-0.5 text-warning-500 flex-shrink-0" />
             <div>
-              <strong>Versatile Color Codes:</strong> Color information provided in standard HEX, RGB, and HSL formats for easy use.
+              <strong className="text-default-700">Versatile Color Codes:</strong>
+              <span className="block mt-1">Color information provided in standard HEX, RGB, and HSL formats for easy use.</span>
             </div>
           </div>
-          <div className="flex items-start">
-            <Download className="w-4 h-4 mr-2 mt-0.5 text-danger-500" />
+          
+          <div className="flex items-start gap-3">
+            <Download className="w-5 h-5 mt-0.5 text-danger-500 flex-shrink-0" />
             <div>
-              <strong>Palette Download:</strong> Easily export the generated color palette as an image for integration with design tools.
+              <strong className="text-default-700">Palette Download:</strong>
+              <span className="block mt-1">Easily export the generated color palette as an image for integration with design tools.</span>
             </div>
           </div>
-          <div className="flex items-start">
-            <ImageUp className="w-4 h-4 mr-2 mt-0.5 text-primary-500" />
+          
+          <div className="flex items-start gap-3">
+            <ImageUp className="w-5 h-5 mt-0.5 text-primary-500 flex-shrink-0" />
             <div>
-              <strong>Intuitive Image Upload:</strong> Supports drag & drop and click-to-select for effortless image input.
+              <strong className="text-default-700">Intuitive Image Upload:</strong>
+              <span className="block mt-1">Supports drag & drop and click-to-select for effortless image input.</span>
             </div>
           </div>
-          <div className="flex items-start">
-            <Smartphone className="w-4 h-4 mr-2 mt-0.5 text-secondary-500" />
+
+          <div className="flex items-start gap-3">
+            <Smartphone className="w-5 h-5 mt-0.5 text-secondary-500 flex-shrink-0" />
             <div>
-              <strong>Responsive Design:</strong> Fully functional and user-friendly on desktops, tablets, and mobile devices.
+              <strong className="text-default-700">Responsive Design:</strong>
+              <span className="block mt-1">Fully functional and user-friendly on desktops, tablets, and mobile devices.</span>
             </div>
           </div>
-          <div className="flex items-start">
-            <Zap className="w-4 h-4 mr-2 mt-0.5 text-success-500" />
+
+          <div className="flex items-start gap-3">
+            <Zap className="w-5 h-5 mt-0.5 text-success-500 flex-shrink-0" />
             <div>
-              <strong>Instant Analysis:</strong> Fast client-side processing for immediate color results without server uploads.
+              <strong className="text-default-700">Instant Analysis:</strong>
+              <span className="block mt-1">Fast client-side processing for immediate color results without server uploads.</span>
             </div>
           </div>
         </div>
@@ -234,7 +329,7 @@ export default function InfoSection() {
           <Wand2 className="w-6 h-6 mr-2 text-primary-500" />
           Tips for Best Results
         </h2>
-        <div className="bg-default-100/50 dark:bg-default-200/20 p-5 rounded-lg">
+        <div className="bg-default-200/50 dark:bg-default-300/20 p-3 rounded-lg shadow-md">
           <ul className="space-y-3 text-default-600">
             <li className="flex items-start">
               <div className="bg-primary-100 dark:bg-primary-900/30 p-1 rounded-full mr-3 mt-0.5">

@@ -25,7 +25,9 @@ import {
   Wand2,       // For Advanced Tips title
   Keyboard,    // For Tips
   Puzzle,      // For Tips: Combining features
-  Share2,      // For Tips: Sharing
+  Share2,
+  UploadCloud,
+  FileDiff,      // For Tips: Sharing
  
   // Add other icons as needed from previous examples
 } from "lucide-react"
@@ -67,24 +69,79 @@ export default function InfoSection() {
           <BookOpen className="w-6 h-6 mr-2 text-primary-500" />
           How to Use the Markdown to HTML Converter?
         </h2>
-        <ol className="list-decimal list-inside space-y-2 text-default-600"> {/* Standardized text */}
-          <li>
-            <strong>Input Markdown:</strong> Type or paste your Markdown into the editor. Alternatively, use the "Import File" button to upload a <code>.md</code>, <code>.markdown</code>, or <code>.txt</code> file.
+
+        <ol className="list-none space-y-4 text-default-600">
+          <li className="flex items-start gap-3">
+            <span className="flex-shrink-0 w-6 h-6 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center text-sm font-medium">
+              1
+            </span>
+            <div className="flex-1">
+              <div className="flex items-center gap-2 mb-1">
+                <UploadCloud className="w-4 h-4 text-blue-500 flex-shrink-0" />
+                <strong className="text-default-700">Input Markdown:</strong>
+              </div>
+              <p className="text-default-600 ml-6">
+                Type, paste, or upload a <code>.md</code>, <code>.markdown</code>, or <code>.txt</code> file into the editor.
+              </p>
+            </div>
           </li>
-          <li>
-            <strong>Convert:</strong> Click the "Convert Now" (or similar) button. The AI will process your Markdown and generate the HTML.
+
+          <li className="flex items-start gap-3">
+            <span className="flex-shrink-0 w-6 h-6 bg-purple-100 text-purple-600 rounded-full flex items-center justify-center text-sm font-medium">
+              2
+            </span>
+            <div className="flex-1">
+              <div className="flex items-center gap-2 mb-1">
+                <Zap className="w-4 h-4 text-purple-500 flex-shrink-0" />
+                <strong className="text-default-700">Convert your text:</strong>
+              </div>
+              <p className="text-default-600 ml-6">
+                Click the "Convert" button to process your Markdown and generate the corresponding HTML.
+              </p>
+            </div>
           </li>
-          <li>
-            <strong>View HTML Code:</strong> Switch to the "HTML" tab (or output area) to see the raw HTML. You can copy this code for your use.
+
+          <li className="flex items-start gap-3">
+            <span className="flex-shrink-0 w-6 h-6 bg-red-100 text-red-600 rounded-full flex items-center justify-center text-sm font-medium">
+              3
+            </span>
+            <div className="flex-1">
+              <div className="flex items-center gap-2 mb-1">
+                <Eye className="w-4 h-4 text-red-500 flex-shrink-0" />
+                <strong className="text-default-700">View and Preview:</strong>
+              </div>
+              <div className="ml-6 space-y-2">
+                <div className="flex items-start gap-2">
+                  <FileText className="w-3 h-3 mt-0.5 text-gray-500 flex-shrink-0" />
+                  <div>
+                    <strong className="text-default-700">HTML Code:</strong>
+                    <span className="text-default-600 ml-1">Switch to the "HTML" tab to see the raw, generated code.</span>
+                  </div>
+                </div>
+                <div className="flex items-start gap-2">
+                  <FileDiff className="w-3 h-3 mt-0.5 text-gray-500 flex-shrink-0" />
+                  <div>
+                    <strong className="text-default-700">Live Preview:</strong>
+                    <span className="text-default-600 ml-1">Use the "Preview" tab to see how your HTML will render in a browser.</span>
+                  </div>
+                </div>
+              </div>
+            </div>
           </li>
-          <li>
-            <strong>Preview Output:</strong> Use the "Preview" tab to see a live rendering of how your HTML will appear in a browser.
-          </li>
-          <li>
-            <strong>Save/Copy:</strong> Use buttons like "Copy HTML" to copy the code to your clipboard or "Download HTML" to save it as an <code>.html</code> file.
-          </li>
-          <li>
-            <strong>Open in New Window (Optional):</strong> Some converters offer an "Open in New Window" option from the preview to see the full-page rendering.
+
+          <li className="flex items-start gap-3">
+            <span className="flex-shrink-0 w-6 h-6 bg-indigo-100 text-indigo-600 rounded-full flex items-center justify-center text-sm font-medium">
+              4
+            </span>
+            <div className="flex-1">
+              <div className="flex items-center gap-2 mb-1">
+                <Share2 className="w-4 h-4 text-indigo-500 flex-shrink-0" />
+                <strong className="text-default-700">Save or Export:</strong>
+              </div>
+              <p className="text-default-600 ml-6">
+                Copy the code to your clipboard, download it as an <code>.html</code> file, or open the preview in a new window.
+              </p>
+            </div>
           </li>
         </ol>
 
@@ -92,96 +149,122 @@ export default function InfoSection() {
           <Settings2 className="w-6 h-6 mr-2 text-primary-500" />
           Supported Markdown Elements & Enhancements
         </h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4 text-sm text-default-600">
-          <div className="flex items-start">
-            <Type className="w-4 h-4 mr-2 mt-0.5 text-primary-500" />
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4 text-default-600">
+          <div className="flex items-start gap-3">
+            <Type className="w-5 h-5 mt-0.5 text-primary-500 flex-shrink-0" />
             <div>
-              <strong>Standard Markdown:</strong> Full support for common Markdown syntax including headings, lists, bold, italics, links, images, blockquotes, and inline code.
+              <strong className="text-default-700">Standard Markdown:</strong>
+              <span className="block mt-1">Full support for common Markdown syntax including headings, lists, bold, italics, links, images, blockquotes, and inline code.</span>
             </div>
           </div>
-          <div className="flex items-start">
-            <Code className="w-4 h-4 mr-2 mt-0.5 text-secondary-500" />
+          
+          <div className="flex items-start gap-3">
+            <Code className="w-5 h-5 mt-0.5 text-secondary-500 flex-shrink-0" />
             <div>
-              <strong>Code Blocks & Syntax Highlighting:</strong> Fenced code blocks are converted with appropriate HTML structure (<code>&lt;pre&gt;&lt;code&gt;&lt;/code&gt;&lt;/pre&gt;</code>) and often include syntax highlighting for various languages.
+              <strong className="text-default-700">Code Blocks & Syntax Highlighting:</strong>
+              <span className="block mt-1">Fenced code blocks are converted with appropriate HTML structure (<code className="text-xs bg-default-100 px-1 py-0.5 rounded">&lt;pre&gt;&lt;code&gt;&lt;/code&gt;&lt;/pre&gt;</code>) and often include syntax highlighting for various languages.</span>
             </div>
           </div>
-          <div className="flex items-start">
-            <MousePointerClick className="w-4 h-4 mr-2 mt-0.5 text-success-500" />
+          
+          <div className="flex items-start gap-3">
+            <MousePointerClick className="w-5 h-5 mt-0.5 text-success-500 flex-shrink-0" />
             <div>
-              <strong>Interactive Buttons:</strong> Special syntax like <code>[Button Text](button:action)</code> can be used to generate clickable HTML buttons (often with JavaScript for interactivity).
+              <strong className="text-default-700">Interactive Buttons:</strong>
+              <span className="block mt-1">Special syntax like <code className="text-xs bg-default-100 px-1 py-0.5 rounded">[Button Text](button:action)</code> can be used to generate clickable HTML buttons (often with JavaScript for interactivity).</span>
             </div>
           </div>
-          <div className="flex items-start">
-            <ShieldCheck className="w-4 h-4 mr-2 mt-0.5 text-warning-500" />
+          
+          <div className="flex items-start gap-3">
+            <ShieldCheck className="w-5 h-5 mt-0.5 text-warning-500 flex-shrink-0" />
             <div>
-              <strong>Secure Sanitization:</strong> Output HTML is typically sanitized (e.g., using DOMPurify) to prevent XSS attacks while preserving intended formatting and safe interactive elements.
+              <strong className="text-default-700">Secure Sanitization:</strong>
+              <span className="block mt-1">Output HTML is typically sanitized (e.g., using DOMPurify) to prevent XSS attacks while preserving intended formatting and safe interactive elements.</span>
             </div>
           </div>
-          <div className="flex items-start">
-            <Palette className="w-4 h-4 mr-2 mt-0.5 text-danger-500" />
+          
+          <div className="flex items-start gap-3">
+            <Palette className="w-5 h-5 mt-0.5 text-danger-500 flex-shrink-0" />
             <div>
-              <strong>Comprehensive Styling:</strong> Generated HTML often includes a default stylesheet for professional typography, tables, code blocks, and other elements.
+              <strong className="text-default-700">Comprehensive Styling:</strong>
+              <span className="block mt-1">Generated HTML often includes a default stylesheet for professional typography, tables, code blocks, and other elements.</span>
             </div>
           </div>
-          <div className="flex items-start">
-            <Zap className="w-4 h-4 mr-2 mt-0.5 text-primary-500" /> {/* Using Zap as it means "action" or "dynamic" */}
+          
+          <div className="flex items-start gap-3">
+            <Zap className="w-5 h-5 mt-0.5 text-primary-500 flex-shrink-0" />
             <div>
-              <strong>Icon Support (Lucide):</strong> Some converters may parse and render icon syntax (e.g., for Lucide icons) if referenced within the Markdown.
+              <strong className="text-default-700">Icon Support (Lucide):</strong>
+              <span className="block mt-1">Some converters may parse and render icon syntax (e.g., for Lucide icons) if referenced within the Markdown.</span>
             </div>
           </div>
         </div>
 
-        <h2 className="text-2xl font-semibold text-default-700 mb-4 mt-8 flex items-center">
-          <Lightbulb className="w-6 h-6 mr-2 text-primary-500" /> {/* Using Lightbulb for Key Features title */}
+       <h2 className="text-2xl font-semibold text-default-700 mb-4 mt-8 flex items-center">
+          <Lightbulb className="w-6 h-6 mr-2 text-primary-500" />
           Key Features
         </h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4 text-sm text-default-600">
-          <div className="flex items-start">
-            <Brain className="w-4 h-4 mr-2 mt-0.5 text-primary-500" />
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4 text-default-600">
+          <div className="flex items-start gap-3">
+            <Brain className="w-5 h-5 mt-0.5 text-primary-500 flex-shrink-0" />
             <div>
-              <strong>AI-Powered Conversion:</strong> Intelligently interprets Markdown to produce semantically correct and contextually appropriate HTML.
+              <strong className="text-default-700">AI-Powered Conversion:</strong>
+              <span className="block mt-1">Intelligently interprets Markdown to produce semantically correct and contextually appropriate HTML.</span>
             </div>
           </div>
-          <div className="flex items-start">
-            <Eye className="w-4 h-4 mr-2 mt-0.5 text-secondary-500" />
+          
+          <div className="flex items-start gap-3">
+            <Eye className="w-5 h-5 mt-0.5 text-secondary-500 flex-shrink-0" />
             <div>
-              <strong>Real-time Preview:</strong> Instantly visualize how your Markdown translates to rendered HTML, facilitating quick iterations.
+              <strong className="text-default-700">Real-time Preview:</strong>
+              <span className="block mt-1">Instantly visualize how your Markdown translates to rendered HTML, facilitating quick iterations.</span>
             </div>
           </div>
-          <div className="flex items-start">
-            <FileCode className="w-4 h-4 mr-2 mt-0.5 text-success-500" />
+          
+          <div className="flex items-start gap-3">
+            <FileCode className="w-5 h-5 mt-0.5 text-success-500 flex-shrink-0" />
             <div>
-              <strong>File Import/Export:</strong> Easily upload Markdown files (<code>.md</code>, <code>.txt</code>) and download the resulting HTML.
+              <strong className="text-default-700">File Import/Export:</strong>
+              <span className="block mt-1">Easily upload Markdown files (<code className="text-xs bg-default-100 px-1 py-0.5 rounded">.md</code>, <code className="text-xs bg-default-100 px-1 py-0.5 rounded">.txt</code>) and download the resulting HTML.</span>
             </div>
           </div>
-          <div className="flex items-start">
-            <Highlighter className="w-4 h-4 mr-2 mt-0.5 text-warning-500" />
+          
+          <div className="flex items-start gap-3">
+            <Highlighter className="w-5 h-5 mt-0.5 text-warning-500 flex-shrink-0" />
             <div>
-              <strong>Enhanced Syntax Highlighting:</strong> Clear and attractive styling for code blocks across multiple programming languages.
+              <strong className="text-default-700">Enhanced Syntax Highlighting:</strong>
+              <span className="block mt-1">Clear and attractive styling for code blocks across multiple programming languages.</span>
             </div>
           </div>
-          <div className="flex items-start">
-            <Smartphone className="w-4 h-4 mr-2 mt-0.5 text-danger-500" />
+          
+          <div className="flex items-start gap-3">
+            <Smartphone className="w-5 h-5 mt-0.5 text-danger-500 flex-shrink-0" />
             <div>
-              <strong>Responsive HTML Output:</strong> Generated HTML is styled to be responsive and look great on desktops, tablets, and mobile devices.
+              <strong className="text-default-700">Responsive HTML Output:</strong>
+              <span className="block mt-1">Generated HTML is styled to be responsive and look great on desktops, tablets, and mobile devices.</span>
             </div>
           </div>
-           <div className="flex items-start">
-            <ShieldCheck className="w-4 h-4 mr-2 mt-0.5 text-primary-500" />
+          
+          <div className="flex items-start gap-3">
+            <ShieldCheck className="w-5 h-5 mt-0.5 text-primary-500 flex-shrink-0" />
             <div>
-              <strong>Security Focused:</strong> Built-in sanitization to protect against cross-site scripting (XSS) vulnerabilities.
+              <strong className="text-default-700">Security Focused:</strong>
+              <span className="block mt-1">Built-in sanitization to protect against cross-site scripting (XSS) vulnerabilities.</span>
             </div>
           </div>
-          <div className="flex items-start">
-            <MousePointerClick className="w-4 h-4 mr-2 mt-0.5 text-secondary-500" />
+          
+          <div className="flex items-start gap-3">
+            <MousePointerClick className="w-5 h-5 mt-0.5 text-secondary-500 flex-shrink-0" />
             <div>
-              <strong>Interactive Element Support:</strong> Go beyond static content by creating interactive elements like buttons directly from Markdown.
+              <strong className="text-default-700">Interactive Element Support:</strong>
+              <span className="block mt-1">Go beyond static content by creating interactive elements like buttons directly from Markdown.</span>
             </div>
           </div>
-          <div className="flex items-start">
-            <Palette className="w-4 h-4 mr-2 mt-0.5 text-success-500" />
+          
+          <div className="flex items-start gap-3">
+            <Palette className="w-5 h-5 mt-0.5 text-success-500 flex-shrink-0" />
             <div>
-              <strong>Clean & Modern Aesthetics:</strong> The default styling ensures your converted content is presented professionally without extra effort.
+              <strong className="text-default-700">Clean & Modern Aesthetics:</strong>
+              <span className="block mt-1">The default styling ensures your converted content is presented professionally without extra effort.</span>
             </div>
           </div>
         </div>

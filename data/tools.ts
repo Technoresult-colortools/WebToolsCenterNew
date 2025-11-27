@@ -243,7 +243,7 @@ export const allTools: Tool[] = [
     category: "Image",
     href: "/tools/image/image-filters",
     icon: faImage,
-    description: "Count the number of letters in Text Tools.",
+    description: "Transform your photos with our professional image filtering tool. Apply artistic effects, adjust intensities, and create stunning visuals with our filter collection.",
 
   },
   {
@@ -251,7 +251,7 @@ export const allTools: Tool[] = [
     category: "Image",
     href: "/tools/image/image-resizer",
     icon: faExpand,
-    description: "Resize images to specific dimensions.",
+    description: "Resize images to specific dimensions effortlessly. Choose from PNG, JPEG, or WebP formats and preserve quality for web use and social media.",
 
   },
   {
@@ -259,7 +259,7 @@ export const allTools: Tool[] = [
     category: "Image",
     href: "/tools/image/image-average-color-finder",
     icon: faPalette,
-    description: "Analyze images to find their average and dominant colors effortlessly.",
+    description: "Analyze images to find their average and dominant colors effortlessly. Perfect for designers, artists, and anyone looking to create cohesive color palettes for their projects.",
 
   },
   {
@@ -267,7 +267,7 @@ export const allTools: Tool[] = [
     category: "Image",
     href: "/tools/image/image-color-extractor",
     icon: faEyeDropper,
-    description: "Extract colors from an image.",
+    description: "Effortlessly extract dominant colors from images and create stunning color palettes for your projects.",
 
   },
   {
@@ -275,7 +275,7 @@ export const allTools: Tool[] = [
     category: "Image",
     href: "/tools/image/image-color-picker",
     icon: faPalette,
-    description: "Pick colors from images.",
+    description: "Extract colors from any image using our Image Color Picker. Ideal for designers to quickly generate HEX, RGB, and HSL palettes.",
 
   },
   {
@@ -283,7 +283,7 @@ export const allTools: Tool[] = [
     category: "Image",
     href: "/tools/image/svg-blob-generator",
     icon: faShapes,
-    description: "Generate random SVG blobs.",
+    description: "Generate organic, customizable SVG blob shapes instantly. Perfect for modern web, presentations, and graphics—fully scalable, lightweight, and tailored to your style.",
 
   },
   {
@@ -291,7 +291,7 @@ export const allTools: Tool[] = [
     category: "Image",
     href: "/tools/image/svg-pattern-generator",
     icon: faVectorSquare,
-    description: "Generate SVG patterns.",
+    description: "Create unique, repeatable vector patterns for web backgrounds, print designs, and digital art with customizable options.",
 
   },
   {
@@ -299,7 +299,7 @@ export const allTools: Tool[] = [
     category: "Image",
     href: "/tools/image/photo-censor",
     icon: faEyeSlash,
-    description: "Blur or censor parts of a photo.",
+    description: "Protect your privacy and enhance your visuals effortlessly with our intuitive Photo Censor tool, designed for seamless image editing and creative expression.",
 
   },
   {
@@ -307,7 +307,7 @@ export const allTools: Tool[] = [
     category: "Image",
     href: "/tools/image/svg-to-png-converter",
     icon: faFileImage,
-    description: "Convert SVG images to PNG format.",
+    description: "Easily convert your SVG files to high-quality PNG images with our fast and reliable SVG to PNG Converter.",
 
   },
   {
@@ -315,7 +315,7 @@ export const allTools: Tool[] = [
     category: "Image",
     href: "/tools/image/image-merger",
     icon: faFileImage,
-    description: "Merge Two Images Online.",
+    description: "Merge up to 5 images into a single, high-quality composition. Easily align, layer, and download your fused images in seconds.",
 
   },
   
@@ -332,7 +332,7 @@ export const allTools: Tool[] = [
     category: "Image",
     href: "/tools/image/png-to-webp-converter",
     icon: faFileImage,
-    description: "Convert your PNG, JPG, and JPEG images to WebP format.",
+    description: "Convert your PNG, JPG, and JPEG images to WebP format for faster websites and smaller file sizes.",
 
   },
   {
@@ -340,7 +340,7 @@ export const allTools: Tool[] = [
     category: "Image",
     href: "/tools/image/image-to-base64-converter",
     icon: faFileCode,
-    description: "Convert images to Base64 format.",
+    description: "Effortlessly convert your images to Base64 encoded strings for easy embedding in HTML, CSS, or JavaScript.",
 
   },
   {
@@ -348,7 +348,7 @@ export const allTools: Tool[] = [
     category: "Image",
     href: "/tools/image/base64-to-image-converter",
     icon: faFileCode,
-    description: "Convert Base64 to Image format.",
+    description: "Effortlessly convert Base64 encoded strings back to images for easy viewing and downloading.",
 
   },
 

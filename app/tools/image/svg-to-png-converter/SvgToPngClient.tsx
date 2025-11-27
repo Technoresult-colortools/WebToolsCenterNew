@@ -20,20 +20,11 @@ import {
   EyeOff,
   AlertTriangle,
   ChevronDown,
-  BookOpen,
-  Info,
-  Sliders,
-  Lightbulb,
-  Palette,
-  Maximize2,
-  RefreshCw,
-  Shield,
-  HelpCircle,
   Lock,
 } from "lucide-react"
 import ToolLayout from "@/components/ToolLayout"
 import NextImage from 'next/image'
-import Link from "next/link"
+import InfoSectionSvgToPng from "./info-section"
 
 const exportSizeOptions = [
   { key: "custom", name: "Custom" },
@@ -214,7 +205,7 @@ const qualityOptions = [
   return (
     <ToolLayout
       title="SVG to PNG Converter"
-      description="Convert SVG files to PNG with customizable options"
+      description="Easily convert your SVG files to high-quality PNG images with our fast and reliable SVG to PNG Converter."
       toolId="678f382b26f06f912191bc94"
     >
       <div className="flex flex-col gap-8">
@@ -227,13 +218,13 @@ const qualityOptions = [
                 ref={fileInputRef}
                 onChange={(e) => handleFileUpload(e.target.files?.[0] as File)}
                 accept=".svg,image/svg+xml"
-                className="hidden"
+                className=" hidden"
                 id="svg-upload"
               />
               <div className="flex items-center mb-2">
-                <Lock className="w-4 h-4 inline-block mr-1" />
-                <strong className="text-sm">Secure Conversion:</strong>
-                <span className="text-sm ml-1">All processing is done locally</span>
+                <Lock className="w-4 h-4 inline-block mr-1 text-primary" />
+                <strong className="text-primary text-sm">Secure Conversion:</strong>
+                <span className="text-primary text-sm ml-1">All processing is done locally</span>
               </div>
               <div
                 className="flex flex-col items-center justify-center h-64 px-4 py-6 bg-default-100 text-primary rounded-lg shadow-lg tracking-wide uppercase border-2 border-primary border-dashed cursor-pointer hover:bg-primary-100 hover:text-primary-600 transition duration-300"
@@ -459,143 +450,7 @@ const qualityOptions = [
       <canvas ref={canvasRef} style={{ display: 'none' }} />
 
         {/* Info Section */}
-        <Card className="mt-8 bg-default-50 dark:bg-default-100 p-4 md:p-8">
-          <div className="rounded-xl p-2 md:p-4 max-w-4xl mx-auto">
-            <h2 className="text-lg md:text-xl lg:text-2xl font-semibold text-default-700 mb-4 flex items-center">
-              <Info className="w-6 h-6 mr-2" />
-              What is the SVG to PNG Converter?
-            </h2>
-            <p className="text-sm md:text-base text-default-600 mb-4">
-            The SVG to PNG converter is a powerful and user -friendly device designed to convert scalable vector graphics (SVG) into high quality portable network graphics (PNG) images. It is an essential utility for designers, developers and digital material creators, which need to convert their scalable vector designs into registration format for various applications. With our{" "}
-              <Link href="#how-to-use" className="text-primary hover:underline">
-                easy-to-use interface
-              </Link>
-              , you can quickly convert your SVG files while maintaining image quality and customizing output settings.
-            </p>
-            <p className="text-sm md:text-base text-default-600 mb-4">
-            Whether you are preparing graphics for web use, making app icons, or requiring the bitmap versions of your vector picture, streamlines our SVG to PNG converter process, saves you time and ensures frequent consequences in various platforms and equipment.
-            </p>
-
-            <div className="my-8">
-              <NextImage
-                src="/Images/InfosectionImages/SvgToPngConverterPreview.png?height=400&width=600"
-                alt="Screenshot of the SVG to PNG Converter interface showing conversion options and a sample converted image"
-                width={600}
-                height={400}
-                className="rounded-lg shadow-lg w-full h-auto"
-              />
-            </div>
-
-            <h2
-              id="how-to-use"
-              className="text-lg md:text-xl lg:text-2xl font-semibold text-default-700 mb-4 mt-8 flex items-center"
-            >
-              <BookOpen className="w-6 h-6 mr-2" />
-              How to Use the SVG to PNG Converter?
-            </h2>
-            <p className="text-sm md:text-base text-default-600 mb-4">
-              Converting your SVG files to PNG is a straightforward process with our tool. Here's a step-by-step guide:
-            </p>
-            <ol className="list-decimal list-inside space-y-2 text-sm md:text-base">
-              <li>Upload your SVG file using the file input or enter a valid SVG URL.</li>
-              <li>
-                Preview your SVG and adjust the{" "}
-                <Link href="#conversion-settings" className="text-primary hover:underline">
-                  conversion settings
-                </Link>{" "}
-                as needed.
-              </li>
-              <li>Click the "Convert" button to generate the PNG image.</li>
-              <li>Preview the converted PNG image to ensure it meets your requirements.</li>
-              <li>Download the PNG file or copy the original SVG code if needed.</li>
-              <li>Use the "Reset" button to start a new conversion with different settings or a new file.</li>
-            </ol>
-
-            <h2
-              id="conversion-settings"
-              className="text-lg md:text-xl lg:text-2xl font-semibold text-default-700 mb-4 mt-8 flex items-center"
-            >
-              <Sliders className="w-6 h-6 mr-2" />
-              Conversion Settings
-            </h2>
-            <p className="text-sm md:text-base text-default-600 mb-4">
-              Our SVG to PNG Converter offers several customization options to ensure your output matches your needs:
-            </p>
-            <ul className="list-disc list-inside space-y-2 text-xs md:text-sm">
-              <li>
-                <strong>Scale</strong>: Adjust the size of the output PNG relative to the original SVG
-              </li>
-              <li>
-                <strong>Background Color</strong>: Choose a custom background color or make it transparent
-              </li>
-              <li>
-                <strong>Export Size</strong>: Select from preset sizes or specify custom dimensions
-              </li>
-              <li>
-                <strong>Custom Dimensions</strong>: Set exact pixel dimensions for your PNG output
-              </li>
-            </ul>
-
-            <h2 className="text-lg md:text-xl lg:text-2xl font-semibold text-default-700 mb-4 mt-8 flex items-center">
-              <Lightbulb className="w-6 h-6 mr-2" />
-              Key Features
-            </h2>
-            <ul className="list-disc list-inside space-y-2 text-xs md:text-sm">
-              <li>
-                <Upload className="w-4 h-4 inline-block mr-1" /> <strong>Flexible Input</strong>: Upload SVG files or
-                use URL input
-              </li>
-              <li>
-                <Eye className="w-4 h-4 inline-block mr-1" /> <strong>Live Preview</strong>: See your SVG and converted
-                PNG before downloading
-              </li>
-              <li>
-                <Palette className="w-4 h-4 inline-block mr-1" /> <strong>Background Options</strong>: Choose custom
-                colors or create transparent PNGs
-              </li>
-              <li>
-                <Maximize2 className="w-4 h-4 inline-block mr-1" /> <strong>Flexible Sizing</strong>: Use preset export
-                sizes or specify custom dimensions
-              </li>
-              <li>
-                <Download className="w-4 h-4 inline-block mr-1" /> <strong>Easy Export</strong>: Download PNG or copy
-                original SVG code
-              </li>
-              <li>
-                <RefreshCw className="w-4 h-4 inline-block mr-1" /> <strong>Quick Reset</strong>: Start over with new
-                settings or files easily
-              </li>
-              <li>
-                <Shield className="w-4 h-4 inline-block mr-1" /> <strong>Secure Conversion</strong>: All processing done
-                client-side for data privacy
-              </li>
-            </ul>
-
-            <h2 className="text-lg md:text-xl lg:text-2xl font-semibold text-default-700 mb-4 mt-8 flex items-center">
-              <HelpCircle className="w-6 h-6 mr-2" />
-              Tips for Optimal Conversion
-            </h2>
-            <ul className="list-disc list-inside space-y-2 text-xs md:text-sm">
-              <li>Use high-quality SVG files for the best PNG output</li>
-              <li>Adjust the scale to find the right balance between file size and image quality</li>
-              <li>
-                Consider using transparent backgrounds for logos or icons that need to be placed on various colored
-                backgrounds
-              </li>
-              <li>Use preset sizes for quick conversions tailored to specific platforms</li>
-              <li>For precise control, use custom dimensions to fit your exact requirements</li>
-              <li>Always preview your PNG before downloading to ensure it meets your expectations</li>
-            </ul>
-
-            <p className="text-sm md:text-base text-default-600 mt-6">
-            Are you ready to convert your SVG files into high quality PNG images? Our SVG to PNG converter offers an ideal
-              A mix of simplicity and powerful features to meet all your conversion needs. Whether you are a web
-              Developer ensures cross-browsers compatibility, a graphic designer prepares property for various mediums,
-              Or a digital market is making a view for many platforms, our tool is here to streamline you
-              Workflow. Now start changing and experience the ease of professional-grade SVG for PNG conversion!
-            </p>
-          </div>
-        </Card>
+        <InfoSectionSvgToPng />
       
     </ToolLayout>
   )

@@ -120,50 +120,60 @@ export default function InfoSectionImageCropper() {
           <Ratio className="w-6 h-6 mr-2 text-primary-500" />
           Supported Aspect Ratios
         </h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4 text-sm text-default-600">
-          <div className="flex items-start">
-            <Crop className="w-4 h-4 mr-2 mt-0.5 text-primary-500" />
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4 text-default-600">
+          <div className="flex items-start gap-3">
+            <Crop className="w-5 h-5 mt-0.5 text-primary-500 flex-shrink-0" />
             <div>
-              <strong>Free:</strong> Crop without any aspect ratio constraints, giving you complete freedom to select
-              any dimensions.
+              <strong className="text-default-700">Free:</strong>
+              <span className="block mt-1">Crop without any aspect ratio constraints, giving you complete freedom to select any dimensions.</span>
             </div>
           </div>
-          <div className="flex items-start">
-            <Square className="w-4 h-4 mr-2 mt-0.5 text-secondary-500" />
+          
+          <div className="flex items-start gap-3">
+            <Square className="w-5 h-5 mt-0.5 text-secondary-500 flex-shrink-0" />
             <div>
-              <strong>Square (1:1):</strong> Perfect for profile pictures, Instagram posts, and other square format
-              images.
+              <strong className="text-default-700">Square (1:1):</strong>
+              <span className="block mt-1">Perfect for profile pictures, Instagram posts, and other square format images.</span>
             </div>
           </div>
-          <div className="flex items-start">
-            <Rectangle className="w-4 h-4 mr-2 mt-0.5 text-success-500" />
+          
+          <div className="flex items-start gap-3">
+            <Rectangle className="w-5 h-5 mt-0.5 text-success-500 flex-shrink-0" />
             <div>
-              <strong>Standard (4:3):</strong> Common aspect ratio for digital cameras, tablets, and standard displays.
+              <strong className="text-default-700">Standard (4:3):</strong>
+              <span className="block mt-1">Common aspect ratio for digital cameras, tablets, and standard displays.</span>
             </div>
           </div>
-          <div className="flex items-start">
-            <Tv className="w-4 h-4 mr-2 mt-0.5 text-warning-500" />
+          
+          <div className="flex items-start gap-3">
+            <Tv className="w-5 h-5 mt-0.5 text-warning-500 flex-shrink-0" />
             <div>
-              <strong>Widescreen (16:9):</strong> Ideal for videos, presentations, and widescreen displays.
+              <strong className="text-default-700">Widescreen (16:9):</strong>
+              <span className="block mt-1">Ideal for videos, presentations, and widescreen displays.</span>
             </div>
           </div>
-          <div className="flex items-start">
-            <Smartphone className="w-4 h-4 mr-2 mt-0.5 text-danger-500" />
+          
+          <div className="flex items-start gap-3">
+            <Smartphone className="w-5 h-5 mt-0.5 text-danger-500 flex-shrink-0" />
             <div>
-              <strong>Portrait (9:16):</strong> Perfect for mobile stories, TikTok videos, and vertical content.
+              <strong className="text-default-700">Portrait (9:16):</strong>
+              <span className="block mt-1">Perfect for mobile stories, TikTok videos, and vertical content.</span>
             </div>
           </div>
-          <div className="flex items-start">
-            <Monitor className="w-4 h-4 mr-2 mt-0.5 text-primary-500" />
+          
+          <div className="flex items-start gap-3">
+            <Monitor className="w-5 h-5 mt-0.5 text-primary-500 flex-shrink-0" />
             <div>
-              <strong>Classic (3:2):</strong> Traditional photography aspect ratio used in 35mm film and many DSLR
-              cameras.
+              <strong className="text-default-700">Classic (3:2):</strong>
+              <span className="block mt-1">Traditional photography aspect ratio used in 35mm film and many DSLR cameras.</span>
             </div>
           </div>
-          <div className="flex items-start">
-            <Smartphone className="w-4 h-4 mr-2 mt-0.5 text-secondary-500" />
+
+          <div className="flex items-start gap-3">
+            <Smartphone className="w-5 h-5 mt-0.5 text-secondary-500 flex-shrink-0" />
             <div>
-              <strong>Portrait (2:3):</strong> Vertical version of the classic photography ratio, good for portraits.
+              <strong className="text-default-700">Portrait (2:3):</strong>
+              <span className="block mt-1">Vertical version of the classic photography ratio, good for portraits.</span>
             </div>
           </div>
         </div>
@@ -195,79 +205,88 @@ export default function InfoSectionImageCropper() {
           </div>
         </div>
 
-        <h2 className="text-2xl font-semibold text-default-700 mb-4 mt-8 flex items-center">
+        <h2 id="key-features" className="text-2xl font-semibold text-default-700 mb-4 mt-8 flex items-center">
           <Lightbulb className="w-6 h-6 mr-2 text-primary-500" />
           Key Features
         </h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4 text-sm text-default-600">
-          <div className="flex items-start">
-            <Crop className="w-4 h-4 mr-2 mt-0.5 text-primary-500" />
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4 text-default-600">
+          <div className="flex items-start gap-3">
+            <Crop className="w-5 h-5 mt-0.5 text-primary-500 flex-shrink-0" />
             <div>
-              <strong>Precise Cropping:</strong> Crop images with pixel-perfect precision using an intuitive
-              drag-and-drop interface.
+              <strong className="text-default-700">Precise Cropping:</strong>
+              <span className="block mt-1">Crop images with pixel-perfect precision using an intuitive drag-and-drop interface.</span>
             </div>
           </div>
-          <div className="flex items-start">
-            <Ratio className="w-4 h-4 mr-2 mt-0.5 text-secondary-500" />
+
+          <div className="flex items-start gap-3">
+            <Ratio className="w-5 h-5 mt-0.5 text-secondary-500 flex-shrink-0" />
             <div>
-              <strong>Multiple Aspect Ratios:</strong> Choose from common aspect ratios or use free-form cropping for
-              custom dimensions.
+              <strong className="text-default-700">Multiple Aspect Ratios:</strong>
+              <span className="block mt-1">Choose from common aspect ratios or use free-form cropping for custom dimensions.</span>
             </div>
           </div>
-          <div className="flex items-start">
-            <RotateCw className="w-4 h-4 mr-2 mt-0.5 text-success-500" />
+
+          <div className="flex items-start gap-3">
+            <RotateCw className="w-5 h-5 mt-0.5 text-success-500 flex-shrink-0" />
             <div>
-              <strong>Rotation & Flipping:</strong> Rotate images to any angle and flip horizontally or vertically to
-              correct orientation.
+              <strong className="text-default-700">Rotation & Flipping:</strong>
+              <span className="block mt-1">Rotate images to any angle and flip horizontally or vertically to correct orientation.</span>
             </div>
           </div>
-          <div className="flex items-start">
-            <ZoomIn className="w-4 h-4 mr-2 mt-0.5 text-warning-500" />
+
+          <div className="flex items-start gap-3">
+            <ZoomIn className="w-5 h-5 mt-0.5 text-warning-500 flex-shrink-0" />
             <div>
-              <strong>Zoom Controls:</strong> Zoom in to focus on details or zoom out to see the entire image during
-              editing.
+              <strong className="text-default-700">Zoom Controls:</strong>
+              <span className="block mt-1">Zoom in to focus on details or zoom out to see the entire image during editing.</span>
             </div>
           </div>
-          <div className="flex items-start">
-            <SlidersHorizontal className="w-4 h-4 mr-2 mt-0.5 text-danger-500" />
+
+          <div className="flex items-start gap-3">
+            <SlidersHorizontal className="w-5 h-5 mt-0.5 text-danger-500 flex-shrink-0" />
             <div>
-              <strong>Image Adjustments:</strong> Fine-tune brightness and contrast to enhance the appearance of your
-              images.
+              <strong className="text-default-700">Image Adjustments:</strong>
+              <span className="block mt-1">Fine-tune brightness and contrast to enhance the appearance of your images.</span>
             </div>
           </div>
-          <div className="flex items-start">
-            <History className="w-4 h-4 mr-2 mt-0.5 text-primary-500" />
+
+          <div className="flex items-start gap-3">
+            <History className="w-5 h-5 mt-0.5 text-primary-500 flex-shrink-0" />
             <div>
-              <strong>Edit History:</strong> Track your editing steps with redo functionality for a seamless editing
-              experience.
+              <strong className="text-default-700">Edit History:</strong>
+              <span className="block mt-1">Track your editing steps with redo functionality for a seamless editing experience.</span>
             </div>
           </div>
-          <div className="flex items-start">
-            <Eye className="w-4 h-4 mr-2 mt-0.5 text-secondary-500" />
+
+          <div className="flex items-start gap-3">
+            <Eye className="w-5 h-5 mt-0.5 text-secondary-500 flex-shrink-0" />
             <div>
-              <strong>Fullscreen Preview:</strong> View your edited images in an immersive fullscreen mode for detailed
-              inspection.
+              <strong className="text-default-700">Fullscreen Preview:</strong>
+              <span className="block mt-1">View your edited images in an immersive fullscreen mode for detailed inspection.</span>
             </div>
           </div>
-          <div className="flex items-start">
-            <Smartphone className="w-4 h-4 mr-2 mt-0.5 text-success-500" />
+
+          <div className="flex items-start gap-3">
+            <Smartphone className="w-5 h-5 mt-0.5 text-success-500 flex-shrink-0" />
             <div>
-              <strong>Mobile-Friendly:</strong> Fully responsive design works seamlessly on smartphones and tablets with
-              touch support.
+              <strong className="text-default-700">Mobile-Friendly:</strong>
+              <span className="block mt-1">Fully responsive design works seamlessly on smartphones and tablets with touch support.</span>
             </div>
           </div>
-          <div className="flex items-start">
-            <FileImage className="w-4 h-4 mr-2 mt-0.5 text-warning-500" />
+
+          <div className="flex items-start gap-3">
+            <FileImage className="w-5 h-5 mt-0.5 text-warning-500 flex-shrink-0" />
             <div>
-              <strong>Multiple Export Formats:</strong> Save your images in JPEG, PNG, or WebP formats with adjustable
-              quality settings.
+              <strong className="text-default-700">Multiple Export Formats:</strong>
+              <span className="block mt-1">Save your images in JPEG, PNG, or WebP formats with adjustable quality settings.</span>
             </div>
           </div>
-          <div className="flex items-start">
-            <Upload className="w-4 h-4 mr-2 mt-0.5 text-danger-500" />
+
+          <div className="flex items-start gap-3">
+            <Upload className="w-5 h-5 mt-0.5 text-danger-500 flex-shrink-0" />
             <div>
-              <strong>Simple Upload:</strong> Drag and drop or click to upload images from your device with support for
-              all common formats.
+              <strong className="text-default-700">Simple Upload:</strong>
+              <span className="block mt-1">Drag and drop or click to upload images from your device with support for all common formats.</span>
             </div>
           </div>
         </div>

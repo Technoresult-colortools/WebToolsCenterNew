@@ -2,10 +2,10 @@
 
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import { Card, CardBody, Button, Input, Slider, Dropdown, DropdownTrigger, DropdownMenu, DropdownItem, Switch } from "@nextui-org/react";
-import { Download, Code, Info, BookOpen, Lightbulb, Sliders, Palette, FileImage, Eye, ShuffleIcon, ImageIcon } from "lucide-react";
+import { Download, Code,  Palette,  Shuffle, Upload, Trash2, Sparkles } from "lucide-react";
 import { toast } from "react-hot-toast";
 import ToolLayout from "@/components/ToolLayout";
-import NextImage from "next/image"
+import InfoSectionSVGBlob from "./info-section";
 
 export default function SVGBlobGenerator() {
     // Basic blob parameters
@@ -20,19 +20,22 @@ export default function SVGBlobGenerator() {
     const [amplitude, setAmplitude] = useState(0.5);
     const [randomSeed, setRandomSeed] = useState(Math.random() * 1000);
     
-    // Path generation method
-    const [pathMethod, setPathMethod] = useState("advanced"); // "simple" or "advanced"
-    
     // Animation state
     const [isShaking, setIsShaking] = useState(false);
     
     // Image background settings
     const [useImageBackground, setUseImageBackground] = useState(false);
-    const [backgroundUrl, setBackgroundUrl] = useState("https://picsum.photos/seed/781/600/400");
+    const [backgroundUrl, setBackgroundUrl] = useState("");
+    const [uploadedImage, setUploadedImage] = useState<string | null>(null);
+    const [isLoadingImage, setIsLoadingImage] = useState(false);
+    
+    // Unsplash API key - replace with your own
+    const UNSPLASH_ACCESS_KEY = process.env.NEXT_PUBLIC_UNSPLASH_ACCESS_KEY;
     
     // SVG state
     const [svgPath, setSvgPath] = useState("");
     const svgRef = useRef<SVGSVGElement>(null);
+    const fileInputRef = useRef<HTMLInputElement>(null);
     
     // Generate blob points using advanced algorithm
     const generateBlobPoints = useCallback(() => {
@@ -74,83 +77,115 @@ export default function SVGBlobGenerator() {
         return points;
     }, [growth, edgeCount, complexity, smoothness, frequency, amplitude, randomSeed]);
 
-    // Generate path using advanced curve method (from first code)
+    // Generate path using advanced curve method
     const generateAdvancedPath = useCallback((points: [number, number][]) => {
+        if (points.length === 0) return "";
+        
         let path = `M${points[0][0]},${points[0][1]} `;
         
-        // Handle each point with proper curve control to create rounded, flowing blob
+        // Create smooth curves using cubic bezier for better smoothness
         for (let i = 0; i < points.length; i++) {
-            const currentPoint = points[i];
-            const nextPoint = points[(i + 1) % points.length];
+            const current = points[i];
+            const next = points[(i + 1) % points.length];
+            const prev = points[(i - 1 + points.length) % points.length];
+            const afterNext = points[(i + 2) % points.length];
             
-            // Calculate control points for quadratic bezier curve
-            const dx = nextPoint[0] - currentPoint[0];
-            const dy = nextPoint[1] - currentPoint[1];
+            // Calculate control points for smoother curves
+            const cp1x = current[0] + (next[0] - prev[0]) * smoothness * 0.25;
+            const cp1y = current[1] + (next[1] - prev[1]) * smoothness * 0.25;
             
-            // Create smooth, flowing curves by placing control points along the curve
-            const controlX = nextPoint[0] - dx * smoothness;
-            const controlY = nextPoint[1] - dy * smoothness;
+            const cp2x = next[0] - (afterNext[0] - current[0]) * smoothness * 0.25;
+            const cp2y = next[1] - (afterNext[1] - current[1]) * smoothness * 0.25;
             
-            // Use Q (quadratic bezier) for smoother, more natural curves
-            path += `Q${controlX},${controlY} ${nextPoint[0]},${nextPoint[1]} `;
+            // Use cubic bezier for smoother curves
+            path += `C${cp1x},${cp1y} ${cp2x},${cp2y} ${next[0]},${next[1]} `;
         }
         
         path += "Z";
         return path;
     }, [smoothness]);
 
-    // Generate path using simple method (from second code)
-    const generateSimplePath = useCallback((points: [number, number][]) => {
-        let path = `M${points[0][0]},${points[0][1]} `;
-        
-        points.forEach((point, i) => {
-            const nextPoint = points[(i + 1) % points.length];
-            const controlX = (point[0] + nextPoint[0]) / 2;
-            const controlY = (point[1] + nextPoint[1]) / 2;
-            path += `Q${point[0]},${point[1]} ${controlX},${controlY} `;
-        });
-        
-        path += "Z";
-        return path;
-    }, []);
-
     // Main function to generate blob
     const generateBlob = useCallback(() => {
         const points = generateBlobPoints();
-        
-        // Use selected path generation method
-        if (pathMethod === "simple") {
-            setSvgPath(generateSimplePath(points));
-        } else {
-            setSvgPath(generateAdvancedPath(points));
-        }
-    }, [generateBlobPoints, generateAdvancedPath, generateSimplePath, pathMethod]);
+        setSvgPath(generateAdvancedPath(points));
+    }, [generateBlobPoints, generateAdvancedPath]);
 
     useEffect(() => {
         generateBlob();
     }, [generateBlob]);
     
+    // Handle image upload
+    const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const file = event.target.files?.[0];
+        if (file) {
+            if (file.size > 5 * 1024 * 1024) {
+                toast.error("Image size should be less than 5MB");
+                return;
+            }
+            
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                const result = e.target?.result as string;
+                setUploadedImage(result);
+                setBackgroundUrl(result);
+                setUseImageBackground(true);
+                toast.success("Image uploaded successfully!");
+            };
+            reader.readAsDataURL(file);
+        }
+    };
+    
+    const handleRemoveImage = () => {
+        setUploadedImage(null);
+        setBackgroundUrl("");
+        setUseImageBackground(false);
+        if (fileInputRef.current) {
+            fileInputRef.current.value = "";
+        }
+        toast.success("Image removed");
+    };
+    
+    const handleShuffleImage = async () => {
+        try {
+            setIsLoadingImage(true);
+            const response = await fetch(
+                `https://api.unsplash.com/photos/random?orientation=landscape&w=600&h=400`,
+                {
+                    headers: {
+                        Authorization: `Client-ID ${UNSPLASH_ACCESS_KEY}`
+                    }
+                }
+            );
+            
+            if (!response.ok) {
+                throw new Error('Failed to fetch image');
+            }
+            
+            const data = await response.json();
+            setBackgroundUrl(data.urls.regular);
+            setUploadedImage(null); // Clear uploaded image when using Unsplash
+            setUseImageBackground(true);
+            toast.success("New Unsplash image loaded!");
+        } catch (error) {
+            console.error('Error fetching Unsplash image:', error);
+            toast.error('Failed to load image from Unsplash');
+        } finally {
+            setIsLoadingImage(false);
+        }
+    };
+    
     // Trigger blob regeneration with a new seed
     const handleShuffle = () => {
-        // Update the random seed with a new value
         const newSeed = Math.random() * 1000;
         setRandomSeed(newSeed);
-        
-        // Start shaking animation
         setIsShaking(true);
-        
-        // Stop shaking after animation completes
-        setTimeout(() => {
-            setIsShaking(false);
-        }, 500);
-        
+        setTimeout(() => setIsShaking(false), 500);
         toast.success("New blob shape generated!");
     };
     
     const handleRandomizeAll = () => {
         setIsShaking(true);
-        
-        // Use rounded numbers for better UX
         setEdgeCount(Math.floor(Math.random() * 12) + 5);
         setComplexity(Math.round((Math.random() * 0.8 + 0.2) * 100) / 100);
         setSmoothness(Math.round((Math.random() * 0.8 + 0.2) * 100) / 100);
@@ -158,88 +193,136 @@ export default function SVGBlobGenerator() {
         setAmplitude(Math.round((Math.random() * 0.7 + 0.3) * 100) / 100);
         setGrowth(Math.round((Math.random() * 5 + 4) * 10) / 10);
         setRandomSeed(Math.random() * 1000);
-        
-        // Stop shaking after animation completes
-        setTimeout(() => {
-            setIsShaking(false);
-        }, 500);
-        
+        setTimeout(() => setIsShaking(false), 500);
         toast.success("All parameters randomized!");
     };
     
-    const handleShuffleImage = () => {
-        const randomId = Math.floor(Math.random() * 1000);
-        setBackgroundUrl(`https://picsum.photos/seed/${randomId}/600/400`);
-        toast.success("New background image applied!");
-    };
-    
     const getSVGContent = () => {
-        return `<svg id="blob-generator" viewBox="0 0 480 480" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-    ${useImageBackground ? `
+        // Escape special characters in URLs for proper XML format
+        const escapedUrl = backgroundUrl
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;')
+            .replace(/'/g, '&apos;');
+            
+        return `<svg viewBox="0 0 480 480" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    ${useImageBackground && backgroundUrl ? `
     <defs>
       <clipPath id="blob-shape">
         <path d="${svgPath}" />
       </clipPath>
     </defs>
-    <image href="${backgroundUrl}" width="480" height="480" clip-path="url(#blob-shape)" preserveAspectRatio="xMidYMid slice" />
+    <image href="${escapedUrl}" width="480" height="480" clip-path="url(#blob-shape)" preserveAspectRatio="xMidYMid slice" />
     ` : `<path fill="${fillColor}" d="${svgPath}" />`}
   </svg>`;
     };
     
-    const handleExport = (key: string) => {
+    const handleExport = async (key: string) => {
         const svgContent = getSVGContent();
         
         switch (key) {
             case "svg":
-                const blob = new Blob([svgContent], { type: "image/svg+xml" });
-                const url = URL.createObjectURL(blob);
-                const a = document.createElement("a");
-                a.href = url;
-                a.download = "blob.svg";
-                a.click();
-                URL.revokeObjectURL(url);
-                toast.success("SVG exported successfully!");
+                try {
+                    const blob = new Blob([svgContent], { type: "image/svg+xml;charset=utf-8" });
+                    const url = URL.createObjectURL(blob);
+                    const a = document.createElement("a");
+                    a.href = url;
+                    a.download = "blob.svg";
+                    document.body.appendChild(a);
+                    a.click();
+                    document.body.removeChild(a);
+                    URL.revokeObjectURL(url);
+                    toast.success("SVG exported successfully!");
+                } catch (error) {
+                    console.error("SVG export error:", error);
+                    toast.error("Failed to export SVG");
+                }
                 break;
             
             case "png":
-                if (svgRef.current) {
+                try {
                     const canvas = document.createElement("canvas");
                     canvas.width = 480;
                     canvas.height = 480;
                     const ctx = canvas.getContext("2d");
+                    
+                    if (!ctx) {
+                        toast.error("Failed to create canvas context");
+                        return;
+                    }
+                    
                     const img = new Image();
+                    
                     img.onload = () => {
-                        if (ctx) {
-                            ctx.drawImage(img, 0, 0, 480, 480);
-                            canvas.toBlob((blob) => {
-                                if (blob) {
-                                    const url = URL.createObjectURL(blob);
-                                    const a = document.createElement("a");
-                                    a.href = url;
-                                    a.download = "blob.png";
-                                    a.click();
-                                    URL.revokeObjectURL(url);
-                                    toast.success("PNG exported successfully!");
-                                }
-                            });
-                        }
+                        ctx.fillStyle = "white";
+                        ctx.fillRect(0, 0, 480, 480);
+                        ctx.drawImage(img, 0, 0, 480, 480);
+                        
+                        canvas.toBlob((blob) => {
+                            if (blob) {
+                                const url = URL.createObjectURL(blob);
+                                const a = document.createElement("a");
+                                a.href = url;
+                                a.download = "blob.png";
+                                document.body.appendChild(a);
+                                a.click();
+                                document.body.removeChild(a);
+                                URL.revokeObjectURL(url);
+                                toast.success("PNG exported successfully!");
+                            } else {
+                                toast.error("Failed to create PNG blob");
+                            }
+                        }, "image/png");
                     };
-                    img.src = `data:image/svg+xml;base64,${btoa(svgContent)}`;
+                    
+                    img.onerror = () => {
+                        toast.error("Failed to load SVG for PNG export");
+                    };
+                    
+                    // Use encodeURIComponent for better compatibility
+                    const svgBlob = new Blob([svgContent], { type: "image/svg+xml;charset=utf-8" });
+                    const svgUrl = URL.createObjectURL(svgBlob);
+                    img.src = svgUrl;
+                    
+                    // Clean up the temporary URL after a delay
+                    setTimeout(() => URL.revokeObjectURL(svgUrl), 100);
+                } catch (error) {
+                    console.error("PNG export error:", error);
+                    toast.error("Failed to export PNG");
                 }
                 break;
             
             case "code":
-                navigator.clipboard.writeText(svgContent);
-                toast.success("SVG code copied to clipboard!");
+                try {
+                    await navigator.clipboard.writeText(svgContent);
+                    toast.success("SVG code copied to clipboard!");
+                } catch (error) {
+                    console.error("Clipboard error:", error);
+                    // Fallback method
+                    const textArea = document.createElement("textarea");
+                    textArea.value = svgContent;
+                    textArea.style.position = "fixed";
+                    textArea.style.left = "-999999px";
+                    document.body.appendChild(textArea);
+                    textArea.select();
+                    try {
+                        document.execCommand('copy');
+                        toast.success("SVG code copied to clipboard!");
+                    } catch (err) {
+                        toast.error("Failed to copy to clipboard");
+                    }
+                    document.body.removeChild(textArea);
+                }
                 break;
         }
     };
   
     return (
         <ToolLayout
-        title="SVG Blob Generator"
-        description="Create unique, organic blob shapes with ease"
-        toolId="678f382a26f06f912191bc91"
+            title="SVG Blob Generator"
+            description="Generate organic, customizable SVG blob shapes instantly. Perfect for modern web, presentations, and graphics—fully scalable, lightweight, and tailored to your style."
+            toolId="678f382a26f06f912191bc91"
         >
             <div className="flex flex-col gap-8">
                 <Card className="bg-default-50 dark:bg-default-100">
@@ -253,7 +336,7 @@ export default function SVGBlobGenerator() {
                                     viewBox="0 0 480 480"
                                     xmlns="http://www.w3.org/2000/svg"
                                 >
-                                    {useImageBackground ? (
+                                    {useImageBackground && backgroundUrl ? (
                                         <>
                                             <defs>
                                                 <clipPath id="blob-shape">
@@ -281,7 +364,7 @@ export default function SVGBlobGenerator() {
                                     <Button 
                                         color="primary" 
                                         onPress={handleShuffle}
-                                        startContent={<ShuffleIcon className="w-4 h-4" />}
+                                        startContent={<Shuffle className="w-4 h-4" />}
                                     >
                                         Shuffle Blob
                                     </Button>
@@ -289,7 +372,7 @@ export default function SVGBlobGenerator() {
                                     <Button 
                                         color="secondary" 
                                         onPress={handleRandomizeAll}
-                                        startContent={<Sliders className="w-4 h-4" />}
+                                        startContent={<Sparkles className="w-4 h-4" />}
                                     >
                                         Randomize All
                                     </Button>
@@ -316,29 +399,91 @@ export default function SVGBlobGenerator() {
                                 
                                 {/* Main controls */}
                                 <div className="space-y-6">
-                                    {/* Color picker */}
-                                    <div className="flex items-center gap-3">
-                                        <Palette className="w-5 h-5 opacity-70" />
-                                        <Input
-                                            label="Blob Fill Color"
-                                            type="color"
-                                            value={fillColor}
-                                            onChange={(e) => setFillColor(e.target.value)}
-                                            className="w-full"
-                                            variant="bordered"
-                                            labelPlacement="outside"
-                                        />
+                                    {/* Image background controls - MOVED TO TOP */}
+                                    <div className="pb-4 border-b border-gray-200 dark:border-gray-700">
+                                        <div className="flex items-center gap-4 mb-4">
+                                            <Switch
+                                                isSelected={useImageBackground}
+                                                onValueChange={setUseImageBackground}
+                                            />
+                                            <span className="font-medium">Use Image Background</span>
+                                        </div>
+                                        
+                                        {useImageBackground && (
+                                            <div className="space-y-3">
+                                                <input
+                                                    ref={fileInputRef}
+                                                    type="file"
+                                                    accept="image/*"
+                                                    onChange={handleImageUpload}
+                                                    className="hidden"
+                                                />
+                                                
+                                                {/* Show preview if there's any image */}
+                                                {(uploadedImage || backgroundUrl) && (
+                                                    <div className="relative rounded-lg overflow-hidden border-2 border-primary/20 mb-3">
+                                                        <img 
+                                                            src={uploadedImage || backgroundUrl} 
+                                                            alt="Background preview" 
+                                                            className="w-full h-24 object-cover"
+                                                        />
+                                                    </div>
+                                                )}
+                                                
+                                                <div className="flex gap-2">
+                                                    <Button 
+                                                        color="primary" 
+                                                        variant="flat"
+                                                        onPress={() => fileInputRef.current?.click()}
+                                                        startContent={<Upload className="w-4 h-4" />}
+                                                        className="flex-1"
+                                                        isDisabled={isLoadingImage}
+                                                    >
+                                                        Upload Image
+                                                    </Button>
+                                                    <Button 
+                                                        color="secondary" 
+                                                        variant="flat"
+                                                        onPress={handleShuffleImage}
+                                                        startContent={<Shuffle className="w-4 h-4" />}
+                                                        className="flex-1"
+                                                        isLoading={isLoadingImage}
+                                                    >
+                                                        Random Image
+                                                    </Button>
+                                                </div>
+                                                
+                                                {(uploadedImage || backgroundUrl) && (
+                                                    <Button 
+                                                        color="danger" 
+                                                        variant="flat"
+                                                        size="sm"
+                                                        onPress={handleRemoveImage}
+                                                        startContent={<Trash2 className="w-4 h-4" />}
+                                                        className="w-full"
+                                                    >
+                                                        Remove Image
+                                                    </Button>
+                                                )}
+                                            </div>
+                                        )}
                                     </div>
                                     
-                                    {/* Path Method Selector */}
-                                    <div className="flex items-center gap-4 mb-2">
-                                        <span className="text-md font-medium">Curve Style:</span>
-                                        <Switch
-                                            isSelected={pathMethod === "simple"}
-                                            onValueChange={(checked) => setPathMethod(checked ? "simple" : "advanced")}
-                                        />
-                                        <span>{pathMethod === "simple" ? "Simple Curves" : "Advanced Curves"}</span>
-                                    </div>
+                                    {/* Color picker - only show when not using image */}
+                                    {!useImageBackground && (
+                                        <div className="flex items-center gap-3">
+                                            <Palette className="w-5 h-5 opacity-70" />
+                                            <Input
+                                                label="Blob Fill Color"
+                                                type="color"
+                                                value={fillColor}
+                                                onChange={(e) => setFillColor(e.target.value)}
+                                                className="w-full"
+                                                variant="bordered"
+                                                labelPlacement="outside"
+                                            />
+                                        </div>
+                                    )}
                                     
                                     {/* Sliders section */}
                                     <div className="space-y-3">
@@ -412,29 +557,6 @@ export default function SVGBlobGenerator() {
                                             className="max-w-md mb-3"
                                         />
                                     </div>
-                                    
-                                    {/* Image background controls */}
-                                    <div className="pt-2 border-t border-gray-200 dark:border-gray-700">
-                                        <div className="flex items-center gap-4 mb-4">
-                                            <Switch
-                                                isSelected={useImageBackground}
-                                                onValueChange={setUseImageBackground}
-                                            />
-                                            <span>Use Image Background</span>
-                                        </div>
-                                        
-                                        {useImageBackground && (
-                                            <div className="pt-2">
-                                                <Button 
-                                                    color="primary" 
-                                                    onPress={handleShuffleImage}
-                                                    startContent={<ImageIcon className="w-4 h-4" />}
-                                                >
-                                                    Random Image
-                                                </Button>
-                                            </div>
-                                        )}
-                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -460,156 +582,39 @@ export default function SVGBlobGenerator() {
                 .animate-blob-shake {
                     animation: blob-shake 0.5s ease;
                 }
+                
+                @keyframes slide-in {
+                    from {
+                        transform: translateX(100%);
+                        opacity: 0;
+                    }
+                    to {
+                        transform: translateX(0);
+                        opacity: 1;
+                    }
+                }
+                
+                @keyframes slide-out {
+                    from {
+                        transform: translateX(0);
+                        opacity: 1;
+                    }
+                    to {
+                        transform: translateX(100%);
+                        opacity: 0;
+                    }
+                }
+                
+                .animate-slide-in {
+                    animation: slide-in 0.3s ease;
+                }
+                
+                .animate-slide-out {
+                    animation: slide-out 0.3s ease;
+                }
             `}</style>
 
-            <Card className="mt-6 bg-default-50 dark:bg-default-100 p-4 md:p-8">
-            <div className="rounded-xl p-2 md:p-4 max-w-4xl mx-auto">
-                <h2 className="text-xl md:text-2xl font-semibold text-default-700 mb-4 flex items-center">
-                <Info className="w-6 h-6 mr-2" />
-                What is the SVG Blob Generator?
-                </h2>
-                <p className="text-sm md:text-base text-default-600 mb-4">
-                The SVG Blob generator is a powerful and intuitive device designed to create unique, organic drop shapes for your design projects. These smooth, flowing shapes add a modern and playful aesthetics for websites, presentations and graphic designs. With our generator, you can create a custom SVG blob which are fully scalable, light and ready to use in any digital project.
-                </p>
-                <p className="text-sm md:text-base text-default-600 mb-4">
-                Unlike static design elements, our drop generator gives you complete control over every aspect of the presence of your drop. Adjust parameters such as growth, edge count, complexity and lubrication to create anything from simple, round shapes to complex, uncontrolled forms. You can also fill your drops with images for creative masking effects or use solid colors for clean, minimal designs.
-                </p>
-
-                <div className="my-8">
-              <NextImage 
-                src="/Images/InfosectionImages/SVGBlobGeneratorPreview.png?height=400&width=600"
-                alt="Screenshot of the PNG to WebP Converter interface showing image conversion and optimization options" 
-                width={600} 
-                height={400} 
-                className="rounded-lg shadow-lg w-full h-auto"
-              />
-            </div>
-
-                <h2 id="how-to-use" className="text-xl md:text-2xl font-semibold text-default-700 mb-4 mt-8 flex items-center">
-                <BookOpen className="w-6 h-6 mr-2" />
-                How to Use the SVG Blob Generator?
-                </h2>
-                <ol className="list-decimal list-inside space-y-2 text-sm md:text-base text-default-600">
-                <li>Start by exploring the default blob shape in the preview area.</li>
-                <li>
-                    Adjust the <strong>Growth</strong> slider to control the overall size of your blob.
-                </li>
-                <li>
-                    Use the <strong>Edge Count</strong> slider to determine how many points form your blob's outline.
-                </li>
-                <li>
-                    Modify <strong>Complexity</strong> to add more variation and detail to your blob's edges.
-                </li>
-                <li>
-                    Adjust <strong>Smoothness</strong> to control how rounded or sharp the curves appear.
-                </li>
-                <li>
-                    Fine-tune the <strong>Wave Frequency</strong> and <strong>Wave Amplitude</strong> for additional texture.
-                </li>
-                <li>
-                    Choose between <strong>Simple Curves</strong> or <strong>Advanced Curves</strong> for different path generation
-                    methods.
-                </li>
-                <li>
-                    Select a fill color using the color picker, or toggle <strong>Use Image Background</strong> to fill your blob
-                    with an image.
-                </li>
-                <li>
-                    Click <strong>Shuffle Blob</strong> to generate a new random shape while keeping your current settings.
-                </li>
-                <li>
-                    Use <strong>Randomize All</strong> to completely change all parameters for quick exploration.
-                </li>
-                <li>
-                    When satisfied with your design, use the <strong>Export</strong> dropdown to save as SVG, PNG, or copy the SVG
-                    code.
-                </li>
-                </ol>
-
-                <h2 className="text-xl md:text-2xl font-semibold text-default-700 mb-4 mt-8 flex items-center">
-                <Lightbulb className="w-6 h-6 mr-2" />
-                Key Features
-                </h2>
-                <ul className="list-disc list-inside space-y-2 text-sm md:text-base text-default-600">
-                <li>
-                    <Sliders className="w-4 h-4 inline-block mr-1" /> <strong>Comprehensive Controls:</strong> Fine-tune every
-                    aspect of your blob with intuitive sliders
-                </li>
-                <li>
-                    <ShuffleIcon className="w-4 h-4 inline-block mr-1" /> <strong>Randomization Options:</strong> Quickly generate
-                    new shapes with shuffle and randomize features
-                </li>
-                <li>
-                    <Palette className="w-4 h-4 inline-block mr-1" /> <strong>Flexible Styling:</strong> Choose between solid colors
-                    or image backgrounds for versatile designs
-                </li>
-                <li>
-                    <Eye className="w-4 h-4 inline-block mr-1" /> <strong>Real-time Preview:</strong> See changes instantly as you
-                    adjust parameters
-                </li>
-                <li>
-                    <Download className="w-4 h-4 inline-block mr-1" /> <strong>Multiple Export Formats:</strong> Save your creations
-                    as SVG or PNG files
-                </li>
-                <li>
-                    <Code className="w-4 h-4 inline-block mr-1" /> <strong>Code Access:</strong> Copy the SVG code directly for easy
-                    integration into your projects
-                </li>
-                <li>
-                    <FileImage className="w-4 h-4 inline-block mr-1" /> <strong>Image Masking:</strong> Create unique visual effects
-                    by clipping images to your blob shape
-                </li>
-                </ul>
-
-                <h2 className="text-xl md:text-2xl font-semibold text-default-700 mb-4 mt-8 flex items-center">
-                <Lightbulb className="w-6 h-6 mr-2" />
-                Creative Tips and Tricks
-                </h2>
-                <ul className="list-disc list-inside space-y-2 text-sm md:text-base text-default-600">
-                <li>
-                    <strong>For smooth, cloud-like blobs:</strong> Use higher edge counts (10-15) with high smoothness (0.7-1.0) and
-                    low complexity (0.2-0.4).
-                </li>
-                <li>
-                    <strong>For abstract, angular shapes:</strong> Try lower edge counts (3-6) with low smoothness (0-0.3) and high
-                    complexity (0.7-1.0).
-                </li>
-                <li>
-                    <strong>For subtle background elements:</strong> Create large, gentle blobs with high growth (8-10) and moderate
-                    smoothness (0.5-0.7).
-                </li>
-                <li>
-                    <strong>For dynamic, flowing shapes:</strong> Increase wave frequency (6-10) and amplitude (0.6-0.9) with
-                    moderate edge count (8-12).
-                </li>
-                <li>
-                    <strong>For consistent brand elements:</strong> Save your favorite parameter combinations to recreate similar
-                    blob styles across projects.
-                </li>
-                <li>
-                    <strong>For layered designs:</strong> Export multiple blobs with slight variations and stack them with different
-                    opacities in your design software.
-                </li>
-                <li>
-                    <strong>For animated websites:</strong> Export several blob variations and use CSS or JavaScript to morph
-                    between them.
-                </li>
-                <li>
-                    <strong>For creative image displays:</strong> Use the image background feature with photos to create unique,
-                    organic image frames.
-                </li>
-                </ul>
-
-                <p className="text-sm md:text-base text-default-600 mt-6">
-                Ready to add organic, fluid shapes to your design toolkit? Our SVG Blob Generator makes it easy to create custom,
-                scalable vector graphics that can enhance any project. Whether you're looking for subtle background elements or
-                bold, eye-catching shapes, the possibilities are endless. Start experimenting with different parameters to
-                discover unique blob designs that perfectly complement your creative vision!
-                </p>
-            </div>
-            </Card>
-     
-    </ToolLayout>
-  )
+            <InfoSectionSVGBlob />
+        </ToolLayout>
+    )
 }
-

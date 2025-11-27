@@ -48,7 +48,7 @@ export default function InfoSection() {
   const previewImageSrc = "/Images/InfosectionImages/DuplicateLineRemoverPreview.png?height=400&width=800"; // Placeholder, update this
 
   return (
-    <Card className="bg-default-50 dark:bg-default-100 p-4 md:p-8 mt-8">
+    <Card className="bg-default-50 dark:bg-default-100 p-4 md:p-8">
       <div className="rounded-xl p-2 md:p-4 max-w-6xl mx-auto">
         <h2 className="text-2xl font-semibold text-default-700 mb-4 flex items-center">
           <Info className="w-6 h-6 mr-2 text-primary-500" />
@@ -75,53 +75,153 @@ export default function InfoSection() {
 
         <h2 id="how-to-use" className="text-2xl font-semibold text-default-700 mb-4 mt-8 flex items-center">
           <BookOpen className="w-6 h-6 mr-2 text-primary-500" />
-          How to Use the Duplicate Line Remover & Analyzer
+          How to Use the Duplicate Line Remover & Analyzer?
         </h2>
-        <ol className="list-decimal list-inside space-y-2 text-default-600">
-          <li>
-            <strong className="flex items-center">
-              <UploadCloud className="w-4 h-4 mr-1.5 text-blue-500" /> Input your text:
-            </strong> Enter, paste, upload a file, or use sample generators.
+
+        <ol className="list-none space-y-4 text-default-600">
+          <li className="flex items-start gap-3">
+            <span className="flex-shrink-0 w-6 h-6 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center text-sm font-medium">
+              1
+            </span>
+            <div className="flex-1">
+              <div className="flex items-center gap-2 mb-1">
+                <UploadCloud className="w-4 h-4 text-blue-500 flex-shrink-0" />
+                <strong className="text-default-700">Input your text:</strong>
+              </div>
+              <p className="text-default-600 ml-6">
+                Enter, paste, upload a file, or use sample generators.
+              </p>
+            </div>
           </li>
-          <li>
-            <strong className="flex items-center">
-              <Settings className="w-4 h-4 mr-1.5 text-green-500" /> Configure processing options:
-            </strong>
-            <ul className="list-disc list-inside ml-6 mt-1 space-y-1">
-              <li><Settings2 className="inline w-3 h-3 mr-1 text-gray-500" /><strong>Basic Options:</strong> Filter mode, sort order, case sensitivity, whitespace.</li>
-              <li><Regex className="inline w-3 h-3 mr-1 text-gray-500" /><strong>Advanced Options:</strong> Regex filtering, custom separators, line numbering.</li>
-              <li><ListChecks className="inline w-3 h-3 mr-1 text-gray-500" /><strong>Presets:</strong> Apply pre-configured or custom settings.</li>
-            </ul>
+
+          <li className="flex items-start gap-3">
+            <span className="flex-shrink-0 w-6 h-6 bg-green-100 text-green-600 rounded-full flex items-center justify-center text-sm font-medium">
+              2
+            </span>
+            <div className="flex-1">
+              <div className="flex items-center gap-2 mb-1">
+                <Settings className="w-4 h-4 text-green-500 flex-shrink-0" />
+                <strong className="text-default-700">Configure processing options:</strong>
+              </div>
+              <div className="ml-6 space-y-2">
+                <div className="flex items-start gap-2">
+                  <Settings2 className="w-3 h-3 mt-0.5 text-gray-500 flex-shrink-0" />
+                  <div>
+                    <strong className="text-default-700">Basic Options:</strong>
+                    <span className="text-default-600 ml-1">Filter mode, sort order, case sensitivity, whitespace.</span>
+                  </div>
+                </div>
+                <div className="flex items-start gap-2">
+                  <Regex className="w-3 h-3 mt-0.5 text-gray-500 flex-shrink-0" />
+                  <div>
+                    <strong className="text-default-700">Advanced Options:</strong>
+                    <span className="text-default-600 ml-1">Regex filtering, custom separators, line numbering.</span>
+                  </div>
+                </div>
+                <div className="flex items-start gap-2">
+                  <ListChecks className="w-3 h-3 mt-0.5 text-gray-500 flex-shrink-0" />
+                  <div>
+                    <strong className="text-default-700">Presets:</strong>
+                    <span className="text-default-600 ml-1">Apply pre-configured or custom settings.</span>
+                  </div>
+                </div>
+              </div>
+            </div>
           </li>
-          <li>
-            <strong className="flex items-center">
-              <Filter className="w-4 h-4 mr-1.5 text-orange-500" /> Select filter mode:
-            </strong> (Remove duplicates, Keep only duplicates, Highlight, Count, Mark first).
+
+          <li className="flex items-start gap-3">
+            <span className="flex-shrink-0 w-6 h-6 bg-orange-100 text-orange-600 rounded-full flex items-center justify-center text-sm font-medium">
+              3
+            </span>
+            <div className="flex-1">
+              <div className="flex items-center gap-2 mb-1">
+                <Filter className="w-4 h-4 text-orange-500 flex-shrink-0" />
+                <strong className="text-default-700">Select filter mode:</strong>
+              </div>
+              <p className="text-default-600 ml-6">
+                (Remove duplicates, Keep only duplicates, Highlight, Count, Mark first).
+              </p>
+            </div>
           </li>
-          <li>
-            <strong className="flex items-center">
-              <Zap className="w-4 h-4 mr-1.5 text-purple-500" /> Process your text:
-            </strong> Click "Process" or enable "Auto Process".
+
+          <li className="flex items-start gap-3">
+            <span className="flex-shrink-0 w-6 h-6 bg-purple-100 text-purple-600 rounded-full flex items-center justify-center text-sm font-medium">
+              4
+            </span>
+            <div className="flex-1">
+              <div className="flex items-center gap-2 mb-1">
+                <Zap className="w-4 h-4 text-purple-500 flex-shrink-0" />
+                <strong className="text-default-700">Process your text:</strong>
+              </div>
+              <p className="text-default-600 ml-6">
+                Click "Process" or enable "Auto Process".
+              </p>
+            </div>
           </li>
-          <li>
-            <strong className="flex items-center">
-              <Eye className="w-4 h-4 mr-1.5 text-red-500" /> Explore results:
-            </strong>
-            <ul className="list-disc list-inside ml-6 mt-1 space-y-1">
-              <li><FileText className="inline w-3 h-3 mr-1 text-gray-500" /><strong>Processed Output:</strong> View filtered text.</li>
-              <li><FileDiff className="inline w-3 h-3 mr-1 text-gray-500" /><strong>Diff View:</strong> Compare input and output.</li>
-              <li><Search className="inline w-3 h-3 mr-1 text-gray-500" /><strong>Duplicate Analysis:</strong> Details on duplicate patterns.</li>
-            </ul>
+
+          <li className="flex items-start gap-3">
+            <span className="flex-shrink-0 w-6 h-6 bg-red-100 text-red-600 rounded-full flex items-center justify-center text-sm font-medium">
+              5
+            </span>
+            <div className="flex-1">
+              <div className="flex items-center gap-2 mb-1">
+                <Eye className="w-4 h-4 text-red-500 flex-shrink-0" />
+                <strong className="text-default-700">Explore results:</strong>
+              </div>
+              <div className="ml-6 space-y-2">
+                <div className="flex items-start gap-2">
+                  <FileText className="w-3 h-3 mt-0.5 text-gray-500 flex-shrink-0" />
+                  <div>
+                    <strong className="text-default-700">Processed Output:</strong>
+                    <span className="text-default-600 ml-1">View filtered text.</span>
+                  </div>
+                </div>
+                <div className="flex items-start gap-2">
+                  <FileDiff className="w-3 h-3 mt-0.5 text-gray-500 flex-shrink-0" />
+                  <div>
+                    <strong className="text-default-700">Diff View:</strong>
+                    <span className="text-default-600 ml-1">Compare input and output.</span>
+                  </div>
+                </div>
+                <div className="flex items-start gap-2">
+                  <Search className="w-3 h-3 mt-0.5 text-gray-500 flex-shrink-0" />
+                  <div>
+                    <strong className="text-default-700">Duplicate Analysis:</strong>
+                    <span className="text-default-600 ml-1">Details on duplicate patterns.</span>
+                  </div>
+                </div>
+              </div>
+            </div>
           </li>
-          <li>
-             <strong className="flex items-center">
-              <ListFilter className="w-4 h-4 mr-1.5 text-yellow-500" /> Use additional tools:
-            </strong> Sorting, grouping, view statistics.
+
+          <li className="flex items-start gap-3">
+            <span className="flex-shrink-0 w-6 h-6 bg-yellow-100 text-yellow-600 rounded-full flex items-center justify-center text-sm font-medium">
+              6
+            </span>
+            <div className="flex-1">
+              <div className="flex items-center gap-2 mb-1">
+                <ListFilter className="w-4 h-4 text-yellow-500 flex-shrink-0" />
+                <strong className="text-default-700">Use additional tools:</strong>
+              </div>
+              <p className="text-default-600 ml-6">
+                Sorting, grouping, view statistics.
+              </p>
+            </div>
           </li>
-          <li>
-            <strong className="flex items-center">
-              <Share2 className="w-4 h-4 mr-1.5 text-indigo-500" /> Export or share:
-            </strong> Copy, download (text/JSON).
+
+          <li className="flex items-start gap-3">
+            <span className="flex-shrink-0 w-6 h-6 bg-indigo-100 text-indigo-600 rounded-full flex items-center justify-center text-sm font-medium">
+              7
+            </span>
+            <div className="flex-1">
+              <div className="flex items-center gap-2 mb-1">
+                <Share2 className="w-4 h-4 text-indigo-500 flex-shrink-0" />
+                <strong className="text-default-700">Export or share:</strong>
+              </div>
+              <p className="text-default-600 ml-6">
+                Copy, download (text/JSON).
+              </p>
+            </div>
           </li>
         </ol>
 
@@ -252,37 +352,37 @@ export default function InfoSection() {
           Use Cases
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 text-default-600">
-          <div className="bg-default-100/50 dark:bg-default-200/20 p-3 rounded-lg shadow-md">
+          <div className="bg-default-200/50 dark:bg-default-300/20 p-3 rounded-lg shadow-md">
             <h3 className="font-semibold text-lg mb-2 flex items-center">
               <FileText className="w-4 h-4 mr-2 text-primary-500" /> Data Cleaning
             </h3>
             <p className="text-sm">Remove duplicates from datasets, CSVs, or database exports.</p>
           </div>
-          <div className="bg-default-100/50 dark:bg-default-200/20 p-3 rounded-lg shadow-md">
+          <div className="bg-default-200/50 dark:bg-default-300/20 p-3 rounded-lg shadow-md">
             <h3 className="font-semibold text-lg mb-2 flex items-center">
               <Code className="w-4 h-4 mr-2 text-secondary-500" /> Code Maintenance
             </h3>
             <p className="text-sm">Clean duplicate imports, find redundant code blocks.</p>
           </div>
-          <div className="bg-default-100/50 dark:bg-default-200/20 p-3 rounded-lg shadow-md">
+          <div className="bg-default-200/50 dark:bg-default-300/20 p-3 rounded-lg shadow-md">
             <h3 className="font-semibold text-lg mb-2 flex items-center">
               <FileSearch className="w-4 h-4 mr-2 text-success-500" /> Log File Analysis
             </h3>
             <p className="text-sm">Extract unique errors, identify recurring patterns.</p>
           </div>
-          <div className="bg-default-100/50 dark:bg-default-200/20 p-3 rounded-lg shadow-md">
+          <div className="bg-default-200/50 dark:bg-default-300/20 p-3 rounded-lg shadow-md">
             <h3 className="font-semibold text-lg mb-2 flex items-center">
               <Share2 className="w-4 h-4 mr-2 text-warning-500" /> Content Management
             </h3>
             <p className="text-sm">Deduplicate email lists, remove redundant content.</p>
           </div>
-          <div className="bg-default-100/50 dark:bg-default-200/20 p-3 rounded-lg shadow-md">
+          <div className="bg-default-200/50 dark:bg-default-300/20 p-3 rounded-lg shadow-md">
             <h3 className="font-semibold text-lg mb-2 flex items-center">
               <BarChart className="w-4 h-4 mr-2 text-danger-500" /> Pattern Discovery
             </h3>
             <p className="text-sm">Analyze frequency patterns, discover common phrases.</p>
           </div>
-          <div className="bg-default-100/50 dark:bg-default-200/20 p-3 rounded-lg shadow-md">
+          <div className="bg-default-200/50 dark:bg-default-300/20 p-3 rounded-lg shadow-md">
             <h3 className="font-semibold text-lg mb-2 flex items-center">
               <ArrowLeftRight className="w-4 h-4 mr-2 text-primary-500" /> Data Transformation
             </h3>

@@ -2,8 +2,8 @@
 
 import React, { useState, useCallback, useRef } from 'react';
 import { Card, CardBody, Button,  Input, Slider, Checkbox } from "@nextui-org/react";
-import NextImage from 'next/image';
-import {  Download, Info, Lightbulb, BookOpen, Trash2, Upload, ImageIcon, ZapIcon, Settings, Layers, ImagePlus, Sliders, Clock, AlertCircle, CheckCircle2, EyeIcon, Scale } from 'lucide-react';
+import InfoSectionPngConverter from './info-section';
+import {  Download, Trash2, Upload, ImageIcon,  Settings,  ImagePlus, } from 'lucide-react';
 import { toast } from 'react-hot-toast';
 import ToolLayout from '@/components/ToolLayout';
 
@@ -229,7 +229,7 @@ export default function PngToWebpConverter() {
         {/* Input Section */}
         <Card className="bg-default-50 dark:bg-default-100">
           <CardBody className="p-6">
-            <label className="block text-lg font-medium text-default-700 mb-2">Upload Images:</label>
+            <label className="block text-lg font-medium text-primary mb-2">Upload Images:</label>
             
             <div className="border-2 border-dashed border-default-200 rounded-xl p-8 text-center mb-4">
               <input
@@ -311,9 +311,9 @@ export default function PngToWebpConverter() {
             {/* Options Section */}
             <div className="mt-6">
               <div className="flex justify-between items-center mb-2">
-                <h3 className="text-base font-medium">Conversion Options</h3>
+                <h3 className="text-base font-medium text-primary">Conversion Options</h3>
                 <Button
-                  color="default"
+                  color="secondary"
                   variant="light"
                   size="sm"
                   onClick={() => setShowAdvancedOptions(!showAdvancedOptions)}
@@ -367,6 +367,7 @@ export default function PngToWebpConverter() {
                         <Input
                           type="number"
                           min="1"
+                          variant='bordered'
                           placeholder="Original width"
                           value={options.resizeWidth?.toString() || ''}
                           onChange={(e) => setOptions({
@@ -381,6 +382,7 @@ export default function PngToWebpConverter() {
                         <Input
                           type="number"
                           min="1"
+                           variant='bordered'
                           placeholder="Original height"
                           value={options.resizeHeight?.toString() || ''}
                           onChange={(e) => setOptions({
@@ -493,95 +495,10 @@ export default function PngToWebpConverter() {
           </Card>
         )}
         
-        {/* Info Section */}
-        <Card className="mt-8 bg-default-50 dark:bg-default-100 p-4 md:p-8">
-          <div className="rounded-xl p-2 md:p-4 max-w-6xl mx-auto">
-            <h2 className="text-lg md:text-xl lg:text-2xl font-semibold text-default-700 mb-4 flex items-center">
-              <Info className="w-6 h-6 mr-2" />
-              What is the PNG to WebP Converter?
-            </h2>
-            <p className="text-sm md:text-base text-default-600 mb-4">
-            The PNG to webpi converter is a powerful tool designed to convert your PNG and JPEG images into a more efficient webp format. Developed by Google, Webp offers better compression and quality characteristics, resulting in small file sizes without renouncing image quality. This converter is looking at web developers, designers, content creators and anyone to customize the performance of their website.
-            </p>
-            <p className="text-sm md:text-base text-default-600 mb-4">
-            With support for batch conversion, quality adjustment, size, and detailed figures, our converter makes your images easier and improve in loading time of your website. Webpi images are usually 25–35% smaller than PNG and JPEG files, making them ideal for modern web applications.
-            </p>
-
-            <div className="my-8">
-              <NextImage 
-                src="/Images/InfosectionImages/PngToWebPConverterPreview.png?height=400&width=600"
-                alt="Screenshot of the PNG to WebP Converter interface showing image conversion and optimization options" 
-                width={600} 
-                height={400} 
-                className="rounded-lg shadow-lg w-full h-auto"
-              />
-            </div>
-
-            <h2 id="how-to-use" className="text-lg md:text-xl lg:text-2xl font-semibold text-default-700 mb-4 mt-8 flex items-center">
-              <BookOpen className="w-6 h-6 mr-2" />
-              How to Use the PNG to WebP Converter?
-            </h2>
-            <p className="text-sm md:text-base text-default-600 mb-4">
-              Converting your images to WebP format is quick and straight forward. Here's how to get started:
-            </p>
-            <ol className="list-decimal list-inside space-y-2 text-sm md:text-base">
-              <li>Click the "Select PNG, JPG files" button or drag and drop your images into the upload area</li>
-              <li>Set your desired conversion options, including quality level and advanced settings if needed</li>
-              <li>Click the "Convert to WebP" button and wait for the conversion to complete</li>
-              <li>Review the conversion statistics to see how much space you've saved</li>
-              <li>Download individual WebP files or use the "Download All" button to get all your converted images</li>
-            </ol>
-
-            <h2 id="benefits" className="text-lg md:text-xl lg:text-2xl font-semibold text-default-700 mb-4 mt-8 flex items-center">
-              <CheckCircle2 className="w-6 h-6 mr-2" />
-              Benefits of Using WebP Format
-            </h2>
-            <ul className="list-disc list-inside space-y-2 text-xs md:text-sm">
-              <li><strong>Smaller File Sizes</strong>: WebP images are typically 25-35% smaller than PNGs and JPEGs</li>
-              <li><strong>Faster Website Loading</strong>: Reduced file sizes mean quicker page loads and better user experience</li>
-              <li><strong>SEO Advantages</strong>: Page speed is a ranking factor for search engines</li>
-              <li><strong>Transparency Support</strong>: WebP supports alpha channel transparency like PNG</li>
-              <li><strong>Animation Support</strong>: WebP can replace animated GIFs with much smaller file sizes</li>
-              <li><strong>Broad Browser Support</strong>: Most modern browsers now support WebP format</li>
-              <li><strong>Lower Bandwidth Usage</strong>: Ideal for mobile users and those with limited data plans</li>
-            </ul>
-
-            <h2 id="advanced-features" className="text-lg md:text-xl lg:text-2xl font-semibold text-default-700 mb-4 mt-8 flex items-center">
-              <Sliders className="w-6 h-6 mr-2" />
-              Advanced Features
-            </h2>
-            <p className="text-sm md:text-base text-default-600 mb-4">
-              Our PNG to WebP Converter offers several advanced features to give you complete control over your image conversion:
-            </p>
-            <ul className="list-disc list-inside space-y-2 text-xs md:text-sm">
-              <li><strong>Quality Adjustment</strong>: Fine-tune the compression level to balance size and quality</li>
-              <li><strong>Lossless Conversion</strong>: Maintain perfect image quality with lossless compression</li>
-              <li><strong>Image Resizing</strong>: Resize your images during conversion for specific use cases</li>
-              <li><strong>Aspect Ratio Preservation</strong>: Maintain the original proportions when resizing</li>
-              <li><strong>Batch Processing</strong>: Convert multiple files simultaneously to save time</li>
-              <li><strong>Detailed Statistics</strong>: Get comprehensive information about file size savings</li>
-              <li><strong>Preview Functionality</strong>: See your images before and after conversion</li>
-            </ul>
-
-            <h2 className="text-lg md:text-xl lg:text-2xl font-semibold text-default-700 mb-4 mt-8 flex items-center">
-              <Lightbulb className="w-6 h-6 mr-2" />
-              Features That Make Us Stand Out
-            </h2>
-            <ul className="list-disc list-inside space-y-2 text-xs md:text-sm">
-              <li><ZapIcon className="w-4 h-4 inline-block mr-1" /> <strong>Client-Side Processing</strong>: Your images never leave your computer for enhanced privacy</li>
-              <li><Scale className="w-4 h-4 inline-block mr-1" /> <strong>Detailed Size Comparison</strong>: See exactly how much space you're saving</li>
-              <li><EyeIcon className="w-4 h-4 inline-block mr-1" /> <strong>Image Preview</strong>: Review your images before and after conversion</li>
-              <li><AlertCircle className="w-4 h-4 inline-block mr-1" /> <strong>Format Validation</strong>: We check that your files are compatible before processing</li>
-              <li><Layers className="w-4 h-4 inline-block mr-1" /> <strong>Bulk Download Options</strong>: Save time with our "Download All" feature</li>
-              <li><Clock className="w-4 h-4 inline-block mr-1" /> <strong>Progress Tracking</strong>: Monitor conversion progress in real-time</li>
-            </ul>
-
-            <p className="text-sm md:text-base text-default-600 mt-4">
-              Ready to optimize your images and speed up your website? Try our PNG to WebP Converter now and experience the benefits of smaller, faster-loading images without compromising on quality. Whether you're a web developer looking to improve page performance or a content creator aiming to reduce storage usage, our tool provides the perfect solution for modern image optimization needs.
-            </p>
-          </div>
-        </Card>
+     
       </div>
+         {/* Info Section */}
+       <InfoSectionPngConverter />
     </ToolLayout>
   );
 }

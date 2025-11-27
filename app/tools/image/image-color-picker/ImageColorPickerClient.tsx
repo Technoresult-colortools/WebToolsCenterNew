@@ -1,7 +1,7 @@
 "use client"
 
 import type React from "react"
-import { useState, useRef, useEffect } from "react"
+import { useState, useRef, useEffect, useCallback } from "react"
 import {
   Button,
   Card,
@@ -10,13 +10,23 @@ import {
   DropdownTrigger,
   DropdownMenu,
   DropdownItem,
+  Chip,
+  Progress,
+  Tooltip,
 } from "@nextui-org/react"
-import { Upload, X, RefreshCw, Info, BookOpen, Lightbulb, Pipette, Copy, Palette } from "lucide-react"
+import { Upload, X, RefreshCw, Pipette, Copy, Palette, Camera } from "lucide-react"
 import { Toast, toast } from "react-hot-toast"
 import ToolLayout from "@/components/ToolLayout"
-import NextImage from "next/image"
+import InfoSectionImageColorPicker from "./info-section"
 
 type ColorFormat = "hex" | "rgb" | "hsl"
+
+interface ColorInfo {
+  hex: string
+  rgb: { r: number; g: number; b: number }
+  hsl: { h: number; s: number; l: number }
+  name?: string
+}
 
 export default function ImageColorPicker() {
   const [selectedColor, setSelectedColor] = useState<string | null>(null)
@@ -28,70 +38,19 @@ export default function ImageColorPicker() {
   const [colorHistory, setColorHistory] = useState<string[]>([])
   const [isImageEyeDropperActive, setIsImageEyeDropperActive] = useState(false)
   const [dominantColors, setDominantColors] = useState<string[]>([])
+  const [isProcessing, setIsProcessing] = useState(false)
+  const [touchMode, setTouchMode] = useState(false)
+  const [crosshairPosition, setCrosshairPosition] = useState<{ x: number; y: number } | null>(null)
+  
   const fileInputRef = useRef<HTMLInputElement>(null)
-
   const imageRef = useRef<HTMLImageElement>(null)
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const imageContainerRef = useRef<HTMLDivElement>(null)
+  const cameraInputRef = useRef<HTMLInputElement>(null)
 
-  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0]
-    if (file) {
-      processFile(file)
-    }
-  }
-
-  const processFile = (file: File) => {
-    const reader = new FileReader()
-    reader.onload = (e) => setImageSrc(e.target?.result as string)
-    reader.readAsDataURL(file)
-  }
-  useEffect(() => {
-    if (imageSrc && imageRef.current && canvasRef.current) {
-      const img = new Image()
-      img.src = imageSrc
-      img.onload = () => {
-        const canvas = canvasRef.current!
-        canvas.width = img.naturalWidth
-        canvas.height = img.naturalHeight
-        const ctx = canvas.getContext("2d")!
-        ctx.drawImage(img, 0, 0, canvas.width, canvas.height)
-        extractDominantColors()
-      }
-    }
-  }, [imageSrc])
-
-  const handleDragEnter = (e: React.DragEvent<HTMLLabelElement>) => {
-    e.preventDefault()
-    e.stopPropagation()
-    setIsDragging(true)
-  }
-
-  const handleDragLeave = (e: React.DragEvent<HTMLLabelElement>) => {
-    e.preventDefault()
-    e.stopPropagation()
-    setIsDragging(false)
-  }
-
-  const handleDragOver = (e: React.DragEvent<HTMLLabelElement>) => {
-    e.preventDefault()
-    e.stopPropagation()
-  }
-
-  const handleDrop = (e: React.DragEvent<HTMLLabelElement>) => {
-    e.preventDefault()
-    e.stopPropagation()
-    setIsDragging(false)
-
-    const files = e.dataTransfer.files
-    if (files && files.length > 0) {
-      processFile(files[0])
-    }
-  }
-
-
+  // Enhanced color utilities
   const rgbToHex = (r: number, g: number, b: number) => {
-    return "#" + [r, g, b].map((x) => x.toString(16).padStart(2, "0")).join("")
+    return "#" + [r, g, b].map((x) => Math.round(x).toString(16).padStart(2, "0")).join("")
   }
 
   const hexToRgb = (hex: string) => {
@@ -140,20 +99,269 @@ export default function ImageColorPicker() {
     }
   }
 
+  // Enhanced file processing
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0]
+    if (file) {
+      processFile(file)
+    }
+  }
+
+  const processFile = (file: File) => {
+    setIsProcessing(true)
+    setFileName(file.name)
+    
+    // Validate file type and size
+    if (!file.type.startsWith('image/')) {
+      toast.error("Please select a valid image file")
+      setIsProcessing(false)
+      return
+    }
+    
+    if (file.size > 10 * 1024 * 1024) { // 10MB limit
+      toast.error("File size too large. Please select an image under 10MB")
+      setIsProcessing(false)
+      return
+    }
+
+    const reader = new FileReader()
+    reader.onload = (e) => {
+      setImageSrc(e.target?.result as string)
+      setIsProcessing(false)
+      toast.success("Image loaded successfully!")
+    }
+    reader.onerror = () => {
+      toast.error("Failed to load image")
+      setIsProcessing(false)
+    }
+    reader.readAsDataURL(file)
+  }
+
+  // Enhanced image processing
+  useEffect(() => {
+    if (imageSrc && imageRef.current && canvasRef.current) {
+      const img = new Image()
+      img.src = imageSrc
+      img.onload = () => {
+        const canvas = canvasRef.current!
+        const maxSize = 1920 // Limit canvas size for performance
+        let { width, height } = img
+        
+        if (width > maxSize || height > maxSize) {
+          const ratio = Math.min(maxSize / width, maxSize / height)
+          width *= ratio
+          height *= ratio
+        }
+        
+        canvas.width = width
+        canvas.height = height
+        const ctx = canvas.getContext("2d")!
+        ctx.drawImage(img, 0, 0, width, height)
+        extractDominantColors()
+      }
+    }
+  }, [imageSrc])
+
+  // Mobile-friendly drag and drop
+  const handleDragEnter = (e: React.DragEvent<HTMLLabelElement>) => {
+    e.preventDefault()
+    e.stopPropagation()
+    setIsDragging(true)
+  }
+
+  const handleDragLeave = (e: React.DragEvent<HTMLLabelElement>) => {
+    e.preventDefault()
+    e.stopPropagation()
+    setIsDragging(false)
+  }
+
+  const handleDragOver = (e: React.DragEvent<HTMLLabelElement>) => {
+    e.preventDefault()
+    e.stopPropagation()
+  }
+
+  const handleDrop = (e: React.DragEvent<HTMLLabelElement>) => {
+    e.preventDefault()
+    e.stopPropagation()
+    setIsDragging(false)
+
+    const files = e.dataTransfer.files
+    if (files && files.length > 0) {
+      processFile(files[0])
+    }
+  }
+
+  // Enhanced color picking with mobile support
+  const getColorFromCoordinates = useCallback((x: number, y: number) => {
+    if (!canvasRef.current) return null
+    
+    const canvas = canvasRef.current
+    const ctx = canvas.getContext("2d")!
+    const imageData = ctx.getImageData(x, y, 1, 1)
+    const [r, g, b] = imageData.data
+    
+    return rgbToHex(r, g, b)
+  }, [])
+
+  const handleImageClick = useCallback((e: React.MouseEvent | React.TouchEvent) => {
+    if (!imageContainerRef.current || !canvasRef.current) return
+    
+    const rect = imageContainerRef.current.getBoundingClientRect()
+    const clientX = 'touches' in e ? e.touches[0].clientX : e.clientX
+    const clientY = 'touches' in e ? e.touches[0].clientY : e.clientY
+    
+    const x = Math.round(clientX - rect.left)
+    const y = Math.round(clientY - rect.top)
+    
+    // Ensure coordinates are within canvas bounds
+    if (x >= 0 && y >= 0 && x < canvasRef.current.width && y < canvasRef.current.height) {
+      const color = getColorFromCoordinates(x, y)
+      if (color) {
+        setSelectedColor(color)
+        setShowColorDetails(true)
+        setColorHistory((prev) => [color, ...prev.filter(c => c !== color).slice(0, 9)])
+        toast.success("Color picked successfully!")
+      }
+    }
+  }, [getColorFromCoordinates])
+
+  // Touch support for mobile
+  const handleTouchMove = useCallback((e: React.TouchEvent) => {
+    if (!touchMode || !imageContainerRef.current) return
+    
+    e.preventDefault()
+    const rect = imageContainerRef.current.getBoundingClientRect()
+    const touch = e.touches[0]
+    const x = touch.clientX - rect.left
+    const y = touch.clientY - rect.top
+    
+    setCrosshairPosition({ x, y })
+  }, [touchMode])
+
+  const handleTouchEnd = useCallback((e: React.TouchEvent) => {
+    if (touchMode) {
+      handleImageClick(e)
+      setTouchMode(false)
+      setCrosshairPosition(null)
+    }
+  }, [touchMode, handleImageClick])
+
+  // Enhanced eyedropper with fallback
+  const handleImageEyeDropper = async () => {
+    try {
+      if (!imageSrc) {
+        toast.error("Please upload an image first")
+        return
+      }
+
+      setIsImageEyeDropperActive(true)
+
+      // Check if device supports EyeDropper API
+      if ("EyeDropper" in window) {
+        try {
+          // @ts-expect-error - EyeDropper API might not be in TypeScript definitions
+          const eyeDropper = new EyeDropper()
+          const result = await eyeDropper.open()
+
+          setSelectedColor(result.sRGBHex)
+          setShowColorDetails(true)
+          setColorHistory((prev) => [result.sRGBHex, ...prev.filter(c => c !== result.sRGBHex).slice(0, 9)])
+          toast.success("Color picked successfully!")
+        } catch (error) {
+          // User cancelled or other error
+          if (typeof error === "object" && error !== null && "name" in error && (error as { name: string }).name !== 'AbortError') {
+            throw error
+          }
+        }
+      } else {
+        // Fallback for mobile and unsupported browsers
+        setTouchMode(true)
+        toast.success("Touch mode activated! Tap on the image to pick colors", { duration: 3000 })
+      }
+    } catch (error) {
+      // Fallback to touch mode
+      setTouchMode(true)
+      toast.success("Touch the image to pick colors", { duration: 3000 })
+    } finally {
+      setIsImageEyeDropperActive(false)
+    }
+  }
+
+  // Enhanced dominant color extraction
+  const extractDominantColors = useCallback(() => {
+    if (!imageSrc || !canvasRef.current) return
+
+    const canvas = canvasRef.current
+    const ctx = canvas.getContext("2d")!
+    const { width, height } = canvas
+    
+    // Sample fewer pixels for better performance
+    const sampleSize = Math.min(width * height, 10000)
+    const stepSize = Math.max(1, Math.floor((width * height) / sampleSize))
+    
+    const colorCounts: { [key: string]: number } = {}
+    
+    for (let i = 0; i < width * height; i += stepSize * 4) {
+      const x = (i / 4) % width
+      const y = Math.floor(i / 4 / width)
+      
+      if (x < width && y < height) {
+        const imageData = ctx.getImageData(x, y, 1, 1)
+        const [r, g, b, a] = imageData.data
+        
+        // Skip transparent pixels
+        if (a < 128) continue
+        
+        // Group similar colors
+        const groupedR = Math.floor(r / 32) * 32
+        const groupedG = Math.floor(g / 32) * 32
+        const groupedB = Math.floor(b / 32) * 32
+        
+        const hex = rgbToHex(groupedR, groupedG, groupedB)
+        colorCounts[hex] = (colorCounts[hex] || 0) + 1
+      }
+    }
+
+    const sortedColors = Object.entries(colorCounts)
+      .sort((a, b) => b[1] - a[1])
+      .slice(0, 8)
+      .map(([color]) => color)
+
+    setDominantColors(sortedColors)
+  }, [imageSrc])
+
+  // Utility functions
   const resetSelection = () => {
     setSelectedColor(null)
     setShowColorDetails(false)
+    setTouchMode(false)
+    setCrosshairPosition(null)
   }
 
   const copyToClipboard = (text: string) => {
-    navigator.clipboard
-      .writeText(text)
-      .then(() => {
+    if (navigator.clipboard) {
+      navigator.clipboard
+        .writeText(text)
+        .then(() => {
+          toast.success("Copied to clipboard!")
+        })
+        .catch(() => {
+          toast.error("Failed to copy")
+        })
+    } else {
+      // Fallback for older browsers
+      const textArea = document.createElement('textarea')
+      textArea.value = text
+      document.body.appendChild(textArea)
+      textArea.select()
+      try {
+        document.execCommand('copy')
         toast.success("Copied to clipboard!")
-      })
-      .catch(() => {
+      } catch (err) {
         toast.error("Failed to copy")
-      })
+      }
+      document.body.removeChild(textArea)
+    }
   }
 
   const getColorString = (color: string | null) => {
@@ -171,337 +379,292 @@ export default function ImageColorPicker() {
     }
   }
 
-  const handleImageEyeDropper = async () => {
-    try {
-      if (!imageSrc) {
-        toast.error("Please upload an image first")
-        return
-      }
-
-      setIsImageEyeDropperActive(true)
-
-      if ("EyeDropper" in window) {
-        // @ts-expect-error - EyeDropper API might not be in TypeScript definitions
-        const eyeDropper = new EyeDropper()
-        const result = await eyeDropper.open()
-
-        setSelectedColor(result.sRGBHex)
-        setShowColorDetails(true)
-        setColorHistory((prev) => [result.sRGBHex, ...prev.slice(0, 9)])
-        toast.success("Color picked successfully!")
-      } else {
-        toast(
-          (t: Toast) => (
-            <span>
-              Color picker not supported on this device. Tap the image to select a color.
-              <Button size="sm" onClick={() => toast.dismiss(t.id)}>
-                Dismiss
-              </Button>
-            </span>
-          ),
-          { icon: "ℹ️", style: { background: "#3b82f6", color: "#fff" } },
-        )
-
-        const handleImageClick = (e: MouseEvent) => {
-          const rect = imageContainerRef.current!.getBoundingClientRect()
-          const x = e.clientX - rect.left
-          const y = e.clientY - rect.top
-
-          const canvas = canvasRef.current!
-          const ctx = canvas.getContext("2d")!
-          const imageData = ctx.getImageData(x, y, 1, 1)
-          const [r, g, b] = imageData.data
-
-          const hex = rgbToHex(r, g, b)
-          setSelectedColor(hex)
-          setShowColorDetails(true)
-          setColorHistory((prev) => [hex, ...prev.slice(0, 9)])
-          toast.success("Color picked successfully!")
-
-          imageContainerRef.current!.removeEventListener("click", handleImageClick)
-        }
-
-        imageContainerRef.current!.addEventListener("click", handleImageClick)
-      }
-    } catch {
-      toast.error("Failed to pick color")
-    } finally {
-      setIsImageEyeDropperActive(false)
+  // Camera capture for mobile
+  const handleCameraCapture = () => {
+    if (cameraInputRef.current) {
+      cameraInputRef.current.click()
     }
   }
-
-  const extractDominantColors = () => {
-    if (!imageSrc || !canvasRef.current) return
-
-    const canvas = canvasRef.current
-    const ctx = canvas.getContext("2d")!
-    const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height)
-    const pixels = imageData.data
-    const colorCounts: { [key: string]: number } = {}
-
-    for (let i = 0; i < pixels.length; i += 4) {
-      const r = pixels[i]
-      const g = pixels[i + 1]
-      const b = pixels[i + 2]
-      const rgb = `rgb(${r},${g},${b})`
-      colorCounts[rgb] = (colorCounts[rgb] || 0) + 1
-    }
-
-    const sortedColors = Object.entries(colorCounts)
-      .sort((a, b) => b[1] - a[1])
-      .slice(0, 5)
-      .map(([color]) => color)
-
-    setDominantColors(sortedColors)
-  }
-
-  useEffect(() => {
-    return () => {
-      if (imageContainerRef.current) {
-        imageContainerRef.current.removeEventListener("click", () => {})
-      }
-    }
-  }, [])
 
   return (
-    <ToolLayout title="Image Color Picker" 
-    description="Effortlessly extract and capture colors from any image"
-    toolId="678f382a26f06f912191bc90"
+    <ToolLayout 
+      title="Image Color Picker" 
+      description="Effortlessly extract and capture colors from any image"
+      toolId="678f382a26f06f912191bc90"
     >
-
-
-      <Card className="mb-8 bg-default-50 dark:bg-default-100">
+      <Card className="mb-6 bg-default-50 dark:bg-default-100">
         <CardBody>
-          <div className="flex justify-between items-center mb-4">
+          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-4">
+            <div className="flex flex-wrap gap-2">
+              <Button 
+                onClick={handleImageEyeDropper} 
+                disabled={isImageEyeDropperActive || !imageSrc} 
+                color="primary"
+                className="flex-1 sm:flex-none"
+              >
+                <Pipette className="h-4 w-4 mr-2" />
+                {touchMode ? "Touch Mode Active" : "Pick Color"}
+              </Button>
+            </div>
             
-            <Button onClick={handleImageEyeDropper} disabled={isImageEyeDropperActive || !imageSrc} color="primary">
-              <Pipette className="h-5 w-5 mr-2" />
-              Pick Image Color
-            </Button>
+            <div className="flex gap-2">
+              <Button onClick={() => fileInputRef.current?.click()} size="sm" variant="bordered">
+                <Upload className="h-4 w-4 mr-2" />
+                Upload
+              </Button>
+              <Button onClick={handleCameraCapture} size="sm" variant="bordered">
+                <Camera className="h-4 w-4 mr-2" />
+                Camera
+              </Button>
+            </div>
           </div>
 
-          {fileName && <p className="text-default-500 mb-2">Current file: {fileName}</p>}
+          {fileName && (
+            <div className="flex items-center gap-2 mb-2">
+              <Chip size="sm" color="primary" variant="flat">{fileName}</Chip>
+              {isProcessing && <Progress size="sm" isIndeterminate className="flex-1" />}
+            </div>
+          )}
+
+          {touchMode && (
+            <div className="mb-4 p-3 bg-blue-100 dark:bg-blue-900/30 rounded-lg">
+              <p className="text-sm text-blue-800 dark:text-blue-200">
+                🎯 Touch mode active! Tap anywhere on the image to pick colors.
+              </p>
+            </div>
+          )}
 
           {!imageSrc ? (
-             <label
-             className={`flex flex-col items-center justify-center h-64 px-4 py-6 bg-default-100 text-primary rounded-lg shadow-lg tracking-wide uppercase border-2 ${
-               isDragging ? "border-primary bg-primary-100" : "border-primary border-dashed"
-             } cursor-pointer hover:bg-primary-100 hover:text-primary-600 transition duration-300`}
-             onDragEnter={handleDragEnter}
-             onDragLeave={handleDragLeave}
-             onDragOver={handleDragOver}
-             onDrop={handleDrop}
-           >
+            <label
+              className={`flex flex-col items-center justify-center h-48 sm:h-64 px-4 py-6 bg-default-100 text-primary rounded-lg shadow-lg tracking-wide uppercase border-2 ${
+                isDragging ? "border-primary bg-primary-100" : "border-primary border-dashed"
+              } cursor-pointer hover:bg-primary-100 hover:text-primary-600 transition duration-300`}
+              onDragEnter={handleDragEnter}
+              onDragLeave={handleDragLeave}
+              onDragOver={handleDragOver}
+              onDrop={handleDrop}
+            >
               <Upload size={32} />
-              <span className="mt-2 text-base leading-normal">
-                  {isDragging ? "Drop image here" : "Select a file or drag and drop"}
-                </span>
-                <input ref={fileInputRef} type="file" className="hidden" onChange={handleFileChange} accept="image/*" />
-              </label>
+              <span className="mt-2 text-base leading-normal text-center">
+                {isDragging ? "Drop image here" : "Select a file or drag and drop"}
+              </span>
+              <span className="text-xs text-default-500 mt-1">
+                Supports JPG, PNG, GIF, WEBP (Max 10MB)
+              </span>
+              <input ref={fileInputRef} type="file" className="hidden" onChange={handleFileChange} accept="image/*" />
+              <input 
+                ref={cameraInputRef} 
+                type="file" 
+                className="hidden" 
+                onChange={handleFileChange} 
+                accept="image/*" 
+                capture="environment"
+              />
+            </label>
           ) : (
             <div ref={imageContainerRef} className="relative">
-              <div className="relative h-48 md:h-96 bg-default-100 border border-default-400 dark:border-default-700 rounded-lg overflow-hidden">
+              <div 
+                className="relative h-48 sm:h-64 md:h-96 bg-default-100 border border-default-400 dark:border-default-700 rounded-lg overflow-hidden cursor-crosshair select-none"
+                onClick={handleImageClick}
+                onTouchMove={handleTouchMove}
+                onTouchEnd={handleTouchEnd}
+              >
                 <img
                   ref={imageRef}
-                  src={imageSrc || "/placeholder.svg"}
+                  src={imageSrc}
                   alt="Uploaded"
                   className="w-full h-full object-contain"
+                  draggable={false}
                 />
+                
+                {/* Crosshair for touch mode */}
+                {crosshairPosition && (
+                  <div 
+                    className="absolute pointer-events-none z-10"
+                    style={{
+                      left: crosshairPosition.x - 10,
+                      top: crosshairPosition.y - 10,
+                      width: 20,
+                      height: 20,
+                      border: '2px solid #ff0000',
+                      borderRadius: '50%',
+                      backgroundColor: 'rgba(255, 0, 0, 0.2)'
+                    }}
+                  />
+                )}
               </div>
-              <Button
-                isIconOnly
-                color="danger"
-                aria-label="Reset image"
-                className="absolute top-2 right-2"
-                onClick={() => {
-                  setImageSrc(null)
-                  setFileName("")
-                  setDominantColors([])
-                }}
-              >
-                <X size={20} />
-              </Button>
+              
+              <div className="absolute top-2 right-2 flex gap-1">
+                <Button
+                  isIconOnly
+                  color="danger"
+                  aria-label="Remove image"
+                  size="sm"
+                  onClick={() => {
+                    setImageSrc(null)
+                    setFileName("")
+                    setDominantColors([])
+                    resetSelection()
+                    if (fileInputRef.current) {
+                      fileInputRef.current.value = ""
+                    }
+                  }}
+                >
+                  <X size={16} />
+                </Button>
+              </div>
               <canvas ref={canvasRef} className="hidden" />
             </div>
           )}
         </CardBody>
       </Card>
 
+      {/* Color Details */}
       {showColorDetails && selectedColor && (
-        <Card className="mt-6 bg-default-50 dark:bg-default-100">
+        <Card className="mb-6 bg-default-50 dark:bg-default-100">
           <CardBody>
-            <div className="flex items-center justify-between mb-4">
+            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-4">
               <h2 className="text-xl md:text-2xl font-bold">Selected Color</h2>
-              <Button onClick={resetSelection} color="danger">
+              <Button onClick={resetSelection} color="danger" size="sm">
                 <RefreshCw size={16} className="mr-2" />
                 Reset
               </Button>
             </div>
 
-            <div className="flex items-center space-x-4 mb-4">
+            <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 mb-4">
               <div
-                className="w-12 h-12 md:w-16 md:h-16 rounded-full border-4 border-default shadow-lg"
+                className="w-16 h-16 sm:w-20 sm:h-20 rounded-xl border-4 border-default shadow-lg flex-shrink-0"
                 style={{ backgroundColor: selectedColor }}
               />
-              <span className="text-lg md:text-xl font-semibold">{getColorString(selectedColor)}</span>
-              <Button onClick={() => copyToClipboard(getColorString(selectedColor))} size="sm" color="primary">
-                <Copy size={16} className="mr-2" />
-                Copy
-              </Button>
+              <div className="flex-1 min-w-0">
+                <div className="flex flex-col sm:flex-row gap-2 items-start sm:items-center">
+                  <span className="text-lg font-semibold break-all">{getColorString(selectedColor)}</span>
+                  <Button 
+                    onClick={() => copyToClipboard(getColorString(selectedColor))} 
+                    size="sm" 
+                    color="primary"
+                    className="flex-shrink-0"
+                  >
+                    <Copy size={14} className="mr-1" />
+                    Copy
+                  </Button>
+                </div>
+              </div>
             </div>
 
-            <Dropdown>
-              <DropdownTrigger>
-                <Button variant="bordered">{colorFormat.toUpperCase()}</Button>
-              </DropdownTrigger>
-              <DropdownMenu aria-label="Color format selection" onAction={(key) => setColorFormat(key as ColorFormat)}>
-                <DropdownItem key="hex" className="text-default-700">HEX</DropdownItem>
-                <DropdownItem key="rgb" className="text-default-700">RGB</DropdownItem>
-                <DropdownItem key="hsl" className="text-default-700">HSL</DropdownItem>
-              </DropdownMenu>
-            </Dropdown>
+            <div className="flex flex-wrap gap-2 mb-4">
+              <Dropdown>
+                <DropdownTrigger>
+                  <Button variant="bordered" size="sm">{colorFormat.toUpperCase()}</Button>
+                </DropdownTrigger>
+                <DropdownMenu aria-label="Color format selection" onAction={(key) => setColorFormat(key as ColorFormat)}>
+                  <DropdownItem key="hex" className="text-default-700">HEX</DropdownItem>
+                  <DropdownItem key="rgb" className="text-default-700">RGB</DropdownItem>
+                  <DropdownItem key="hsl" className="text-default-700">HSL</DropdownItem>
+                </DropdownMenu>
+              </Dropdown>
+            </div>
 
-            <div className="mt-4">
-              {colorFormat === "hex" && <p>HEX: {selectedColor}</p>}
-              {colorFormat === "rgb" &&
-                (() => {
-                  const rgb = hexToRgb(selectedColor)
-                  return rgb ? (
-                    <p>
-                      RGB: {rgb.r}, {rgb.g}, {rgb.b}
-                    </p>
-                  ) : (
-                    <p>Invalid color</p>
-                  )
-                })()}
-              {colorFormat === "hsl" &&
-                (() => {
-                  const rgb = hexToRgb(selectedColor)
-                  if (!rgb) return <p>Invalid color</p>
-                  const hsl = rgbToHsl(rgb.r, rgb.g, rgb.b)
-                  return (
-                    <p>
-                      HSL: {hsl.h}°, {hsl.s}%, {hsl.l}%
-                    </p>
-                  )
-                })()}
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-sm">
+              <div className="p-3 bg-default-200 rounded-lg">
+                <p className="font-semibold">HEX</p>
+                <p className="font-mono">{selectedColor}</p>
+              </div>
+              {(() => {
+                const rgb = hexToRgb(selectedColor)
+                return rgb ? (
+                  <div className="p-3 bg-default-200 rounded-lg">
+                    <p className="font-semibold">RGB</p>
+                    <p className="font-mono">{rgb.r}, {rgb.g}, {rgb.b}</p>
+                  </div>
+                ) : null
+              })()}
+              {(() => {
+                const rgb = hexToRgb(selectedColor)
+                if (!rgb) return null
+                const hsl = rgbToHsl(rgb.r, rgb.g, rgb.b)
+                return (
+                  <div className="p-3 bg-default-200 rounded-lg">
+                    <p className="font-semibold">HSL</p>
+                    <p className="font-mono">{hsl.h}°, {hsl.s}%, {hsl.l}%</p>
+                  </div>
+                )
+              })()}
             </div>
           </CardBody>
         </Card>
       )}
 
+      {/* Dominant Colors */}
       {dominantColors.length > 0 && (
-        <Card className="mt-6 bg-default-50 dark:bg-default-100">
+        <Card className="mb-6 bg-default-50 dark:bg-default-100">
           <CardBody>
-            <h3 className="text-lg font-semibold mb-2 flex items-center">
-              <Palette className="w-5 h-5 mr-2" />
-              Dominant Colors
-            </h3>
-            <div className="flex flex-wrap gap-2">
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="text-lg font-semibold flex items-center">
+                <Palette className="w-5 h-5 mr-2" />
+                Dominant Colors
+              </h3>
+              <Chip size="sm" variant="flat">{dominantColors.length} colors</Chip>
+            </div>
+            <div className="grid grid-cols-4 sm:grid-cols-8 gap-2">
               {dominantColors.map((color, index) => (
-                <div
-                  key={index}
-                  className="w-12 h-12 rounded-lg border-2 border-default cursor-pointer hover:scale-110 transition-transform flex flex-col items-center justify-center"
-                  style={{ backgroundColor: color }}
-                  onClick={() => {
-                    copyToClipboard(color)
-                    toast.success("Color copied to clipboard!")
-                  }}
-                  title={`Click to copy: ${color}`}
-                >
-                  <span className="text-xs font-bold text-white bg-black bg-opacity-50 px-1 rounded">{index + 1}</span>
-                </div>
+                <Tooltip key={index} content={`Click to copy: ${color}`} placement="top" className="text-default-700">
+                  <div
+                    className="aspect-square rounded-lg border-2 border-default cursor-pointer hover:scale-110 transition-transform flex items-center justify-center relative group"
+                    style={{ backgroundColor: color }}
+                    onClick={() => {
+                      copyToClipboard(color)
+                      toast.success("Color copied to clipboard!")
+                    }}
+                  >
+                    <span className="text-xs font-bold text-white bg-black/50 px-1 rounded opacity-0 group-hover:opacity-100 transition-opacity">
+                      {index + 1}
+                    </span>
+                  </div>
+                </Tooltip>
               ))}
             </div>
           </CardBody>
         </Card>
       )}
 
+      {/* Color History */}
       {colorHistory.length > 0 && (
-        <Card className="mt-6 bg-default-50 dark:bg-default-100">
+        <Card className="mb-6 bg-default-50 dark:bg-default-100">
           <CardBody>
-            <h3 className="text-lg font-semibold mb-2">Color History</h3>
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="text-lg font-semibold">Color History</h3>
+              <div className="flex items-center gap-2">
+                <Chip size="sm" variant="flat">{colorHistory.length}/10</Chip>
+                <Button 
+                  size="sm" 
+                  color="danger" 
+                  variant="light"
+                  onClick={() => setColorHistory([])}
+                >
+                  Clear
+                </Button>
+              </div>
+            </div>
             <div className="flex flex-wrap gap-2">
               {colorHistory.map((color, index) => (
-                <div
-                  key={index}
-                  className="w-8 h-8 rounded-full border-2 border-default cursor-pointer hover:scale-110 transition-transform"
-                  style={{ backgroundColor: color }}
-                  onClick={() => {
-                    copyToClipboard(color)
-                    toast.success("Color copied to clipboard!")
-                  }}
-                  title={`Click to copy: ${color}`}
-                />
+                <Tooltip key={index} content={`Click to copy: ${color}`} placement="top">
+                  <div
+                    className="w-10 h-10 sm:w-12 sm:h-12 rounded-full border-2 border-default cursor-pointer hover:scale-110 transition-transform shadow-md"
+                    style={{ backgroundColor: color }}
+                    onClick={() => {
+                      copyToClipboard(color)
+                      toast.success("Color copied to clipboard!")
+                    }}
+                  />
+                </Tooltip>
               ))}
             </div>
           </CardBody>
         </Card>
       )}
 
-        <Card className="mt-8 bg-default-50 dark:bg-default-100 p-4 md:p-8">
-        <div className="rounded-xl p-2 md:p-4 max-w-4xl mx-auto">
-            <h2 className="text-lg md:text-xl lg:text-2xl font-semibold text-default-700 mb-4 flex items-center">
-            <Info className="w-6 h-6 mr-2" />
-            What is the Image Color Picker?
-            </h2>
-            <p className="text-sm md:text-base text-default-600 mb-4">
-            Image Color Picker is a powerful device designed for designers, developers and color enthusiasts. This allows you to upload any image and remove the exact color information from it. Whether you are choosing a personal color or analyzes the major color palette of an entire image, our device provides you with accurate and easy-to-use color data.
-            </p>
-            <p className="text-sm md:text-base text-default-600 mb-4">
-            With features such as an ideopper tool for accurate color selection, major color extraction, and many color formats (hex, RGB, HSL), image color picker is an invaluable resource for anyone working with color in its projects. This is perfect for making united color schemes, matching colors with inspirational images, or simply searching for the color composition of your favorite photos.
-            </p>
-
-            <div className="my-8">
-            <NextImage
-                src="/Images/InfosectionImages/ImageColorPickerPreview.png?height=400&width=600"
-                alt="Screenshot of the Image Color Picker interface showing image upload area, color selection tools, and color analysis results"
-                width={600}
-                height={400}
-                className="rounded-lg shadow-lg w-full h-auto"
-            />
-            </div>
-
-            <h2 id="how-to-use" className="text-lg md:text-xl lg:text-2xl font-semibold text-default-700 mb-4 mt-8 flex items-center">
-            <BookOpen className="w-6 h-6 mr-2" />
-            How to Use the Image Color Picker?
-            </h2>
-            <ol className="list-decimal list-inside space-y-2 text-sm md:text-base">
-            <li>Upload an image by clicking the upload area or dragging and dropping a file.</li>
-            <li>
-                Once your image is uploaded, you can use the eyedropper tool to pick colors from specific areas of the image.
-            </li>
-            <li>Click the "Pick Image Color" button to activate the eyedropper tool.</li>
-            <li>Select a color from the image by clicking on it.</li>
-            <li>View the selected color's details in HEX, RGB, and HSL formats, click on the Drop down menu Hex button by default and then select the other formats. </li>
-            <li>Copy the color value to your clipboard by clicking the "Copy" button.</li>
-            <li>Explore the automatically extracted dominant colors from your image.</li>
-            <li>Access your recently picked colors from the color history section.</li>
-            </ol>
-
-            <h2 className="text-lg md:text-xl lg:text-2xl font-semibold text-default-700 mb-4 mt-8 flex items-center">
-            <Lightbulb className="w-6 h-6 mr-2" />
-            Key Features
-            </h2>
-            <ul className="list-disc list-inside space-y-2 text-sm md:text-base">
-            <li>Precise color picking with an eyedropper tool</li>
-            <li>Automatic extraction of dominant colors from the uploaded image</li>
-            <li>Support for multiple color formats: HEX, RGB, and HSL</li>
-            <li>Color history tracking for easy access to previously picked colors</li>
-            <li>One-click color copying to clipboard</li>
-            <li>Responsive design for seamless use on desktop and mobile devices</li>
-            <li>Real-time color format switching</li>
-            <li>Visual representation of picked and dominant colors</li>
-            <li>User-friendly interface with drag-and-drop image upload</li>
-            </ul>
-
-            <p className="text-sm md:text-base text-default-600 mt-4">
-            Are you ready to explore the world of colors in your images? Now start using our image color picker and unlock the power of accurate color selection and analysis. Whether you are working on a complex project a professional designer or searching an enthusiastic color theory, our equipment provides the required insight and functionality for you. Try it today and see how it can increase your color workflow and inspire your creative projects!
-            </p>
-        </div>
-        </Card>
-
+      <InfoSectionImageColorPicker />
     </ToolLayout>
   )
 }
-
