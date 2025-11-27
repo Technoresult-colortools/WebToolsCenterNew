@@ -21,13 +21,6 @@ import InfoSectionImageColorPicker from "./info-section"
 
 type ColorFormat = "hex" | "rgb" | "hsl"
 
-interface ColorInfo {
-  hex: string
-  rgb: { r: number; g: number; b: number }
-  hsl: { h: number; s: number; l: number }
-  name?: string
-}
-
 export default function ImageColorPicker() {
   const [selectedColor, setSelectedColor] = useState<string | null>(null)
   const [imageSrc, setImageSrc] = useState<string | null>(null)
@@ -278,7 +271,7 @@ export default function ImageColorPicker() {
         setTouchMode(true)
         toast.success("Touch mode activated! Tap on the image to pick colors", { duration: 3000 })
       }
-    } catch (error) {
+    } catch {
       // Fallback to touch mode
       setTouchMode(true)
       toast.success("Touch the image to pick colors", { duration: 3000 })
@@ -357,7 +350,7 @@ export default function ImageColorPicker() {
       try {
         document.execCommand('copy')
         toast.success("Copied to clipboard!")
-      } catch (error) {
+      } catch {
         toast.error("Failed to copy")
       }
       document.body.removeChild(textArea)
