@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import { Card, CardBody, Button, Input, Slider, Dropdown, DropdownTrigger, DropdownMenu, DropdownItem, Switch } from "@nextui-org/react";
-import { Download, Code,  Palette,  Shuffle, Upload, Trash2, Sparkles } from "lucide-react";
+import { Download, Code, Palette, Shuffle, Upload, Trash2, Sparkles } from "lucide-react";
 import { toast } from "react-hot-toast";
 import ToolLayout from "@/components/ToolLayout";
 import InfoSectionSVGBlob from "./info-section";
@@ -14,93 +14,93 @@ export default function SVGBlobGenerator() {
     const [edgeCount, setEdgeCount] = useState(8);
     const [complexity, setComplexity] = useState(0.7);
     const [smoothness, setSmoothness] = useState(0.5);
-    
+
     // Advanced blob parameters
     const [frequency, setFrequency] = useState(4);
     const [amplitude, setAmplitude] = useState(0.5);
     const [randomSeed, setRandomSeed] = useState(Math.random() * 1000);
-    
+
     // Animation state
     const [isShaking, setIsShaking] = useState(false);
-    
+
     // Image background settings
     const [useImageBackground, setUseImageBackground] = useState(false);
     const [backgroundUrl, setBackgroundUrl] = useState("");
     const [uploadedImage, setUploadedImage] = useState<string | null>(null);
     const [isLoadingImage, setIsLoadingImage] = useState(false);
-    
+
     // Unsplash API key - replace with your own
     const UNSPLASH_ACCESS_KEY = process.env.NEXT_PUBLIC_UNSPLASH_ACCESS_KEY;
-    
+
     // SVG state
     const [svgPath, setSvgPath] = useState("");
     const svgRef = useRef<SVGSVGElement>(null);
     const fileInputRef = useRef<HTMLInputElement>(null);
-    
+
     // Generate blob points using advanced algorithm
     const generateBlobPoints = useCallback(() => {
         const size = 480;
         const center = size / 2;
         const points: [number, number][] = [];
         const angleStep = (Math.PI * 2) / edgeCount;
-        
+
         // Maximum radius to prevent edge collision
         const maxRadius = center * 0.8;
         const minRadius = center * 0.2;
         const baseRadius = minRadius + (maxRadius - minRadius) * (growth / 10);
-        
+
         // Generate points at consistent angles
         for (let i = 0; i < edgeCount; i++) {
             const angle = i * angleStep;
-            
+
             // Add high-frequency detail using sine waves
             const sineWave = Math.sin(angle * frequency) * amplitude;
-            
+
             // Create randomness based on angle and seed
             const randomFactor = (Math.sin(angle * randomSeed) + Math.cos(angle * randomSeed * 0.7)) * 0.5;
-            
+
             // Scale randomness based on available space
             const maxRandomness = (maxRadius - baseRadius) * complexity;
             const randomness = (randomFactor * maxRandomness) + (sineWave * maxRandomness);
-            
+
             // Apply smoothness to radius calculation
             const wobble = Math.sin(angle * 3) * smoothness * (maxRadius - baseRadius) * 0.2;
-            
+
             // Ensure radius stays within bounds
             const radius = Math.min(Math.max(baseRadius + randomness + wobble, minRadius), maxRadius);
-            
+
             const x = center + Math.cos(angle) * radius;
             const y = center + Math.sin(angle) * radius;
             points.push([x, y]);
         }
-        
+
         return points;
     }, [growth, edgeCount, complexity, smoothness, frequency, amplitude, randomSeed]);
 
     // Generate path using advanced curve method
     const generateAdvancedPath = useCallback((points: [number, number][]) => {
         if (points.length === 0) return "";
-        
+
         let path = `M${points[0][0]},${points[0][1]} `;
-        
+
         // Create smooth curves using cubic bezier for better smoothness
         for (let i = 0; i < points.length; i++) {
             const current = points[i];
             const next = points[(i + 1) % points.length];
             const prev = points[(i - 1 + points.length) % points.length];
             const afterNext = points[(i + 2) % points.length];
-            
+
             // Calculate control points for smoother curves
             const cp1x = current[0] + (next[0] - prev[0]) * smoothness * 0.25;
             const cp1y = current[1] + (next[1] - prev[1]) * smoothness * 0.25;
-            
+
             const cp2x = next[0] - (afterNext[0] - current[0]) * smoothness * 0.25;
             const cp2y = next[1] - (afterNext[1] - current[1]) * smoothness * 0.25;
-            
+
             // Use cubic bezier for smoother curves
             path += `C${cp1x},${cp1y} ${cp2x},${cp2y} ${next[0]},${next[1]} `;
         }
-        
+
         path += "Z";
         return path;
     }, [smoothness]);
@@ -114,7 +114,7 @@ export default function SVGBlobGenerator() {
     useEffect(() => {
         generateBlob();
     }, [generateBlob]);
-    
+
     // Handle image upload
     const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
         const file = event.target.files?.[0];
@@ -123,7 +123,7 @@ export default function SVGBlobGenerator() {
                 toast.error("Image size should be less than 5MB");
                 return;
             }
-            
+
             const reader = new FileReader();
             reader.onload = (e) => {
                 const result = e.target?.result as string;
@@ -135,7 +135,7 @@ export default function SVGBlobGenerator() {
             reader.readAsDataURL(file);
         }
     };
-    
+
     const handleRemoveImage = () => {
         setUploadedImage(null);
         setBackgroundUrl("");
@@ -145,7 +145,7 @@ export default function SVGBlobGenerator() {
         }
         toast.success("Image removed");
     };
-    
+
     const handleShuffleImage = async () => {
         try {
             setIsLoadingImage(true);
@@ -157,11 +157,11 @@ export default function SVGBlobGenerator() {
                     }
                 }
             );
-            
+
             if (!response.ok) {
                 throw new Error('Failed to fetch image');
             }
-            
+
             const data = await response.json();
             setBackgroundUrl(data.urls.regular);
             setUploadedImage(null); // Clear uploaded image when using Unsplash
@@ -174,7 +174,7 @@ export default function SVGBlobGenerator() {
             setIsLoadingImage(false);
         }
     };
-    
+
     // Trigger blob regeneration with a new seed
     const handleShuffle = () => {
         const newSeed = Math.random() * 1000;
@@ -183,7 +183,7 @@ export default function SVGBlobGenerator() {
         setTimeout(() => setIsShaking(false), 500);
         toast.success("New blob shape generated!");
     };
-    
+
     const handleRandomizeAll = () => {
         setIsShaking(true);
         setEdgeCount(Math.floor(Math.random() * 12) + 5);
@@ -196,7 +196,7 @@ export default function SVGBlobGenerator() {
         setTimeout(() => setIsShaking(false), 500);
         toast.success("All parameters randomized!");
     };
-    
+
     const getSVGContent = () => {
         // Escape special characters in URLs for proper XML format
         const escapedUrl = backgroundUrl
@@ -205,7 +205,7 @@ export default function SVGBlobGenerator() {
             .replace(/>/g, '&gt;')
             .replace(/"/g, '&quot;')
             .replace(/'/g, '&apos;');
-            
+
         return `<svg viewBox="0 0 480 480" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
     ${useImageBackground && backgroundUrl ? `
     <defs>
@@ -217,10 +217,10 @@ export default function SVGBlobGenerator() {
     ` : `<path fill="${fillColor}" d="${svgPath}" />`}
   </svg>`;
     };
-    
+
     const handleExport = async (key: string) => {
         const svgContent = getSVGContent();
-        
+
         switch (key) {
             case "svg":
                 try {
@@ -239,26 +239,26 @@ export default function SVGBlobGenerator() {
                     toast.error("Failed to export SVG");
                 }
                 break;
-            
+
             case "png":
                 try {
                     const canvas = document.createElement("canvas");
                     canvas.width = 480;
                     canvas.height = 480;
                     const ctx = canvas.getContext("2d");
-                    
+
                     if (!ctx) {
                         toast.error("Failed to create canvas context");
                         return;
                     }
-                    
+
                     const img = new Image();
-                    
+
                     img.onload = () => {
                         ctx.fillStyle = "white";
                         ctx.fillRect(0, 0, 480, 480);
                         ctx.drawImage(img, 0, 0, 480, 480);
-                        
+
                         canvas.toBlob((blob) => {
                             if (blob) {
                                 const url = URL.createObjectURL(blob);
@@ -275,16 +275,16 @@ export default function SVGBlobGenerator() {
                             }
                         }, "image/png");
                     };
-                    
+
                     img.onerror = () => {
                         toast.error("Failed to load SVG for PNG export");
                     };
-                    
+
                     // Use encodeURIComponent for better compatibility
                     const svgBlob = new Blob([svgContent], { type: "image/svg+xml;charset=utf-8" });
                     const svgUrl = URL.createObjectURL(svgBlob);
                     img.src = svgUrl;
-                    
+
                     // Clean up the temporary URL after a delay
                     setTimeout(() => URL.revokeObjectURL(svgUrl), 100);
                 } catch (error) {
@@ -292,7 +292,7 @@ export default function SVGBlobGenerator() {
                     toast.error("Failed to export PNG");
                 }
                 break;
-            
+
             case "code":
                 try {
                     await navigator.clipboard.writeText(svgContent);
@@ -309,7 +309,7 @@ export default function SVGBlobGenerator() {
                     try {
                         document.execCommand('copy');
                         toast.success("SVG code copied to clipboard!");
-                    } catch (err) {
+                    } catch {
                         toast.error("Failed to copy to clipboard");
                     }
                     document.body.removeChild(textArea);
@@ -317,7 +317,7 @@ export default function SVGBlobGenerator() {
                 break;
         }
     };
-  
+
     return (
         <ToolLayout
             title="SVG Blob Generator"
@@ -356,27 +356,27 @@ export default function SVGBlobGenerator() {
                                     )}
                                 </svg>
                             </div>
-                            
+
                             {/* Controls section */}
                             <div className="space-y-4">
                                 {/* Action buttons */}
                                 <div className="flex flex-wrap gap-2 mb-6">
-                                    <Button 
-                                        color="primary" 
+                                    <Button
+                                        color="primary"
                                         onPress={handleShuffle}
                                         startContent={<Shuffle className="w-4 h-4" />}
                                     >
                                         Shuffle Blob
                                     </Button>
-                                    
-                                    <Button 
-                                        color="secondary" 
+
+                                    <Button
+                                        color="secondary"
                                         onPress={handleRandomizeAll}
                                         startContent={<Sparkles className="w-4 h-4" />}
                                     >
                                         Randomize All
                                     </Button>
-                                    
+
                                     <Dropdown>
                                         <DropdownTrigger>
                                             <Button color="primary">
@@ -396,7 +396,7 @@ export default function SVGBlobGenerator() {
                                         </DropdownMenu>
                                     </Dropdown>
                                 </div>
-                                
+
                                 {/* Main controls */}
                                 <div className="space-y-6">
                                     {/* Image background controls - MOVED TO TOP */}
@@ -408,7 +408,7 @@ export default function SVGBlobGenerator() {
                                             />
                                             <span className="font-medium">Use Image Background</span>
                                         </div>
-                                        
+
                                         {useImageBackground && (
                                             <div className="space-y-3">
                                                 <input
@@ -418,21 +418,21 @@ export default function SVGBlobGenerator() {
                                                     onChange={handleImageUpload}
                                                     className="hidden"
                                                 />
-                                                
+
                                                 {/* Show preview if there's any image */}
                                                 {(uploadedImage || backgroundUrl) && (
                                                     <div className="relative rounded-lg overflow-hidden border-2 border-primary/20 mb-3">
-                                                        <img 
-                                                            src={uploadedImage || backgroundUrl} 
-                                                            alt="Background preview" 
+                                                        <img
+                                                            src={uploadedImage || backgroundUrl}
+                                                            alt="Background preview"
                                                             className="w-full h-24 object-cover"
                                                         />
                                                     </div>
                                                 )}
-                                                
+
                                                 <div className="flex gap-2">
-                                                    <Button 
-                                                        color="primary" 
+                                                    <Button
+                                                        color="primary"
                                                         variant="flat"
                                                         onPress={() => fileInputRef.current?.click()}
                                                         startContent={<Upload className="w-4 h-4" />}
@@ -441,8 +441,8 @@ export default function SVGBlobGenerator() {
                                                     >
                                                         Upload Image
                                                     </Button>
-                                                    <Button 
-                                                        color="secondary" 
+                                                    <Button
+                                                        color="secondary"
                                                         variant="flat"
                                                         onPress={handleShuffleImage}
                                                         startContent={<Shuffle className="w-4 h-4" />}
@@ -452,10 +452,10 @@ export default function SVGBlobGenerator() {
                                                         Random Image
                                                     </Button>
                                                 </div>
-                                                
+
                                                 {(uploadedImage || backgroundUrl) && (
-                                                    <Button 
-                                                        color="danger" 
+                                                    <Button
+                                                        color="danger"
                                                         variant="flat"
                                                         size="sm"
                                                         onPress={handleRemoveImage}
@@ -468,7 +468,7 @@ export default function SVGBlobGenerator() {
                                             </div>
                                         )}
                                     </div>
-                                    
+
                                     {/* Color picker - only show when not using image */}
                                     {!useImageBackground && (
                                         <div className="flex items-center gap-3">
@@ -484,11 +484,11 @@ export default function SVGBlobGenerator() {
                                             />
                                         </div>
                                     )}
-                                    
+
                                     {/* Sliders section */}
                                     <div className="space-y-3">
                                         <h3 className="text-md font-medium">Shape Controls</h3>
-                                        
+
                                         <Slider
                                             label="Growth"
                                             step={0.1}
@@ -499,7 +499,7 @@ export default function SVGBlobGenerator() {
                                             className="max-w-md mb-3"
                                             showSteps={true}
                                         />
-                                        
+
                                         <Slider
                                             label="Edge Count"
                                             step={1}
@@ -510,7 +510,7 @@ export default function SVGBlobGenerator() {
                                             className="max-w-md mb-3"
                                             showSteps={true}
                                         />
-                                        
+
                                         <Slider
                                             label="Complexity"
                                             step={0.01}
@@ -520,7 +520,7 @@ export default function SVGBlobGenerator() {
                                             onChange={(value) => setComplexity(Number(value))}
                                             className="max-w-md mb-3"
                                         />
-                                        
+
                                         <Slider
                                             label="Smoothness"
                                             step={0.01}
@@ -531,11 +531,11 @@ export default function SVGBlobGenerator() {
                                             className="max-w-md mb-3"
                                         />
                                     </div>
-                                    
+
                                     {/* Advanced controls section */}
                                     <div className="space-y-3">
                                         <h3 className="text-md font-medium">Wave Controls</h3>
-                                        
+
                                         <Slider
                                             label="Wave Frequency"
                                             step={1}
@@ -546,7 +546,7 @@ export default function SVGBlobGenerator() {
                                             className="max-w-md mb-3"
                                             showSteps={true}
                                         />
-                                        
+
                                         <Slider
                                             label="Wave Amplitude"
                                             step={0.01}
@@ -563,7 +563,7 @@ export default function SVGBlobGenerator() {
                     </CardBody>
                 </Card>
             </div>
-            
+
             {/* Add animation keyframes */}
             <style jsx global>{`
                 @keyframes blob-shake {

@@ -2,21 +2,12 @@
 
 import type React from "react"
 import { useState, useRef, useCallback, useEffect } from "react"
-import NextImage from "next/image"
 import { Card, CardBody, Button, RadioGroup, Radio, Slider, Divider } from "@nextui-org/react"
 import { toast } from "react-hot-toast"
 import {
   Upload,
   Download,
   RefreshCw,
-  Info,
-  Lightbulb,
-  BookOpen,
-  Scissors,
-  Eye,
-  Lock,
-  SlidersHorizontal,
-  Smartphone,
   Loader2,
 } from "lucide-react"
 import ToolLayout from "@/components/ToolLayout"
@@ -300,7 +291,7 @@ const PhotoCensor: React.FC = () => {
       <div className="flex flex-col gap-6">
         <Card className="bg-default-50 dark:bg-default-100">
           <CardBody className="p-6">
-          <h2 className="text-xl sm:text-1xl md:text-2xl font-bold text-primary mb-4">Upload an Image</h2>
+            <h2 className="text-xl sm:text-1xl md:text-2xl font-bold text-primary mb-4">Upload an Image</h2>
             <label className="flex flex-col items-center justify-center h-32 px-4 py-6 bg-default-100 text-primary rounded-lg shadow-md tracking-wide uppercase border-2 border-primary border-dashed cursor-pointer hover:bg-primary-100 hover:text-primary-600 transition duration-300">
               <Upload size={32} />
               <span className="mt-2 text-sm sm:text-base md:text-md leading-normal text-center block">Select a file or drag and drop</span>

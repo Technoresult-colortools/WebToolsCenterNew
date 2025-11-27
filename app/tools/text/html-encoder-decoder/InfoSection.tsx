@@ -10,19 +10,14 @@ import {
   ShieldCheck,  // Use Case: Preventing XSS, Advanced Tip: Security First
   Braces,       // Key Feature: Encode & Decode, How to Use: Select Mode, Use Case: HTML Attributes
   Settings2,    // Key Feature: Granular Encoding, How to Use: Configure Options
-  ClipboardPaste, // How to Use: Input Text
   ListChecks,   // Use Case section icon
-  Wand2,        // How to Use: Process
   Copy,         // Key Feature: Easy I/O, How to Use: View & Use Output
   Zap,          // Key Feature: Auto-Processing, Advanced Tips section icon
   Layers,       // Key Feature: Multiple Entity Types, Advanced Tip: Choosing Entity Types
   TerminalSquare, // Use Case: Displaying Code
   Globe,        // Use Case: Internationalization, Advanced Tip: Non-ASCII Characters
-    // Implied in Easy I/O
-  Repeat,       // For Encode/Decode modes
   Hash,         // For Numeric entities (Decimal/Hex)
   Type,         // For Named entities
-    // If export to JSON is a feature
   Eye,
   UploadCloud,
   Filter,

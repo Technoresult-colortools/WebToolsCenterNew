@@ -29,10 +29,10 @@ import {
   Aperture,   // Filter Type: Blur
   Sparkles,   // Filter Type: Effects, Tips
   Mountain,   // Tip: Landscapes
-  ImageUp,    // How to use: Upload
+
   Download,   // How to use: Export
   RotateCcw,  // How to use: Undo
-  RotateCw,   // How to use: Redo
+
   CheckSquare, // How to use: Multiple Filters Mode toggle
   Heart,       // How to use: Favorite
   Copy,        // How to use: Save as base
@@ -147,7 +147,7 @@ export default function InfoSectionImageFilters() {
                 <strong className="text-default-700">Use advanced features:</strong>
               </div>
               <div className="ml-6 space-y-2">
-                 <div className="flex items-start gap-2">
+                <div className="flex items-start gap-2">
                   <CheckSquare className="w-3 h-3 mt-0.5 text-gray-500 flex-shrink-0" />
                   <div>
                     <strong className="text-default-700">Stack Filters:</strong>
@@ -174,7 +174,7 @@ export default function InfoSectionImageFilters() {
                 <Eye className="w-4 h-4 text-purple-500 flex-shrink-0" />
                 <strong className="text-default-700">Review and manage edits:</strong>
               </div>
-               <div className="ml-6 space-y-2">
+              <div className="ml-6 space-y-2">
                 <div className="flex items-start gap-2">
                   <FileDiff className="w-3 h-3 mt-0.5 text-gray-500 flex-shrink-0" />
                   <div>
@@ -189,7 +189,7 @@ export default function InfoSectionImageFilters() {
                     <span className="text-default-600 ml-1">Use Undo/Redo to navigate your editing history.</span>
                   </div>
                 </div>
-                 <div className="flex items-start gap-2">
+                <div className="flex items-start gap-2">
                   <Copy className="w-3 h-3 mt-0.5 text-gray-500 flex-shrink-0" />
                   <div>
                     <strong className="text-default-700">Set New Base:</strong>
@@ -228,7 +228,7 @@ export default function InfoSectionImageFilters() {
               <span className="block mt-1">Control fundamental aspects like Brightness, Contrast, Saturation, and Exposure.</span>
             </div>
           </div>
-          
+
           <div className="flex items-start gap-3">
             <Palette className="w-5 h-5 mt-0.5 text-secondary-500 flex-shrink-0" />
             <div>
@@ -236,7 +236,7 @@ export default function InfoSectionImageFilters() {
               <span className="block mt-1">Apply popular styles such as Grayscale, Sepia, Vintage, Invert, and Posterize.</span>
             </div>
           </div>
-          
+
           <div className="flex items-start gap-3">
             <Droplets className="w-5 h-5 mt-0.5 text-success-500 flex-shrink-0" />
             <div>
@@ -244,7 +244,7 @@ export default function InfoSectionImageFilters() {
               <span className="block mt-1">Adjust Hue, apply Duotone effects, Color Tint, or manipulate specific color channels.</span>
             </div>
           </div>
-          
+
           <div className="flex items-start gap-3">
             <Aperture className="w-5 h-5 mt-0.5 text-warning-500 flex-shrink-0" />
             <div>
@@ -252,7 +252,7 @@ export default function InfoSectionImageFilters() {
               <span className="block mt-1">Add Gaussian Blur, Box Blur, or sharpen details to enhance focus or create depth.</span>
             </div>
           </div>
-          
+
           <div className="flex items-start gap-3">
             <Sparkles className="w-5 h-5 mt-0.5 text-danger-500 flex-shrink-0" />
             <div>
@@ -260,7 +260,7 @@ export default function InfoSectionImageFilters() {
               <span className="block mt-1">Experiment with Pixelate, Vignette, Noise, Glitch, Custom Drop Shadows, and more unique transformations.</span>
             </div>
           </div>
-          
+
           <div className="flex items-start gap-3">
             <Settings2 className="w-5 h-5 mt-0.5 text-primary-500 flex-shrink-0" />
             <div>
@@ -282,7 +282,7 @@ export default function InfoSectionImageFilters() {
               <span className="block mt-1">A diverse collection of basic, artistic, and advanced effects to suit any style.</span>
             </div>
           </div>
-          
+
           <div className="flex items-start gap-3">
             <Eye className="w-5 h-5 mt-0.5 text-secondary-500 flex-shrink-0" />
             <div>
@@ -290,7 +290,7 @@ export default function InfoSectionImageFilters() {
               <span className="block mt-1">See changes applied to your image immediately as you select filters or adjust settings.</span>
             </div>
           </div>
-          
+
           <div className="flex items-start gap-3">
             <Layers className="w-5 h-5 mt-0.5 text-success-500 flex-shrink-0" />
             <div>
@@ -298,7 +298,7 @@ export default function InfoSectionImageFilters() {
               <span className="block mt-1">Layer and combine multiple filters to create unique and sophisticated visual effects.</span>
             </div>
           </div>
-          
+
           <div className="flex items-start gap-3">
             <SlidersHorizontal className="w-5 h-5 mt-0.5 text-warning-500 flex-shrink-0" />
             <div>
@@ -306,7 +306,7 @@ export default function InfoSectionImageFilters() {
               <span className="block mt-1">Fine-tune the strength of each applied filter for subtle or dramatic results.</span>
             </div>
           </div>
-          
+
           <div className="flex items-start gap-3">
             <GitCompareArrows className="w-5 h-5 mt-0.5 text-danger-500 flex-shrink-0" />
             <div>
@@ -314,7 +314,7 @@ export default function InfoSectionImageFilters() {
               <span className="block mt-1">Easily toggle between original and edited versions, or use side-by-side views for detailed comparison.</span>
             </div>
           </div>
-          
+
           <div className="flex items-start gap-3">
             <Star className="w-5 h-5 mt-0.5 text-primary-500 flex-shrink-0" />
             <div>
@@ -463,7 +463,7 @@ export default function InfoSectionImageFilters() {
                 <strong>Experiment for Mood:</strong> Different filter combinations can evoke various moods (e.g., warm vintage, cool modern, dramatic monochrome). Explore to find what fits your vision.
               </div>
             </li>
-             <li className="flex items-start">
+            <li className="flex items-start">
               <div className="bg-primary-100 dark:bg-primary-900/30 p-1 rounded-full mr-3 mt-0.5">
                 <User className="w-4 h-4 mr-1 text-primary-500" /> <Mountain className="w-4 h-4 text-primary-500" />
               </div>
@@ -471,7 +471,7 @@ export default function InfoSectionImageFilters() {
                 <strong>Tailor to Subject:</strong> Some filters work better for portraits (e.g., skin smoothing, soft focus) while others excel for landscapes (e.g., HDR effects, vibrant saturation).
               </div>
             </li>
-             <li className="flex items-start">
+            <li className="flex items-start">
               <div className="bg-secondary-100 dark:bg-secondary-900/30 p-1 rounded-full mr-3 mt-0.5">
                 <Droplets className="w-4 h-4 text-secondary-500" />
               </div>

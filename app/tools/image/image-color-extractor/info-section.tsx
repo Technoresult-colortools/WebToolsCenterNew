@@ -18,7 +18,6 @@ import {
   FileImage,
   Hash,
   Pipette,
-  CloudHail as ColorWheel,
   Brush,
   ImageIcon,
   Scissors,
@@ -63,7 +62,7 @@ export default function InfoSectionImageColorExtractor() {
           </Link>
         </div>
 
-       <h2 id="how-to-use" className="text-2xl font-semibold text-default-700 mb-4 mt-8 flex items-center">
+        <h2 id="how-to-use" className="text-2xl font-semibold text-default-700 mb-4 mt-8 flex items-center">
           <BookOpen className="w-6 h-6 mr-2 text-primary-500" />
           How to Use the Image Color Extractor?
         </h2>

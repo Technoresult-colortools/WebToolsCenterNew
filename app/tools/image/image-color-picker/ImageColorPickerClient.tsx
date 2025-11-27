@@ -15,7 +15,7 @@ import {
   Tooltip,
 } from "@nextui-org/react"
 import { Upload, X, RefreshCw, Pipette, Copy, Palette, Camera } from "lucide-react"
-import { Toast, toast } from "react-hot-toast"
+import { toast } from "react-hot-toast"
 import ToolLayout from "@/components/ToolLayout"
 import InfoSectionImageColorPicker from "./info-section"
 
@@ -41,7 +41,7 @@ export default function ImageColorPicker() {
   const [isProcessing, setIsProcessing] = useState(false)
   const [touchMode, setTouchMode] = useState(false)
   const [crosshairPosition, setCrosshairPosition] = useState<{ x: number; y: number } | null>(null)
-  
+
   const fileInputRef = useRef<HTMLInputElement>(null)
   const imageRef = useRef<HTMLImageElement>(null)
   const canvasRef = useRef<HTMLCanvasElement>(null)
@@ -57,10 +57,10 @@ export default function ImageColorPicker() {
     const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex)
     return result
       ? {
-          r: Number.parseInt(result[1], 16),
-          g: Number.parseInt(result[2], 16),
-          b: Number.parseInt(result[3], 16),
-        }
+        r: Number.parseInt(result[1], 16),
+        g: Number.parseInt(result[2], 16),
+        b: Number.parseInt(result[3], 16),
+      }
       : null
   }
 
@@ -110,14 +110,14 @@ export default function ImageColorPicker() {
   const processFile = (file: File) => {
     setIsProcessing(true)
     setFileName(file.name)
-    
+
     // Validate file type and size
     if (!file.type.startsWith('image/')) {
       toast.error("Please select a valid image file")
       setIsProcessing(false)
       return
     }
-    
+
     if (file.size > 10 * 1024 * 1024) { // 10MB limit
       toast.error("File size too large. Please select an image under 10MB")
       setIsProcessing(false)
@@ -146,13 +146,13 @@ export default function ImageColorPicker() {
         const canvas = canvasRef.current!
         const maxSize = 1920 // Limit canvas size for performance
         let { width, height } = img
-        
+
         if (width > maxSize || height > maxSize) {
           const ratio = Math.min(maxSize / width, maxSize / height)
           width *= ratio
           height *= ratio
         }
-        
+
         canvas.width = width
         canvas.height = height
         const ctx = canvas.getContext("2d")!
@@ -194,25 +194,25 @@ export default function ImageColorPicker() {
   // Enhanced color picking with mobile support
   const getColorFromCoordinates = useCallback((x: number, y: number) => {
     if (!canvasRef.current) return null
-    
+
     const canvas = canvasRef.current
     const ctx = canvas.getContext("2d")!
     const imageData = ctx.getImageData(x, y, 1, 1)
     const [r, g, b] = imageData.data
-    
+
     return rgbToHex(r, g, b)
   }, [])
 
   const handleImageClick = useCallback((e: React.MouseEvent | React.TouchEvent) => {
     if (!imageContainerRef.current || !canvasRef.current) return
-    
+
     const rect = imageContainerRef.current.getBoundingClientRect()
     const clientX = 'touches' in e ? e.touches[0].clientX : e.clientX
     const clientY = 'touches' in e ? e.touches[0].clientY : e.clientY
-    
+
     const x = Math.round(clientX - rect.left)
     const y = Math.round(clientY - rect.top)
-    
+
     // Ensure coordinates are within canvas bounds
     if (x >= 0 && y >= 0 && x < canvasRef.current.width && y < canvasRef.current.height) {
       const color = getColorFromCoordinates(x, y)
@@ -228,13 +228,13 @@ export default function ImageColorPicker() {
   // Touch support for mobile
   const handleTouchMove = useCallback((e: React.TouchEvent) => {
     if (!touchMode || !imageContainerRef.current) return
-    
+
     e.preventDefault()
     const rect = imageContainerRef.current.getBoundingClientRect()
     const touch = e.touches[0]
     const x = touch.clientX - rect.left
     const y = touch.clientY - rect.top
-    
+
     setCrosshairPosition({ x, y })
   }, [touchMode])
 
@@ -294,29 +294,29 @@ export default function ImageColorPicker() {
     const canvas = canvasRef.current
     const ctx = canvas.getContext("2d")!
     const { width, height } = canvas
-    
+
     // Sample fewer pixels for better performance
     const sampleSize = Math.min(width * height, 10000)
     const stepSize = Math.max(1, Math.floor((width * height) / sampleSize))
-    
+
     const colorCounts: { [key: string]: number } = {}
-    
+
     for (let i = 0; i < width * height; i += stepSize * 4) {
       const x = (i / 4) % width
       const y = Math.floor(i / 4 / width)
-      
+
       if (x < width && y < height) {
         const imageData = ctx.getImageData(x, y, 1, 1)
         const [r, g, b, a] = imageData.data
-        
+
         // Skip transparent pixels
         if (a < 128) continue
-        
+
         // Group similar colors
         const groupedR = Math.floor(r / 32) * 32
         const groupedG = Math.floor(g / 32) * 32
         const groupedB = Math.floor(b / 32) * 32
-        
+
         const hex = rgbToHex(groupedR, groupedG, groupedB)
         colorCounts[hex] = (colorCounts[hex] || 0) + 1
       }
@@ -357,7 +357,7 @@ export default function ImageColorPicker() {
       try {
         document.execCommand('copy')
         toast.success("Copied to clipboard!")
-      } catch (err) {
+      } catch (error) {
         toast.error("Failed to copy")
       }
       document.body.removeChild(textArea)
@@ -387,8 +387,8 @@ export default function ImageColorPicker() {
   }
 
   return (
-    <ToolLayout 
-      title="Image Color Picker" 
+    <ToolLayout
+      title="Image Color Picker"
       description="Effortlessly extract and capture colors from any image"
       toolId="678f382a26f06f912191bc90"
     >
@@ -396,9 +396,9 @@ export default function ImageColorPicker() {
         <CardBody>
           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-4">
             <div className="flex flex-wrap gap-2">
-              <Button 
-                onClick={handleImageEyeDropper} 
-                disabled={isImageEyeDropperActive || !imageSrc} 
+              <Button
+                onClick={handleImageEyeDropper}
+                disabled={isImageEyeDropperActive || !imageSrc}
                 color="primary"
                 className="flex-1 sm:flex-none"
               >
@@ -406,7 +406,7 @@ export default function ImageColorPicker() {
                 {touchMode ? "Touch Mode Active" : "Pick Color"}
               </Button>
             </div>
-            
+
             <div className="flex gap-2">
               <Button onClick={() => fileInputRef.current?.click()} size="sm" variant="bordered">
                 <Upload className="h-4 w-4 mr-2" />
@@ -436,9 +436,8 @@ export default function ImageColorPicker() {
 
           {!imageSrc ? (
             <label
-              className={`flex flex-col items-center justify-center h-48 sm:h-64 px-4 py-6 bg-default-100 text-primary rounded-lg shadow-lg tracking-wide uppercase border-2 ${
-                isDragging ? "border-primary bg-primary-100" : "border-primary border-dashed"
-              } cursor-pointer hover:bg-primary-100 hover:text-primary-600 transition duration-300`}
+              className={`flex flex-col items-center justify-center h-48 sm:h-64 px-4 py-6 bg-default-100 text-primary rounded-lg shadow-lg tracking-wide uppercase border-2 ${isDragging ? "border-primary bg-primary-100" : "border-primary border-dashed"
+                } cursor-pointer hover:bg-primary-100 hover:text-primary-600 transition duration-300`}
               onDragEnter={handleDragEnter}
               onDragLeave={handleDragLeave}
               onDragOver={handleDragOver}
@@ -452,18 +451,18 @@ export default function ImageColorPicker() {
                 Supports JPG, PNG, GIF, WEBP (Max 10MB)
               </span>
               <input ref={fileInputRef} type="file" className="hidden" onChange={handleFileChange} accept="image/*" />
-              <input 
-                ref={cameraInputRef} 
-                type="file" 
-                className="hidden" 
-                onChange={handleFileChange} 
-                accept="image/*" 
+              <input
+                ref={cameraInputRef}
+                type="file"
+                className="hidden"
+                onChange={handleFileChange}
+                accept="image/*"
                 capture="environment"
               />
             </label>
           ) : (
             <div ref={imageContainerRef} className="relative">
-              <div 
+              <div
                 className="relative h-48 sm:h-64 md:h-96 bg-default-100 border border-default-400 dark:border-default-700 rounded-lg overflow-hidden cursor-crosshair select-none"
                 onClick={handleImageClick}
                 onTouchMove={handleTouchMove}
@@ -476,10 +475,10 @@ export default function ImageColorPicker() {
                   className="w-full h-full object-contain"
                   draggable={false}
                 />
-                
+
                 {/* Crosshair for touch mode */}
                 {crosshairPosition && (
-                  <div 
+                  <div
                     className="absolute pointer-events-none z-10"
                     style={{
                       left: crosshairPosition.x - 10,
@@ -493,7 +492,7 @@ export default function ImageColorPicker() {
                   />
                 )}
               </div>
-              
+
               <div className="absolute top-2 right-2 flex gap-1">
                 <Button
                   isIconOnly
@@ -539,9 +538,9 @@ export default function ImageColorPicker() {
               <div className="flex-1 min-w-0">
                 <div className="flex flex-col sm:flex-row gap-2 items-start sm:items-center">
                   <span className="text-lg font-semibold break-all">{getColorString(selectedColor)}</span>
-                  <Button 
-                    onClick={() => copyToClipboard(getColorString(selectedColor))} 
-                    size="sm" 
+                  <Button
+                    onClick={() => copyToClipboard(getColorString(selectedColor))}
+                    size="sm"
                     color="primary"
                     className="flex-shrink-0"
                   >
@@ -636,9 +635,9 @@ export default function ImageColorPicker() {
               <h3 className="text-lg font-semibold">Color History</h3>
               <div className="flex items-center gap-2">
                 <Chip size="sm" variant="flat">{colorHistory.length}/10</Chip>
-                <Button 
-                  size="sm" 
-                  color="danger" 
+                <Button
+                  size="sm"
+                  color="danger"
                   variant="light"
                   onClick={() => setColorHistory([])}
                 >

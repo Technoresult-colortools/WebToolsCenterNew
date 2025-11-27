@@ -20,8 +20,6 @@ import {
   MessageSquare, // Use Case: Creative Messaging
   Lock,         // Use Case: Simple Obfuscation
   GraduationCap,// Use Case: Educational Tool
-  ClipboardPaste, // For "Input your text"
-  ListChecks,   // For "Choose scrambling method"
   Eye,          // For "Tips for Best Results" / Readability
   Layers,       // For "Intensity" control
   Wand2,
@@ -190,7 +188,7 @@ export default function InfoSection() {
               <span className="block mt-1">Choose from various methods like random shuffle, reverse, sort, etc.</span>
             </div>
           </div>
-          
+
           <div className="flex items-start gap-3">
             <Settings2 className="w-5 h-5 mt-0.5 text-secondary-500 flex-shrink-0" />
             <div>
@@ -198,7 +196,7 @@ export default function InfoSection() {
               <span className="block mt-1">Control over preserving first/last letters, case sensitivity, and scrambling intensity.</span>
             </div>
           </div>
-          
+
           <div className="flex items-start gap-3">
             <Type className="w-5 h-5 mt-0.5 text-success-500 flex-shrink-0" />
             <div>
@@ -206,7 +204,7 @@ export default function InfoSection() {
               <span className="block mt-1">Works with single words, sentences, or entire paragraphs.</span>
             </div>
           </div>
-          
+
           <div className="flex items-start gap-3">
             <Eye className="w-5 h-5 mt-0.5 text-warning-500 flex-shrink-0" />
             <div>
@@ -214,7 +212,7 @@ export default function InfoSection() {
               <span className="block mt-1">Options like "Preserve Ends" help maintain some legibility.</span>
             </div>
           </div>
-          
+
           <div className="flex items-start gap-3">
             <Zap className="w-5 h-5 mt-0.5 text-danger-500 flex-shrink-0" />
             <div>
@@ -222,7 +220,7 @@ export default function InfoSection() {
               <span className="block mt-1">Scrambles text instantly with a click.</span>
             </div>
           </div>
-          
+
           <div className="flex items-start gap-3">
             <Copy className="w-5 h-5 mt-0.5 text-primary-500 flex-shrink-0" />
             <div>

@@ -13,7 +13,7 @@ import {
   Tabs,
   Tab,
 } from "@nextui-org/react"
-import { Upload, X, Copy, Info, BookOpen, Lightbulb } from "lucide-react"
+import { Upload, X, Copy, } from "lucide-react"
 import { toast, Toaster } from "react-hot-toast"
 import ToolLayout from "@/components/ToolLayout"
 import InfoSectionImageColorExtractor from "./info-section"
@@ -31,7 +31,7 @@ interface ColorThief {
 declare global {
   interface Window {
     ColorThief: {
-      new (): ColorThief
+      new(): ColorThief
     }
   }
 }
@@ -195,9 +195,8 @@ export default function ColorExtractor() {
             {!image ? (
               <label
                 ref={dropZoneRef}
-                className={`flex flex-col items-center justify-center h-64 px-4 py-6 bg-default-100 text-primary rounded-lg shadow-lg tracking-wide uppercase border-2 ${
-                  isDragging ? "border-primary bg-primary-100" : "border-primary border-dashed"
-                } cursor-pointer hover:bg-primary-100 hover:text-primary-600 transition duration-300`}
+                className={`flex flex-col items-center justify-center h-64 px-4 py-6 bg-default-100 text-primary rounded-lg shadow-lg tracking-wide uppercase border-2 ${isDragging ? "border-primary bg-primary-100" : "border-primary border-dashed"
+                  } cursor-pointer hover:bg-primary-100 hover:text-primary-600 transition duration-300`}
                 onDragEnter={handleDragEnter}
                 onDragLeave={handleDragLeave}
                 onDragOver={handleDragOver}
@@ -236,10 +235,10 @@ export default function ColorExtractor() {
                   <Button variant="bordered">Number of Colors: {colorCount}</Button>
                 </DropdownTrigger>
                 <DropdownMenu aria-label="Color count selection" onAction={(key) => setColorCount(Number(key))}>
-                  <DropdownItem key="6"  className="text-default-700">6</DropdownItem>
-                  <DropdownItem key="12"  className="text-default-700">12</DropdownItem>
-                  <DropdownItem key="16"  className="text-default-700">16</DropdownItem>
-                  <DropdownItem key="21"  className="text-default-700">21</DropdownItem>
+                  <DropdownItem key="6" className="text-default-700">6</DropdownItem>
+                  <DropdownItem key="12" className="text-default-700">12</DropdownItem>
+                  <DropdownItem key="16" className="text-default-700">16</DropdownItem>
+                  <DropdownItem key="21" className="text-default-700">21</DropdownItem>
                 </DropdownMenu>
               </Dropdown>
             </div>
@@ -251,10 +250,10 @@ export default function ColorExtractor() {
                   aria-label="Color format options"
                   selectedKey={activeTab}
                   onSelectionChange={(key) => setActiveTab(key as "hex" | "rgb" | "hsl")}
-                  
+
                 >
                   <Tab key="hex" title="HEX">
-                    <ColorGrid colors={colors} format="hex" onCopy={copyToClipboard}  />
+                    <ColorGrid colors={colors} format="hex" onCopy={copyToClipboard} />
                   </Tab>
                   <Tab key="rgb" title="RGB">
                     <ColorGrid colors={colors} format="rgb" onCopy={copyToClipboard} />

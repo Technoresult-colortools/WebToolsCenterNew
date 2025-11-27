@@ -14,7 +14,6 @@ import {
   Layers,
   Film,
   Maximize,
-  Image as ImageIcon,
   FileImage,
   Settings,
   Download,

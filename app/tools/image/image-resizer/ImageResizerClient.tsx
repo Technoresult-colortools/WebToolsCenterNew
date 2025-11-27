@@ -17,22 +17,18 @@ import {
   Tab,
   Tooltip,
 } from "@nextui-org/react"
-import NextImage from "next/image"
 import { toast } from "react-hot-toast"
-import { 
-  Upload, 
-  Download, 
-  RefreshCw, 
-  ArrowLeftRight, 
-  ImageIcon, 
-  Info, 
-  Lightbulb, 
-  BookOpen, 
-  X, 
-  Instagram, 
-  Facebook, 
-  Twitter, 
-  Linkedin, 
+import {
+  Upload,
+  Download,
+  RefreshCw,
+  ArrowLeftRight,
+  ImageIcon,
+  X,
+  Instagram,
+  Facebook,
+  Twitter,
+  Linkedin,
   Youtube,
   Settings
 } from "lucide-react"
@@ -212,14 +208,14 @@ export default function EnhancedImageResizer() {
 
   const handlePresetChange = (preset: string) => {
     setSelectedPreset(preset)
-    
+
     if (preset === "custom") return
-    
+
     const selectedPreset = socialMediaPresets.find(p => p.key === preset)
     if (selectedPreset) {
       setWidth(selectedPreset.width)
       setHeight(selectedPreset.height)
-      
+
       // Optionally adjust format for optimal results based on the platform
       if (preset.includes("instagram") || preset.includes("facebook")) {
         setFormat("jpeg")
@@ -251,10 +247,10 @@ export default function EnhancedImageResizer() {
                 onDrop={handleDrop}
               >
                 <Upload size={48} />
-                  <span className="mt-2 text-sm sm:text-base md:text-md leading-normal text-center block">Select a file or drag and drop</span>
-                  <span className="mt-1 text-xs text-gray-500">Supports JPG, PNG, WebP, GIF</span>
-                  <input ref={fileInputRef} type="file" className="hidden" onChange={handleFileChange} accept="image/*" />
-                </label>
+                <span className="mt-2 text-sm sm:text-base md:text-md leading-normal text-center block">Select a file or drag and drop</span>
+                <span className="mt-1 text-xs text-gray-500">Supports JPG, PNG, WebP, GIF</span>
+                <input ref={fileInputRef} type="file" className="hidden" onChange={handleFileChange} accept="image/*" />
+              </label>
             ) : (
               <div className="relative">
                 <div className="relative h-64 md:h-96 bg-default-100 rounded-lg overflow-hidden">
@@ -286,9 +282,9 @@ export default function EnhancedImageResizer() {
 
         {originalImage && (
           <>
-            <Tabs 
-              aria-label="Image Resizer Options" 
-              selectedKey={activeTab} 
+            <Tabs
+              aria-label="Image Resizer Options"
+              selectedKey={activeTab}
               onSelectionChange={(key) => setActiveTab(key as string)}
               className="w-full"
             >
@@ -309,7 +305,7 @@ export default function EnhancedImageResizer() {
                           Original size: {originalImage.width} x {originalImage.height}
                         </p>
                       </div>
-                      
+
                       {resizedImage && (
                         <div>
                           <h3 className="text-xl font-bold text-default-700 mb-4">Resized Preview</h3>
@@ -326,7 +322,7 @@ export default function EnhancedImageResizer() {
                         </div>
                       )}
                     </div>
-                    
+
                     {resizedImage && (
                       <div className="flex justify-center mt-6">
                         <Button onClick={handleDownload} color="primary">
@@ -338,7 +334,7 @@ export default function EnhancedImageResizer() {
                   </CardBody>
                 </Card>
               </Tab>
-              
+
               <Tab key="settings" title="Resize Settings">
                 <Card className="bg-default-50 dark:bg-default-100">
                   <CardBody className="p-6">
@@ -349,11 +345,11 @@ export default function EnhancedImageResizer() {
                           const PresetIcon = preset.icon;
                           return (
                             <Tooltip key={preset.key} content={`${preset.label}: ${preset.width}×${preset.height}`} className="text-default-700">
-                              <Button 
+                              <Button
                                 onClick={() => handlePresetChange(preset.key)}
                                 color={selectedPreset === preset.key ? "primary" : "default"}
                                 className="flex-col h-24 "
-                                
+
                                 variant={selectedPreset === preset.key ? "solid" : "flat"}
                               >
                                 <PresetIcon className="h-6 w-6 mb-1" />
@@ -364,7 +360,7 @@ export default function EnhancedImageResizer() {
                         })}
                       </div>
                     </div>
-                    
+
                     <h3 className="text-xl font-bold text-default-700 mb-4">Custom Dimensions</h3>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <div>
@@ -409,7 +405,7 @@ export default function EnhancedImageResizer() {
                         Preserve aspect ratio
                       </Checkbox>
                     </div>
-                    
+
                     <h3 className="text-xl font-bold text-default-700 mb-4 mt-8">Output Settings</h3>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <div>
@@ -454,7 +450,7 @@ export default function EnhancedImageResizer() {
                         </div>
                       </div>
                     </div>
-                    
+
                     <div className="flex flex-wrap justify-center gap-4 mt-8">
                       <Button onClick={handleResize} color="primary" size="md">
                         <ImageIcon className="h-5 w-5 mr-2" />
@@ -468,7 +464,7 @@ export default function EnhancedImageResizer() {
                   </CardBody>
                 </Card>
               </Tab>
-              
+
               {resizedImage && (
                 <Tab key="result" title="Result">
                   <Card className="bg-default-50 dark:bg-default-100">
@@ -509,11 +505,11 @@ export default function EnhancedImageResizer() {
         )}
 
         <canvas ref={canvasRef} style={{ display: "none" }} />
-        
-         {/* Info Section */}
+
+        {/* Info Section */}
         <InfoSectionImageResizer />
       </div>
-      
+
     </ToolLayout>
   )
 }

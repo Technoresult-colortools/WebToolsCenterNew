@@ -3,7 +3,6 @@
 import { Card, CardBody } from "@nextui-org/react"
 import {
   Info,
-
   BookOpen,
   Lightbulb,
   Sliders,
@@ -15,9 +14,7 @@ import {
   RefreshCw,
   Shield,
   HelpCircle,
-  FileUp,
   Settings2,
-  Check,
   Sparkles,
   Wand2,
   Layers,
