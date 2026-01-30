@@ -3,7 +3,7 @@ import ClipPathGeneratorClient from './ClipPathGeneratorClient';
 
 export const metadata: Metadata = {
     title: 'Clip Path Generator | WebToolsCenter',
-    description: 'Easily create custom clip-path shapes with this visual generator. Adjust shape, size, opacity, and more, then copy the generated CSS for your designs.',
+    description: 'Create custom CSS shapes instantly with our free visual Clip Path Generator. Drag points to sculpt polygons, circles, and complex masks, then copy the CSS code in one click.',
     keywords: [
         'Clip path generator',
         'CSS clip-path',
@@ -41,7 +41,7 @@ export const metadata: Metadata = {
         canonical: '/tools/css/clip-path-generator'
     }
 };
-  
+
 export default function ClipPathGenerator() {
-  return <ClipPathGeneratorClient />;
+    return <ClipPathGeneratorClient />;
 }

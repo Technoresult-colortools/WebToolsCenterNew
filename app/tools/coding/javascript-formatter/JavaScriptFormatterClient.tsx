@@ -1,11 +1,10 @@
-
 "use client"
 
 import type React from "react"
-import { useState, useRef } from "react"
-import { Button, Card, CardBody, Input, Switch, Textarea, Tabs, Tab } from "@nextui-org/react"
+import { useState, useRef, useMemo } from "react"
+import { Button, Card, CardBody, Input, Switch, Textarea, Chip, Divider, Tooltip, ButtonGroup } from "@nextui-org/react"
 import { toast } from "react-hot-toast"
-import { FileMinus, Copy, Download, Upload, Info, BookOpen, Lightbulb, Zap, FileCode, Trash2 } from "lucide-react"
+import { Copy, Download, Upload, Zap, FileCode, Trash2, FileText, RotateCw, Settings2, CheckCircle2, DownloadCloud, Code, Braces } from "lucide-react"
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter"
 import { atomDark } from "react-syntax-highlighter/dist/esm/styles/prism"
 import prettier from "prettier/standalone"
@@ -13,12 +12,14 @@ import parserBabel from "prettier/plugins/babel"
 import parserTypeScript from "prettier/plugins/typescript"
 import parserEstree from "prettier/plugins/estree"
 import ToolLayout from "@/components/ToolLayout"
-import Image from "next/image"
+import InfoSectionJavascriptFormatter from "./info-section"
 
 export default function JavaScriptFormatter() {
   const [inputJS, setInputJS] = useState("")
   const [outputJS, setOutputJS] = useState("")
   const [isFormatting, setIsFormatting] = useState(false)
+
+  // All original options preserved
   const [useTabs, setUseTabs] = useState(false)
   const [singleQuotes, setSingleQuotes] = useState(false)
   const [semicolons, setSemicolons] = useState(true)
@@ -28,8 +29,14 @@ export default function JavaScriptFormatter() {
   const [sortImports, setSortImports] = useState(false)
   const [removeConsoleLog, setRemoveConsoleLog] = useState(false)
   const [selectedParser, setSelectedParser] = useState<'babel' | 'typescript'>('babel')
+
   const [fileName, setFileName] = useState("")
   const fileInputRef = useRef<HTMLInputElement>(null)
+
+  const stats = useMemo(() => ({
+    input: inputJS.length,
+    output: outputJS.length,
+  }), [inputJS, outputJS])
 
   const formatJS = async () => {
     if (!inputJS.trim()) {
@@ -39,16 +46,8 @@ export default function JavaScriptFormatter() {
 
     setIsFormatting(true)
     try {
-      // Validate input before formatting
-      if (inputJS.length > 1000000) {
-        toast.error("File is too large. Please use a smaller JavaScript file.")
-        setIsFormatting(false)
-        return
-      }
-
-      // Determine plugins based on selected parser
-      const plugins = selectedParser === 'babel' 
-        ? [parserBabel, parserEstree] 
+      const plugins = selectedParser === 'babel'
+        ? [parserBabel, parserEstree]
         : [parserTypeScript, parserEstree]
 
       let formattedCode = await prettier.format(inputJS, {
@@ -61,7 +60,6 @@ export default function JavaScriptFormatter() {
         printWidth: compressCode ? Number.POSITIVE_INFINITY : 80,
       })
 
-      // Additional formatting options
       if (removeComments) {
         formattedCode = formattedCode.replace(/\/\*[\s\S]*?\*\/|([^\\:]|^)\/\/.*$/gm, "$1")
       }
@@ -79,339 +77,246 @@ export default function JavaScriptFormatter() {
 
       setOutputJS(formattedCode)
       toast.success("JavaScript formatted successfully!")
-    } catch (error) {
-      console.error("Full Formatting Error:", error)
-      
-      // More detailed error handling
-      if (error instanceof Error) {
-        let errorMessage = "Error formatting JavaScript."
-        
-        // Specific error type checks
-        if (error.message.includes("SyntaxError")) {
-          errorMessage = "Syntax error in your JavaScript. Please check your code."
-        } else if (error.message.includes("Cannot parse")) {
-          errorMessage = "Unable to parse the JavaScript file. Try switching parser or checking syntax."
-        } else if (error.message.includes("Unexpected token")) {
-          errorMessage = "Unexpected token found. Check for syntax errors in your code."
-        } else if (error.message.includes("Missing visitor keys")) {
-          errorMessage = "Parsing error. Try switching to TypeScript parser or checking for experimental features."
-        }
-        
-        toast.error(errorMessage)
-        
-        // Log additional context for debugging
-        console.error("Error Details:", {
-          name: error.name,
-          message: error.message,
-          stack: error.stack
-        })
-      } else {
-        toast.error("Unexpected error formatting JavaScript.")
-      }
+    } catch (error: any) {
+      toast.error(error.message?.includes("SyntaxError") ? "Syntax error detected in code." : "Formatting failed.")
     } finally {
       setIsFormatting(false)
     }
   }
+
+  const handleReset = () => {
+    setInputJS(""); setOutputJS(""); setFileName("");
+    if (fileInputRef.current) fileInputRef.current.value = ""
+    toast.success("Reset completed")
+  }
+
   const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
     if (file) {
-      // Validate file type
-      const allowedExtensions = ['.js', '.jsx', '.ts', '.tsx']
-      const fileExtension = '.' + file.name.split('.').pop()?.toLowerCase()
-      
-      if (!allowedExtensions.includes(fileExtension)) {
-        toast.error(`Unsupported file type. Please upload ${allowedExtensions.join(', ')} files.`)
-        return
-      }
-
-      // Validate file size (limit to 5MB)
       if (file.size > 5 * 1024 * 1024) {
-        toast.error("File is too large. Maximum file size is 5MB.")
+        toast.error("File exceeds 5MB limit.")
         return
       }
-
       setFileName(file.name)
       const reader = new FileReader()
-      reader.onload = (e) => {
-        const content = e.target?.result as string
-        
-        // Debug logging
-        console.log("File Upload - Raw Content:", content)
-        console.log("File Upload - Content Length:", content.length)
-        
-        setInputJS(content)
-        toast.success("File uploaded successfully!")
-      }
-      reader.onerror = (error) => {
-        console.error("File Reading Error:", error)
-        toast.error("Error reading file. Please try again.")
-      }
+      reader.onload = (e) => setInputJS(e.target?.result as string)
       reader.readAsText(file)
+      toast.success("File uploaded!")
     }
-  }
-
-  const copyToClipboard = () => {
-    if (!outputJS.trim()) {
-      toast.error("No formatted JavaScript to copy.")
-      return
-    }
-    navigator.clipboard.writeText(outputJS)
-    toast.success("Formatted JavaScript copied to clipboard!")
-  }
-
-  const handleReset = () => {
-    setInputJS("")
-    setOutputJS("")
-    setFileName("")
-    if (fileInputRef.current) {
-      fileInputRef.current.value = ""
-    }
-    toast.success("Reset done successfully!")
   }
 
   const handleDownload = () => {
-    if (!outputJS.trim()) {
-      toast.error("No formatted JavaScript to download.")
-      return
-    }
+    if (!outputJS) return
     const blob = new Blob([outputJS], { type: "text/javascript" })
     const url = URL.createObjectURL(blob)
     const a = document.createElement("a")
     a.href = url
     a.download = fileName || "formatted.js"
-    document.body.appendChild(a)
     a.click()
-    document.body.removeChild(a)
-    URL.revokeObjectURL(url)
-    toast.success("Download started!")
   }
-
 
   return (
     <ToolLayout
       title="JavaScript Formatter"
-      description="Clean up and standardize your JavaScript code"
+      description="Effortlessly beautify, clean, and standardize JavaScript and TypeScript code online with this professional Prettier-powered formatter and multi-parser tool."
       toolId="678f382f26f06f912191bcc1"
     >
-      <div className="flex flex-col gap-8">
-        <Card className="bg-default-50 dark:bg-default-100">
-          <CardBody className="p-6">
-            <Tabs aria-label="JavaScript Formatter options">
-              <Tab
-                key="format"
-                title={
-                  <div className="flex items-center text-primary">
-                    <FileMinus className="w-4 h-4 mr-2 text-primary" />
-                    Format JavaScript
-                  </div>
-                }
-              >
-                <div className="space-y-4 mt-4">
-                  <Textarea
-                    label="JavaScript to Format"
-                    placeholder="Enter JavaScript to format..."
-                    value={inputJS}
-                    variant="bordered"
-                    onChange={(e) => setInputJS(e.target.value)}
-                    minRows={4}
-                  />
-                  <p className="text-sm text-default-500">Characters: {inputJS.length}</p>
+      <div className="flex flex-col gap-6">
 
-                  <SyntaxHighlighter
-                    language="javascript"
-                    style={atomDark}
-                    className="w-full min-h-[100px] max-h-[300px] overflow-auto"
-                  >
-                    {outputJS}
-                  </SyntaxHighlighter>
-                  <p className="text-sm text-default-500">Characters: {outputJS.length}</p>
+        {/* 1. Compact Stats Bar */}
+        {/* Compact Stats Bar */}
+        <Card className="bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50 dark:from-blue-950/30 dark:via-purple-950/30 dark:to-pink-950/30 border-2 border-primary/20 shadow-lg">
+          <CardBody className="p-3">
+            <div className="flex flex-wrap items-center justify-between gap-3">
+              <div className="flex items-center gap-3 flex-wrap">
+                <div className="flex items-center gap-2 px-3 py-1.5 bg-white/60 dark:bg-black/20 rounded-lg backdrop-blur-sm">
+                  <FileText className="w-4 h-4 text-primary" />
+                  <span className="text-sm font-semibold text-default-700">Input:</span>
+                  <span className="text-sm font-bold text-primary">{stats.input.toLocaleString()}</span>
+                  <span className="text-xs text-default-500">chars</span>
                 </div>
-              </Tab>
-            </Tabs>
-            {/* Add Parser Selection */}
-            <div className="mt-4">
-              <h3 className="text-lg font-semibold mb-2">Parser Selection</h3>
-              <div className="flex space-x-4">
-                <Button 
-                  color={selectedParser === 'babel' ? 'primary' : 'default'}
-                  onPress={() => setSelectedParser('babel')}
-                >
-                  Babel Parser
-                </Button>
-                <Button 
-                  color={selectedParser === 'typescript' ? 'primary' : 'default'}
-                  onPress={() => setSelectedParser('typescript')}
-                >
-                  TypeScript Parser
-                </Button>
-              </div>
-            </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
-              {/* Switch Group */}
-              <div className="flex flex-col gap-2">
-                <Switch isSelected={useTabs} onValueChange={setUseTabs}>
-                  Use Tabs
-                </Switch>
-                <Switch isSelected={singleQuotes} onValueChange={setSingleQuotes}>
-                  Use Single Quotes
-                </Switch>
-                <Switch isSelected={semicolons} onValueChange={setSemicolons}>
-                  Add Semicolons
-                </Switch>
-                <Switch isSelected={removeComments} onValueChange={setRemoveComments}>
-                  Remove Comments
-                </Switch>
+                {outputJS && (
+                  <>
+                    <div className="text-default-400">→</div>
+                    <div className="flex items-center gap-2 px-3 py-1.5 bg-white/60 dark:bg-black/20 rounded-lg backdrop-blur-sm">
+                      <Zap className="w-4 h-4 text-success" />
+                      <span className="text-sm font-semibold text-default-700">Output:</span>
+                      <span className="text-sm font-bold text-success">{stats.output.toLocaleString()}</span>
+                      <span className="text-xs text-default-500">chars</span>
+                    </div>
+
+                    {stats.output < stats.input && (
+                      <Chip size="sm" color="success" variant="flat" startContent={<CheckCircle2 className="w-3 h-3" />}>
+                        {((1 - stats.output / stats.input) * 100).toFixed(1)}% smaller
+                      </Chip>
+                    )}
+                  </>
+                )}
+
+                {fileName && (
+                  <Chip
+                    size="sm"
+                    variant="flat"
+                    color="secondary"
+                    className="max-w-[250px]"
+                    startContent={<Code className="w-3 h-3" />}
+                  >
+                    <span className="truncate">{fileName}</span>
+                  </Chip>
+                )}
               </div>
 
-              {/* Input & Additional Switches */}
-              <div className="flex flex-col gap-2">
-                <Input
-                  type="number"
-                  label="Indent Size"
-                  variant="bordered"
-                  value={indentSize.toString()}
-                  onChange={(e) => setIndentSize(Number(e.target.value))}
-                />
-                <Switch isSelected={compressCode} onValueChange={setCompressCode}>
-                  Compress Code
-                </Switch>
-                <Switch isSelected={sortImports} onValueChange={setSortImports}>
-                  Sort Imports
-                </Switch>
-                <Switch isSelected={removeConsoleLog} onValueChange={setRemoveConsoleLog}>
-                  Remove Console.log
-                </Switch>
+              <div className="flex gap-2">
+                <Tooltip content="Reset all">
+                  <Button
+                    size="md"
+                    variant="flat"
+                    color="danger"
+                    onPress={handleReset}
+                    isIconOnly
+                  >
+                    <RotateCw className="w-4 h-4" />
+                  </Button>
+                </Tooltip>
               </div>
-            </div>
-
-            <div className="flex flex-col md:flex-row flex-wrap gap-2 mt-4 w-full">
-              <Button
-                className="w-full md:flex-1"
-                color="primary"
-                onPress={formatJS}
-                isLoading={isFormatting}
-                startContent={<FileCode />}
-              >
-                {isFormatting ? "Formatting..." : "Format"}
-              </Button>
-              <Button
-                className="w-full md:flex-1"
-                color="secondary"
-                onPress={copyToClipboard}
-                isDisabled={!outputJS}
-                startContent={<Copy />}
-              >
-                Copy
-              </Button>
-              <Button className="w-full md:flex-1" color="danger" onPress={handleReset} startContent={<Trash2 />}>
-                Reset
-              </Button>
-              <Button
-                className="w-full md:flex-1"
-                color="success"
-                onPress={handleDownload}
-                isDisabled={!outputJS}
-                startContent={<Download />}
-              >
-                Download
-              </Button>
-            </div>
-
-            <div className="mt-4">
-              <h3 className="text-lg font-semibold mb-2">Upload JavaScript File</h3>
-              <div className="flex flex-col md:flex-row items-center space-y-2 md:space-y-0 md:space-x-2">
-                <Input
-                  type="file"
-                  variant="bordered"
-                  accept=".js,.jsx,.ts,.tsx"
-                  onChange={handleFileUpload}
-                  ref={fileInputRef}
-                />
-                <Button color="primary" onPress={() => fileInputRef.current?.click()} startContent={<Upload />}>
-                  Upload
-                </Button>
-              </div>
-              {fileName && <p className="text-sm mt-2">Uploaded: {fileName}</p>}
             </div>
           </CardBody>
         </Card>
 
-        <Card className="mt-8 bg-default-50 dark:bg-default-100 p-4 md:p-8">
-          <div className="rounded-xl p-2 md:p-4 max-w-4xl mx-auto">
-            {/* About Section */}
-            <h2 className="text-lg md:text-xl lg:text-2xl font-semibold text-default-700 mb-4 flex items-center">
-              <Info className="w-6 h-6 mr-2" />
-              What is JavaScript Formatter?
-            </h2>
-            <p className="text-sm md:text-base text-default-600 mb-4">
-            The JavaScript Formatter is a useful tool that helps you clean up and standardize your JavaScript code. It runs Prettier, a popular code formatting engine to produce consistent and easy to read JavaScript code. If you are a web developer, a software engineer, or just someone working with JavaScript, you can utilize this tool to help you keep your code clean and organized.
-            </p>
+        {/* 2. Input Section */}
+        <Card className="shadow-lg border border-default-200 overflow-hidden">
+          <div className="p-4 bg-default-100/50 border-b border-default-200 flex flex-wrap justify-between items-center gap-2">
+            <div className="flex items-center gap-2">
+              <div className="p-1.5 bg-primary/10 rounded-md">
+                <Braces className="w-4 h-4 text-primary" />
+              </div>
+              <h3 className="text-sm font-bold">Input JavaScript</h3>
+            </div>
+            <div className="flex gap-2">
+              <Button size="sm" variant="flat" onPress={() => fileInputRef.current?.click()} startContent={<Upload className="w-3.5 h-3.5" />}>
+                Upload
+              </Button>
+            </div>
+          </div>
+          <CardBody className="p-4">
+            <Textarea
+              placeholder="Paste your JavaScript/TypeScript here..."
+              value={inputJS}
+              onChange={(e) => setInputJS(e.target.value)}
+              minRows={10}
+              variant="bordered"
+              classNames={{ input: "font-mono text-sm" }}
+            />
+          </CardBody>
+        </Card>
 
-            {/* Image Preview */}
-            <div className="my-8">
-              <Image
-                src="/Images/InfosectionImages/JavaScriptFormatterPreview.png?height=400&width=600"
-                alt="Screenshot of the JavaScript Formatter interface showing input, formatting options, and output"
-                width={600}
-                height={400}
-                className="rounded-lg shadow-lg w-full h-auto"
-              />
+        {/* 3. Formatting Options Grid */}
+        <Card className="shadow-lg border border-default-200 overflow-hidden">
+          <div className="p-3 bg-default-100/50 border-b border-default-200">
+            <div className="flex items-center gap-2">
+              <Settings2 className="w-4 h-4 text-warning" />
+              <h3 className="text-sm font-bold">Formatting Options</h3>
+            </div>
+          </div>
+          <CardBody className="p-6 space-y-6">
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+              {/* Parser Selection */}
+              <div className="space-y-3">
+                <p className="text-[10px] font-bold uppercase text-default-400">Parser Selection</p>
+                <ButtonGroup size="sm" className="w-full">
+                  <Button className="flex-1" color={selectedParser === 'babel' ? 'primary' : 'default'} onPress={() => setSelectedParser('babel')}>Babel</Button>
+                  <Button className="flex-1" color={selectedParser === 'typescript' ? 'primary' : 'default'} onPress={() => setSelectedParser('typescript')}>TypeScript</Button>
+                </ButtonGroup>
+                <div className="pt-2 space-y-2">
+                  <Switch size="sm" isSelected={useTabs} onValueChange={setUseTabs}><span className="text-xs">Use Tabs</span></Switch>
+                  <div className="space-x-2"><Switch size="sm" isSelected={singleQuotes} onValueChange={setSingleQuotes}><span className="text-xs">Single Quotes</span></Switch></div>
+
+                  <Switch size="sm" isSelected={semicolons} onValueChange={setSemicolons}><span className="text-xs">Add Semicolons</span></Switch>
+                </div>
+              </div>
+
+              {/* Cleaning Options */}
+              <div className="space-y-3">
+                <p className="text-[10px] font-bold uppercase text-default-400">Clean & Sort</p>
+                <div className="space-y-2">
+                  <Switch size="sm" color="danger" isSelected={removeComments} onValueChange={setRemoveComments}><span className="text-xs">Remove Comments</span></Switch>
+                  <Switch size="sm" color="danger" isSelected={removeConsoleLog} onValueChange={setRemoveConsoleLog}><span className="text-xs">Remove console.log</span></Switch>
+                  <div className="space-y-2"><Switch size="sm" color="secondary" isSelected={sortImports} onValueChange={setSortImports}><span className="text-xs">Sort Imports</span></Switch></div>
+
+                  <Switch size="sm" color="warning" isSelected={compressCode} onValueChange={setCompressCode}><span className="text-xs">Compress Code</span></Switch>
+                </div>
+              </div>
+
+              {/* Indent Size */}
+              <div className="space-y-3">
+                <p className="text-[10px] font-bold uppercase text-default-400">Indentation</p>
+                <Input
+                  type="number"
+                  label="Indent Size"
+                  size="sm"
+                  variant="bordered"
+                  value={indentSize.toString()}
+                  onChange={(e) => setIndentSize(Number(e.target.value))}
+                  isDisabled={useTabs}
+                />
+              </div>
             </div>
 
-            {/* How to Use */}
-            <h2 className="text-lg md:text-xl lg:text-2xl font-semibold text-default-700 mb-4 mt-8 flex items-center">
-              <BookOpen className="w-6 h-6 mr-2" />
-              How to Use JavaScript Formatter?
-            </h2>
-            <ol className="list-decimal list-inside space-y-2 text-sm md:text-base">
-              <li>Enter your JavaScript code in the input area or upload a JavaScript file.</li>
-              <li>Adjust formatting options according to your preferences.</li>
-              <li>Click the "Format" button to process your code.</li>
-              <li>Review the formatted JavaScript in the output area.</li>
-              <li>Use the "Copy" button to copy the formatted JavaScript to your clipboard.</li>
-              <li>Use the "Download" button to save the formatted JavaScript as a file.</li>
-              <li>Click "Reset" to clear all inputs and start over.</li>
-            </ol>
+            <Divider />
 
-            {/* Key Features */}
-            <h2 className="text-lg md:text-xl lg:text-2xl font-semibold text-default-700 mb-4 mt-8 flex items-center">
-              <Lightbulb className="w-6 h-6 mr-2" />
-              Key Features
-            </h2>
-            <ul className="list-disc list-inside space-y-2 text-sm md:text-base">
-              <li>Prettier-powered formatting for consistent results.</li>
-              <li>Customizable indentation (spaces or tabs).</li>
-              <li>Option to use single or double quotes for strings.</li>
-              <li>Control over semicolon insertion.</li>
-              <li>Comment removal option for cleaner output.</li>
-              <li>Code compression feature for minification.</li>
-              <li>Import statement sorting.</li>
-              <li>Console.log removal option.</li>
-              <li>Syntax highlighting for easy code reading.</li>
-              <li>File upload support for formatting existing JavaScript files.</li>
-              <li>One-click copy and download of formatted code.</li>
-              <li>Character count display for input and output.</li>
-            </ul>
-
-            {/* Advanced Usage */}
-            <h2 className="text-lg md:text-xl lg:text-2xl font-semibold text-default-700 mb-4 mt-8 flex items-center">
-              <Zap className="w-6 h-6 mr-2" />
-              Advanced Usage
-            </h2>
-            <ul className="list-disc list-inside space-y-2 text-sm md:text-base">
-              <li>Integrate the JavaScript Formatter into your development workflow for consistent coding style.</li>
-              <li>Use the formatted output as a base for creating coding standards in your team.</li>
-              <li>Combine with linting tools for comprehensive code quality checks.</li>
-              <li>Utilize the compression feature for preparing production-ready code.</li>
-              <li>
-                Experiment with different formatting options to find the style that best suits your project needs.
-              </li>
-            </ul>
-          </div>
+            {/* Smaller Format Action */}
+            <div className="flex justify-center">
+              <Button
+                size="md"
+                color="primary"
+                variant="shadow"
+                onPress={formatJS}
+                isLoading={isFormatting}
+                className="font-bold px-10"
+                startContent={!isFormatting && <Zap className="w-4 h-4" />}
+              >
+                Format Code
+              </Button>
+            </div>
+          </CardBody>
         </Card>
+
+        {/* 4. Output Section */}
+        {outputJS && (
+          <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
+            <Card className="shadow-lg border border-success/30 overflow-hidden">
+              <div className="p-4 bg-success/5 border-b border-success/20 flex justify-between items-center flex-wrap gap-2">
+                <div className="flex items-center gap-2">
+                  <CheckCircle2 className="w-5 h-5 text-success" />
+                  <h3 className="text-sm font-bold text-success">Formatted JavaScript</h3>
+                </div>
+                <div className="flex gap-2">
+                  <Button size="sm" color="success" variant="flat" onPress={() => { navigator.clipboard.writeText(outputJS); toast.success("Copied!"); }} startContent={<Copy className="w-3.5 h-3.5" />}>
+                    Copy
+                  </Button>
+                  <Button size="sm" color="success" variant="flat" isIconOnly onPress={handleDownload}>
+                    <DownloadCloud className="w-4 h-4" />
+                  </Button>
+                </div>
+              </div>
+              <SyntaxHighlighter
+                language="javascript"
+                style={atomDark}
+                customStyle={{ margin: 0, maxHeight: "600px", fontSize: "0.85rem", padding: "1.5rem" }}
+              >
+                {outputJS}
+              </SyntaxHighlighter>
+            </Card>
+          </div>
+        )}
+
+
       </div>
+      <InfoSectionJavascriptFormatter />
+
+      <input type="file" accept=".js,.jsx,.ts,.tsx" onChange={handleFileUpload} ref={fileInputRef} className="hidden" />
     </ToolLayout>
   )
 }
-

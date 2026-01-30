@@ -15,8 +15,8 @@ import {
   Modal,
   ModalContent,
 } from "@nextui-org/react"
-import Image from "next/image"
-import { Copy, Download, Info, Lightbulb, BookOpen, RefreshCw, Plus, Trash2, ArrowUpDown, X, Maximize2 } from "lucide-react"
+import InfoSectionBoxShadow from "./info-section"
+import { Copy, Download, RefreshCw, Plus, Trash2, ArrowUpDown, X, Maximize2 } from "lucide-react"
 import { toast } from "react-hot-toast"
 import ToolLayout from "@/components/ToolLayout"
 
@@ -32,83 +32,83 @@ type Shadow = {
 type BoxShadowUnit = "px" | "em" | "rem"
 
 const DEFAULT_VALUES = {
-    px: {
-      offsetX: 5,
-      offsetY: 5,
-      blur: 10,
-      spread: 0,
-      boxWidth: 200,
-      boxHeight: 200,
-      borderRadius: 0,
-    },
-    em: {
-      offsetX: 0.3,
-      offsetY: 0.3,
-      blur: 0.625,
-      spread: 0,
-      boxWidth: 12.5,
-      boxHeight: 12.5,
-      borderRadius: 0,
-    },
-    rem: {
-      offsetX: 0.3,
-      offsetY: 0.3,
-      blur: 0.625,
-      spread: 0,
-      boxWidth: 12.5,
-      boxHeight: 12.5,
-      borderRadius: 0,
-    },
-  }
-  
-  const SLIDER_RANGES = {
-    px: {
-      offset: { min: -50, max: 50, step: 1 },
-      blur: { min: 0, max: 100, step: 1 },
-      spread: { min: -50, max: 50, step: 1 },
-      box: { min: 50, max: 300, step: 1 },
-      radius: { min: 0, max: 150, step: 1 },
-    },
-    em: {
-      offset: { min: -3, max: 3, step: 0.1 },
-      blur: { min: 0, max: 6, step: 0.1 },
-      spread: { min: -3, max: 3, step: 0.1 },
-      box: { min: 3, max: 18, step: 0.5 },
-      radius: { min: 0, max: 9, step: 0.1 },
-    },
-    rem: {
-      offset: { min: -3, max: 3, step: 0.1 },
-      blur: { min: 0, max: 6, step: 0.1 },
-      spread: { min: -3, max: 3, step: 0.1 },
-      box: { min: 3, max: 18, step: 0.5 },
-      radius: { min: 0, max: 9, step: 0.1 },
-    },
-  }
+  px: {
+    offsetX: 5,
+    offsetY: 5,
+    blur: 10,
+    spread: 0,
+    boxWidth: 200,
+    boxHeight: 200,
+    borderRadius: 0,
+  },
+  em: {
+    offsetX: 0.3,
+    offsetY: 0.3,
+    blur: 0.625,
+    spread: 0,
+    boxWidth: 12.5,
+    boxHeight: 12.5,
+    borderRadius: 0,
+  },
+  rem: {
+    offsetX: 0.3,
+    offsetY: 0.3,
+    blur: 0.625,
+    spread: 0,
+    boxWidth: 12.5,
+    boxHeight: 12.5,
+    borderRadius: 0,
+  },
+}
 
-  export default function BoxShadowGenerator() {
-    const [unit, setUnit] = useState<BoxShadowUnit>("px")
-    const [shadows, setShadows] = useState<Shadow[]>([
-      { 
-        inset: false, 
-        offsetX: DEFAULT_VALUES[unit].offsetX,
-        offsetY: DEFAULT_VALUES[unit].offsetY,
-        blur: DEFAULT_VALUES[unit].blur,
-        spread: DEFAULT_VALUES[unit].spread,
-        color: "#00000040" 
-      },
-    ])
-    const [boxColor, setBoxColor] = useState("#ffffff")
-    const [boxWidth, setBoxWidth] = useState(DEFAULT_VALUES[unit].boxWidth)
-    const [boxHeight, setBoxHeight] = useState(DEFAULT_VALUES[unit].boxHeight)
-    const [borderRadius, setBorderRadius] = useState(DEFAULT_VALUES[unit].borderRadius)
-    const [css, setCSS] = useState("")
-    const [presetName, setPresetName] = useState("")
-    const [presets, setPresets] = useState<{ name: string; shadows: Shadow[] }[]>([])
-    const [isFullscreen, setIsFullscreen] = useState(false)
-  
-    useEffect(() => {
-      generateCSS()
-    }, [shadows, boxColor, boxWidth, boxHeight, borderRadius, unit])
+const SLIDER_RANGES = {
+  px: {
+    offset: { min: -50, max: 50, step: 1 },
+    blur: { min: 0, max: 100, step: 1 },
+    spread: { min: -50, max: 50, step: 1 },
+    box: { min: 50, max: 300, step: 1 },
+    radius: { min: 0, max: 150, step: 1 },
+  },
+  em: {
+    offset: { min: -3, max: 3, step: 0.1 },
+    blur: { min: 0, max: 6, step: 0.1 },
+    spread: { min: -3, max: 3, step: 0.1 },
+    box: { min: 3, max: 18, step: 0.5 },
+    radius: { min: 0, max: 9, step: 0.1 },
+  },
+  rem: {
+    offset: { min: -3, max: 3, step: 0.1 },
+    blur: { min: 0, max: 6, step: 0.1 },
+    spread: { min: -3, max: 3, step: 0.1 },
+    box: { min: 3, max: 18, step: 0.5 },
+    radius: { min: 0, max: 9, step: 0.1 },
+  },
+}
+
+export default function BoxShadowGenerator() {
+  const [unit, setUnit] = useState<BoxShadowUnit>("px")
+  const [shadows, setShadows] = useState<Shadow[]>([
+    {
+      inset: false,
+      offsetX: DEFAULT_VALUES[unit].offsetX,
+      offsetY: DEFAULT_VALUES[unit].offsetY,
+      blur: DEFAULT_VALUES[unit].blur,
+      spread: DEFAULT_VALUES[unit].spread,
+      color: "#00000040"
+    },
+  ])
+  const [boxColor, setBoxColor] = useState("#ffffff")
+  const [boxWidth, setBoxWidth] = useState(DEFAULT_VALUES[unit].boxWidth)
+  const [boxHeight, setBoxHeight] = useState(DEFAULT_VALUES[unit].boxHeight)
+  const [borderRadius, setBorderRadius] = useState(DEFAULT_VALUES[unit].borderRadius)
+  const [css, setCSS] = useState("")
+  const [presetName, setPresetName] = useState("")
+  const [presets, setPresets] = useState<{ name: string; shadows: Shadow[] }[]>([])
+  const [isFullscreen, setIsFullscreen] = useState(false)
+
+  useEffect(() => {
+    generateCSS()
+  }, [shadows, boxColor, boxWidth, boxHeight, borderRadius, unit])
 
   const generateCSS = () => {
     const shadowString = shadows
@@ -132,8 +132,8 @@ const DEFAULT_VALUES = {
   // Handle unit change
   const handleUnitChange = (newUnit: BoxShadowUnit) => {
     const scaleFactors = {
-      'px-em': 1/16,
-      'px-rem': 1/16,
+      'px-em': 1 / 16,
+      'px-rem': 1 / 16,
       'em-px': 16,
       'rem-px': 16,
       'em-rem': 1,
@@ -325,7 +325,7 @@ const DEFAULT_VALUES = {
           <CardBody className="p-6">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               <div>
-            
+
                 <div
                   className="bg-default-200 dark:bg-default-700 p-4 rounded-lg flex items-center justify-center relative"
                   style={{ minHeight: "300px" }}
@@ -338,7 +338,7 @@ const DEFAULT_VALUES = {
               </div>
 
               <div>
-    
+
                 <Tabs aria-label="Box Shadow options">
                   <Tab key="shadows" title="Shadows">
                     <div className="space-y-4 mt-4">
@@ -347,12 +347,12 @@ const DEFAULT_VALUES = {
                           Unit:
                         </label>
                         <Select
-                            id="unit"
-                            selectedKeys={[unit]}
-                            variant="bordered"
-                            onChange={(e) => handleUnitChange(e.target.value as BoxShadowUnit)}
-                            className="max-w-xs"
-                            >
+                          id="unit"
+                          selectedKeys={[unit]}
+                          variant="bordered"
+                          onChange={(e) => handleUnitChange(e.target.value as BoxShadowUnit)}
+                          className="max-w-xs"
+                        >
                           <SelectItem key="px" value="px" className="text-default-700">
                             px
                           </SelectItem>
@@ -408,13 +408,13 @@ const DEFAULT_VALUES = {
                               {unit}
                             </label>
                             <Slider
-                            aria-label={`Offset X for shadow ${index + 1}`}
-                            value={shadow.offsetX}
-                            onChange={(value) => handleShadowChange(index, "offsetX", Number(value))}
-                            step={SLIDER_RANGES[unit].offset.step}
-                            maxValue={SLIDER_RANGES[unit].offset.max}
-                            minValue={SLIDER_RANGES[unit].offset.min}
-                            className="max-w-md"
+                              aria-label={`Offset X for shadow ${index + 1}`}
+                              value={shadow.offsetX}
+                              onChange={(value) => handleShadowChange(index, "offsetX", Number(value))}
+                              step={SLIDER_RANGES[unit].offset.step}
+                              maxValue={SLIDER_RANGES[unit].offset.max}
+                              minValue={SLIDER_RANGES[unit].offset.min}
+                              className="max-w-md"
                             />
                           </div>
                           <div>
@@ -423,13 +423,13 @@ const DEFAULT_VALUES = {
                               {unit}
                             </label>
                             <Slider
-                            aria-label={`Offset Y for shadow ${index + 1}`}
-                            value={shadow.offsetX}
-                            onChange={(value) => handleShadowChange(index, "offsetY", Number(value))}
-                            step={SLIDER_RANGES[unit].offset.step}
-                            maxValue={SLIDER_RANGES[unit].offset.max}
-                            minValue={SLIDER_RANGES[unit].offset.min}
-                            className="max-w-md"
+                              aria-label={`Offset Y for shadow ${index + 1}`}
+                              value={shadow.offsetX}
+                              onChange={(value) => handleShadowChange(index, "offsetY", Number(value))}
+                              step={SLIDER_RANGES[unit].offset.step}
+                              maxValue={SLIDER_RANGES[unit].offset.max}
+                              minValue={SLIDER_RANGES[unit].offset.min}
+                              className="max-w-md"
                             />
                           </div>
                           <div>
@@ -490,72 +490,72 @@ const DEFAULT_VALUES = {
                   </Tab>
                   <Tab key="box" title="Box">
                     <div className="space-y-4 mt-4">
-                        <div>
+                      <div>
                         <label className="text-default-700">Box Color</label>
                         <div className="flex space-x-2">
-                            <Input
+                          <Input
                             type="color"
                             variant="bordered"
                             value={boxColor}
                             onChange={(e) => setBoxColor(e.target.value)}
                             className="w-16 h-12 mt-1 bg-transparent"
-                            />
-                            <Input
+                          />
+                          <Input
                             type="text"
                             value={boxColor}
                             variant="bordered"
                             onChange={(e) => setBoxColor(e.target.value)}
                             className="flex-grow mt-1"
-                            />
+                          />
                         </div>
-                        </div>
-                        <div>
+                      </div>
+                      <div>
                         <label className="text-default-700">
-                            Width: {boxWidth}
-                            {unit}
+                          Width: {boxWidth}
+                          {unit}
                         </label>
                         <Slider
-                            aria-label="Box Width"
-                            value={boxWidth}
-                            onChange={(value) => setBoxWidth(Number(value))}
-                            step={SLIDER_RANGES[unit].box.step}
-                            maxValue={SLIDER_RANGES[unit].box.max}
-                            minValue={SLIDER_RANGES[unit].box.min}
-                            className="max-w-md"
+                          aria-label="Box Width"
+                          value={boxWidth}
+                          onChange={(value) => setBoxWidth(Number(value))}
+                          step={SLIDER_RANGES[unit].box.step}
+                          maxValue={SLIDER_RANGES[unit].box.max}
+                          minValue={SLIDER_RANGES[unit].box.min}
+                          className="max-w-md"
                         />
-                        </div>
-                        <div>
+                      </div>
+                      <div>
                         <label className="text-default-700">
-                            Height: {boxHeight}
-                            {unit}
+                          Height: {boxHeight}
+                          {unit}
                         </label>
                         <Slider
-                            aria-label="Box Height"
-                            value={boxHeight}
-                            onChange={(value) => setBoxHeight(Number(value))}
-                            step={SLIDER_RANGES[unit].box.step}
-                            maxValue={SLIDER_RANGES[unit].box.max}
-                            minValue={SLIDER_RANGES[unit].box.min}
-                            className="max-w-md"
+                          aria-label="Box Height"
+                          value={boxHeight}
+                          onChange={(value) => setBoxHeight(Number(value))}
+                          step={SLIDER_RANGES[unit].box.step}
+                          maxValue={SLIDER_RANGES[unit].box.max}
+                          minValue={SLIDER_RANGES[unit].box.min}
+                          className="max-w-md"
                         />
-                        </div>
-                        <div>
+                      </div>
+                      <div>
                         <label className="text-default-700">
-                            Border Radius: {borderRadius}
-                            {unit}
+                          Border Radius: {borderRadius}
+                          {unit}
                         </label>
                         <Slider
-                            aria-label="Border Radius"
-                            value={borderRadius}
-                            onChange={(value) => setBorderRadius(Number(value))}
-                            step={SLIDER_RANGES[unit].radius.step}
-                            maxValue={SLIDER_RANGES[unit].radius.max}
-                            minValue={SLIDER_RANGES[unit].radius.min}
-                            className="max-w-md"
+                          aria-label="Border Radius"
+                          value={borderRadius}
+                          onChange={(value) => setBorderRadius(Number(value))}
+                          step={SLIDER_RANGES[unit].radius.step}
+                          maxValue={SLIDER_RANGES[unit].radius.max}
+                          minValue={SLIDER_RANGES[unit].radius.min}
+                          className="max-w-md"
                         />
-                        </div>
+                      </div>
                     </div>
-                    </Tab>
+                  </Tab>
                   <Tab key="presets" title="Presets">
                     <div className="space-y-4 mt-4">
                       <div>
@@ -594,103 +594,39 @@ const DEFAULT_VALUES = {
               </div>
             </div>
 
-        
-              {/* Generated CSS Section */}
-                <Card className="bg-default-50 dark:bg-default-100 mt-6">
-                <CardBody className="p-6">
-                    <h2 className="text-xl md:text-2xl font-bold text-default-700 mb-4">Generated CSS</h2>
-                    <div className="bg-default-200 p-4 rounded-lg overflow-x-auto max-h-60 overflow-y-auto">
-                    <pre className="text-default-700 whitespace-pre-wrap break-all text-xs md:text-sm">
-                        {css}
-                    </pre>
-                    </div>
-                </CardBody>
-                </Card>
 
-
-                <div className="mt-4 flex flex-col space-y-2 md:flex-row md:justify-end md:space-y-0 md:space-x-2">
-                <Button color="primary" onPress={handleCopy} startContent={<Copy className="h-4 w-4" />}>
-                    Copy CSS
-                </Button>
-                <Button color="secondary" onPress={handleDownload} startContent={<Download className="h-4 w-4" />}>
-                    Download CSS
-                </Button>
-                <Button color="danger" onPress={handleReset} startContent={<RefreshCw className="h-4 w-4" />}>
-                    Reset
-                </Button>
+            {/* Generated CSS Section */}
+            <Card className="bg-default-50 dark:bg-default-100 mt-6">
+              <CardBody className="p-6">
+                <h2 className="text-xl md:text-2xl font-bold text-default-700 mb-4">Generated CSS</h2>
+                <div className="bg-default-200 p-4 rounded-lg overflow-x-auto max-h-60 overflow-y-auto">
+                  <pre className="text-default-700 whitespace-pre-wrap break-all text-xs md:text-sm">
+                    {css}
+                  </pre>
                 </div>
+              </CardBody>
+            </Card>
 
-       
+
+            <div className="mt-4 flex flex-col space-y-2 md:flex-row md:justify-end md:space-y-0 md:space-x-2">
+              <Button color="primary" onPress={handleCopy} startContent={<Copy className="h-4 w-4" />}>
+                Copy CSS
+              </Button>
+              <Button color="secondary" onPress={handleDownload} startContent={<Download className="h-4 w-4" />}>
+                Download CSS
+              </Button>
+              <Button color="danger" onPress={handleReset} startContent={<RefreshCw className="h-4 w-4" />}>
+                Reset
+              </Button>
+            </div>
+
+
           </CardBody>
         </Card>
 
-        <Card className="bg-default-50 dark:bg-default-100 p-4 md:p-8">
-          <CardBody>
-            <h2 className="text-2xl font-semibold text-default-700 mb-4 flex items-center">
-              <Info className="w-6 h-6 mr-2" />
-              What is CSS Box Shadow Generator?
-            </h2>
-            <p className="text-default-600 mb-4">
-            The CSS box shadow generator is a powerful and intuitive tool designed for web developers and designers to appeal to create a complex and visually CSS box shade. This allows you to easily customize multiple shadow layers, adjust box properties and generate an exact CSS code for your projects.
-            </p>
 
-            <div className="my-8">
-              <Image
-                src="/Images/InfosectionImages/CSSBoxShadowPreview.png?height=400&width=600"
-                alt="Screenshot of the Enhanced Box Shadow Generator interface showing preview and customization options"
-                width={600}
-                height={400}
-                className="rounded-lg shadow-lg w-full h-auto"
-              />
-            </div>
-
-            <h2 className="text-xl font-semibold text-default-700 mb-4 mt-8 flex items-center">
-              <BookOpen className="w-6 h-6 mr-2" />
-              How to Use CSS Box Shadow Generator?
-            </h2>
-            <ol className="list-decimal list-inside space-y-2 text-default-600">
-              <li>Use the "Shadows" tab to add, remove, and customize multiple box shadow layers.</li>
-              <li>Adjust offset, blur, spread, and color for each shadow layer.</li>
-              <li>Toggle the "Inset" switch to create inner shadows.</li>
-              <li>Reorder shadow layers using the up and down arrows.</li>
-              <li>Switch between different units (px, em, rem) for precise control.</li>
-              <li>Use the "Box" tab to customize the preview box's color, size, and border radius.</li>
-              <li>
-                Create and load presets in the "Presets" tab for quick access to your favorite shadow combinations.
-              </li>
-              <li>Preview your box shadow in real-time, with options for fullscreen view.</li>
-              <li>Copy the generated CSS or download it as a file for use in your projects.</li>
-              <li>Use the Reset button to start over with default settings.</li>
-            </ol>
-
-            <h2 className="text-xl font-semibold text-default-700 mb-4 mt-8 flex items-center">
-              <Lightbulb className="w-6 h-6 mr-2" />
-              Key Features
-            </h2>
-            <ul className="list-disc list-inside space-y-2 text-default-600">
-              <li>Multiple shadow layers with individual controls</li>
-              <li>Inset shadow option for inner shadows</li>
-              <li>Customizable offset, blur, spread, and color for each shadow</li>
-              <li>Support for multiple units: px, em, and rem</li>
-              <li>Shadow layer reordering</li>
-              <li>Adjustable preview box color, size, and border radius</li>
-              <li>Preset saving and loading functionality</li>
-              <li>Real-time preview with fullscreen mode</li>
-              <li>Generated CSS code with syntax highlighting</li>
-              <li>Copy to clipboard and download as file options</li>
-              <li>Reset option to quickly return to default settings</li>
-              <li>Responsive design for use on various devices</li>
-            </ul>
-
-            <p className="text-default-600 mt-6">
-              The CSS Box Shadow Generator empowers you to create sophisticated, layered shadow effects that can
-              dramatically improve the visual appeal of your web projects. Whether you're aiming for subtle depth or
-              bold, eye-catching designs, this tool provides the flexibility and precision you need. Start experimenting
-              with box shadows today and elevate your web designs to new heights of professionalism and creativity!
-            </p>
-            </CardBody>
-        </Card>
       </div>
+      <InfoSectionBoxShadow />
       {renderFullscreenPreview()}
     </ToolLayout>
   )

@@ -2,15 +2,12 @@
 
 import type React from "react"
 import { useState, useEffect, useRef, } from "react"
-import NextImage from 'next/image'
-import { Button, Card, CardBody, Input, Switch, Slider, Tabs, Tab, Select, SelectItem,} from "@nextui-org/react"
+import { Button, Card, CardBody, Input, Switch, Slider, Tabs, Tab, Select, SelectItem, } from "@nextui-org/react"
 import { toast } from "react-hot-toast"
 import {
   Copy,
   RefreshCw,
   Info,
-  BookOpen,
-  Lightbulb,
   EyeIcon,
   ImageIcon,
   Plus,
@@ -20,7 +17,8 @@ import {
   RotateCcw,
 } from "lucide-react"
 import ToolLayout from "@/components/ToolLayout"
-import Link from "next/link"
+
+import InfoSectionClipPath from "./info-section"
 
 type Shape =
   | "triangle"
@@ -287,7 +285,7 @@ export default function ClipPathGenerator() {
   const [shape, setShape] = useState<Shape>('triangle')
   const [points, setPoints] = useState(initialShapes.triangle)
   const [clipPath, setClipPath] = useState('')
-  const [imageUrl, setImageUrl] = useState('https://api.unsplash.com/photos/random?orientation=landscape&w=600&h=400') 
+  const [imageUrl, setImageUrl] = useState('https://api.unsplash.com/photos/random?orientation=landscape&w=600&h=400')
   const [, setIsLoadingImage] = useState(false)
   const [showOutside, setShowOutside] = useState(false)
   const [hideGuides, setHideGuides] = useState(false)
@@ -313,11 +311,11 @@ export default function ClipPathGenerator() {
           }
         }
       )
-      
+
       if (!response.ok) {
         throw new Error('Failed to fetch image')
       }
-      
+
       const data = await response.json()
       setImageUrl(data.urls.regular)
     } catch (error) {
@@ -330,10 +328,10 @@ export default function ClipPathGenerator() {
     }
   }
 
-   // Load initial image when component mounts
- useEffect(() => {
-  handleShuffleImage()
-}, [])
+  // Load initial image when component mounts
+  useEffect(() => {
+    handleShuffleImage()
+  }, [])
 
   useEffect(() => {
     updateClipPath()
@@ -364,8 +362,8 @@ export default function ClipPathGenerator() {
     toast.success('CSS copied to clipboard!')
   }
 
-   // Modified reset function
-   const handleReset = () => {
+  // Modified reset function
+  const handleReset = () => {
     setShape('triangle')
     setPoints(initialShapes.triangle)
     handleShuffleImage()
@@ -450,143 +448,143 @@ export default function ClipPathGenerator() {
   return (
     <ToolLayout
       title="CSS Clip Path Generator"
-      description="Create and customize clip-path shapes for your web designs"
+      description="Create custom CSS shapes instantly with our free visual Clip Path Generator."
       toolId="678f382b26f06f912191bc97"
     >
       <div className="flex flex-col gap-8">
         <Card className="bg-default-50 dark:bg-default-100">
-        <CardBody className="p-6">
-          {/* Controls section - responsive layout */}
-          <div className="flex flex-col md:flex-row justify-between items-stretch md:items-center gap-4 mb-4">
-            {/* Shape selector */}
-            <div className="w-full md:w-1/4">
-              <Select
-                label="Select Shape"
-                selectedKeys={new Set([shape])}
-                onSelectionChange={(keys) => setShape(Array.from(keys)[0] as Shape)}
-                variant="bordered"
-              >
-                {Object.keys(initialShapes).map((shapeKey) => (
-                  <SelectItem key={shapeKey} value={shapeKey} className="text-default-700">
-                    {shapeKey.charAt(0).toUpperCase() + shapeKey.slice(1)}
-                  </SelectItem>
-                ))}
-              </Select>
-            </div>
-
-            {/* Sliders container - side by side on all screens */}
-            <div className="w-full md:flex-1 flex flex-col md:flex-row gap-4">
-              {/* Width slider */}
-              <div className="flex-1">
-                <p className="text-small text-default-500 mb-2">Width: {width}%</p>
-                <Slider
-                  aria-label="Width"
-                  size="sm"
-                  step={1}
-                  maxValue={100}
-                  minValue={0}
-                  value={width}
-                  onChange={(value: number | number[]) => setWidth(Array.isArray(value) ? value[0] : value)}
-                />
+          <CardBody className="p-6">
+            {/* Controls section - responsive layout */}
+            <div className="flex flex-col md:flex-row justify-between items-stretch md:items-center gap-4 mb-4">
+              {/* Shape selector */}
+              <div className="w-full md:w-1/4">
+                <Select
+                  label="Select Shape"
+                  selectedKeys={new Set([shape])}
+                  onSelectionChange={(keys) => setShape(Array.from(keys)[0] as Shape)}
+                  variant="bordered"
+                >
+                  {Object.keys(initialShapes).map((shapeKey) => (
+                    <SelectItem key={shapeKey} value={shapeKey} className="text-default-700">
+                      {shapeKey.charAt(0).toUpperCase() + shapeKey.slice(1)}
+                    </SelectItem>
+                  ))}
+                </Select>
               </div>
 
-              {/* Height slider */}
-              <div className="flex-1">
-                <p className="text-small text-default-500 mb-2">Height: {height}%</p>
-                <Slider
-                  aria-label="Height"
-                  size="sm"
-                  step={1}
-                  maxValue={100}
-                  minValue={0}
-                  value={height}
-                  onChange={(value: number | number[]) => setHeight(Array.isArray(value) ? value[0] : value)}
-                />
-              </div>
-            </div>
-
-            {/* Reset button */}
-            <div className="self-end md:self-center">
-              <Button 
-                color="danger" 
-                variant="flat" 
-                isIconOnly
-                onPress={handleReset}
-                aria-label="Reset All"
-              >
-                <RotateCcw className="w-4 h-4" />
-              </Button>
-            </div>
-          </div>
-          
-          {/* Preview section - unchanged */}
-          <div 
-            ref={previewRef}
-            className="relative rounded-lg overflow-hidden touch-none border-2 border-gray-400"
-            style={{ width: '100%', paddingBottom: '50.00%'}}
-            onPointerMove={handlePointerMove}
-            onPointerUp={handlePointerUp}
-            onPointerLeave={handlePointerUp}
-          >
-            <div className="absolute inset-0">
-              <img 
-                src={useCustomBackground && customBackgroundUrl ? customBackgroundUrl : imageUrl} 
-                alt="Clipped image"
-                className="absolute top-0 left-0 w-full h-full object-cover"
-                style={{ 
-                  clipPath: clipPath,
-                  WebkitClipPath: clipPath,
-                  opacity: opacity / 100,
-                }}
-              />
-              {!hideGuides && (
-                <div className="absolute inset-0 pointer-events-none">
-                  <div className="absolute top-1/2 left-0 w-full border-t-2 border-dashed border-blue-500 opacity-50"></div>
-                  <div className="absolute top-0 left-1/2 h-full border-l-2 border-dashed border-blue-500 opacity-50"></div>
+              {/* Sliders container - side by side on all screens */}
+              <div className="w-full md:flex-1 flex flex-col md:flex-row gap-4">
+                {/* Width slider */}
+                <div className="flex-1">
+                  <p className="text-small text-default-500 mb-2">Width: {width}%</p>
+                  <Slider
+                    aria-label="Width"
+                    size="sm"
+                    step={1}
+                    maxValue={100}
+                    minValue={0}
+                    value={width}
+                    onChange={(value: number | number[]) => setWidth(Array.isArray(value) ? value[0] : value)}
+                  />
                 </div>
-              )}
-              {showOutside && (
-                <img 
-                  src={useCustomBackground && customBackgroundUrl ? customBackgroundUrl : imageUrl} 
-                  alt="Outside image"
+
+                {/* Height slider */}
+                <div className="flex-1">
+                  <p className="text-small text-default-500 mb-2">Height: {height}%</p>
+                  <Slider
+                    aria-label="Height"
+                    size="sm"
+                    step={1}
+                    maxValue={100}
+                    minValue={0}
+                    value={height}
+                    onChange={(value: number | number[]) => setHeight(Array.isArray(value) ? value[0] : value)}
+                  />
+                </div>
+              </div>
+
+              {/* Reset button */}
+              <div className="self-end md:self-center">
+                <Button
+                  color="danger"
+                  variant="flat"
+                  isIconOnly
+                  onPress={handleReset}
+                  aria-label="Reset All"
+                >
+                  <RotateCcw className="w-4 h-4" />
+                </Button>
+              </div>
+            </div>
+
+            {/* Preview section - unchanged */}
+            <div
+              ref={previewRef}
+              className="relative rounded-lg overflow-hidden touch-none border-2 border-gray-400"
+              style={{ width: '100%', paddingBottom: '50.00%' }}
+              onPointerMove={handlePointerMove}
+              onPointerUp={handlePointerUp}
+              onPointerLeave={handlePointerUp}
+            >
+              <div className="absolute inset-0">
+                <img
+                  src={useCustomBackground && customBackgroundUrl ? customBackgroundUrl : imageUrl}
+                  alt="Clipped image"
                   className="absolute top-0 left-0 w-full h-full object-cover"
                   style={{
-                    opacity: 0.2,
-                    filter: 'blur(1px)',
-                    transform: 'scale(1.01)',
+                    clipPath: clipPath,
+                    WebkitClipPath: clipPath,
+                    opacity: opacity / 100,
                   }}
                 />
-              )}
-              {!hideGuides && shape !== 'circle' && shape !== 'ellipse' && points && points.length > 0 && points.map(([x, y], index) => (
-                <div
-                  key={index}
-                  className="absolute w-6 h-6 bg-blue-500 rounded-full cursor-move touch-none"
-                  style={{ 
-                    left: `${((100 - width) / 2) + (x * width) / 100}%`, 
-                    top: `${((100 - height) / 2) + (y * height) / 100}%`, 
-                    transform: 'translate(-50%, -50%)' 
-                  }}
-                  onPointerDown={handlePointerDown(index)}
-                />
-              ))}
+                {!hideGuides && (
+                  <div className="absolute inset-0 pointer-events-none">
+                    <div className="absolute top-1/2 left-0 w-full border-t-2 border-dashed border-blue-500 opacity-50"></div>
+                    <div className="absolute top-0 left-1/2 h-full border-l-2 border-dashed border-blue-500 opacity-50"></div>
+                  </div>
+                )}
+                {showOutside && (
+                  <img
+                    src={useCustomBackground && customBackgroundUrl ? customBackgroundUrl : imageUrl}
+                    alt="Outside image"
+                    className="absolute top-0 left-0 w-full h-full object-cover"
+                    style={{
+                      opacity: 0.2,
+                      filter: 'blur(1px)',
+                      transform: 'scale(1.01)',
+                    }}
+                  />
+                )}
+                {!hideGuides && shape !== 'circle' && shape !== 'ellipse' && points && points.length > 0 && points.map(([x, y], index) => (
+                  <div
+                    key={index}
+                    className="absolute w-6 h-6 bg-blue-500 rounded-full cursor-move touch-none"
+                    style={{
+                      left: `${((100 - width) / 2) + (x * width) / 100}%`,
+                      top: `${((100 - height) / 2) + (y * height) / 100}%`,
+                      transform: 'translate(-50%, -50%)'
+                    }}
+                    onPointerDown={handlePointerDown(index)}
+                  />
+                ))}
+              </div>
             </div>
-          </div>
-          
-          {/* Shuffle button - unchanged */}
-          <div className="mt-4">
-            <Button onPress={handleShuffleImage} variant="shadow" color="primary" className="w-full">
-              <RefreshCw className="h-5 w-5 mr-2" />
-              Shuffle Image
-            </Button>
-          </div>
-        </CardBody>
+
+            {/* Shuffle button - unchanged */}
+            <div className="mt-4">
+              <Button onPress={handleShuffleImage} variant="shadow" color="primary" className="w-full">
+                <RefreshCw className="h-5 w-5 mr-2" />
+                Shuffle Image
+              </Button>
+            </div>
+          </CardBody>
         </Card>
 
         <Card className="bg-default-50 dark:bg-default-100">
           <CardBody className="p-6">
             <h2 className="text-2xl font-bold mb-4">Settings</h2>
             <Tabs aria-label="Clip Path Generator options">
-              
+
               <Tab
                 key="points"
                 title={
@@ -635,7 +633,7 @@ export default function ClipPathGenerator() {
                   </Button>
                 </div>
               </Tab>
-              
+
               <Tab
                 key="appearance"
                 title={
@@ -710,7 +708,7 @@ export default function ClipPathGenerator() {
             </div>
             <div className="bg-default-200 dark:bg-default-100 rounded-lg p-4 font-mono text-sm">
               <div className="flex flex-col gap-2">
-              <div className="text-primary">{/* Generated Clip Path CSS */}</div>
+                <div className="text-primary">{/* Generated Clip Path CSS */}</div>
                 <div>.element {"{"}</div>
                 <div className="ml-4 text-success">clip-path: {clipPath};</div>
                 <div className="ml-4 text-success">-webkit-clip-path: {clipPath};</div>
@@ -727,70 +725,8 @@ export default function ClipPathGenerator() {
           </CardBody>
         </Card>
 
-        <Card className="bg-default-50 dark:bg-default-100 p-4 md:p-8">
-      
-            <div className="rounded-xl p-2 md:p-4 max-w-6xl mx-auto">
-              <h2 className="text-lg md:text-xl lg:text-2xl font-semibold text-default-700 mb-4 flex items-center">
-                <Info className="w-6 h-6 mr-2" />
-                What is the Clip Path Generator?
-              </h2>
-              <p className="text-sm md:text-base text-default-600 mb-4">
-              Imagine that you are a digital artist with a magical pair of scissors who can cut any shape from an image. What does this essentially do our  <Link href="#how-to-use" className="text-primary hover:underline">Clip Path Generator</Link>!  It is a fun and spontaneous tool that allows you to make a custom shape to reveal parts of an image hiding others. Whether you are a web designer who are looking to add some flair to your site or trying to create a developer unique UI element, this tool is your new best friend.
-              </p>
-              <p className="text-sm md:text-base text-default-600 mb-4">
-              With clip path generator, you can convert boring rectangles into exciting polygons, convert square profile images into correct circles, or even create complex custom shapes that bring your creative vision into life. It is like being a digital accurate knife that is never sluggish!
-              </p>
-              
-              <div className="my-8">
-                <NextImage 
-                  src="/Images/InfosectionImages/CSSClipPathPreview.png?height=400&width=600" 
-                  alt="Screenshot of the Clip Path Generator interface showing various shape options and controls" 
-                  width={600} 
-                  height={400} 
-                  className="rounded-lg shadow-lg w-full h-auto"
-                />
-              </div>
-              
-              <h2 id="how-to-use" className="text-lg md:text-xl lg:text-2xl font-semibold text-default-700 mb-4 mt-8 flex items-center">
-                <BookOpen className="w-6 h-6 mr-2" />
-                How to Use the Clip Path Generator?
-              </h2>
-              <ol className="list-decimal list-inside space-y-2 text-sm md:text-base">
-                <li>First, head over to the <strong>Shape</strong> tab and pick your shape.</li>
-                <li>Drag the control points to sculpt your shape.</li>
-                <li>Adjust the size using the width and height sliders.</li>
-                <li>Modify the opacity for transparency effects.</li>
-                <li>Toggle "Show Outside" to preview the clipped area.</li>
-                <li>Use "Hide Guides and Points" for a cleaner view.</li>
-                <li>Upload a custom background if desired.</li>
-                <li>Copy the generated CSS code and use it in your project.</li>
-                <li>Use the "Reset" button to start fresh.</li>
-              </ol>
-              
-              <h2 className="text-lg md:text-xl lg:text-2xl font-semibold text-default-700 mb-4 mt-8 flex items-center">
-                <Lightbulb className="w-6 h-6 mr-2" />
-                Features That'll Make You Go "Wow!"
-              </h2>
-              <ul className="list-disc list-inside space-y-2 text-sm md:text-base">
-                <li>A variety of pre-defined shapes from basic to complex.</li>
-                <li>Custom shape option for unique designs.</li>
-                <li>Interactive shape editing with draggable control points.</li>
-                <li>Real-time preview for instant feedback.</li>
-                <li>Adjustable opacity and size controls.</li>
-                <li>Toggle to show/hide the area outside the clip path.</li>
-                <li>Customizable background image upload.</li>
-                <li>One-click CSS code copying for easy integration.</li>
-                <li>Responsive design for all devices.</li>
-              </ul>
-              
-              <p className="text-sm md:text-base text-default-600 mt-4">
-                So, what are you waiting for? Dive in, start clipping, and let your creativity run wild! Who knows? You might just create the next big thing in web design.
-              </p>
-            </div>
-
-        </Card>
-
-    </div>  
+      </div>
+      <InfoSectionClipPath />
     </ToolLayout>
   )
 }

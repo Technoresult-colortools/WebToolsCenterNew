@@ -2,345 +2,417 @@
 
 import type React from "react"
 import { useState, useRef } from "react"
-import { Button, Card, CardBody,  Input, Switch, Textarea, Tabs, Tab } from "@nextui-org/react"
-import { toast, } from "react-hot-toast"
-import { FileMinus,  Upload, Info, BookOpen, FileText, Clipboard, Trash2, DownloadCloud, Settings } from "lucide-react"
+import { Button, Card, CardBody, Input, Textarea, Chip, Progress, Divider, Switch, Slider, Tooltip } from "@nextui-org/react"
+import { toast } from "react-hot-toast"
+import { Upload, Copy, RefreshCw, Download, Zap, FileCode, TrendingDown, Sparkles, Code2, Settings, Wand2, Terminal } from "lucide-react"
 import { minify } from "terser"
 import ToolLayout from "@/components/ToolLayout"
-import Image from "next/image"
+import InfoSectionJavascriptMinifier from "./info-section"
 
-// Constants
-const MAX_FILE_SIZE = 1024 * 1024 // 1MB
-const MAX_CODE_LENGTH = 500000 // 500KB for direct input
+const MAX_FILE_SIZE_MB = 2
+
+interface MinifyOptions {
+  mangle: boolean
+  compress: boolean
+  dropConsole: boolean
+  dropDebugger: boolean
+  formatComments: boolean
+}
 
 export default function JavaScriptMinifier() {
   const [inputJS, setInputJS] = useState("")
   const [outputJS, setOutputJS] = useState("")
   const [fileName, setFileName] = useState("")
-  const [minificationStats, setMinificationStats] = useState<{
-    original: number
-    minified: number
-    savings: number
-  } | null>(null)
-  const [isMinifying, setIsMinifying] = useState(false)
-  const [dropConsole, setDropConsole] = useState(false)
+  const [processStats, setProcessStats] = useState<{ original: number; processed: number; savings: number } | null>(null)
+  const [mode, setMode] = useState<'minify' | 'beautify'>('minify')
+  const [showSettings, setShowSettings] = useState(false)
+  const [isProcessing, setIsProcessing] = useState(false)
+
+  // Minification options
   const [mangle, setMangle] = useState(true)
+  const [compress, setCompress] = useState(true)
+  const [dropConsole, setDropConsole] = useState(false)
+  const [dropDebugger, setDropDebugger] = useState(true)
+  const [formatComments, setFormatComments] = useState(false)
+  const [compressionLevel, setCompressionLevel] = useState(50)
+
   const fileInputRef = useRef<HTMLInputElement>(null)
 
-  const minifyJavaScript = async (code: string) => {
-    setIsMinifying(true)
-    try {
-      if (code.length > MAX_CODE_LENGTH) {
-        throw new Error("Input code exceeds maximum length limit of 500KB")
-      }
-
-      const minifyOptions = {
-        compress: {
-          dead_code: true,
-          drop_debugger: true,
-          conditionals: true,
-          evaluate: true,
-          booleans: true,
-          loops: true,
-          unused: true,
-          hoist_funs: true,
-          keep_fargs: false,
-          hoist_vars: true,
-          if_return: true,
-          join_vars: true,
-          drop_console: dropConsole,
-          passes: 2,
-        },
-        mangle: mangle,
-        format: {
-          comments: false,
-        },
-      }
-
-      const result = await minify(code, minifyOptions)
-
-      if (!result || !result.code) {
-        throw new Error("Minification failed: No output generated")
-      }
-
-      return result.code
-    } catch (error) {
-      if (error instanceof Error) {
-        console.error("Minification error:", error.message)
-        throw new Error(`Minification failed: ${error.message}`)
-      }
-      throw error
-    } finally {
-      setIsMinifying(false)
-    }
-  }
-
-  const handleMinify = async () => {
+  const processJS = async () => {
     if (!inputJS.trim()) {
-      toast.error("Please enter some JavaScript to minify.")
+      toast.error("Please enter some JavaScript to process.")
       return
     }
 
+    setIsProcessing(true)
+
     try {
-      const minified = await minifyJavaScript(inputJS)
-      setOutputJS(minified)
+      let result;
 
-      const originalSize = inputJS.length
-      const minifiedSize = minified.length
-      const savings = originalSize - minifiedSize
-      const savingsPercentage = ((savings / originalSize) * 100).toFixed(2)
+      if (mode === 'minify') {
+        const passes = Math.max(1, Math.floor(compressionLevel / 20))
 
-      setMinificationStats({ original: originalSize, minified: minifiedSize, savings })
-      toast.success(`JavaScript minified successfully! Reduced by ${savingsPercentage}%`)
-    } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : "Unknown error occurred"
-      toast.error(errorMessage)
-      setOutputJS("")
-      setMinificationStats(null)
+        result = await minify(inputJS, {
+          compress: compress ? {
+            dead_code: true,
+            drop_debugger: dropDebugger,
+            conditionals: true,
+            evaluate: true,
+            booleans: true,
+            loops: true,
+            unused: true,
+            hoist_funs: true,
+            keep_fargs: false,
+            hoist_vars: true,
+            if_return: true,
+            join_vars: true,
+            drop_console: dropConsole,
+            passes: passes,
+          } : false,
+          mangle: mangle,
+          format: {
+            comments: formatComments,
+          },
+        })
+      } else {
+        result = await minify(inputJS, {
+          compress: false,
+          mangle: false,
+          format: {
+            beautify: true,
+            comments: true,
+            indent_level: 2,
+          },
+        })
+      }
+
+      if (result && result.code) {
+        setOutputJS(result.code)
+
+        const originalSize = new Blob([inputJS]).size
+        const processedSize = new Blob([result.code]).size
+        const savings = originalSize - processedSize
+        const savingsPercentage = originalSize > 0 ? ((savings / originalSize) * 100).toFixed(2) : "0"
+
+        setProcessStats({
+          original: originalSize,
+          processed: processedSize,
+          savings
+        })
+
+        toast.success(
+          mode === 'minify'
+            ? `JavaScript minified! Reduced by ${savingsPercentage}%`
+            : "JavaScript beautified successfully!"
+        )
+      }
+    } catch (error: any) {
+      console.error("Processing error:", error)
+      toast.error(`Error: ${error.message || "Failed to process JavaScript"}`)
+    } finally {
+      setIsProcessing(false)
     }
   }
 
-  const copyToClipboard = async (text: string) => {
+  const copyToClipboard = (text: string) => {
     if (!text.trim()) {
-      toast.error("No minified JavaScript to copy.")
+      toast.error(`No output to copy.`)
       return
     }
-    try {
-      await navigator.clipboard.writeText(text)
-      toast.success("Copied to clipboard!")
-    } catch {
-      toast.error("Failed to copy to clipboard")
-    }
+    navigator.clipboard.writeText(text)
+    toast.success("Copied to clipboard!")
   }
 
   const handleReset = () => {
     setInputJS("")
     setOutputJS("")
     setFileName("")
-    setMinificationStats(null)
-    if (fileInputRef.current) {
-      fileInputRef.current.value = ""
-    }
+    setProcessStats(null)
+    if (fileInputRef.current) fileInputRef.current.value = ""
     toast.success("Reset successful!")
   }
 
   const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
-    if (!file) return
-
-    if (!file.name.endsWith(".js")) {
-      toast.error("Please upload a JavaScript file (.js)")
-      if (fileInputRef.current) {
-        fileInputRef.current.value = ""
-      }
-      return
-    }
-
-    if (file.size > MAX_FILE_SIZE) {
-      toast.error("File size exceeds 1MB limit")
-      if (fileInputRef.current) {
-        fileInputRef.current.value = ""
-      }
-      return
-    }
-
-    setFileName(file.name)
-    const reader = new FileReader()
-
-    reader.onload = (e) => {
-      const content = e.target?.result as string
-      if (content.length > MAX_CODE_LENGTH) {
-        toast.error("File content exceeds maximum length limit of 500KB")
-        setFileName("")
-        if (fileInputRef.current) {
-          fileInputRef.current.value = ""
-        }
+    if (file) {
+      if (!file.name.endsWith(".js") && file.type !== "text/javascript") {
+        toast.error("Please upload a JavaScript file (.js)")
         return
       }
-      setInputJS(content)
-      toast.success("File uploaded successfully!")
-    }
-
-    reader.onerror = () => {
-      toast.error("Error reading file")
-      setFileName("")
-      if (fileInputRef.current) {
-        fileInputRef.current.value = ""
+      if (file.size > MAX_FILE_SIZE_MB * 1024 * 1024) {
+        toast.error(`File is too large. Max size is ${MAX_FILE_SIZE_MB}MB.`)
+        return
       }
+      setFileName(file.name)
+      const reader = new FileReader()
+      reader.onload = (e) => {
+        setInputJS(e.target?.result as string)
+        toast.success("File uploaded successfully!")
+      }
+      reader.readAsText(file)
     }
-
-    reader.readAsText(file)
   }
 
   const handleDownload = () => {
-    if (!outputJS.trim()) {
-      toast.error("No minified JavaScript to download.")
-      return
+    if (!outputJS.trim()) return
+    const blob = new Blob([outputJS], { type: "application/javascript" })
+    const url = URL.createObjectURL(blob)
+    const a = document.createElement("a")
+    a.href = url
+    a.download = fileName
+      ? fileName.replace(".js", mode === 'minify' ? ".min.js" : ".pretty.js")
+      : (mode === 'minify' ? "script.min.js" : "script.js")
+    document.body.appendChild(a)
+    a.click()
+    document.body.removeChild(a)
+    URL.revokeObjectURL(url)
+  }
+
+  const formatBytes = (bytes: number) => {
+    if (bytes === 0) return "0 Bytes"
+    const k = 1024
+    const sizes = ["Bytes", "KB", "MB"]
+    const i = Math.floor(Math.log(Math.abs(bytes)) / Math.log(k))
+    return (bytes / Math.pow(k, i)).toFixed(2) + " " + sizes[i]
+  }
+
+  const applyPreset = (preset: 'safe' | 'balanced' | 'aggressive') => {
+    switch (preset) {
+      case 'safe':
+        setMangle(false); setCompress(true); setDropConsole(false); setCompressionLevel(20);
+        break
+      case 'balanced':
+        setMangle(true); setCompress(true); setDropConsole(false); setCompressionLevel(50);
+        break
+      case 'aggressive':
+        setMangle(true); setCompress(true); setDropConsole(true); setCompressionLevel(100);
+        break
     }
-    try {
-      const blob = new Blob([outputJS], { type: "application/javascript" })
-      const url = URL.createObjectURL(blob)
-      const a = document.createElement("a")
-      a.href = url
-      a.download = fileName ? `${fileName.replace(".js", ".min.js")}` : "minified.js"
-      document.body.appendChild(a)
-      a.click()
-      document.body.removeChild(a)
-      URL.revokeObjectURL(url)
-      toast.success("Download started!")
-    } catch {
-      toast.error("Failed to download file")
-    }
+    toast.success(`${preset.charAt(0).toUpperCase() + preset.slice(1)} preset applied`)
   }
 
   return (
     <ToolLayout
-      title="JavaScript Minifier"
-      description="JavaScript Minifier is a powerful tool designed to reduce the file size of your JavaScript code"
+      title="JavaScript Minifier & Beautifier"
+      description="Optimize your JS code for production or format it for readability using industry-standard Terser engine"
       toolId="678f382f26f06f912191bcbe"
     >
-
-      <Card className="bg-default-50 dark:bg-default-100">
-        <CardBody className="p-6">
-          <Tabs aria-label="JavaScript Minifier options">
-            <Tab
-              key="minify"
-              title={
-                <div className="flex items-center text-primary">
-                  <FileMinus className="w-4 h-4 mr-2 text-primary" />
-                  Minify JavaScript
-                </div>
-              }
-            >
-              <div className="space-y-4 mt-4">
-                <Textarea
-                  label="JavaScript to Minify"
-                  placeholder="Enter JavaScript to minify..."
-                  value={inputJS}
-                  onChange={(e) => setInputJS(e.target.value)}
-                  minRows={4}
-                  variant="bordered"
-                />
-                <Textarea label="Minified JavaScript" variant="bordered" value={outputJS} readOnly minRows={4} />
-              </div>
-            </Tab>
-          </Tabs>
-
-          <div className="flex items-center space-x-4 mt-4">
-            <Switch isSelected={dropConsole} onValueChange={setDropConsole}>
-              Remove console.log statements
-            </Switch>
-            <Switch isSelected={mangle} onValueChange={setMangle}>
-              Mangle variable names
-            </Switch>
-          </div>
-
-            <div className="flex flex-col md:flex-row gap-2 md:gap-4 mt-4 w-full">
-            <Button className="w-full md:flex-1" color="primary" onPress={handleMinify} isLoading={isMinifying} startContent={<FileText />}>
-                {isMinifying ? "Minifying..." : "Minify"}
-            </Button>
-            <Button className="w-full md:flex-1" color="secondary" onPress={() => copyToClipboard(outputJS)} startContent={<Clipboard />}>
-                Copy
-            </Button>
-            <Button className="w-full md:flex-1" color="danger" onPress={handleReset} startContent={<Trash2 />}>
-                Reset
-            </Button>
-            <Button className="w-full md:flex-1" color="success" onPress={handleDownload} startContent={<DownloadCloud />}>
-                Download
-            </Button>
+      <div className="flex flex-col gap-6">
+        {/* Mode Selection */}
+        <Card className="bg-gradient-to-br from-primary/5 to-secondary/5 dark:from-primary/10 dark:to-secondary/10 backdrop-blur-sm border border-primary/20 shadow-lg">
+          <CardBody className="p-6">
+            <div className="flex items-center gap-2 mb-4">
+              <Wand2 className="w-5 h-5 text-primary" />
+              <h3 className="text-lg font-semibold">Select Mode</h3>
             </div>
-
-
-          {minificationStats && (
-            <Card className="mt-4">
-              <CardBody>
-                <h3 className="font-semibold mb-2">Minification Results:</h3>
-                <p>Original size: {minificationStats.original} bytes</p>
-                <p>Minified size: {minificationStats.minified} bytes</p>
-                <p>
-                  Saved: {minificationStats.savings} bytes (
-                  {((minificationStats.savings / minificationStats.original) * 100).toFixed(2)}%)
-                </p>
-              </CardBody>
-            </Card>
-          )}
-
-          <div className="mt-4">
-            <h3 className="text-lg font-semibold mb-2">Upload JavaScript File</h3>
-            <div className="flex flex-col md:flex-row items-center space-y-2 md:space-y-0 md:space-x-2">
-              <Input type="file" variant="bordered" accept=".js" onChange={handleFileUpload} ref={fileInputRef} />
-              <Button color="primary" onPress={() => fileInputRef.current?.click()} startContent={<Upload />}>
-                Upload
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <Button
+                onPress={() => setMode('minify')}
+                variant={mode === 'minify' ? 'solid' : 'flat'}
+                color={mode === 'minify' ? 'primary' : 'default'}
+                size="lg"
+                className="h-auto py-4 flex flex-col items-center justify-center gap-1 hover:scale-105 transition-transform"
+              >
+                <span className="text-2xl">⚡</span>
+                <span className="font-semibold">Minify JS</span>
+                <span className="text-xs opacity-70">Compress & obfuscate</span>
+              </Button>
+              <Button
+                onPress={() => setMode('beautify')}
+                variant={mode === 'beautify' ? 'solid' : 'flat'}
+                color={mode === 'beautify' ? 'secondary' : 'default'}
+                size="lg"
+                className="h-auto py-4 flex flex-col items-center justify-center gap-1 hover:scale-105 transition-transform"
+              >
+                <span className="text-2xl">✨</span>
+                <span className="font-semibold">Beautify JS</span>
+                <span className="text-xs opacity-70">Format & prettify</span>
               </Button>
             </div>
-            {fileName && <p className="text-sm mt-2">Uploaded: {fileName}</p>}
-          </div>
-        </CardBody>
-      </Card>
-
-      <Card className="mt-8 bg-default-50 dark:bg-default-100 p-4 md:p-8">
-
-            <div className="rounded-xl p-2 md:p-4 max-w-4xl mx-auto">
-            
-            {/* About Section */}
-            <h2 className="text-lg md:text-xl lg:text-2xl font-semibold text-default-700 mb-4 flex items-center">
-                <Info className="w-6 h-6 mr-2" />
-                What is JavaScript Minifier?
-            </h2>
-            <p className="text-sm md:text-base text-default-600 mb-4">
-            Purpose built for web developers, the JavaScript Minifier is a powerful application that is designed to reduce the JavaScript file size to optimize performance. It reduces code by removing all unnecessary characters and optional characters (like whitespace, newlines, and comments) to optimize performance, and and reduce load time. The tool includes advanced options such as **console.log removal** and **variable name mangling**, which are useful for beginners who are optimizing their first JavaScript file or experienced developers optimizing the performance files for an enterprise javascript project.
-            </p>
-           
-
-            {/* Image Preview */}
-            <div className="my-8">
-                <Image
-                 src="/Images/InfosectionImages/JavascriptMinifierPreview.png?height=400&width=600"
-                alt="Screenshot of the JavaScript Minifier interface showing the code editor and minification options"
-                width={600}
-                height={400}
-                className="rounded-lg shadow-lg w-full h-auto"
-                />
-            </div>
-
-            {/* How to Use */}
-            <h2 className="text-lg md:text-xl lg:text-2xl font-semibold text-default-700 mb-4 mt-8 flex items-center">
-                <BookOpen className="w-6 h-6 mr-2" />
-                How to Use JavaScript Minifier?
-            </h2>
-            <ol className="list-decimal list-inside space-y-2 text-sm md:text-base">
-                <li>Enter your JavaScript code in the input area or upload a JavaScript file (max 1MB).</li>
-                <li>Adjust minification options, such as console.log removal and variable name mangling.</li>
-                <li>Click the **"Minify"** button to process your code.</li>
-                <li>Review the minified JavaScript in the output area and check minification statistics.</li>
-                <li>Use the **"Copy"** button to copy the minified JavaScript to your clipboard.</li>
-                <li>Use the **"Download"** button to save the minified JavaScript as a file.</li>
-                <li>Click **"Reset"** to clear all inputs and start over.</li>
-                <li>Experiment with different options to balance file size and readability.</li>
-            </ol>
-
-            {/* Key Features */}
-            <h2 className="text-lg md:text-xl lg:text-2xl font-semibold text-default-700 mb-4 mt-8 flex items-center">
-                <Settings className="w-6 h-6 mr-2" />
-                Key Features
-            </h2>
-            <ul className="list-disc list-inside space-y-2 text-sm md:text-base">
-                <li>Uses **Terser** for efficient JavaScript minification.</li>
-                <li>Advanced compression options for optimal file size reduction.</li>
-                <li>Removes `console.log` statements to clean up the final code.</li>
-                <li>Variable name mangling for further size reduction.</li>
-                <li>Supports direct input and file uploads (up to 1MB).</li>
-                <li>Real-time minification statistics for better optimization insights.</li>
-                <li>Copy to clipboard functionality for quick use.</li>
-                <li>Download minified JavaScript as a file.</li>
-                <li>Responsive design for seamless use on all devices.</li>
-                <li>Syntax error detection and reporting.</li>
-            </ul>
-
-            </div>
-
+          </CardBody>
         </Card>
+
+        {/* Presets */}
+        {mode === 'minify' && (
+          <Card className="bg-gradient-to-br from-primary/5 to-secondary/5 dark:from-primary/10 dark:to-secondary/10 backdrop-blur-sm border border-primary/20 shadow-lg">
+            <CardBody className="p-6">
+              <div className="flex items-center gap-2 mb-4">
+                <Sparkles className="w-5 h-5 text-purple-600 dark:text-purple-400" />
+                <h3 className="text-lg font-semibold">Quick Presets</h3>
+              </div>
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                <Button onPress={() => applyPreset('safe')} variant="flat" size="lg" className="h-auto py-4 flex flex-col bg-white dark:bg-gray-600 hover:scale-105 transition-transform">
+                  <span className="text-2xl">🛡️</span>
+                  <span className="font-semibold">Safe</span>
+                  <span className="text-xs opacity-70">No mangling</span>
+                </Button>
+                <Button onPress={() => applyPreset('balanced')} variant="flat" color="primary" size="lg" className="h-auto py-4 flex flex-col hover:scale-105 transition-transform">
+                  <span className="text-2xl">⚖️</span>
+                  <span className="font-semibold">Balanced</span>
+                  <span className="text-xs opacity-70">Standard</span>
+                </Button>
+                <Button onPress={() => applyPreset('aggressive')} variant="flat" color="warning" size="lg" className="h-auto py-4 flex flex-col hover:scale-105 transition-transform">
+                  <span className="text-2xl">🚀</span>
+                  <span className="font-semibold">Aggressive</span>
+                  <span className="text-xs opacity-70">Max savings</span>
+                </Button>
+              </div>
+            </CardBody>
+          </Card>
+        )}
+
+        {/* Stats */}
+        {processStats && (
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <Card className="bg-gradient-to-br from-blue-500 to-blue-600 text-white shadow-lg">
+              <CardBody className="p-4 flex flex-row items-center justify-between">
+                <div>
+                  <p className="text-xs opacity-90 mb-1">Original Size</p>
+                  <p className="text-xl font-bold">{formatBytes(processStats.original)}</p>
+                </div>
+                <FileCode className="w-8 h-8 opacity-80" />
+              </CardBody>
+            </Card>
+            <Card className="bg-gradient-to-br from-green-500 to-green-600 text-white shadow-lg">
+              <CardBody className="p-4 flex flex-row items-center justify-between">
+                <div>
+                  <p className="text-xs opacity-90 mb-1">{mode === 'minify' ? 'Minified' : 'Formatted'} Size</p>
+                  <p className="text-xl font-bold">{formatBytes(processStats.processed)}</p>
+                </div>
+                <TrendingDown className="w-8 h-8 opacity-80" />
+              </CardBody>
+            </Card>
+            <Card className="bg-gradient-to-br from-purple-500 to-purple-600 text-white shadow-lg">
+              <CardBody className="p-4 flex flex-col justify-center">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-xs opacity-90 mb-1">{mode === 'minify' ? 'Reduced' : 'Change'}</p>
+                    <p className="text-xl font-bold">
+                      {mode === 'minify'
+                        ? `${((processStats.savings / processStats.original) * 100).toFixed(2)}%`
+                        : formatBytes(processStats.savings)}
+                    </p>
+                  </div>
+                  <Sparkles className="w-8 h-8 opacity-80" />
+                </div>
+                {mode === 'minify' && (
+                  <Progress value={(processStats.savings / processStats.original) * 100} className="mt-2" size="sm" classNames={{ indicator: "bg-white/80" }} />
+                )}
+              </CardBody>
+            </Card>
+          </div>
+        )}
+
+        {/* Main Editor */}
+        <Card className="bg-default-50 dark:bg-default-100 shadow-xl">
+          <CardBody className="p-6">
+            <div className="mb-6">
+              <div className="flex items-center justify-between mb-3">
+                <h3 className="text-sm font-semibold flex items-center gap-2">
+                  <Upload className="w-4 h-4" /> Upload JS File
+                </h3>
+                {fileName && <Chip size="sm" color="success" variant="flat">{fileName}</Chip>}
+              </div>
+              <div className="flex gap-2">
+                <Input ref={fileInputRef} type="file" accept=".js" onChange={handleFileUpload} variant="bordered" size="sm" className="flex-1" />
+                <Button onPress={() => fileInputRef.current?.click()} color="primary" size="sm" startContent={<Upload className="w-3 h-3" />}>Upload</Button>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-6">
+              <div>
+                <label className="block text-sm font-semibold mb-2 flex items-center gap-2"><Terminal className="w-4 h-4" /> Input JS</label>
+                <Textarea
+                  placeholder="Paste your code here..."
+                  value={inputJS}
+                  onChange={(e) => setInputJS(e.target.value)}
+                  variant="bordered"
+                  minRows={12}
+                  classNames={{ input: "font-mono text-xs" }}
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-semibold mb-2 flex items-center gap-2"><Code2 className="w-4 h-4" /> Output</label>
+                <Textarea
+                  placeholder="Processed code will appear here..."
+                  value={outputJS}
+                  variant="bordered"
+                  minRows={12}
+                  readOnly
+                  classNames={{ input: "font-mono text-xs" }}
+                />
+              </div>
+            </div>
+
+            {/* ACTION BUTTONS GROUP */}
+            <div className="flex flex-wrap gap-2 mb-6">
+              <Button color="primary" onPress={processJS} isLoading={isProcessing} startContent={!isProcessing && <Zap className="w-4 h-4" />} className="flex-1 font-semibold">
+                {mode === 'minify' ? 'Minify Code' : 'Beautify Code'}
+              </Button>
+              <Button color="success" variant="flat" onPress={() => copyToClipboard(outputJS)} startContent={<Copy className="w-4 h-4" />}>Copy</Button>
+              <Button color="primary" variant="flat" onPress={handleDownload} isDisabled={!outputJS} startContent={<Download className="w-4 h-4" />}>Download</Button>
+
+              {/* ADVANCED SETTINGS ICON BUTTON - POSITIONED BEFORE RESET */}
+              {mode === 'minify' && (
+                <Tooltip content="Advanced Settings">
+                  <Button
+                    isIconOnly
+                    variant="flat"
+                    color="secondary"
+                    onPress={() => setShowSettings(!showSettings)}
+                    className="transition-all"
+                  >
+                    <Settings className={`w-5 h-5 transition-transform ${showSettings ? 'rotate-90 text-primary' : ''}`} />
+                  </Button>
+                </Tooltip>
+              )}
+
+              <Button color="danger" variant="flat" onPress={handleReset} startContent={<RefreshCw className="w-4 h-4" />}>Reset</Button>
+            </div>
+
+            {/* SETTINGS PANEL */}
+            {mode === 'minify' && showSettings && (
+              <div className="mt-2 space-y-6 animate-in fade-in slide-in-from-top-2 duration-300">
+                <Divider className="my-4" />
+                <div className="bg-primary/5 dark:bg-primary/10 rounded-lg p-4 border border-primary/20">
+                  <h4 className="text-sm font-semibold mb-3">Compression Intensity</h4>
+                  <Slider
+                    step={20}
+                    maxValue={100}
+                    minValue={0}
+                    value={compressionLevel}
+                    onChange={(v) => setCompressionLevel(v as number)}
+                    className="max-w-full"
+                    size="sm"
+                  />
+                  <div className="flex justify-between mt-2 text-xs opacity-70">
+                    <span>Fast</span>
+                    <span className="font-bold text-primary">{compressionLevel}%</span>
+                    <span>Maximum (Deep)</span>
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 bg-gradient-to-br from-success/10 to-primary/10 dark:from-success/20 dark:to-primary/20 backdrop-blur-sm border border-success/30 p-4 rounded-lg">
+                  <Switch isSelected={mangle} onValueChange={setMangle} size="sm">
+                    <div className="text-xs font-medium">Mangle Variables <span className="block opacity-60 font-normal">Shorten variable names</span></div>
+                  </Switch>
+                  <Switch isSelected={compress} onValueChange={setCompress} size="sm">
+                    <div className="text-xs font-medium">Compress Logic <span className="block opacity-60 font-normal">Optimize loops & ifs</span></div>
+                  </Switch>
+                  <Switch isSelected={dropConsole} onValueChange={setDropConsole} size="sm">
+                    <div className="text-xs font-medium">Drop Console <span className="block opacity-60 font-normal">Remove console.log</span></div>
+                  </Switch>
+                  <Switch isSelected={formatComments} onValueChange={setFormatComments} size="sm">
+                    <div className="text-xs font-medium">Keep Comments <span className="block opacity-60 font-normal">Preserve JSDoc/Comments</span></div>
+                  </Switch>
+                </div>
+              </div>
+            )}
+          </CardBody>
+        </Card>
+      </div>
+
+      <InfoSectionJavascriptMinifier />
     </ToolLayout>
   )
 }
-

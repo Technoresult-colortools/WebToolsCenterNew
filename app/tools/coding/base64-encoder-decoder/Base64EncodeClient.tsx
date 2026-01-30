@@ -2,7 +2,7 @@
 
 import type React from "react"
 import { useState, useEffect, useRef, useCallback } from "react"
-import { Input, Button, Textarea, Card, CardBody, Tabs, Tab, Select, SelectItem } from "@nextui-org/react"
+import { Button, Textarea, Card, CardBody, Tabs, Tab, Select, SelectItem, Chip, } from "@nextui-org/react"
 import {
   FileLock,
   FileLock2,
@@ -10,21 +10,28 @@ import {
   Copy,
   RefreshCw,
   Info,
-  BookOpen,
-  Settings,
-  Lightbulb,
   Download,
   Eye,
   EyeOff,
+  Settings,
+  Sparkles,
+  Check,
+  Zap,
+  FileText,
 } from "lucide-react"
-import { toast,} from "react-hot-toast"
+import { toast, } from "react-hot-toast"
 import ToolLayout from "@/components/ToolLayout"
-import Image from "next/image"
-import Link from "next/link"
-import { Clock } from "lucide-react" // Import Clock icon
+import InfoSectionBase64 from "./info-section"
 
 const MAX_FILE_SIZE_MB = 5
 const ALLOWED_FILE_TYPES = ["text/plain", "image/png", "image/jpeg", "application/pdf"]
+
+const QUICK_PRESETS = [
+  { name: "Sample Text", icon: "📝", text: "Hello, World! This is a Base64 encoding example." },
+  { name: "JSON Data", icon: "📊", text: '{"name":"John","age":30,"city":"New York"}' },
+  { name: "HTML Code", icon: "🌐", text: "<h1>Hello World</h1><p>This is HTML</p>" },
+  { name: "URL String", icon: "🔗", text: "https://example.com/path?query=value&param=data" },
+]
 
 export default function Base64EncoderDecoder() {
   const [inputText, setInputText] = useState("")
@@ -33,29 +40,30 @@ export default function Base64EncoderDecoder() {
   const [fileName, setFileName] = useState("")
   const [encoding, setEncoding] = useState("UTF-8")
   const [showPreview, setShowPreview] = useState(false)
+  const [showAdvanced, setShowAdvanced] = useState(false)
   const fileInputRef = useRef<HTMLInputElement>(null)
 
   const handleEncode = useCallback(() => {
     try {
-      const encoder = new TextEncoder();
-      const data = encoder.encode(inputText);
-      const encoded = btoa(String.fromCharCode.apply(null, Array.from(data)));
-      setOutputText(encoded);
+      const encoder = new TextEncoder()
+      const data = encoder.encode(inputText)
+      const encoded = btoa(String.fromCharCode.apply(null, Array.from(data)))
+      setOutputText(encoded)
     } catch {
-      toast.error(`Error encoding text. Make sure it's valid ${encoding}.`);
+      toast.error(`Error encoding text. Make sure it's valid ${encoding}.`)
     }
-  }, [inputText, encoding]);
+  }, [inputText, encoding])
 
   const handleDecode = useCallback(() => {
     try {
-      const decoded = atob(inputText);
-      const decoder = new TextDecoder(encoding);
-      const decodedText = decoder.decode(new Uint8Array([...decoded].map((char) => char.charCodeAt(0))));
-      setOutputText(decodedText);
+      const decoded = atob(inputText)
+      const decoder = new TextDecoder(encoding)
+      const decodedText = decoder.decode(new Uint8Array([...decoded].map((char) => char.charCodeAt(0))))
+      setOutputText(decodedText)
     } catch {
-      toast.error("Error decoding text. Make sure it's valid Base64.");
+      toast.error("Error decoding text. Make sure it's valid Base64.")
     }
-  }, [inputText, encoding]);
+  }, [inputText, encoding])
 
   const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0]
@@ -132,13 +140,19 @@ export default function Base64EncoderDecoder() {
     document.body.removeChild(element)
   }
 
+  const applyPreset = (text: string) => {
+    setInputText(text)
+    setActiveTab("encode")
+    toast.success("Preset applied!")
+  }
+
   useEffect(() => {
     if (activeTab === "encode") {
-      handleEncode();
+      handleEncode()
     } else {
-      handleDecode();
+      handleDecode()
     }
-  }, [inputText, activeTab, encoding, handleEncode, handleDecode]); // Now safe Added encoding to dependencies
+  }, [inputText, activeTab, encoding, handleEncode, handleDecode])
 
   return (
     <ToolLayout
@@ -147,216 +161,343 @@ export default function Base64EncoderDecoder() {
       toolId="678f382e26f06f912191bcb9"
     >
 
-      <Card className="bg-default-50 dark:bg-default-100 mb-8">
-        <CardBody className="p-6">
-          <Tabs selectedKey={activeTab} onSelectionChange={(key) => setActiveTab(key as string)}>
-            <Tab
-              key="encode"
-              title={
-                <div className="flex items-center">
-                  <FileLock className="w-4 h-4 mr-2" />
-                  Encode
+      <div className="flex flex-col gap-6">
+        {/* Quick Presets Card */}
+        <Card className="w-full bg-gradient-to-br from-primary/5 to-secondary/5 dark:from-primary/10 dark:to-secondary/10 backdrop-blur-sm border border-primary/20">
+          <CardBody className="p-6">
+            <div className="flex items-center gap-2 mb-4">
+              <Sparkles className="w-5 h-5 text-primary" />
+              <h3 className="text-lg font-semibold text-default-700">Quick Presets</h3>
+              <Chip size="sm" variant="flat" color="primary">
+                New
+              </Chip>
+            </div>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+              {QUICK_PRESETS.map((preset) => (
+                <Button
+                  key={preset.name}
+                  onPress={() => applyPreset(preset.text)}
+                  color="primary"
+                  variant="flat"
+                  className="h-auto py-4 flex flex-col items-center gap-2 hover:scale-105 transition-transform"
+                >
+                  <span className="text-2xl">{preset.icon}</span>
+                  <span className="text-sm font-semibold">{preset.name}</span>
+                </Button>
+              ))}
+            </div>
+          </CardBody>
+        </Card>
+
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          {/* Left Column - Input and Output */}
+          <div className="lg:col-span-2 space-y-6">
+            {/* Input Section */}
+            <Card className="w-full bg-default-50/70 dark:bg-default-100/70 backdrop-blur-sm border border-default-200/50">
+              <CardBody className="space-y-4 p-6">
+                <div className="flex items-center justify-between">
+                  <h2 className="text-xl font-semibold text-default-700 flex items-center gap-2">
+                    <FileText className="w-5 h-5 text-primary" />
+                    Input
+                  </h2>
+                  <div className="flex gap-2">
+                    <Button size="sm" color="danger" variant="flat" onPress={handleReset} startContent={<RefreshCw className="w-4 h-4" />}>
+                      Clear
+                    </Button>
+                  </div>
                 </div>
-              }
-            >
-              <div className="space-y-4 mt-4">
-                <Textarea
-                  label="Text to Encode"
-                  placeholder="Enter text to encode..."
-                  variant="bordered"
-                  value={inputText}
-                  onChange={(e) => setInputText(e.target.value)}
-                  minRows={4}
-                />
-                <Textarea label="Encoded Base64" variant="bordered" value={outputText} readOnly minRows={4} />
-              </div>
-            </Tab>
-            <Tab
-              key="decode"
-              title={
-                <div className="flex items-center">
-                  <FileLock2 className="w-4 h-4 mr-2" />
-                  Decode
+
+                <Tabs selectedKey={activeTab} onSelectionChange={(key) => setActiveTab(key as string)} variant="underlined" color="primary">
+                  <Tab
+                    key="encode"
+                    title={
+                      <div className="flex items-center gap-2">
+                        <FileLock className="w-4 h-4" />
+                        <span className="font-medium">Encode</span>
+                      </div>
+                    }
+                  />
+                  <Tab
+                    key="decode"
+                    title={
+                      <div className="flex items-center gap-2">
+                        <FileLock2 className="w-4 h-4" />
+                        <span className="font-medium">Decode</span>
+                      </div>
+                    }
+                  />
+                </Tabs>
+
+                <div className="relative">
+                  <Textarea
+                    label={activeTab === "encode" ? "Text to Encode" : "Base64 to Decode"}
+                    placeholder={activeTab === "encode" ? "Enter text to encode..." : "Enter Base64 to decode..."}
+                    variant="bordered"
+                    value={inputText}
+                    onChange={(e) => setInputText(e.target.value)}
+                    minRows={6}
+                    classNames={{
+                      input: "text-sm font-mono",
+                    }}
+                  />
+                  <div className="absolute bottom-3 right-3">
+                    <Chip size="sm" variant="flat" color={inputText.length > 0 ? "primary" : "default"}>
+                      {inputText.length} chars
+                    </Chip>
+                  </div>
                 </div>
-              }
-            >
-              <div className="space-y-4 mt-4">
+
+                {/* File Upload */}
+                <div className="relative">
+                  <label className="flex flex-col items-center justify-center w-full p-6 border-2 border-dashed border-default-300 rounded-lg cursor-pointer hover:border-primary hover:bg-primary/5 transition-all duration-200">
+                    <input type="file" className="hidden" onChange={handleFileUpload} ref={fileInputRef} accept=".txt,.png,.jpg,.jpeg,.pdf" />
+                    <Upload className="h-8 w-8 text-default-400 mb-2" />
+                    <span className="text-default-600 text-sm font-medium">Upload file to encode/decode</span>
+                    <span className="text-default-400 text-xs mt-1">Click or drag and drop</span>
+                  </label>
+                  {fileName && (
+                    <div className="mt-2 p-2 bg-success/10 rounded-lg flex items-center gap-2">
+                      <Check className="w-4 h-4 text-success" />
+                      <span className="text-sm text-success font-medium">{fileName}</span>
+                    </div>
+                  )}
+                  <p className="text-xs text-default-500 flex items-center gap-1 mt-2">
+                    <Info className="w-3 h-3" />
+                    Max {MAX_FILE_SIZE_MB}MB • PNG, JPEG, PDF, TXT
+                  </p>
+                </div>
+              </CardBody>
+            </Card>
+
+            {/* Output Section */}
+            <Card className="w-full bg-gradient-to-br from-success/10 to-primary/10 dark:from-success/20 dark:to-primary/20 backdrop-blur-sm border border-success/30">
+              <CardBody className="space-y-4 p-6">
+                <div className="flex items-center justify-between">
+                  <h2 className="text-xl font-semibold text-default-700 flex items-center gap-2">
+                    <Check className="w-5 h-5 text-success" />
+                    Output
+                  </h2>
+                  <Chip color="success" variant="flat" size="sm" startContent={<Check className="w-3 h-3" />}>
+                    {activeTab === "encode" ? "Encoded" : "Decoded"}
+                  </Chip>
+                </div>
+
                 <Textarea
-                  label="Base64 to Decode"
-                  placeholder="Enter Base64 to decode..."
+                  label={activeTab === "encode" ? "Encoded Base64" : "Decoded Text"}
                   variant="bordered"
-                  value={inputText}
-                  onChange={(e) => setInputText(e.target.value)}
-                  minRows={4}
+                  value={outputText}
+                  readOnly
+                  minRows={6}
+                  classNames={{
+                    input: "text-sm font-mono text-primary font-semibold",
+                    inputWrapper: "bg-white/70 dark:bg-gray-900/50 border-2",
+                  }}
+                  placeholder="Your output will appear here..."
                 />
-                <Textarea label="Decoded Text" variant="bordered" value={outputText} readOnly minRows={4} />
-              </div>
-            </Tab>
-          </Tabs>
 
-          <div className="flex flex-wrap gap-4 mt-4">
-            <Button color="primary" onClick={() => copyToClipboard(outputText)}>
-              <Copy className="w-4 h-4 mr-2" />
-              Copy {activeTab === "encode" ? "Encoded" : "Decoded"}
-            </Button>
-            <Button color="danger" onClick={handleReset}>
-              <RefreshCw className="w-4 h-4 mr-2" />
-              Reset
-            </Button>
-            <Button color="success" onClick={handleDownload}>
-              <Download className="w-4 h-4 mr-2" />
-              Download
-            </Button>
-            <Button color="primary" onClick={() => setShowPreview(!showPreview)}>
-              {showPreview ? <EyeOff className="w-4 h-4 mr-2" /> : <Eye className="w-4 h-4 mr-2" />}
-              {showPreview ? "Hide" : "Show"} Preview
-            </Button>
+                <div className="flex gap-3 flex-wrap">
+                  <Button
+                    color="primary"
+                    variant="shadow"
+                    onPress={() => copyToClipboard(outputText)}
+                    startContent={<Copy className="w-4 h-4" />}
+                    className="flex-1 min-w-[140px]"
+                    isDisabled={!outputText}
+                  >
+                    Copy Output
+                  </Button>
+                  <Button
+                    color="secondary"
+                    variant="flat"
+                    onPress={handleDownload}
+                    startContent={<Download className="w-4 h-4" />}
+                    className="flex-1 min-w-[140px]"
+                    isDisabled={!outputText}
+                  >
+                    Download
+                  </Button>
+                  <Button
+                    color="default"
+                    variant="bordered"
+                    onPress={() => setShowPreview(!showPreview)}
+                    startContent={showPreview ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                  >
+                    {showPreview ? "Hide" : "Show"} Preview
+                  </Button>
+                </div>
+
+                {/* Stats Grid */}
+                <div className="grid grid-cols-2 gap-3">
+                  <div className="p-3 bg-white/50 dark:bg-gray-900/30 rounded-lg text-center">
+                    <p className="text-xs text-default-500">Input Length</p>
+                    <p className="text-lg font-bold text-primary">{inputText.length}</p>
+                  </div>
+                  <div className="p-3 bg-white/50 dark:bg-gray-900/30 rounded-lg text-center">
+                    <p className="text-xs text-default-500">Output Length</p>
+                    <p className="text-lg font-bold text-secondary">{outputText.length}</p>
+                  </div>
+                </div>
+
+                {/* Preview */}
+                {showPreview && outputText && (
+                  <div className="p-4 bg-white/50 dark:bg-gray-900/30 rounded-lg border border-default-200">
+                    <p className="text-xs text-default-500 mb-2 font-medium">Preview:</p>
+                    <div className="text-sm text-default-700 break-all max-h-40 overflow-y-auto">
+                      {outputText}
+                    </div>
+                  </div>
+                )}
+              </CardBody>
+            </Card>
           </div>
 
-          <div className="mt-6">
-            <h3 className="text-lg font-semibold mb-2">Upload File to Encode/Decode</h3>
-            <div className="flex flex-col sm:flex-row items-center space-y-2 sm:space-y-0 sm:space-x-2">
-              <Input type="file" variant="bordered" onChange={handleFileUpload} ref={fileInputRef} className="w-3/4" />
-              <Button color="primary" onClick={() => fileInputRef.current?.click()}>
-                <Upload className="w-4 h-4 mr-2" />
-                Upload
-              </Button>
-            </div>
-            {fileName && <p className="text-sm mt-2">Uploaded: {fileName}</p>}
-            <p className="text-sm text-default-400 flex items-center mt-2">
-              <Info className="w-4 h-4 mr-1" />
-              Max file size: {MAX_FILE_SIZE_MB}MB. Allowed types: PNG, JPEG, PDF, TXT
-            </p>
+          {/* Right Column - Settings */}
+          <div className="space-y-6">
+            {/* Configuration Section */}
+            <Card className="w-full bg-default-50/70 dark:bg-default-100/70 backdrop-blur-sm border border-default-200/50">
+              <CardBody className="p-6">
+                <div className="flex items-center gap-2 mb-4">
+                  <Settings className="w-5 h-5 text-primary" />
+                  <h2 className="text-lg font-semibold text-default-700">Configuration</h2>
+                </div>
+
+                <div className="space-y-4">
+                  <div className="space-y-2">
+                    <label className="text-sm font-medium text-default-700">Character Encoding</label>
+                    <Select
+                      selectedKeys={[encoding]}
+                      variant="bordered"
+                      onChange={(e) => setEncoding(e.target.value)}
+                      size="sm"
+                      classNames={{
+                        trigger: "bg-white dark:bg-gray-900/50",
+                      }}
+                    >
+                      <SelectItem key="UTF-8" value="UTF-8">
+                        UTF-8 (Default)
+                      </SelectItem>
+                      <SelectItem key="ASCII" value="ASCII">
+                        ASCII
+                      </SelectItem>
+                      <SelectItem key="ISO-8859-1" value="ISO-8859-1">
+                        ISO-8859-1 (Latin-1)
+                      </SelectItem>
+                    </Select>
+                    <p className="text-xs text-default-500 flex items-center gap-1">
+                      <Info className="w-3 h-3" />
+                      Choose the character encoding format
+                    </p>
+                  </div>
+
+                  {/* Mode Indicator */}
+                  <div className="p-4 bg-gradient-to-r from-primary/10 to-secondary/10 rounded-lg">
+                    <div className="flex items-center justify-between mb-2">
+                      <span className="text-sm font-medium text-default-700">Current Mode</span>
+                      <Chip size="sm" color={activeTab === "encode" ? "primary" : "secondary"} variant="flat">
+                        {activeTab === "encode" ? "Encoding" : "Decoding"}
+                      </Chip>
+                    </div>
+                    <p className="text-xs text-default-500">
+                      {activeTab === "encode"
+                        ? "Converting text to Base64 format"
+                        : "Converting Base64 back to original text"}
+                    </p>
+                  </div>
+
+                  {/* Advanced Settings Toggle */}
+                  <div className="pt-4 border-t border-default-200">
+                    <div
+                      className="flex items-center justify-between p-3 bg-default-100 dark:bg-default-50 rounded-lg cursor-pointer hover:bg-default-200 dark:hover:bg-default-100 transition-colors"
+                      onClick={() => setShowAdvanced(!showAdvanced)}
+                    >
+                      <span className="text-sm font-medium text-default-700">Advanced Options</span>
+                      {showAdvanced ? <EyeOff className="w-4 h-4 text-default-400" /> : <Eye className="w-4 h-4 text-primary" />}
+                    </div>
+                  </div>
+
+                  {showAdvanced && (
+                    <div className="space-y-3 pt-2">
+                      <div className="p-3 bg-white/50 dark:bg-gray-900/30 rounded-lg">
+                        <p className="text-xs font-medium text-default-700 mb-1">Output Format</p>
+                        <p className="text-xs text-default-500">Standard Base64 encoding with padding</p>
+                      </div>
+                      <div className="p-3 bg-white/50 dark:bg-gray-900/30 rounded-lg">
+                        <p className="text-xs font-medium text-default-700 mb-1">Line Breaks</p>
+                        <p className="text-xs text-default-500">No line breaks (continuous string)</p>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </CardBody>
+            </Card>
+
+            {/* Info Card */}
+            <Card className="w-full bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 backdrop-blur-sm border border-blue-200 dark:border-blue-800">
+              <CardBody className="p-6">
+                <div className="flex items-center gap-2 mb-3">
+                  <Info className="w-5 h-5 text-blue-600 dark:text-blue-400" />
+                  <h3 className="text-sm font-semibold text-default-700">About Base64</h3>
+                </div>
+                <div className="space-y-2 text-xs text-default-600">
+                  <p>Base64 is a binary-to-text encoding scheme that represents binary data in ASCII format.</p>
+                  <div className="pt-2 border-t border-blue-200 dark:border-blue-800">
+                    <p className="font-medium mb-1">Common Uses:</p>
+                    <ul className="list-disc list-inside space-y-1 text-default-500">
+                      <li>Email attachments</li>
+                      <li>Data URLs in HTML/CSS</li>
+                      <li>API data transmission</li>
+                      <li>Storing binary data in text format</li>
+                    </ul>
+                  </div>
+                </div>
+              </CardBody>
+            </Card>
+
+            {/* Quick Actions */}
+            <Card className="w-full bg-default-50/70 dark:bg-default-100/70 backdrop-blur-sm border border-default-200/50">
+              <CardBody className="p-6">
+                <div className="flex items-center gap-2 mb-4">
+                  <Zap className="w-5 h-5 text-primary" />
+                  <h2 className="text-lg font-semibold text-default-700">Quick Actions</h2>
+                </div>
+                <div className="space-y-2">
+                  <Button
+                    className="w-full justify-start"
+                    variant="flat"
+                    color="primary"
+                    size="sm"
+                    onPress={() => setActiveTab(activeTab === "encode" ? "decode" : "encode")}
+                    startContent={<RefreshCw className="w-4 h-4" />}
+                  >
+                    Switch to {activeTab === "encode" ? "Decode" : "Encode"}
+                  </Button>
+                  <Button
+                    className="w-full justify-start"
+                    variant="flat"
+                    color="secondary"
+                    size="sm"
+                    onPress={() => fileInputRef.current?.click()}
+                    startContent={<Upload className="w-4 h-4" />}
+                  >
+                    Upload File
+                  </Button>
+                  <Button
+                    className="w-full justify-start"
+                    variant="flat"
+                    color="default"
+                    size="sm"
+                    onPress={handleReset}
+                    startContent={<RefreshCw className="w-4 h-4" />}
+                  >
+                    Clear All
+                  </Button>
+                </div>
+              </CardBody>
+            </Card>
           </div>
-
-          <div className="mt-6">
-            <h3 className="text-lg font-semibold mb-2">Advanced Options</h3>
-            <div className="flex flex-col sm:flex-row items-center space-y-2 sm:space-y-0 sm:space-x-2">
-              <Select
-                label="Encoding"
-                selectedKeys={[encoding]}
-                variant="bordered"
-                onSelectionChange={(keys) => setEncoding(Array.from(keys)[0] as string)}
-              >
-                <SelectItem key="UTF-8" value="UTF-8" className="text-default-700">
-                  UTF-8
-                </SelectItem>
-                <SelectItem key="ASCII" value="ASCII" className="text-default-700">
-                  ASCII
-                </SelectItem>
-                <SelectItem key="ISO-8859-1" value="ISO-8859-1" className="text-default-700">
-                  ISO-8859-1
-                </SelectItem>
-              </Select>
-            </div>
-          </div>
-
-          {showPreview && (
-            <div className="mt-6">
-              <h3 className="text-lg font-semibold mb-2">Preview</h3>
-              <div className="bg-white p-4 rounded-md">
-                <div dangerouslySetInnerHTML={{ __html: outputText }} />
-              </div>
-            </div>
-          )}
-        </CardBody>
-      </Card>
-
-      {/* Info Section */}
-      <Card className="bg-default-50 dark:bg-default-100 p-4 md:p-8">
-        <div className="rounded-xl p-2 md:p-4 max-w-4xl mx-auto">
-          <h2 className="text-lg md:text-xl lg:text-2xl font-semibold text-default-700 mb-4 flex items-center">
-            <Info className="w-6 h-6 mr-2" />
-            What is the Base64 Encoder/Decoder?
-          </h2>
-          <p className="text-sm md:text-base text-default-600 mb-4">
-          Base64 is a versatile tool designed for Enkodar/decoder developers, IT professionals and anyone working with data encoding. It provides a{" "}
-            <Link href="#how-to-use" className="text-primary hover:underline">
-              user-friendly interface
-            </Link>{" "}
-            for encoding and decoding the lessons using the base 64 plan. Whether you are working on web development, data transmission, or simply needs to be converted between text and base 64, our tool simplifies the process with real -time conversion and advanced features.
-          </p>
-          <p className="text-sm md:text-base text-default-600 mb-4">
-          With many file types, support for various lessons encoding and instant preview functionality, it is like being a Swiss Army knife for the base 64 operation in your browser. Say goodbye to command-line tools or limited online converters and hello to a broad base 64 solution!
-          </p>
-
-          <div className="my-8">
-            <Image
-              src="/Images/InfosectionImages/Base64EncoderPreview.png?height=400&width=600"
-              alt="Screenshot of the Base64 Encoder/Decoder interface showing encoding and decoding options"
-              width={600}
-              height={400}
-              className="rounded-lg shadow-lg w-full h-auto"
-            />
-          </div>
-
-          <h2
-            id="how-to-use"
-            className="text-lg md:text-xl lg:text-2xl font-semibold text-default-700 mb-4 mt-8 flex items-center"
-          >
-            <BookOpen className="w-6 h-6 mr-2" />
-            How to Use the Base64 Encoder/Decoder?
-          </h2>
-          <p className="text-sm md:text-base text-default-600 mb-4">
-            Using our Base64 Encoder/Decoder is straightforward. Here's a quick guide to get you started:
-          </p>
-          <ol className="list-decimal list-inside space-y-2 text-sm md:text-base">
-            <li>Choose between the Encode and Decode tabs based on your needs.</li>
-            <li>Enter or paste your text or Base64 string into the input field.</li>
-            <li>Watch as the conversion happens in real-time in the output field.</li>
-            <li>For file encoding/decoding, use the file upload feature.</li>
-            <li>Customize the encoding type in the Advanced Options if needed.</li>
-            <li>Use the Copy, Reset, or Download buttons to manage your output.</li>
-            <li>Toggle the Preview feature to see a rendered version of decoded HTML content.</li>
-          </ol>
-
-          <h2
-            id="features"
-            className="text-lg md:text-xl lg:text-2xl font-semibold text-default-700 mb-4 mt-8 flex items-center"
-          >
-            <Lightbulb className="w-6 h-6 mr-2" />
-            Key Features
-          </h2>
-          <ul className="list-disc list-inside space-y-2 text-xs md:text-sm">
-            <li>
-              <Settings className="w-4 h-4 inline-block mr-1" /> <strong>Real-time conversion:</strong> Instantly encode
-              or decode as you type
-            </li>
-            <li>
-              <Upload className="w-4 h-4 inline-block mr-1" /> <strong>File support:</strong> Upload and process PNG,
-              JPEG, PDF, and text files
-            </li>
-            <li>
-              <RefreshCw className="w-4 h-4 inline-block mr-1" /> <strong>Multiple encodings:</strong> Support for
-              UTF-8, ASCII, and ISO-8859-1
-            </li>
-            <li>
-              <Eye className="w-4 h-4 inline-block mr-1" /> <strong>Preview functionality:</strong> Render decoded HTML
-              content
-            </li>
-            <li>
-              <Copy className="w-4 h-4 inline-block mr-1" /> <strong>Quick actions:</strong> Copy, reset, and download
-              results easily
-            </li>
-            <li>
-              <Info className="w-4 h-4 inline-block mr-1" /> <strong>Error handling:</strong> Clear notifications for
-              invalid inputs or processing issues
-            </li>
-            <li>
-              <Clock className="w-4 h-4 inline-block mr-1" /> <strong>Automatic detection:</strong> Identifies Base64
-              content in uploaded files
-            </li>
-          </ul>
-
-          <p className="text-sm md:text-base text-default-600 mt-6">
-            Ready to simplify your Base64 encoding and decoding tasks? Start using our Base64 Encoder/Decoder now and
-            experience the power of efficient data conversion. Whether you're a seasoned developer working with complex
-            data formats or a beginner exploring the world of encoding, our tool provides the perfect balance of
-            simplicity and advanced features. Try it out and see how it can streamline your workflow!
-          </p>
         </div>
-      </Card>
+      </div>
+      <InfoSectionBase64 />
     </ToolLayout>
   )
 }
-

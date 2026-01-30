@@ -11,14 +11,12 @@ import {
   RefreshCw,
   Minimize,
   Maximize,
-  Info,
-  BookOpen,
-  Lightbulb,
   Check,
   X,
 } from "lucide-react"
 import { toast } from "react-hot-toast"
 import ToolLayout from "@/components/ToolLayout"
+import InfoSectionJSONValidator from "./info-section"
 
 const MAX_CHARS = 100000
 
@@ -103,22 +101,22 @@ export default function JsonValidator() {
   const beautifyJson = useCallback(() => {
     try {
       const parsedJson: unknown = JSON.parse(jsonInput);
-  
+
       // Define the replacer function with correct TypeScript types
       const replacer = sortKeys
         ? (function (_key: string, value: unknown) {
-            if (value && typeof value === "object" && !Array.isArray(value)) {
-              return Object.keys(value as Record<string, unknown>)
-                .sort()
-                .reduce<Record<string, unknown>>((sorted, key) => {
-                  sorted[key] = (value as Record<string, unknown>)[key];
-                  return sorted;
-                }, {});
-            }
-            return value;
-          } as (this: unknown, key: string, value: unknown) => unknown)
+          if (value && typeof value === "object" && !Array.isArray(value)) {
+            return Object.keys(value as Record<string, unknown>)
+              .sort()
+              .reduce<Record<string, unknown>>((sorted, key) => {
+                sorted[key] = (value as Record<string, unknown>)[key];
+                return sorted;
+              }, {});
+          }
+          return value;
+        } as (this: unknown, key: string, value: unknown) => unknown)
         : undefined;
-  
+
       const formatted = JSON.stringify(parsedJson, replacer, indentSize);
       setFormattedJson(formatted);
       setActiveTab("formatted");
@@ -128,7 +126,7 @@ export default function JsonValidator() {
       toast.error("Invalid JSON. Please fix errors before beautifying.");
     }
   }, [jsonInput, sortKeys, indentSize]);
-  
+
   const downloadJson = useCallback(() => {
     const blob = new Blob([formattedJson], { type: "application/json" })
     const url = URL.createObjectURL(blob)
@@ -184,36 +182,36 @@ export default function JsonValidator() {
             </p>
 
             <div className="flex flex-wrap gap-4 mt-4">
-            <Select
+              <Select
                 id="indent-size"
                 label="Indent Size"
                 placeholder="Select indent size..."
                 selectedKeys={new Set([indentSize.toString()])}
                 onSelectionChange={(keys) => {
-                    const selected = Array.from(keys)[0];
-                    setIndentSize(Number(selected));
+                  const selected = Array.from(keys)[0];
+                  setIndentSize(Number(selected));
                 }}
                 className="flex-1 max-w-xs"
                 variant="bordered"
                 listboxProps={{
-                    className: "max-h-[200px] overflow-y-auto", // Control dropdown scrolling
+                  className: "max-h-[200px] overflow-y-auto", // Control dropdown scrolling
                 }}
                 classNames={{
-                    trigger: "bg-default-100 data-[hover=true]:bg-default-200",
-                    listbox: "overflow-y-auto", // Ensure dropdown scrolling
+                  trigger: "bg-default-100 data-[hover=true]:bg-default-200",
+                  listbox: "overflow-y-auto", // Ensure dropdown scrolling
                 }}
-                >
+              >
                 {[2, 4, 8].map((size) => (
-                    <SelectItem
+                  <SelectItem
                     key={size.toString()}
                     value={size.toString()}
                     textValue={`${size} spaces`}
                     className="text-default-700 dark:text-default-600 hover:bg-default-100 dark:hover:bg-default-200"
-                    >
+                  >
                     {size} spaces
-                    </SelectItem>
+                  </SelectItem>
                 ))}
-                </Select>
+              </Select>
 
 
               <div className="flex items-center gap-2">
@@ -303,78 +301,9 @@ export default function JsonValidator() {
           </CardBody>
         </Card>
 
-        {/* Info Section */}
-        <Card className="mt-8 bg-default-50 dark:bg-default-100">
-          <CardBody className="p-6">
-            <div className="rounded-xl p-2 md:p-4 max-w-4xl mx-auto">
-              <h2 className="text-lg md:text-xl lg:text-2xl font-semibold text-default-700 mb-4 flex items-center">
-                <Info className="w-6 h-6 mr-2" />
-                What is JSON Validator and Formatter?
-              </h2>
-              <p className="text-sm md:text-base text-default-600 mb-4">
-                The JSON Validator and Formatter is a powerful tool designed for verification and anyone working with developers, data analysts and anyone working with JSON data. It offers JSON to validate, format and manipulate a broad set of features, ensuring that your data is correct, well structured, and easy to read.
-              </p>
-              <p className="text-sm md:text-base text-default-600 mb-4">
-                Whether you're debugging API responses, cleaning up configuration files, or preparing data for
-                transmission, our JSON Validator and Formatter streamlines your workflow and helps catch errors before
-                they become problems.
-              </p>
 
-              <div className="my-8">
-                <Image
-                src="/Images/InfosectionImages/JSONValidatorPreview.png?height=400&width=600"
-                  alt="Screenshot of the JSON Validator and Formatter interface"
-                  width={600}
-                  height={400}
-                  className="rounded-lg shadow-lg"
-                />
-              </div>
-
-              <h2 className="text-lg md:text-xl lg:text-2xl font-semibold text-default-700 mb-4 mt-8 flex items-center">
-                <BookOpen className="w-6 h-6 mr-2" />
-                How to Use JSON Validator and Formatter?
-              </h2>
-              <ol className="list-decimal list-inside text-default-600 space-y-2 text-sm md:text-base">
-                <li>Paste your JSON into the input area or upload a JSON file.</li>
-                <li>Click 'Validate JSON' to check if your JSON is valid.</li>
-                <li>Use 'Minify' to compress your JSON or 'Beautify' to format it with proper indentation.</li>
-                <li>Adjust the indent size for beautification as needed (2, 4, or 8 spaces).</li>
-                <li>Toggle 'Sort Keys' to alphabetically sort object keys when beautifying.</li>
-                <li>View the formatted JSON in the 'Formatted JSON' tab.</li>
-                <li>Check minification details after minifying your JSON.</li>
-                <li>Copy the formatted JSON to clipboard or download it as a file.</li>
-                <li>Use the 'Clear' button to reset the input and start over.</li>
-              </ol>
-
-              <h2 className="text-lg md:text-xl lg:text-2xl font-semibold text-default-700 mb-4 mt-8 flex items-center">
-                <Lightbulb className="w-6 h-6 mr-2" />
-                Key Features
-              </h2>
-              <ul className="list-disc list-inside text-default-600 space-y-2 text-sm md:text-base">
-                <li>JSON validation with detailed error messages</li>
-                <li>Minification for compact JSON representation</li>
-                <li>Beautification with customizable indentation</li>
-                <li>Option to sort object keys alphabetically</li>
-                <li>Detailed minification statistics</li>
-                <li>File upload and download capabilities</li>
-                <li>Copy-to-clipboard functionality for quick use</li>
-                <li>Clear and intuitive user interface</li>
-                <li>Real-time feedback and notifications</li>
-                <li>Support for large JSON files</li>
-              </ul>
-
-
-              <p className="text-sm md:text-base text-default-600 mt-6">
-                The JSON Validator and Formatter is an essential tool for anyone working with JSON data. By providing a
-                user-friendly interface with powerful features, it simplifies the process of working with JSON, helping
-                you catch errors early and ensure your data is always in the best possible format. With the added
-                minification details, you can now easily track the efficiency of your JSON compression, making it
-                invaluable for optimizing data transfer in your applications.
-              </p>
-            </div>
-          </CardBody>
-        </Card>
       </div>
+      <InfoSectionJSONValidator />
     </ToolLayout>
   )
 }

@@ -15,10 +15,10 @@ import {
   Modal,
   ModalContent,
 } from "@nextui-org/react"
-import Image from "next/image"
-import { Copy, Download, Info, Lightbulb, BookOpen, RefreshCw, Maximize2, X } from "lucide-react"
+import { Copy, Download, RefreshCw, Maximize2, X } from "lucide-react"
 import { toast } from "react-hot-toast"
 import ToolLayout from "@/components/ToolLayout"
+import InfoSectionBorderRadius from "./info-section"
 
 type BorderRadius = {
   topLeft: number
@@ -183,7 +183,7 @@ export default function EnhancedBorderRadiusGenerator() {
       </ModalContent>
     </Modal>
   );
-  
+
 
   return (
     <ToolLayout
@@ -196,7 +196,7 @@ export default function EnhancedBorderRadiusGenerator() {
           <CardBody className="p-6">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               <div>
-   
+
                 <div
                   className="bg-default-200 dark:bg-default-700 p-4 rounded-lg flex items-center justify-center relative"
                   style={{ minHeight: "300px" }}
@@ -209,7 +209,7 @@ export default function EnhancedBorderRadiusGenerator() {
               </div>
 
               <div>
-         
+
                 <Tabs aria-label="Border Radius options">
                   <Tab key="corners" title="Corners">
                     <div className="space-y-4 mt-4">
@@ -364,97 +364,37 @@ export default function EnhancedBorderRadiusGenerator() {
               </div>
             </div>
 
-      
+
             <Card className="bg-default-50 dark:bg-default-100 mt-6">
-                <CardBody className="p-6">
-                    <h2 className="text-xl md:text-2xl font-bold text-default-700 mb-4">Generated CSS</h2>
-                    <div className="bg-default-200 p-4 rounded-lg overflow-x-auto max-h-60 overflow-y-auto">
-                    <pre className="text-default-700 whitespace-pre-wrap break-all text-xs md:text-sm">
-                        {css}
-                    </pre>
-                    </div>
-                </CardBody>
-                </Card>
+              <CardBody className="p-6">
+                <h2 className="text-xl md:text-2xl font-bold text-default-700 mb-4">Generated CSS</h2>
+                <div className="bg-default-200 p-4 rounded-lg overflow-x-auto max-h-60 overflow-y-auto">
+                  <pre className="text-default-700 whitespace-pre-wrap break-all text-xs md:text-sm">
+                    {css}
+                  </pre>
+                </div>
+              </CardBody>
+            </Card>
 
 
-                <div className="mt-4 flex flex-col space-y-2 md:flex-row md:justify-end md:space-y-0 md:space-x-2">
-                <Button color="primary" onPress={handleCopy} startContent={<Copy className="h-4 w-4" />}>
-                  Copy CSS
-                </Button>
-                <Button color="secondary" onPress={handleDownload} startContent={<Download className="h-4 w-4" />}>
-                  Download CSS
-                </Button>
-                <Button color="danger" onPress={handleReset} startContent={<RefreshCw className="h-4 w-4" />}>
-                  Reset
-                </Button>
-              </div>
-          
-          </CardBody>
-        </Card>
-
-        <Card className="bg-default-50 dark:bg-default-100 p-4 md:p-8">
-          <CardBody>
-            <h2 className="text-2xl font-semibold text-default-700 mb-4 flex items-center">
-              <Info className="w-6 h-6 mr-2" />
-              What is the Enhanced Border Radius Generator?
-            </h2>
-            <p className="text-default-600 mb-4">
-            The border radius generator is a powerful and intuitive tool designed for web developers and designers that are visually attractive and modern UI elements. This allows you to easily customize the ready and border properties of the corner of the box, providing a wide range of options to suit your design needs.
-            </p>
-
-            <div className="my-8">
-              <Image
-                src="/Images/InfosectionImages/CSSBorderRadiusPreview.png?height=400&width=600"
-                alt="Screenshot of the Enhanced Border Radius Generator interface showing preview and customization options"
-                width={600}
-                height={400}
-                className="rounded-lg shadow-lg w-full h-auto"
-              />
+            <div className="mt-4 flex flex-col space-y-2 md:flex-row md:justify-end md:space-y-0 md:space-x-2">
+              <Button color="primary" onPress={handleCopy} startContent={<Copy className="h-4 w-4" />}>
+                Copy CSS
+              </Button>
+              <Button color="secondary" onPress={handleDownload} startContent={<Download className="h-4 w-4" />}>
+                Download CSS
+              </Button>
+              <Button color="danger" onPress={handleReset} startContent={<RefreshCw className="h-4 w-4" />}>
+                Reset
+              </Button>
             </div>
 
-            <h2 className="text-xl font-semibold text-default-700 mb-4 mt-8 flex items-center">
-              <BookOpen className="w-6 h-6 mr-2" />
-              How to Use the Enhanced Border Radius Generator?
-            </h2>
-            <ol className="list-decimal list-inside space-y-2 text-default-600">
-              <li>Use the "Corners" tab to adjust individual corner radii or link them for simultaneous changes.</li>
-              <li>Switch between different units (px, %, em, rem) for precise control.</li>
-              <li>Customize the box dimensions and background color in the "Box" tab.</li>
-              <li>Adjust border properties like width, color, and style in the "Border" tab.</li>
-              <li>Preview your changes in real-time with the interactive preview.</li>
-              <li>Use the fullscreen mode for a detailed view of your design.</li>
-              <li>Copy the generated CSS or download it as a file for use in your projects.</li>
-              <li>Use the Reset button to start over with default settings.</li>
-            </ol>
-
-            <h2 className="text-xl font-semibold text-default-700 mb-4 mt-8 flex items-center">
-              <Lightbulb className="w-6 h-6 mr-2" />
-              Key Features
-            </h2>
-            <ul className="list-disc list-inside space-y-2 text-default-600">
-              <li>Individual control for each corner's border radius</li>
-              <li>Support for multiple units: px, %, em, and rem</li>
-              <li>Customizable box dimensions and background color</li>
-              <li>Advanced border customization (width, color, style)</li>
-              <li>Real-time preview with fullscreen mode</li>
-              <li>Generated CSS code with syntax highlighting</li>
-              <li>Copy to clipboard and download as file options</li>
-              <li>Reset option to quickly return to default settings</li>
-              <li>Responsive design for use on various devices</li>
-            </ul>
-
-            <p className="text-default-600 mt-6">
-              The Enhanced Border Radius Generator empowers you to create unique, efficient, and visually appealing UI
-              elements for a wide range of projects. By leveraging the power of CSS, you can generate lightweight,
-              scalable designs that enhance your web presence without relying on heavy image files. Whether you're a
-              seasoned developer or just starting out in web design, this tool offers both simplicity and depth to meet
-              your creative needs. Start experimenting with border radii and styles today and elevate your web designs
-              to the next level!
-            </p>
           </CardBody>
         </Card>
-      </div>
 
+
+      </div>
+      <InfoSectionBorderRadius />
       {renderFullscreenPreview()}
     </ToolLayout>
   )

@@ -15,10 +15,10 @@ import {
   Modal,
   ModalContent,
 } from "@nextui-org/react"
-import { Copy, Shuffle, Plus, Minus, Maximize2, X, Sliders, Code, Download, Lightbulb, BookOpen, Info } from "lucide-react"
+import { Copy, Shuffle, Plus, Minus, Maximize2, X, Sliders, Code, Download, } from "lucide-react"
 import { toast } from "react-hot-toast"
 import ToolLayout from "@/components/ToolLayout"
-import Image from "next/image"
+import InfoSectionGradient from "./info-section"
 
 type ColorStop = {
   color: string
@@ -126,8 +126,8 @@ export default function ModernGradientGenerator() {
         background: cssCode.split(": ")[1]?.slice(0, -1) || "",
         ...(showTransparency
           ? {
-              backgroundImage: `url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAMUlEQVQ4T2NkYGAQYcAP3uCTZhw1gGGYhAGBZIA/nYDCgBDAm9BGDWAAJyRCgLaBCAAgXwixzAS0pgAAAABJRU5ErkJggg==")`,
-            }
+            backgroundImage: `url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAMUlEQVQ4T2NkYGAQYcAP3uCTZhw1gGGYhAGBZIA/nYDCgBDAm9BGDWAAJyRCgLaBCAAgXwixzAS0pgAAAABJRU5ErkJggg==")`,
+          }
           : {}),
       }}
     />
@@ -201,7 +201,7 @@ export default function ModernGradientGenerator() {
               <div className="relative w-full h-80">
                 {renderGradientPreview()}
                 <div className="absolute bottom-4 right-4 flex gap-2">
-               
+
                   <Button isIconOnly variant="flat" onPress={() => setIsFullscreen(true)}>
                     <Maximize2 className="w-4 h-4" />
                   </Button>
@@ -213,189 +213,189 @@ export default function ModernGradientGenerator() {
 
         {/* Controls */}
         <Card className="bg-default-50 dark:bg-default-100">
-        <CardBody className="p-6">
+          <CardBody className="p-6">
             <Tabs
-            selectedKey={selectedTab}
-            onSelectionChange={(key) => setSelectedTab(key.toString())}
-            className="mb-6"
+              selectedKey={selectedTab}
+              onSelectionChange={(key) => setSelectedTab(key.toString())}
+              className="mb-6"
             >
-            <Tab
+              <Tab
                 key="settings"
                 title={
-                <div className="flex items-center gap-2">
+                  <div className="flex items-center gap-2">
                     <Sliders className="w-4 h-4" />
                     <span>Settings</span>
-                </div>
+                  </div>
                 }
-            >
+              >
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6 py-4">
-                {/* Left Column */}
-                <div className="space-y-6">
+                  {/* Left Column */}
+                  <div className="space-y-6">
                     {/* Gradient Type */}
                     <div className="col-span-1 md:col-span-2">
-                    <Select
+                      <Select
                         label="Gradient Type"
                         selectedKeys={[gradientType]}
                         variant="bordered"
                         onChange={(e) => setGradientType(e.target.value as GradientType)}
                         className="w-full"
-                    >
+                      >
                         <SelectItem key="linear" value="linear" className="text-default-700">Linear</SelectItem>
                         <SelectItem key="radial" value="radial" className="text-default-700">Radial</SelectItem>
                         <SelectItem key="conic" value="conic" className="text-default-700">Conic</SelectItem>
-                    </Select>
+                      </Select>
                     </div>
 
                     {/* Angle Controls */}
                     {(gradientType === "linear" || gradientType === "conic") && (
-                    <div className="w-full">
+                      <div className="w-full">
                         <p className="text-sm mb-2 font-medium">Angle: {angle}°</p>
                         <Slider
-                        value={angle}
-                        onChange={(value) => setAngle(value as number)}
-                        minValue={0}
-                        maxValue={360}
-                        step={1}
-                        className="w-full"
+                          value={angle}
+                          onChange={(value) => setAngle(value as number)}
+                          minValue={0}
+                          maxValue={360}
+                          step={1}
+                          className="w-full"
                         />
-                    </div>
+                      </div>
                     )}
 
                     {/* Center Controls */}
                     {(gradientType === "radial" || gradientType === "conic") && (
-                    <div className="space-y-4 w-full">
+                      <div className="space-y-4 w-full">
                         <div>
-                        <p className="text-sm mb-2 font-medium">Center X: {centerX}%</p>
-                        <Slider
+                          <p className="text-sm mb-2 font-medium">Center X: {centerX}%</p>
+                          <Slider
                             value={centerX}
                             onChange={(value) => setCenterX(value as number)}
                             minValue={0}
                             maxValue={100}
                             step={1}
                             className="w-full"
-                        />
+                          />
                         </div>
                         <div>
-                        <p className="text-sm mb-2 font-medium">Center Y: {centerY}%</p>
-                        <Slider
+                          <p className="text-sm mb-2 font-medium">Center Y: {centerY}%</p>
+                          <Slider
                             value={centerY}
                             onChange={(value) => setCenterY(value as number)}
                             minValue={0}
                             maxValue={100}
                             step={1}
                             className="w-full"
-                        />
+                          />
                         </div>
-                    </div>
+                      </div>
                     )}
 
                     {/* Radial Specific Controls */}
                     {gradientType === "radial" && (
-                    <div className="space-y-4 w-full">
+                      <div className="space-y-4 w-full">
                         <Select
-                        label="Shape"
-                        selectedKeys={[gradientShape]}
-                        variant="bordered"
-                        onChange={(e) => setGradientShape(e.target.value as GradientShape)}
-                        className="w-full"
+                          label="Shape"
+                          selectedKeys={[gradientShape]}
+                          variant="bordered"
+                          onChange={(e) => setGradientShape(e.target.value as GradientShape)}
+                          className="w-full"
                         >
-                        <SelectItem key="circle" value="circle" className="text-default-700">Circle</SelectItem>
-                        <SelectItem key="ellipse" value="ellipse" className="text-default-700">Ellipse</SelectItem>
+                          <SelectItem key="circle" value="circle" className="text-default-700">Circle</SelectItem>
+                          <SelectItem key="ellipse" value="ellipse" className="text-default-700">Ellipse</SelectItem>
                         </Select>
                         <Select
-                        label="Size"
-                        selectedKeys={[gradientSize]}
-                        variant="bordered"
-                        onChange={(e) => setGradientSize(e.target.value as GradientSize)}
-                        className="w-full"
+                          label="Size"
+                          selectedKeys={[gradientSize]}
+                          variant="bordered"
+                          onChange={(e) => setGradientSize(e.target.value as GradientSize)}
+                          className="w-full"
                         >
-                        <SelectItem key="closest-side" value="closest-side" className="text-default-700">Closest Side</SelectItem>
-                        <SelectItem key="closest-corner" value="closest-corner" className="text-default-700">Closest Corner</SelectItem>
-                        <SelectItem key="farthest-side" value="farthest-side" className="text-default-700">Farthest Side</SelectItem>
-                        <SelectItem key="farthest-corner" value="farthest-corner" className="text-default-700">Farthest Corner</SelectItem>
+                          <SelectItem key="closest-side" value="closest-side" className="text-default-700">Closest Side</SelectItem>
+                          <SelectItem key="closest-corner" value="closest-corner" className="text-default-700">Closest Corner</SelectItem>
+                          <SelectItem key="farthest-side" value="farthest-side" className="text-default-700">Farthest Side</SelectItem>
+                          <SelectItem key="farthest-corner" value="farthest-corner" className="text-default-700">Farthest Corner</SelectItem>
                         </Select>
-                    </div>
+                      </div>
                     )}
-                </div>
+                  </div>
 
-                {/* Right Column */}
-                <div className="space-y-6">
+                  {/* Right Column */}
+                  <div className="space-y-6">
                     {/* Color Stops */}
                     <div className="space-y-4">
-                    <div className="flex items-center justify-between">
+                      <div className="flex items-center justify-between">
                         <h3 className="text-lg font-semibold">Color Stops</h3>
                         {colorStops.length < 5 && (
-                        <Button
+                          <Button
                             size="sm"
                             variant="flat"
                             color="secondary"
                             onPress={addColorStop}
                             startContent={<Plus className="w-4 h-4" />}
-                        >
+                          >
                             Add Stop
-                        </Button>
+                          </Button>
                         )}
-                    </div>
+                      </div>
 
-                    <div className="grid gap-4">
+                      <div className="grid gap-4">
                         {colorStops.map((stop, index) => (
-                        <div key={index} className="flex items-center gap-3">
+                          <div key={index} className="flex items-center gap-3">
                             <Input
-                            type="color"
-                            variant="bordered"
-                            value={stop.color}
-                            onChange={(e) => handleColorStopChange(index, "color", e.target.value)}
-                            className="w-20 flex-shrink-0"
+                              type="color"
+                              variant="bordered"
+                              value={stop.color}
+                              onChange={(e) => handleColorStopChange(index, "color", e.target.value)}
+                              className="w-20 flex-shrink-0"
                             />
                             <Input
-                            type="number"
-                            variant="bordered"
-                            value={stop.position.toString()}
-                            onChange={(e) => handleColorStopChange(index, "position", Number.parseInt(e.target.value))}
-                            min={0}
-                            max={100}
-                            className="w-24 flex-shrink-0"
-                            endContent={<span className="text-small">%</span>}
+                              type="number"
+                              variant="bordered"
+                              value={stop.position.toString()}
+                              onChange={(e) => handleColorStopChange(index, "position", Number.parseInt(e.target.value))}
+                              min={0}
+                              max={100}
+                              className="w-24 flex-shrink-0"
+                              endContent={<span className="text-small">%</span>}
                             />
                             {colorStops.length > 2 && (
-                            <Button
+                              <Button
                                 isIconOnly
                                 size="sm"
                                 variant="flat"
                                 color="danger"
                                 onPress={() => removeColorStop(index)}
-                            >
+                              >
                                 <Minus className="w-4 h-4" />
-                            </Button>
+                              </Button>
                             )}
-                        </div>
+                          </div>
                         ))}
-                    </div>
+                      </div>
                     </div>
 
                     {/* Additional Controls */}
                     <div className="flex flex-col gap-4">
-                    <Switch 
-                        isSelected={repeating} 
+                      <Switch
+                        isSelected={repeating}
                         onValueChange={setRepeating}
                         className="w-full"
-                    >
+                      >
                         <span className="text-sm">Repeating Gradient</span>
-                    </Switch>
+                      </Switch>
 
-                    <Button
+                      <Button
                         color="secondary"
                         variant="shadow"
                         onPress={generateRandomGradient}
                         startContent={<Shuffle className="w-4 h-4" />}
                         className="w-full"
-                    >
+                      >
                         Random Gradient
-                    </Button>
+                      </Button>
                     </div>
+                  </div>
                 </div>
-                </div>
-            </Tab>
+              </Tab>
 
               <Tab
                 key="code"
@@ -439,70 +439,7 @@ export default function ModernGradientGenerator() {
       </div>
 
       {renderFullscreenPreview()}
-      <Card className="mt-8 bg-default-50 dark:bg-default-100 p-4 md:p-8">
-      <div className="rounded-xl p-2 md:p-4 max-w-4xl mx-auto">
-        <h2 className="text-lg md:text-xl lg:text-2xl font-semibold text-default-700 mb-4 flex items-center">
-          <Info className="w-6 h-6 mr-2" />
-          What is CSS Gradient Generator?
-        </h2>
-        <p className="text-sm md:text-base text-default-600 mb-4">
-        The CSS gradient generator is a powerful and intuitive tool designed for web developers and designers to make stunning, adaptable gradients using CSS to create. It provides support for linear, radial and coniferous gradients with a wide range of adaptation options, allowing you to craft the eye -catching background, button and other UI elements easily.
-        </p>
-        <p className="text-sm md:text-base text-default-600 mb-4">
-        Whether you are an experienced designer who is looking to streamline your workflow or a beginner who discovered the world of CSS gradients, this tool offers an interactive and user friendly approach to create a complex shield effect. It brids the gap between the concept and implementation, which makes it easier to experiment with various configurations and imagine the results in real time.
-        </p>
-        
-        <div className="my-8">
-          <Image 
-             src="/Images/InfosectionImages/CSSGradientPreview.png?height=400&width=600"
-            alt="Screenshot of the Enhanced CSS Gradient Generator interface showing the preview and customization options" 
-            width={600} 
-            height={400}
-            className="rounded-lg shadow-lg w-full h-auto" 
-          />
-        </div>
-        
-        <h2 id="how-to-use" className="text-lg md:text-xl lg:text-2xl font-semibold text-default-700 mb-4 mt-8 flex items-center">
-          <BookOpen className="w-6 h-6 mr-2" />
-          How to Use the CSS Gradient Generator?
-        </h2>
-        <ol className="list-decimal list-inside space-y-2 text-sm md:text-base">
-          <li>Choose between linear, radial, or conic gradient types.</li>
-          <li>For linear and conic gradients, adjust the angle using the slider.</li>
-          <li>For radial and conic gradients, set the center point using the X and Y sliders.</li>
-          <li>Customize radial gradients further by selecting the shape and size.</li>
-          <li>Add, remove, or modify color stops using the color pickers and position inputs.</li>
-          <li>Toggle the "Repeating Gradient" option for creating repeating patterns.</li>
-          <li>Use the "Random Gradient" button for inspiration or quick results.</li>
-          <li>Toggle transparency visibility in the preview area.</li>
-          <li>Use the fullscreen preview button to view your gradient in a larger format.</li>
-          <li>Switch between the "Gradient Settings" and "Generated CSS" tabs to adjust settings or view the code.</li>
-          <li>Copy the generated CSS code or download it as a file for use in your project.</li>
-          <li>Experiment with different combinations to achieve your desired effect.</li>
-        </ol>
-        
-        <h2 className="text-lg md:text-xl lg:text-2xl font-semibold text-default-700 mb-4 mt-8 flex items-center">
-          <Lightbulb className="w-6 h-6 mr-2" />
-          Key Features
-        </h2>
-        <ul className="list-disc list-inside space-y-2 text-sm md:text-base">
-          <li>Support for linear, radial, and conic gradients</li>
-          <li>Up to 5 color stops for complex gradients</li>
-          <li>Real-time preview of the gradient with fullscreen option</li>
-          <li>Angle control for linear and conic gradients</li>
-          <li>Center point control for radial and conic gradients</li>
-          <li>Shape and size options for radial gradients</li>
-          <li>Repeating gradient option for all gradient types</li>
-          <li>Color picker and hex input for precise color selection</li>
-          <li>Transparency toggle in the preview area</li>
-          <li>Random gradient generation for inspiration</li>
-          <li>One-click copy and download of generated CSS code</li>
-          <li>Tabbed interface for easy switching between settings and code</li>
-          <li>Responsive design for use on various devices</li>
-          <li>User-friendly interface with intuitive controls</li>
-        </ul>
-      </div>
-    </Card>
+      <InfoSectionGradient />
     </ToolLayout>
   )
 }

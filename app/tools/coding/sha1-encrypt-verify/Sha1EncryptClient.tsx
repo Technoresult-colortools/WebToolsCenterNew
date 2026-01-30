@@ -3,7 +3,7 @@
 import type React from "react"
 import { useState, useCallback, useRef } from "react"
 import { Card, CardBody, Button, Select, SelectItem, Textarea, Switch, Tabs, Tab } from "@nextui-org/react"
-import Image from "next/image"
+import InfoSectionSHA1Hash from "./info-section"
 import {
   Hash,
   Copy,
@@ -11,11 +11,6 @@ import {
   Upload,
   Download,
   CheckCircle2,
-  Info,
-  BookOpen,
-  Shield,
-  FileText,
-  AlertTriangle,
   Save,
   Trash2,
 } from "lucide-react"
@@ -166,7 +161,7 @@ export default function SHA1Tool() {
             <Tabs aria-label="SHA-1 options">
               <Tab key="generate" title="Generate SHA-1">
                 <div className="flex flex-col gap-4 mt-4">
-               
+
                   <Textarea
                     value={input}
                     onChange={handleInputChange}
@@ -319,120 +314,9 @@ export default function SHA1Tool() {
           </CardBody>
         </Card>
 
-        {/* Information Section */}
-        <Card className="bg-default-50 dark:bg-default-100 p-4 md:p-8">
-          <CardBody>
-            <div className="rounded-xl p-2 md:p-4 max-w-4xl mx-auto">
-              <h2 className="text-lg md:text-xl lg:text-2xl font-semibold text-default-700 mb-4 flex items-center">
-                <Info className="w-6 h-6 mr-2" />
-                What is SHA-1 Hash Generator & Verifier?
-              </h2>
-              <p className="text-sm md:text-base text-default-600 mb-4">
-              The SHA-1 Hash Generator & Verifier is a utility built for developers, security professionals, and anyone else dealing with integrity of data. It provides functionality to generate and verify SHA-1 hashes in order to confirm the data has not changed during communication or storage.
-              </p>
-              <p className="text-sm md:text-base text-default-600 mb-4">
-              SHA-1 (Secure Hash Algorithm 1) produces a hash value of 160 bits (which is 20 bytes long). Although it has been deprecated for some security-sensitive usage due to attacks in theory to happen, (which means in practical situations attacks exist), it is still being used in many other non-cryptographic situations.
-              </p>
 
-              <div className="my-8">
-                <Image
-                 src="/Images/InfosectionImages/SHA1Preview.png?height=400&width=600"
-                  alt="Screenshot of the SHA-1 Hash Generator & Verifier interface"
-                  width={600}
-                  height={400}
-                  className="rounded-lg shadow-lg w-full h-auto"
-                />
-              </div>
-
-              <h2 className="text-lg md:text-xl lg:text-2xl font-semibold text-default-700 mb-4 mt-8 flex items-center">
-                <BookOpen className="w-6 h-6 mr-2" />
-                How to Use the SHA-1 Hash Generator & Verifier
-              </h2>
-              <ol className="list-decimal list-inside space-y-2 text-sm md:text-base">
-                <li>Enter your text in the input area or upload a file.</li>
-                <li>Choose the desired input encoding (UTF-8, Base64, or Hex).</li>
-                <li>Optionally, add a salt value to strengthen the hash.</li>
-                <li>Click 'Generate SHA-1' to create the hash value.</li>
-                <li>To verify a hash, switch to the 'Verify' tab and enter the hash to compare.</li>
-                <li>Use the 'Verify Hash' button to check if the hashes match.</li>
-                <li>Copy the generated hash to clipboard or download it as a file.</li>
-                <li>Use the 'Reset' button to clear all inputs and start over.</li>
-                <li>Save and load presets for frequently used configurations.</li>
-              </ol>
-
-              <h2 className="text-lg md:text-xl lg:text-2xl font-semibold text-default-700 mb-4 mt-8 flex items-center">
-                <Shield className="w-6 h-6 mr-2" />
-                Key Features
-              </h2>
-              <ul className="list-disc list-inside space-y-2 text-sm md:text-base">
-                <li>Generate SHA-1 hashes from text input or file content</li>
-                <li>Verify and compare SHA-1 hashes</li>
-                <li>Support for multiple input encodings: UTF-8, Base64, and Hexadecimal</li>
-                <li>Optional salt input for enhanced security</li>
-                <li>Auto-update feature for real-time hash generation</li>
-                <li>Case-sensitive and case-insensitive hash comparison</li>
-                <li>File upload capability for hashing file contents</li>
-                <li>Clipboard integration for easy copying and pasting</li>
-                <li>Download option for saving generated hashes</li>
-                <li>Preset system for saving and loading frequently used configurations</li>
-              </ul>
-
-              <h2 className="text-lg md:text-xl lg:text-2xl font-semibold text-default-700 mb-4 mt-8 flex items-center">
-                <AlertTriangle className="w-6 h-6 mr-2" />
-                Security Considerations
-              </h2>
-              <ul className="list-disc list-inside space-y-2 text-sm md:text-base">
-                <li>SHA-1 is considered cryptographically broken for security-critical applications.</li>
-                <li>For security-sensitive tasks, use SHA-256 or other stronger algorithms.</li>
-                <li>
-                  Adding a salt can improve resistance to rainbow table attacks, but does not make SHA-1 secure for
-                  critical applications.
-                </li>
-                <li>This tool is primarily for educational purposes and non-security-critical use cases.</li>
-                <li>Always use HTTPS when transmitting sensitive data or hash values over the network.</li>
-                <li>Regularly update your hashing practices to align with current security standards.</li>
-              </ul>
-
-              <h2 className="text-lg md:text-xl lg:text-2xl font-semibold text-default-700 mb-4 mt-8 flex items-center">
-                <FileText className="w-6 h-6 mr-2" />
-                Applications and Use Cases
-              </h2>
-              <ul className="list-disc list-inside space-y-2 text-sm md:text-base">
-                <li>
-                  <strong>Data Integrity:</strong> Verify that files or data haven't been tampered with during
-                  transmission or storage.
-                </li>
-                <li>
-                  <strong>Version Control:</strong> Generate unique identifiers for file versions in version control
-                  systems.
-                </li>
-                <li>
-                  <strong>Caching:</strong> Create cache keys for web applications and content delivery networks.
-                </li>
-                <li>
-                  <strong>Digital Signatures:</strong> Understand basic concepts of hashing in digital signature systems
-                  (though SHA-1 should not be used for this purpose in practice).
-                </li>
-                <li>
-                  <strong>Educational Purposes:</strong> Learn about hash functions, their properties, and limitations.
-                </li>
-                <li>
-                  <strong>Legacy System Compatibility:</strong> Generate SHA-1 hashes for systems that still require
-                  them (while planning for migration to stronger algorithms).
-                </li>
-              </ul>
-
-              <p className="text-sm md:text-base text-default-600 mt-6">
-                The SHA-1 Hash Generator & Verifier is a valuable tool for understanding hash functions and their
-                properties. While it's important to recognize the limitations of SHA-1 in modern cryptographic
-                applications, this tool provides insights into hashing concepts and can be useful for various
-                non-security-critical tasks. Always prioritize security best practices and use appropriate algorithms
-                for sensitive applications.
-              </p>
-            </div>
-          </CardBody>
-        </Card>
       </div>
+      <InfoSectionSHA1Hash />
     </ToolLayout>
   )
 }
