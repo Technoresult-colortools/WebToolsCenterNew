@@ -53,7 +53,7 @@ export async function POST(request: Request) {
       success: true
     });
 
-  } catch (error: any) {
+  } catch (error) {
     console.error('SERVER_ERROR:', error);
     return NextResponse.json({ error: 'Failed to generate colors' }, { status: 500 });
   }
