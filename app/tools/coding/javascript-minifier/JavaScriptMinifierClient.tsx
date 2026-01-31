@@ -11,14 +11,6 @@ import InfoSectionJavascriptMinifier from "./info-section"
 
 const MAX_FILE_SIZE_MB = 2
 
-interface MinifyOptions {
-  mangle: boolean
-  compress: boolean
-  dropConsole: boolean
-  dropDebugger: boolean
-  formatComments: boolean
-}
-
 export default function JavaScriptMinifier() {
   const [inputJS, setInputJS] = useState("")
   const [outputJS, setOutputJS] = useState("")
@@ -32,7 +24,7 @@ export default function JavaScriptMinifier() {
   const [mangle, setMangle] = useState(true)
   const [compress, setCompress] = useState(true)
   const [dropConsole, setDropConsole] = useState(false)
-  const [dropDebugger, setDropDebugger] = useState(true)
+  const [dropDebugger, ] = useState(true)
   const [formatComments, setFormatComments] = useState(false)
   const [compressionLevel, setCompressionLevel] = useState(50)
 
@@ -106,11 +98,12 @@ export default function JavaScriptMinifier() {
             : "JavaScript beautified successfully!"
         )
       }
-    } catch (error: any) {
-      console.error("Processing error:", error)
-      toast.error(`Error: ${error.message || "Failed to process JavaScript"}`)
+   } catch (error) {
+      console.error("Processing error:", error);
+      const message = error instanceof Error ? error.message : "Failed to process JavaScript";
+      toast.error(`Error: ${message}`);
     } finally {
-      setIsProcessing(false)
+      setIsProcessing(false);
     }
   }
 

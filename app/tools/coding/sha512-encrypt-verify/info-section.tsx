@@ -10,7 +10,6 @@ import {
     Fingerprint,
     Upload,
     Zap,
-    Code,
     Smartphone,
     CheckCircle2,
     FileText,

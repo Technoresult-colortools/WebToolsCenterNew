@@ -3,7 +3,6 @@
 import type React from "react"
 import { useState, useCallback, useRef } from "react"
 import { Card, CardBody, Button, Select, SelectItem, Textarea, Switch, Tabs, Tab } from "@nextui-org/react"
-import Image from "next/image"
 import {
   Hash,
   Copy,
@@ -11,11 +10,6 @@ import {
   Upload,
   Download,
   CheckCircle2,
-  Info,
-  BookOpen,
-  Shield,
-  FileText,
-  AlertTriangle,
   Save,
   Trash2,
 } from "lucide-react"

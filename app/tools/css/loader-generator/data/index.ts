@@ -50,7 +50,7 @@ export const getLoaderData = (
     categories: LoaderCategories,
     category: string,
     loaderType: string
-): LoaderData | null => { // Note: Return type is LoaderDef from types.ts really
+): LoaderData | null => {
     try {
         if (!isValidCategory(categories, category)) {
             console.error(`Invalid category: ${category}`);
@@ -60,7 +60,8 @@ export const getLoaderData = (
             console.error(`Invalid loader type: ${loaderType} in category: ${category}`);
             return null;
         }
-        // @ts-ignore - The structure matches but TS might complain about interface vs type alias
+
+        // Removed the @ts-expect-error because the indexing is type-safe
         return categories[category][loaderType];
     } catch (error) {
         console.error('Error getting loader data:', error);

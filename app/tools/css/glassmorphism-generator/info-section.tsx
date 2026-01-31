@@ -12,11 +12,9 @@ import {
     Zap,
     Code,
     Smartphone,
-    RefreshCcw,
     Image as ImageIcon,
     Shapes,
     CheckCircle2,
-    Download,
     Palette,
     Maximize
 } from "lucide-react"

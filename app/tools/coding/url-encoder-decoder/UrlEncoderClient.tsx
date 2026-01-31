@@ -9,10 +9,7 @@ import {
   Upload,
   Copy,
   RefreshCw,
-  Info,
   Download,
-  Eye,
-  EyeOff,
   Settings,
   Sparkles,
   Check,
@@ -43,7 +40,6 @@ export default function URLEncoderDecoder() {
   const [decodeMode, setDecodeMode] = useState("standard")
   const [autoTrim, setAutoTrim] = useState(true)
   const [preserveLineBreaks, setPreserveLineBreaks] = useState(true)
-  const [showAdvanced, setShowAdvanced] = useState(false)
   const fileInputRef = useRef<HTMLInputElement>(null)
 
   // URL Breakdown Analysis
@@ -66,7 +62,7 @@ export default function URLEncoderDecoder() {
   const handleEncode = useCallback(() => {
     if (!inputText) return setOutputText("")
     try {
-      let text = autoTrim ? inputText.trim() : inputText
+      const text = autoTrim ? inputText.trim() : inputText
       const lines = preserveLineBreaks ? text.split("\n") : [text]
 
       const encodedLines = lines.map((line) => {
@@ -89,7 +85,7 @@ export default function URLEncoderDecoder() {
   const handleDecode = useCallback(() => {
     if (!inputText) return setOutputText("")
     try {
-      let text = autoTrim ? inputText.trim() : inputText
+      const text = autoTrim ? inputText.trim() : inputText
       const lines = preserveLineBreaks ? text.split("\n") : [text]
 
       const decodedLines = lines.map((line) => {

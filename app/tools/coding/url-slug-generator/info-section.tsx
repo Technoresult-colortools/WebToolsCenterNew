@@ -22,7 +22,6 @@ import {
     Languages,
     Copy,
     Eye,
-    Monitor
 } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"

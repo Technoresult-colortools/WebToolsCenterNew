@@ -25,12 +25,10 @@ import {
     Layers,
     Share2
 } from "lucide-react"
-import Image from "next/image"
 import Link from "next/link"
 
 export default function InfoSectionJWT() {
-    // Image path
-    const imagePath = "/Images/InfosectionImages/JWTPreview.png"
+
 
     return (
         <Card className="bg-default-50 dark:bg-default-100 p-4 md:p-8 mt-8">

@@ -2,7 +2,7 @@
 
 import type React from "react"
 import { useState, useEffect } from "react"
-import { Button, Card, CardBody, Input, Slider, Tabs, Tab, Tooltip, Chip, Progress } from "@nextui-org/react"
+import { Button, Card, CardBody, Input, Slider, Tabs, Tab, Tooltip, Chip } from "@nextui-org/react"
 import { toast, Toaster } from "react-hot-toast"
 import {
   Smartphone,
@@ -117,7 +117,6 @@ export default function ReactNativeShadowGenerator() {
   const [previewShape, setPreviewShape] = useState("square")
   const [history, setHistory] = useState<Shadow[]>([])
   const [showAdvanced, setShowAdvanced] = useState(false)
-  const [showHistory, setShowHistory] = useState(true)
   const [copiedCode, setCopiedCode] = useState(false)
   const [customShadowName, setCustomShadowName] = useState("")
   const [showNameInput, setShowNameInput] = useState(false)
@@ -255,7 +254,7 @@ const styles = StyleSheet.create({
           setHistory(imported)
           localStorage.setItem("shadowHistory", JSON.stringify(imported))
           toast.success("History imported!")
-        } catch (error) {
+        } catch {
           toast.error("Invalid file format")
         }
       }
@@ -263,7 +262,7 @@ const styles = StyleSheet.create({
     }
   }
 
-  const PreviewShape = ({ style }: { style: any }) => {
+const PreviewShape = ({ style }: { style: React.CSSProperties }) => {
     const baseClasses = "w-24 h-24 sm:w-28 sm:h-28 transition-all duration-300"
     if (previewShape === "circle") {
       return <div className={`${baseClasses} rounded-full`} style={style} />

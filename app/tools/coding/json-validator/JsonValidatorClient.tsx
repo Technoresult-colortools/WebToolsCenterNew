@@ -3,7 +3,6 @@
 import type React from "react"
 import { useState, useRef, useCallback } from "react"
 import { Card, CardBody, Button, Textarea, Select, SelectItem, Tabs, Tab } from "@nextui-org/react"
-import Image from "next/image"
 import {
   Copy,
   Upload,

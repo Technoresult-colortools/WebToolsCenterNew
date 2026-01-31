@@ -1,13 +1,13 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { Copy, Download, Shuffle, Wand2, Sun, Moon, Info, BookOpen, Lightbulb, Eye, Code, Palette, Droplet, Zap } from "lucide-react"
+import { Copy, Download, Shuffle, Wand2, Sun, Moon, Eye, Code, Palette, Droplet, Zap } from "lucide-react"
 import { Button, Card, CardBody, Textarea, Switch, Tooltip } from "@nextui-org/react"
 import { toast } from "react-hot-toast"
 import ToolLayout from "@/components/ToolLayout"
 import InfoSectionAIColorPalette from "./info-section"
 import { ColorUtils, fetchColorName } from "@/lib/color-utils"
-import NextImage from "next/image"
+
 
 interface ColorInfo {
   hex: string

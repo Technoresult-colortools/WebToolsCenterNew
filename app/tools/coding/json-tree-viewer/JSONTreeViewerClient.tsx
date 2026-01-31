@@ -2,7 +2,6 @@
 
 import React, { useState, useEffect } from 'react';
 import { Card, CardBody, Button, Select, SelectItem, Textarea, Switch } from "@nextui-org/react";
-import Image from 'next/image';
 import { RefreshCw, Download, } from 'lucide-react';
 import { Toaster } from 'react-hot-toast';
 import TreeView from './Treeview';

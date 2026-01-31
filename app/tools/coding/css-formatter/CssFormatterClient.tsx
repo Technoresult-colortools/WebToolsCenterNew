@@ -2,9 +2,9 @@
 
 import type React from "react"
 import { useState, useRef, useMemo } from "react"
-import { Button, Card, CardBody, Input, Switch, Textarea, Chip, Divider, Slider, Tooltip } from "@nextui-org/react"
+import { Button, Card, CardBody, Switch, Textarea, Chip, Divider, Slider, Tooltip } from "@nextui-org/react"
 import { toast } from "react-hot-toast"
-import { Copy, Download, Upload, Zap, FileCode, Trash2, FileText, RotateCw, Settings2, CheckCircle2, ListFilter, DownloadCloud } from "lucide-react"
+import { Copy, Upload, Zap, FileCode, FileText, RotateCw, Settings2, CheckCircle2, DownloadCloud } from "lucide-react"
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter"
 import { atomDark } from "react-syntax-highlighter/dist/esm/styles/prism"
 import prettier from "prettier/standalone"

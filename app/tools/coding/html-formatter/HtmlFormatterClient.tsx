@@ -10,22 +10,18 @@ import {
   Textarea,
   Slider,
   Tooltip,
-  Tabs,
-  Tab,
   Chip,
   Divider,
 } from "@nextui-org/react";
 import { toast } from "react-hot-toast";
 import {
   Upload,
-  Info,
   Zap,
   Eye,
   EyeOff,
   Clipboard,
   RotateCw,
   DownloadCloud,
-  Trash,
   Code,
   FileText,
   Settings2,
@@ -189,14 +185,17 @@ export default function HTMLFormatter() {
 
       setOutputHTML(formattedCode);
       toast.success("HTML formatted successfully!");
-    } catch (error: any) {
+     } catch (error) {
       console.error("Formatting error:", error);
-      const errorMessage = error?.message
-        ? `Formatting Error: ${error.message}`
+      const errorMessage = error instanceof Error 
+        ? `Formatting Error: ${error.message}` 
         : "Error formatting HTML. Please check your input for syntax errors.";
+      
       toast.error(errorMessage, { duration: 5000 });
+      
+      const displayMessage = error instanceof Error ? error.message : "Unknown error";
       setOutputHTML(
-        `// --- Formatting Error --- \n// ${error?.message || "Unknown error"}\n// --- Original Input --- \n\n${inputHTML}`
+        `// --- Formatting Error --- \n// ${displayMessage}\n// --- Original Input --- \n\n${inputHTML}`
       );
     } finally {
       setIsFormatting(false);
@@ -286,28 +285,28 @@ export default function HTMLFormatter() {
     }
   }, []);
 
-  const handleOptionChange = (option: keyof FormatterOptions, value: any) => {
+   const handleOptionChange = <K extends keyof FormatterOptions>(
+    option: K,
+    value: FormatterOptions[K] | number | number[]
+  ) => {
     let processedValue = value;
-    if (option === "indentSize" || option === "wrapLineLength") {
-      processedValue = Number(value);
-      if (isNaN(processedValue)) {
-        console.error(`Invalid number value for ${option}:`, value);
-        return;
-      }
+
+    // Handle Slider output which can be number | number[]
+    if (Array.isArray(processedValue)) {
+      processedValue = processedValue[0];
     }
+
+    if (option === "indentSize" || option === "wrapLineLength") {
+      processedValue = Number(processedValue);
+      if (isNaN(processedValue)) return;
+    }
+
     setOptions((prev) => ({ ...prev, [option]: processedValue }));
   };
-
   const handleDragOver = useCallback((e: React.DragEvent<HTMLInputElement>) => {
     e.preventDefault();
     e.stopPropagation();
     (e.currentTarget as HTMLElement).classList.add("border-primary");
-  }, []);
-
-  const handleDragLeave = useCallback((e: React.DragEvent<HTMLInputElement>) => {
-    e.preventDefault();
-    e.stopPropagation();
-    (e.currentTarget as HTMLElement).classList.remove("border-primary");
   }, []);
 
   const handleDrop = useCallback((e: React.DragEvent<HTMLInputElement>) => {

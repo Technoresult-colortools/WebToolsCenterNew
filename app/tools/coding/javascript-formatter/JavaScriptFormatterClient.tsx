@@ -4,7 +4,7 @@ import type React from "react"
 import { useState, useRef, useMemo } from "react"
 import { Button, Card, CardBody, Input, Switch, Textarea, Chip, Divider, Tooltip, ButtonGroup } from "@nextui-org/react"
 import { toast } from "react-hot-toast"
-import { Copy, Download, Upload, Zap, FileCode, Trash2, FileText, RotateCw, Settings2, CheckCircle2, DownloadCloud, Code, Braces } from "lucide-react"
+import { Copy, Upload, Zap, FileText, RotateCw, Settings2, CheckCircle2, DownloadCloud, Code, Braces } from "lucide-react"
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter"
 import { atomDark } from "react-syntax-highlighter/dist/esm/styles/prism"
 import prettier from "prettier/standalone"
@@ -75,12 +75,17 @@ export default function JavaScriptFormatter() {
         formattedCode = formattedCode.replace(/console\.log\(.*\);?/g, "")
       }
 
-      setOutputJS(formattedCode)
-      toast.success("JavaScript formatted successfully!")
-    } catch (error: any) {
-      toast.error(error.message?.includes("SyntaxError") ? "Syntax error detected in code." : "Formatting failed.")
+    setOutputJS(formattedCode);
+      toast.success("JavaScript formatted successfully!");
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : "";
+      toast.error(
+        errorMessage.includes("SyntaxError") 
+          ? "Syntax error detected in code." 
+          : "Formatting failed."
+      );
     } finally {
-      setIsFormatting(false)
+      setIsFormatting(false);
     }
   }
 
