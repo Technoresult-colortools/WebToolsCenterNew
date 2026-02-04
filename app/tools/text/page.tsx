@@ -36,9 +36,8 @@ export default function TextToolsPage() {
         <div className="absolute inset-0 bg-gradient-to-br from-primary/10 via-secondary/10 to-primary/5 animate-gradient-xy" />
         <div className="absolute inset-0 bg-[url('/grid.svg')] opacity-10" />
         <div
-          className={`max-w-7xl mx-auto text-center transform transition-all duration-1000 ${
-            isVisible ? "translate-y-0 opacity-100" : "translate-y-10 opacity-0"
-          }`}
+          className={`max-w-7xl mx-auto text-center transform transition-all duration-1000 ${isVisible ? "translate-y-0 opacity-100" : "translate-y-10 opacity-0"
+            }`}
         >
           <div className="relative mb-6">
             <span className="inline-block animate-bounce mb-4">
@@ -49,7 +48,7 @@ export default function TextToolsPage() {
             </h1>
           </div>
           <p className="text-xl text-default-600 mb-12 max-w-2xl mx-auto leading-relaxed">
-            Transform, analyze, and enhance your text with our powerful collection of text manipulation tools.
+            Ttransform, analyze, and enhance your text with our powerful collection of text manipulation tools.
           </p>
 
           {/* Search Section */}
@@ -61,7 +60,7 @@ export default function TextToolsPage() {
                 onChange={(e) => setSearchQuery(e.target.value)}
                 startContent={<Search className="text-default-400 w-6 h-6" />}
                 className="flex-grow"
-                
+
                 size="lg"
                 classNames={{
                   input: "text-foreground text-lg",
