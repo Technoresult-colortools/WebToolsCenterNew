@@ -296,7 +296,7 @@ export default function CodeToImageConverter() {
   const [selectedBackground, setSelectedBackground] = useState("gradient-cosmic")
   const [customBackgroundColor, setCustomBackgroundColor] = useState("#7EDAEC")
   const [customBackgroundImage, setCustomBackgroundImage] = useState("")
-  const [selectedPadding, setSelectedPadding] = useState("32")
+  const [selectedPadding, setSelectedPadding] = useState("68")
   const [fileName, setFileName] = useState("example.js")
   const [isDarkMode,] = useState(true)
   const [showLineNumbers, setShowLineNumbers] = useState(true)
