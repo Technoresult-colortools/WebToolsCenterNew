@@ -19,16 +19,13 @@ import {
   Check,
 
   Grid,
-  Info,
-  BookOpen,
-  Lightbulb,
   ArrowRight,
   Maximize,
   Globe,
   Eye,
 } from "lucide-react"
 import ToolLayout from "@/components/ToolLayout"
-import Image from "next/image"
+import InfoSectionScreenResolutionChecker from "./info-section"
 import { ShareButton } from "@/components/ShareButton"
 
 
@@ -338,7 +335,7 @@ export default function AdvancedScreenChecker() {
       description="Check and analyze your screen resolution,Browser Resolution, color depth, refresh rate, pixel density, and HDR capabilities with our Advanced Screen Resolution Checker. Perfect for display analysis."
       toolId="678f383126f06f912191bcd0"
     >
-  
+
       <div className="flex flex-col gap-8">
         {/* Main Screen Information Card */}
         <Card className="bg-default-50 dark:bg-default-100">
@@ -355,7 +352,7 @@ export default function AdvancedScreenChecker() {
               </Button>
             </div>
 
-            
+
 
             <Tabs
               aria-label="Screen Information Options"
@@ -370,43 +367,43 @@ export default function AdvancedScreenChecker() {
                   </div>
                 }
               > <div className="mt-4 space-y-4">
-                <div className="mb-8 text-center p-8 border-2 border-default-200 rounded-xl">
-              <h2 className="text-4xl font-bold mb-6">
-                {metrics.roundedAvailWidth} × {metrics.roundedAvailHeight}
-              </h2>
-              <div className="space-y-2 text-lg">
-                <p>
-                  Screen Resolution:{" "}
-                  <span className="font-semibold text-primary">
-                    {metrics.availWidth} × {metrics.availHeight}
-                  </span>
-                </p>
-                <p>
-                  Browser Resolution:{" "}
-                  <span className="font-semibold text-primary">
-                    {metrics.logicalWidth} × {metrics.logicalHeight}
-                  </span>
-                </p>
-                <p>
-                  Standard Resolution:{" "}
-                  <span className="font-semibold text-default-400">
-                    {metrics.standardWidth} × {metrics.standardHeight}
-                  </span>
-                </p>
-                <Button
-                  color="primary"
-                  className="mt-4"
-                  onClick={() => {
-                    const pixels = calculateTotalPixels(metrics.availWidth, metrics.availHeight)
-                    toast.success(`Total pixels on your screen: ${pixels} million`)
-                  }}
-                >
-                  Calculate Pixels
-                </Button>
-              </div>
-            </div>
+                  <div className="mb-8 text-center p-8 border-2 border-default-200 rounded-xl">
+                    <h2 className="text-4xl font-bold mb-6">
+                      {metrics.roundedAvailWidth} × {metrics.roundedAvailHeight}
+                    </h2>
+                    <div className="space-y-2 text-lg">
+                      <p>
+                        Screen Resolution:{" "}
+                        <span className="font-semibold text-primary">
+                          {metrics.availWidth} × {metrics.availHeight}
+                        </span>
+                      </p>
+                      <p>
+                        Browser Resolution:{" "}
+                        <span className="font-semibold text-primary">
+                          {metrics.logicalWidth} × {metrics.logicalHeight}
+                        </span>
+                      </p>
+                      <p>
+                        Standard Resolution:{" "}
+                        <span className="font-semibold text-default-400">
+                          {metrics.standardWidth} × {metrics.standardHeight}
+                        </span>
+                      </p>
+                      <Button
+                        color="primary"
+                        className="mt-4"
+                        onClick={() => {
+                          const pixels = calculateTotalPixels(metrics.availWidth, metrics.availHeight)
+                          toast.success(`Total pixels on your screen: ${pixels} million`)
+                        }}
+                      >
+                        Calculate Pixels
+                      </Button>
+                    </div>
+                  </div>
 
-              </div>
+                </div>
                 <div className="mt-4 space-y-4">
                   <div className="grid grid-cols-2 gap-6">
                     <div>
@@ -682,96 +679,15 @@ export default function AdvancedScreenChecker() {
               <ShareButton
                 onShare={shareToSocialMedia}
                 className=" text-white bg-blue-500 shadow-md hover:shadow-lg transition-all duration-300"
-                
+
               />
             </div>
           </CardBody>
         </Card>
 
-        {/* Info Section */}
-        <Card className="bg-default-50 dark:bg-default-100">
-          <CardBody className="p-6">
-            <div className="rounded-xl p-2 md:p-4 max-w-4xl mx-auto">
-              <h2 className="text-lg md:text-xl lg:text-2xl font-semibold text-default-700 mb-4 flex items-center">
-                <Info className="w-6 h-6 mr-2" />
-                What is the Screen Resolution Checker?
-              </h2>
-              <p className="text-sm md:text-base text-default-600 mb-4">
-              Advanced screen checker is a comprehensive device designed to provide detailed information about your performance and device capabilities. It provides insight into physical and logical performance properties, color characteristics and system information, making it priceless to developers, designers and technical enthusiasts.
-              </p>
 
-              <div className="my-8">
-                <Image
-                  src="/Images/InfosectionImages/ScreenResolutionCheckerPreview.webp?height=400&width=600"
-                  alt="Screenshot of the Advanced Screen Checker interface showing various screen information and capabilities"
-                  width={600}
-                  height={400}
-                  className="rounded-lg shadow-lg w-full h-auto"
-                />
-              </div>
-
-              <h2
-                id="how-to-use"
-                className="text-lg md:text-xl lg:text-2xl font-semibold text-default-700 mb-4 mt-8 flex items-center"
-              >
-                <BookOpen className="w-6 h-6 mr-2" />
-                How to Use the Screen Resolution Checker?
-              </h2>
-              <p className="text-sm md:text-base text-default-600 mb-4">
-                Using our Advanced Screen Checker is straightforward:
-              </p>
-              <ol className="list-decimal list-inside space-y-2 text-sm md:text-base">
-                <li>This tool Automatically analyze the screen resolution based on the device</li>
-                <li>You can View the comprehensive display information in the main panel.</li>
-                <li>
-                  Use the tabs to switch between different types of information (Display, Screen Resolution, Browser
-                  Resolution, Pixel Details).
-                </li>
-                <li>Use the "Refresh" button to update the information if needed.</li>
-                <li>Copy all screen details to your clipboard with one click.</li>
-                <li>Share your screen information on social media platforms using the theme-aware share button.</li>
-              </ol>
-
-              <h2 className="text-lg md:text-xl lg:text-2xl font-semibold text-default-700 mb-4 mt-8 flex items-center">
-                <Lightbulb className="w-6 h-6 mr-2" />
-                Features That Make Us Stand Out
-              </h2>
-              <ul className="list-disc list-inside space-y-2 text-xs md:text-sm">
-                <li>
-                  <strong>Comprehensive Display Information:</strong> Get detailed insights into your screen's
-                  capabilities
-                </li>
-                <li>
-                  <strong>Multi-tab Interface:</strong> Easily navigate between different aspects of your display
-                </li>
-                <li>
-                  <strong>Device Type Detection:</strong> Automatically identify whether you're using a desktop, tablet,
-                  or mobile device
-                </li>
-                <li>
-                  <strong>Color Properties:</strong> Learn about your screen's color depth, gamut, and HDR capabilities
-                </li>
-                <li>
-                  <strong>Responsive Design:</strong> Use on any device with a consistent experience
-                </li>
-                <li>
-                  <strong>One-click Sharing:</strong> Easily share your screen information with others
-                </li>
-                <li>
-                  <strong>Visual Representation:</strong> See a visual depiction of your screen's aspect ratio
-                </li>
-              </ul>
-
-              <p className="text-sm md:text-base text-default-600 mt-4">
-                Are you ready to discover the full capabilities of your performance? Dive into our advanced screen resolution checker and
-                Highlight the detailed insight about your screen. Whether you are optimizing your designs a developer, a technology
-                Eager enthusiastic about your hardware, or someone provides our equipment to prevent performance issues
-                You need comprehensive information. Now start searching for your screen ability!
-              </p>
-            </div>
-          </CardBody>
-        </Card>
       </div>
+      <InfoSectionScreenResolutionChecker />
     </ToolLayout>
   )
 }

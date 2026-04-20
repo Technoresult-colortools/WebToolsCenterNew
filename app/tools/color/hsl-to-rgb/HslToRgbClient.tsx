@@ -1,10 +1,10 @@
 "use client"
 
 import { useState, useEffect, useMemo } from "react"
-import { AlertCircle, BookOpen, Copy, Info, Lightbulb, RefreshCw } from "lucide-react"
+import { AlertCircle, Copy, RefreshCw } from "lucide-react"
 import ToolLayout from "@/components/ToolLayout"
 import { toast } from "react-hot-toast"
-import NextImage from "next/image"
+import InfoSectionHslToRgb from "./info-section"
 import { Button, Card, CardBody, Input, Slider, Divider } from "@nextui-org/react"
 
 // Move hslToRgb function outside of the component
@@ -53,7 +53,7 @@ export default function HSLToRGB() {
       description="Convert HSL Color Codes to RGB with Real-time Preview"
       toolId="678f382d26f06f912191bcac"
     >
-      <div className="max-w-4xl mx-auto">
+      <div className="max-w-6xl mx-auto">
         <Card className="bg-default-50 dark:bg-default-100 shadow-md">
           <CardBody className="gap-6 p-6">
             <div className="grid gap-6 md:grid-cols-2">
@@ -139,7 +139,7 @@ export default function HSLToRGB() {
                 <Button
                   onClick={handleReset}
                   color="danger"
-              
+
                   startContent={<RefreshCw className="w-4 h-4" />}
                   className="w-full"
                 >
@@ -189,119 +189,10 @@ export default function HSLToRGB() {
           </CardBody>
         </Card>
 
-        <Card className="mt-8 bg-default-50 dark:bg-default-100">
-          <CardBody className="p-6">
-            <div className="rounded-xl p-2 md:p-4 max-w-4xl mx-auto">
-              <h2 className="text-xl md:text-2xl font-semibold text-default-700 mb-4 flex items-center">
-                <Info className="w-6 h-6 mr-2" />
-                About HSL to RGB Converter
-              </h2>
-              <p className="text-sm md:text-base text-default-600 mb-4">
-                The HSL to RGB Converter is an advanced tool designed for web developers, designers, and digital
-                artists. It allows you to easily convert HSL (Hue, Saturation, Lightness) color values to their RGB
-                (Red, Green, Blue) equivalents. This tool is particularly useful when working with web design, digital
-                imaging, or any project that requires precise color management and conversion between different color
-                models.
-              </p>
-              <p className="text-sm md:text-base text-default-600 mb-4">
-                With features like real-time conversion, interactive sliders, and support for both HSL and RGB formats,
-                the HSL to RGB Converter streamlines your workflow and ensures accurate color representation across
-                different formats. It's perfect for creating consistent color schemes, adjusting color properties, or
-                simply exploring the relationship between HSL and RGB color representations.
-              </p>
 
-              <div className="my-8">
-                <NextImage
-                  src="/Images/HSLToRGBPreview.png?height=400&width=600"
-                  alt="Screenshot of the HSL to RGB Converter interface showing HSL sliders and color preview"
-                  width={600}
-                  height={400}
-                  className="rounded-lg shadow-lg w-full h-auto"
-                />
-              </div>
-
-              <h2
-                id="how-to-use"
-                className="text-xl md:text-2xl font-semibold text-default-700 mb-4 mt-8 flex items-center"
-              >
-                <BookOpen className="w-6 h-6 mr-2" />
-                How to Use the HSL to RGB Converter?
-              </h2>
-              <ol className="list-decimal list-inside space-y-2 text-sm md:text-base text-default-600">
-                <li>Adjust the Hue slider (0-359) to set the base color.</li>
-                <li>Use the Saturation slider (0-100) to adjust the color intensity.</li>
-                <li>Set the Lightness slider (0-100) to control the brightness of the color.</li>
-                <li>Observe the real-time color preview updating as you modify the values.</li>
-                <li>View the converted RGB value in the Color Preview section.</li>
-                <li>Use the copy buttons to quickly copy HSL or RGB values to your clipboard.</li>
-                <li>Experiment with different HSL combinations to see how they translate to RGB values.</li>
-                <li>Use the Reset button to quickly return to default values and start a new conversion.</li>
-              </ol>
-
-              <h2 className="text-xl md:text-2xl font-semibold text-default-700 mb-4 mt-8 flex items-center">
-                <Lightbulb className="w-6 h-6 mr-2" />
-                Key Features
-              </h2>
-              <ul className="list-disc list-inside text-default-600 space-y-2 text-sm md:text-base">
-                <li>Real-time HSL to RGB conversion</li>
-                <li>Interactive sliders for intuitive HSL value adjustments</li>
-                <li>Support for both HSL and RGB color formats</li>
-                <li>Live color preview for immediate visual feedback</li>
-                <li>One-click copying of HSL and RGB values to clipboard</li>
-                <li>Responsive design for seamless use on desktop and mobile devices</li>
-                <li>Reset functionality for quick new color explorations</li>
-                <li>User-friendly interface with clear, easy-to-read color information</li>
-              </ul>
-
-              <h2 className="text-xl md:text-2xl font-semibold text-default-700 mb-4 mt-8 flex items-center">
-                <Info className="w-6 h-6 mr-2" />
-                Applications and Use Cases
-              </h2>
-              <ul className="list-disc list-inside text-default-600 space-y-2 text-sm md:text-base">
-                <li>
-                  <strong>Web Development:</strong> Easily convert HSL colors to RGB for use in CSS and HTML.
-                </li>
-                <li>
-                  <strong>Graphic Design:</strong> Translate HSL values to RGB codes for software that primarily uses
-                  RGB color representation.
-                </li>
-                <li>
-                  <strong>UI/UX Design:</strong> Create consistent color schemes by converting between HSL and RGB
-                  formats.
-                </li>
-                <li>
-                  <strong>Digital Art:</strong> Experiment with color properties using HSL and obtain RGB values for use
-                  in various digital art software.
-                </li>
-                <li>
-                  <strong>Brand Identity:</strong> Maintain color consistency across various digital platforms by
-                  converting between color models.
-                </li>
-                <li>
-                  <strong>Education:</strong> Learn about color theory and the relationship between different color
-                  representations.
-                </li>
-                <li>
-                  <strong>Accessibility Testing:</strong> Adjust color properties to ensure proper contrast and
-                  readability in web designs.
-                </li>
-                <li>
-                  <strong>Color Exploration:</strong> Experiment with HSL color combinations and see their RGB
-                  equivalents for creative inspiration.
-                </li>
-              </ul>
-
-              <p className="text-sm md:text-base text-default-600 mt-6">
-                Ready to simplify your color workflow? Start using our HSL to RGB Converter now and experience the ease
-                of precise color conversion with intuitive controls. Whether you're a professional web developer working
-                on complex projects or a hobbyist exploring color theory, our tool provides the accuracy and
-                functionality you need. Try it out today and see how it can streamline your design process and enhance
-                your understanding of color spaces!
-              </p>
-            </div>
-          </CardBody>
-        </Card>
       </div>
+      <InfoSectionHslToRgb />
+
     </ToolLayout>
   )
 }

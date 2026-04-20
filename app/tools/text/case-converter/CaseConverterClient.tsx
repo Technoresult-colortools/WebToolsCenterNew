@@ -954,8 +954,8 @@ export default function CaseConverter() {
 
   return (
     <ToolLayout
-      title="Case Converter & Text Transformer"
-      description="Transform text into any case format with multi-language support for camelCase, PascalCase, snake_case, and more"
+      title="Case Converter Online"
+      description="Free online case converter tool. Convert text to uppercase, lowercase, sentence case, title case, camelCase and more instantly. Fast & easy text case changer."
       toolId="678f33831fa2b06f4b7ef590"
     >
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
@@ -1832,11 +1832,10 @@ export default function CaseConverter() {
                       {history.map((item, index) => (
                         <div
                           key={index}
-                          className={`p-2 rounded-lg text-sm ${
-                            index === historyIndex
+                          className={`p-2 rounded-lg text-sm ${index === historyIndex
                               ? "bg-primary-100 dark:bg-primary-900/30 border-l-4 border-primary-500"
                               : "bg-default-100/50"
-                          }`}
+                            }`}
                         >
                           <div className="flex justify-between items-center">
                             <div className="font-medium flex items-center">

@@ -14,17 +14,14 @@ import {
   ChevronDown,
   ChevronUp,
   PieChart,
-  Shield,
-  BookOpen,
-  Lightbulb,
 } from "lucide-react"
-import { 
-  Button, 
-  Card, 
-  CardBody, 
-  CardHeader, 
-  Input, 
-  Tooltip, 
+import {
+  Button,
+  Card,
+  CardBody,
+  CardHeader,
+  Input,
+  Tooltip,
   Image,
   Progress,
   Chip,
@@ -33,7 +30,7 @@ import { toast } from "react-hot-toast"
 import ToolLayout from "@/components/ToolLayout"
 import CountryList from "./CountryList"
 import WorldMap from "./WorldMap"
-import NextImage from 'next/image'
+import InfoSectionYoutubeRegionRestriction from "./info-section"
 
 interface RegionAvailability {
   [key: string]: {
@@ -61,7 +58,7 @@ export default function YouTubeRegionRestrictionFinder() {
   const [loading, setLoading] = useState(false)
   const [searchHistory, setSearchHistory] = useState<string[]>([])
   const [userLocation, setUserLocation] = useState<string | null>(null)
-  const [availabilityStats, setAvailabilityStats] = useState<{available: number, unavailable: number}>({available: 0, unavailable: 0})
+  const [availabilityStats, setAvailabilityStats] = useState<{ available: number, unavailable: number }>({ available: 0, unavailable: 0 })
   const [showHistory, setShowHistory] = useState(false)
   const inputRef = useRef<HTMLInputElement>(null)
 
@@ -71,7 +68,7 @@ export default function YouTubeRegionRestrictionFinder() {
     if (history) {
       setSearchHistory(JSON.parse(history))
     }
-    
+
     // Get user's location
     fetch('https://ipapi.co/json/')
       .then(response => response.json())
@@ -90,7 +87,7 @@ export default function YouTubeRegionRestrictionFinder() {
         available: 0,
         unavailable: 0
       }
-      
+
       Object.values(availability).forEach(status => {
         if (status.available) {
           stats.available++
@@ -98,7 +95,7 @@ export default function YouTubeRegionRestrictionFinder() {
           stats.unavailable++
         }
       })
-      
+
       setAvailabilityStats(stats)
     }
   }, [availability])
@@ -258,9 +255,9 @@ export default function YouTubeRegionRestrictionFinder() {
                     {loading ? "Checking..." : "Check Availability"}
                   </Button>
                 </Tooltip>
-                <Button 
-                  variant="flat" 
-                  onClick={handleReset} 
+                <Button
+                  variant="flat"
+                  onClick={handleReset}
                   startContent={<RefreshCw />}
                   className="bg-white/10 text-white hover:bg-white/20"
                   size="lg"
@@ -268,9 +265,9 @@ export default function YouTubeRegionRestrictionFinder() {
                   Reset
                 </Button>
                 {videoUrl && (
-                  <Button 
-                    color="success" 
-                    onPress={handleShare} 
+                  <Button
+                    color="success"
+                    onPress={handleShare}
                     startContent={<Share2 />}
                     className="bg-gradient-to-r from-green-500 to-green-600"
                     size="lg"
@@ -326,9 +323,9 @@ export default function YouTubeRegionRestrictionFinder() {
                     shadow="md"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-end">
-                    <Chip 
-                      className="absolute top-2 right-2" 
-                      color="danger" 
+                    <Chip
+                      className="absolute top-2 right-2"
+                      color="danger"
                       variant="shadow"
                       startContent={<Youtube size={14} />}
                     >
@@ -364,17 +361,17 @@ export default function YouTubeRegionRestrictionFinder() {
           </Card>
         )}
 
-       {availability && (
+        {availability && (
           <>
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
               <Card className="lg:col-span-2 border-none bg-default-50 dark:bg-default-100 backdrop-blur-sm">
-              <CardHeader className="pb-0 flex-col items-start">
-                <div className="flex flex-col items-start">
-                  <h3 className="text-xl font-semibold">Global Availability Map</h3>
-                  <p className="text-default-500 text-sm mt-1">
-                    Visual representation of video availability by country
-                  </p>
-                </div>
+                <CardHeader className="pb-0 flex-col items-start">
+                  <div className="flex flex-col items-start">
+                    <h3 className="text-xl font-semibold">Global Availability Map</h3>
+                    <p className="text-default-500 text-sm mt-1">
+                      Visual representation of video availability by country
+                    </p>
+                  </div>
 
 
 
@@ -400,7 +397,7 @@ export default function YouTubeRegionRestrictionFinder() {
                       <span className="text-sm">Unknown / Default</span>
                     </div>
                   </div>
-              </CardHeader>
+                </CardHeader>
 
                 <CardBody>
                   <div className="h-96 w-full md:h-[500px]">
@@ -425,8 +422,8 @@ export default function YouTubeRegionRestrictionFinder() {
                           {((availabilityStats.available / (availabilityStats.available + availabilityStats.unavailable)) * 100).toFixed(1)}%
                         </span>
                       </div>
-                      <Progress 
-                        value={availabilityStats.available} 
+                      <Progress
+                        value={availabilityStats.available}
                         maxValue={availabilityStats.available + availabilityStats.unavailable}
                         color="success"
                         className="h-2"
@@ -439,8 +436,8 @@ export default function YouTubeRegionRestrictionFinder() {
                           {((availabilityStats.unavailable / (availabilityStats.available + availabilityStats.unavailable)) * 100).toFixed(1)}%
                         </span>
                       </div>
-                      <Progress 
-                        value={availabilityStats.unavailable} 
+                      <Progress
+                        value={availabilityStats.unavailable}
                         maxValue={availabilityStats.available + availabilityStats.unavailable}
                         color="danger"
                         className="h-2"
@@ -454,7 +451,7 @@ export default function YouTubeRegionRestrictionFinder() {
                           <div className="text-2xl">{countries.find(c => c.code === userLocation)?.flag}</div>
                           <div>
                             <p className="font-medium">{countries.find(c => c.code === userLocation)?.name}</p>
-                            <Chip 
+                            <Chip
                               color={availability[userLocation]?.available ? "success" : "danger"}
                               variant="flat"
                               size="sm"
@@ -534,76 +531,7 @@ export default function YouTubeRegionRestrictionFinder() {
         )}
       </div>
 
-      <Card className="mt-6 bg-default-50 dark:bg-default-100 p-4 md:p-8">
-      
-            <div className="rounded-xl p-2 md:p-4 max-w-4xl mx-auto">
-            <h2 className="text-lg md:text-xl lg:text-2xl font-semibold text-default-700 mb-4 flex items-center">
-                <Info className="w-6 h-6 mr-2" />
-                About YouTube Region Restriction Finder
-            </h2>
-            <p className="text-sm md:text-base text-default-600 mb-4">
-            Our YouTube field restriction finder is a powerful and comprehensive tool designed to help the material creators, abusive, researchers and audiences understand the global availability of YouTube videos. This innovative device allows you to check the access to any YouTube video in many countries worldwide, providing valuable insight into material delivery and potential field restrictions.
-            </p>
-
-            <div className="my-8">
-                <NextImage
-                src="/Images/InfosectionImages/YoutubeRegionRestrictionPreview.png?height=400&width=600" 
-                alt="Screenshot of the YouTube Region Restriction Finder interface"
-                width={600}
-                height={400}
-                className="rounded-lg shadow-lg w-full h-auto"
-                />
-            </div>
-
-            <h2 className="text-lg md:text-xl lg:text-2xl font-semibold text-default-700 mb-4 mt-8 flex items-center">
-                <Lightbulb className="w-6 h-6 mr-2" />
-                Key Features
-            </h2>
-            <ul className="list-disc list-inside space-y-2 text-sm md:text-base">
-                <li>Check video availability across multiple regions by simply entering the video URL.</li>
-                <li>Interactive world map visualization of video accessibility.</li>
-                <li>Comprehensive list of all countries with their respective availability status.</li>
-                <li>Detailed video information including title, channel, view count, and publish date.</li>
-                <li>Color-coded availability status for easy interpretation (green for available, red for restricted).</li>
-                <li>Search history feature for quick access to previously checked videos.</li>
-                <li>Share functionality to easily distribute your findings.</li>
-                <li>User-friendly interface with responsive design for all devices.</li>
-                <li>Fast and efficient API-based checking process.</li>
-            </ul>
-
-            <h2 className="text-lg md:text-xl lg:text-2xl font-semibold text-default-700 mb-4 mt-8 flex items-center">
-                <BookOpen className="w-6 h-6 mr-2" />
-                How to Use YouTube Region Restriction Finder
-            </h2>
-            <ol className="list-decimal list-inside space-y-2 text-sm md:text-base">
-                <li>Copy the Youtube Video URL which you want to analyze.</li>
-                <li>Paste the URL into the input field of the YouTube Region Restriction Finder.</li>
-                <li>Click the "Check Availability" button to start the process.</li>
-                <li>
-                View the results in the interactive interface:
-                <ul className="list-disc list-inside ml-6">
-                    <li>World Map: See a visual representation of video availability.</li>
-                    <li>Country List: Check detailed availability status for each country.</li>
-                    <li>Video Details: View information about the checked video.</li>
-                </ul>
-                </li>
-                <li>Use additional features like Reset, Share, and Recent Searches as needed.</li>
-            </ol>
-
-            <h2 className="text-lg md:text-xl lg:text-2xl font-semibold text-default-700 mb-4 mt-8 flex items-center">
-                <Shield className="w-6 h-6 mr-2" />
-                Final Thoughts
-            </h2>
-            <p className="text-sm md:text-base text-default-600">
-                The YouTube Region Restriction Finder is an invaluable tool for anyone working with YouTube content on a global scale. 
-                It provides crucial insights into content availability, helping you make informed decisions about your video distribution strategy. 
-                Whether you're a content creator, marketer, researcher, or simply a curious viewer, this tool offers a window into the complex world 
-                of international content distribution on YouTube. Start exploring the global reach of YouTube videos today and unlock new opportunities 
-                for your content!
-            </p>
-            </div>
-
-        </Card>
+      <InfoSectionYoutubeRegionRestriction />
 
 
     </ToolLayout>

@@ -2,11 +2,11 @@
 
 import type React from "react"
 import { useState, useRef, useEffect, useMemo, useCallback } from "react"
-import { Copy, Download, Info, BookOpen, Lightbulb, Eye, Code, Check } from "lucide-react"
+import { Copy, Download, Check } from "lucide-react"
 import { Button, Card, CardBody, Input, Slider, Select, SelectItem, Tabs, Tab } from "@nextui-org/react"
 import { toast } from "react-hot-toast"
 import ToolLayout from "@/components/ToolLayout"
-import Image from "next/image"
+import InfoSectionColorWheel from "./info-section"
 
 type ColorFormat = 'HEX' | 'RGB' | 'HSL'
 
@@ -23,20 +23,20 @@ const colorHarmonies = [
 
 // Add RGB conversion function
 function hexToRGBString(hex: string): string {
-    const { r, g, b } = hexToRGB(hex)
-    return `rgb(${r}, ${g}, ${b})`
-  }
-  
-  // Add HSL conversion function
-  function hexToHSLString(hex: string): string {
-    const { h, s, l } = hexToHSL(hex)
-    return `hsl(${Math.round(h)}°, ${Math.round(s)}%, ${Math.round(l)}%)`
-  }
-  
-  // Validate hex color
-  function isValidHex(hex: string): boolean {
-    return /^#?([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/.test(hex)
-  }
+  const { r, g, b } = hexToRGB(hex)
+  return `rgb(${r}, ${g}, ${b})`
+}
+
+// Add HSL conversion function
+function hexToHSLString(hex: string): string {
+  const { h, s, l } = hexToHSL(hex)
+  return `hsl(${Math.round(h)}°, ${Math.round(s)}%, ${Math.round(l)}%)`
+}
+
+// Validate hex color
+function isValidHex(hex: string): boolean {
+  return /^#?([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/.test(hex)
+}
 
 // Utility Functions
 function hslToHex(h: number, s: number, l: number): string {
@@ -133,18 +133,18 @@ function getColorFromPosition(
 
 
 export default function ColorWheel() {
-    const [colorFormat, setColorFormat] = useState<ColorFormat>('HEX')
-    const [selectedHarmony, setSelectedHarmony] = useState(colorHarmonies[0])
-    const [baseColor, setBaseColor] = useState("#ff4444")
-    const [customColor, setCustomColor] = useState("#ff4444")
-    const [customHexInput, setCustomHexInput] = useState("FF4444")
-    const [isDragging, setIsDragging] = useState(false)
-    const [selectedDot, setSelectedDot] = useState(0)
-    const [lightness, setLightness] = useState(50)
-    const [copiedIndex, setCopiedIndex] = useState<number | null>(null)
-    const wheelRef = useRef<HTMLDivElement>(null)
-  
-    const { h: hue, s: saturation } = useMemo(() => hexToHSL(baseColor), [baseColor])
+  const [colorFormat, setColorFormat] = useState<ColorFormat>('HEX')
+  const [selectedHarmony, setSelectedHarmony] = useState(colorHarmonies[0])
+  const [baseColor, setBaseColor] = useState("#ff4444")
+  const [customColor, setCustomColor] = useState("#ff4444")
+  const [customHexInput, setCustomHexInput] = useState("FF4444")
+  const [isDragging, setIsDragging] = useState(false)
+  const [selectedDot, setSelectedDot] = useState(0)
+  const [lightness, setLightness] = useState(50)
+  const [copiedIndex, setCopiedIndex] = useState<number | null>(null)
+  const wheelRef = useRef<HTMLDivElement>(null)
+
+  const { h: hue, s: saturation } = useMemo(() => hexToHSL(baseColor), [baseColor])
 
 
   // Calculate harmony colors
@@ -166,20 +166,20 @@ export default function ColorWheel() {
   useEffect(() => {
     if (wheelRef.current) {
       const initialColor = "#ff4444"
-      
+
       // Set initial positions based on harmony angles
-      
+
       setBaseColor(initialColor)
       setCustomColor(initialColor)
       setSelectedDot(0)
     }
   }, [])
 
-   // Handle custom hex input
-   const handleHexInput = (value: string) => {
+  // Handle custom hex input
+  const handleHexInput = (value: string) => {
     const hexValue = value.replace('#', '').toUpperCase()
     setCustomHexInput(hexValue)
-    
+
     if (isValidHex(hexValue)) {
       const newColor = `#${hexValue}`
       setCustomColor(newColor)
@@ -332,7 +332,7 @@ export default function ColorWheel() {
       ctx.fillText(color.toUpperCase(), index * colorWidth + colorWidth / 2, colorHeight + textHeight / 2)
     })
 
-    
+
 
     const link = document.createElement("a")
     link.download = "color-palette.png"
@@ -340,23 +340,23 @@ export default function ColorWheel() {
     link.click()
   }
 
-  
+
 
 
   return (
     <ToolLayout
-    title="Color Wheel"
-    description="Explore color theory and generate harmonious palettes with our advanced color wheel tool"
-    toolId="678f382e26f06f912191bcb2"
-  >
-    <div className="flex flex-col gap-8">
-      <Card className="bg-default-50 dark:bg-default-100">
-        <CardBody className="p-6">
-          {/* Top Section - Color Wheel and Controls */}
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            {/* Color Wheel */}
-            <div className="lg:col-span-2">
-               <div
+      title="Color Wheel"
+      description="Explore color theory and generate harmonious palettes with our advanced color wheel tool"
+      toolId="678f382e26f06f912191bcb2"
+    >
+      <div className="flex flex-col gap-8">
+        <Card className="bg-default-50 dark:bg-default-100">
+          <CardBody className="p-6">
+            {/* Top Section - Color Wheel and Controls */}
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+              {/* Color Wheel */}
+              <div className="lg:col-span-2">
+                <div
                   ref={wheelRef}
                   className="relative w-full aspect-square max-w-[500px] mx-auto touch-none select-none"
                   onMouseDown={handleMouseDown}
@@ -364,11 +364,11 @@ export default function ColorWheel() {
                   onTouchMove={handleTouchMove}
                   onTouchEnd={() => setIsDragging(false)}
                 >
-                <div className="absolute inset-0 rounded-full overflow-hidden shadow-2xl">
-                  <div
-                    className="w-full h-full"
-                    style={{
-                      background: `
+                  <div className="absolute inset-0 rounded-full overflow-hidden shadow-2xl">
+                    <div
+                      className="w-full h-full"
+                      style={{
+                        background: `
                         radial-gradient(
                           circle at center, 
                           transparent 0%, 
@@ -385,44 +385,44 @@ export default function ColorWheel() {
                           hsl(300, 100%, ${lightness}%),
                           hsl(360, 100%, ${lightness}%)
                         )`,
-                    }}
-                  />
-                </div>
-
-                {harmonyColors.map((color, index) => {
-                  const { h, s } = hexToHSL(color)
-                  const dotAngle = h * (Math.PI / 180)
-                  const dotRadius =
-                    (s / 100) *
-                    (Math.min(wheelRef.current?.offsetWidth || 0, wheelRef.current?.offsetHeight || 0) / 2 - 20)
-                  const x = Math.cos(dotAngle) * dotRadius + (wheelRef.current?.offsetWidth || 0) / 2
-                  const y = Math.sin(dotAngle) * dotRadius + (wheelRef.current?.offsetHeight || 0) / 2
-
-                  return (
-                    <div
-                      key={index}
-                      className={`absolute transform -translate-x-1/2 -translate-y-1/2 rounded-full border-2 
-                        ${index === selectedDot 
-                          ? "w-10 h-10 z-20 scale-110 border-white shadow-xl" 
-                          : "w-7 h-7 z-10 border-white/50 shadow-lg"
-                        } transition-all duration-200 cursor-pointer hover:scale-105`}
-                      style={{
-                        backgroundColor: color,
-                        left: `${x}px`,
-                        top: `${y}px`,
                       }}
-                      onClick={() => handleDotClick(index)}
                     />
-                  )
-                })}
-              </div>
-            </div>
+                  </div>
 
-            {/* Controls */}
-            <div className="space-y-6">
-              <div className="space-y-2">
-                <label className="text-sm font-medium text-default-700">Custom Color</label>
-                <div className="flex flex-col gap-2">
+                  {harmonyColors.map((color, index) => {
+                    const { h, s } = hexToHSL(color)
+                    const dotAngle = h * (Math.PI / 180)
+                    const dotRadius =
+                      (s / 100) *
+                      (Math.min(wheelRef.current?.offsetWidth || 0, wheelRef.current?.offsetHeight || 0) / 2 - 20)
+                    const x = Math.cos(dotAngle) * dotRadius + (wheelRef.current?.offsetWidth || 0) / 2
+                    const y = Math.sin(dotAngle) * dotRadius + (wheelRef.current?.offsetHeight || 0) / 2
+
+                    return (
+                      <div
+                        key={index}
+                        className={`absolute transform -translate-x-1/2 -translate-y-1/2 rounded-full border-2 
+                        ${index === selectedDot
+                            ? "w-10 h-10 z-20 scale-110 border-white shadow-xl"
+                            : "w-7 h-7 z-10 border-white/50 shadow-lg"
+                          } transition-all duration-200 cursor-pointer hover:scale-105`}
+                        style={{
+                          backgroundColor: color,
+                          left: `${x}px`,
+                          top: `${y}px`,
+                        }}
+                        onClick={() => handleDotClick(index)}
+                      />
+                    )
+                  })}
+                </div>
+              </div>
+
+              {/* Controls */}
+              <div className="space-y-6">
+                <div className="space-y-2">
+                  <label className="text-sm font-medium text-default-700">Custom Color</label>
+                  <div className="flex flex-col gap-2">
                     <Input
                       type="color"
                       value={customColor}
@@ -448,39 +448,39 @@ export default function ColorWheel() {
                   </div>
                 </div>
 
-              <div className="space-y-2">
-                <label className="text-sm font-medium text-default-700">Lightness</label>
-                <Slider
-                  aria-label="Lightness"
-                  value={lightness}
-                  onChange={(value) => setLightness(value as number)}
-                  step={1}
-                  maxValue={100}
-                  minValue={0}
-                  className="max-w-md"
-                />
-              </div>
+                <div className="space-y-2">
+                  <label className="text-sm font-medium text-default-700">Lightness</label>
+                  <Slider
+                    aria-label="Lightness"
+                    value={lightness}
+                    onChange={(value) => setLightness(value as number)}
+                    step={1}
+                    maxValue={100}
+                    minValue={0}
+                    className="max-w-md"
+                  />
+                </div>
 
-              <div className="space-y-2">
-                <label className="text-sm font-medium text-default-700">Color Harmony</label>
-                <Select
-                  label="Select Harmony"
-                  selectedKeys={[selectedHarmony.name]}
-                  variant="bordered"
-                  onSelectionChange={(keys) => {
-                    const selected = Array.from(keys)[0] as string
-                    setSelectedHarmony(colorHarmonies.find((h) => h.name === selected) || colorHarmonies[0])
-                  }}
-                >
-                  {colorHarmonies.map((harmony) => (
-                    <SelectItem className="text-default-700" key={harmony.name} value={harmony.name}>
-                      {harmony.name}
-                    </SelectItem>
-                  ))}
-                </Select>
+                <div className="space-y-2">
+                  <label className="text-sm font-medium text-default-700">Color Harmony</label>
+                  <Select
+                    label="Select Harmony"
+                    selectedKeys={[selectedHarmony.name]}
+                    variant="bordered"
+                    onSelectionChange={(keys) => {
+                      const selected = Array.from(keys)[0] as string
+                      setSelectedHarmony(colorHarmonies.find((h) => h.name === selected) || colorHarmonies[0])
+                    }}
+                  >
+                    {colorHarmonies.map((harmony) => (
+                      <SelectItem className="text-default-700" key={harmony.name} value={harmony.name}>
+                        {harmony.name}
+                      </SelectItem>
+                    ))}
+                  </Select>
+                </div>
               </div>
             </div>
-          </div>
 
             {/* Color Palette Section */}
             <div className="mt-12">
@@ -581,90 +581,10 @@ export default function ColorWheel() {
             </div>
           </CardBody>
         </Card>
-        </div>
+      </div>
 
-        <Card className="mt-8 bg-default-50 dark:bg-default-100 p-4 md:p-8">
-          <div className="rounded-xl p-2 md:p-4 max-w-4xl mx-auto">
-            <h2 className="text-xl md:text-2xl font-semibold text-default-700 mb-4 flex items-center">
-              <Info className="w-6 h-6 mr-2" />
-              About Color Wheel
-            </h2>
-            <p className="text-sm md:text-base text-default-600 mb-4">
-            Color wheel is an advanced tool designed for designers, developers and color enthusiasts. This allows you to detect color harmony, generate color straps and imagine color relationships with ease and accuracy. Whether you are working on any project related to web design, graphic design, or color theory, this tool offers an intuitive interface to experiment and correct with your color options.
-            </p>
+      <InfoSectionColorWheel />
 
-            <div className="my-8">
-              <Image
-                src="/Images/InfosectionImages/ColorWheelPreview.png?height=400&width=600"
-                alt="Screenshot of the Color Wheel interface showing the interactive wheel and harmony colors"
-                width={600}
-                height={400}
-                className="rounded-lg shadow-lg w-full h-auto"
-              />
-            </div>
-
-            <h2 className="text-xl md:text-2xl font-semibold text-default-700 mb-4 mt-8 flex items-center">
-              <BookOpen className="w-6 h-6 mr-2" />
-              How to Use Color Wheel?
-            </h2>
-            <ol className="list-decimal list-inside space-y-2 text-sm md:text-base text-default-600">
-              <li>Interact with the color wheel by clicking or dragging to select your base color.</li>
-              <li>Or you can use the custom color input to manually enter a specific color.</li>
-              <li>Adjust the lightness slider to modify the brightness of the colors.</li>
-              <li>Select a color harmony from the available options to generate complementary colors.</li>
-              <li>Click on the generated harmony colors to set them as the new base color.</li>
-              <li>Use the copy button to easily copy color values to your clipboard.</li>
-              <li>Download the generated color palette as an image for later use.</li>
-            </ol>
-
-            <h2 className="text-xl md:text-2xl font-semibold text-default-700 mb-4 mt-8 flex items-center">
-              <Lightbulb className="w-6 h-6 mr-2" />
-              Key Features
-            </h2>
-            <ul className="list-disc list-inside space-y-2 text-sm md:text-base text-default-600">
-              <li>Interactive color wheel for intuitive color selection</li>
-              <li>Support for various color harmonies (Complementary, Analogous, Triadic, etc.)</li>
-              <li>Real-time updates of harmony colors as you interact with the wheel</li>
-              <li>Custom color input for precise color selection</li>
-              <li>Lightness adjustment slider for fine-tuning colors</li>
-              <li>Easy-to-use copy functionality for color values</li>
-              <li>Option to download the generated color palette as an image</li>
-            </ul>
-
-            <h2 className="text-xl md:text-2xl font-semibold text-default-700 mb-4 mt-8 flex items-center">
-              <Eye className="w-6 h-6 mr-2" />
-              Tips for Effective Use
-            </h2>
-            <ul className="list-disc list-inside space-y-2 text-sm md:text-base text-default-600">
-              <li>Experiment with different base colors to discover unique palettes.</li>
-              <li>Use the lightness slider to create variations within a chosen color scheme.</li>
-              <li>Try different harmony types to find the perfect combination for your project.</li>
-              <li>Use the custom color input to match specific brand colors or existing design elements.</li>
-              <li>Download your favorite palettes to build a library of harmonious color schemes.</li>
-              <li>Pay attention to contrast when selecting colors for text and backgrounds.</li>
-              <li>Use the monochromatic harmony to create subtle, sophisticated color schemes.</li>
-            </ul>
-
-            <h2 className="text-xl md:text-2xl font-semibold text-default-700 mb-4 mt-8 flex items-center">
-              <Code className="w-6 h-6 mr-2" />
-              Integration Tips
-            </h2>
-            <p className="text-sm md:text-base text-default-600">
-              To effectively implement your generated color palettes in your projects:
-            </p>
-            <ul className="list-disc list-inside space-y-2 text-sm md:text-base text-default-600 mt-2">
-              <li>Use CSS variables to easily apply and update colors throughout your project</li>
-              <li>Create a color system with primary, secondary, and accent colors using different shades</li>
-              <li>Utilize the downloaded PNG palette to import colors into design tools</li>
-              <li>Use the various color formats (HEX, RGB, HSL) as needed for different contexts in your code</li>
-              <li>
-                Consider creating a style guide that incorporates your generated color palette for consistent usage
-                across your project or organization
-              </li>
-            </ul>
-          </div>
-        </Card>
-     
     </ToolLayout>
   )
 }

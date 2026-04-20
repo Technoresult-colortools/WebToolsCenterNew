@@ -2,12 +2,13 @@
 
 import type React from "react"
 import { useState, useEffect, useMemo } from "react"
-import { Search, X, Info, BookOpen, Lightbulb } from "lucide-react"
+import { Search, X, } from "lucide-react"
 import ToolLayout from "@/components/ToolLayout"
 import { toast } from "react-hot-toast"
 import { Button, Card, CardBody, Input, Tabs, Tab } from "@nextui-org/react"
 import { defaultColors, type ColorShade, type ColorPalette } from "./color-data"
 import { generateComplementaryColors, generateAnalogousColors, generateTriadicColors } from "./color-utils"
+import InfoSectionTailwindColorGenerator from "./info-section"
 
 export default function TailwindColorGenerator() {
   const [searchTerm, setSearchTerm] = useState("")
@@ -260,70 +261,9 @@ export default function TailwindColorGenerator() {
           </CardBody>
         </Card>
 
-        <Card className="bg-default-50 dark:bg-default-100">
-          <CardBody className="p-6">
-            <div className="rounded-xl p-2 md:p-4 max-w-4xl mx-auto">
-              <h2 className="text-xl md:text-2xl font-semibold text-default-700 mb-4 flex items-center">
-                <Info className="w-6 h-6 mr-2" />
-                About Tailwind Color Generator
-              </h2>
-              <p className="text-sm md:text-base text-default-600 mb-4">
-              The tailwind color generator is an advanced tool designed for web developers, designers and digital artists. It provides a comprehensive exploration and manipulation platform for tailwind CSS colors, allowing users to easily browse, find and generate custom color palettes. This tool is particularly useful when working with web design, CSS styling, or any project, which requires accurate color management and stability in various color representations.
-              </p>
-              <p className="text-sm md:text-base text-default-600 mb-4">
-              With features such as real-time color preview, interactive color selection, custom palette generation, and support for various color formats, the telvind color generator streamlines your workflow and ensures accurate color representation in your projects. This is perfect for making persistent color schemes, searching color relationships, or simply diving deep into the wide world of tailwind CSS colors.
-              </p>
 
-              <h2
-                id="how-to-use"
-                className="text-xl md:text-2xl font-semibold text-default-700 mb-4 mt-8 flex items-center"
-              >
-                <BookOpen className="w-6 h-6 mr-2" />
-                How to Use the Tailwind Color Generator?
-              </h2>
-              <ol className="list-decimal list-inside space-y-2 text-sm md:text-base text-default-600">
-                <li>Use the search bar to quickly find specific colors or shades within the Tailwind palette.</li>
-                <li>Click on any color swatch to view more details and copy its class name or hex code.</li>
-                <li>Explore different shades of each color family to find the perfect hue for your project.</li>
-                <li>
-                  Switch to the Custom Generator tab to create your own color palette based on a chosen base color.
-                </li>
-                <li>Adjust the base color using the color picker or by entering a hex code.</li>
-                <li>View and copy generated custom shades that complement your base color.</li>
-                <li>Explore complementary, analogous, and triadic color schemes for selected colors.</li>
-                <li>Use the copy buttons to quickly add color values to your clipboard for use in your projects.</li>
-                <li>Experiment with different color combinations to create unique and harmonious designs.</li>
-              </ol>
-
-              <h2 className="text-xl md:text-2xl font-semibold text-default-700 mb-4 mt-8 flex items-center">
-                <Lightbulb className="w-6 h-6 mr-2" />
-                Key Features
-              </h2>
-              <ul className="list-disc list-inside text-default-600 space-y-2 text-sm md:text-base">
-                <li>Comprehensive Tailwind CSS color palette browser</li>
-                <li>Powerful search functionality for quick color location</li>
-                <li>Custom color palette generator</li>
-                <li>Real-time color preview and interaction</li>
-                <li>Support for both class names and hex code formats</li>
-                <li>One-click copying of color values to clipboard</li>
-                <li>Color scheme suggestions (complementary, analogous, triadic)</li>
-                <li>Responsive design for seamless use on desktop and mobile devices</li>
-                <li>Intuitive and user-friendly interface</li>
-                <li>Detailed information and usage tips for each color</li>
-              </ul>
-
-              <p className="text-sm md:text-base text-default-600 mt-6">
-                Ready to elevate your color workflow? Start using our Tailwind Color Generator now and experience the
-                power of efficient color management and exploration. Whether you're a seasoned web developer working on
-                complex projects, a designer crafting the perfect user interface, or a newcomer to the world of web
-                design, our tool provides the functionality and inspiration you need. Try it out today and see how it
-                can streamline your design process, spark your creativity, and help you make the most of Tailwind CSS's
-                robust color system!
-              </p>
-            </div>
-          </CardBody>
-        </Card>
       </div>
+      <InfoSectionTailwindColorGenerator />
     </ToolLayout>
   )
 }

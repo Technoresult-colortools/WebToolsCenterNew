@@ -19,9 +19,6 @@ import {
   RefreshCw,
   AlertCircle,
   Clock,
-  Info,
-  Lightbulb,
-  BookOpen,
   Check,
   Youtube,
   ChevronDown,
@@ -30,13 +27,13 @@ import {
   Trash2,
   PlayCircle,
   Copy,
-  Star,
   PlusCircle,
 } from "lucide-react"
 import { toast } from "react-hot-toast"
 import ToolLayout from "@/components/ToolLayout"
 import YouTube from 'react-youtube'; // <-- Import the YouTube component
 import type { YouTubePlayer } from 'react-youtube'; // <-- Import type for player instance
+import InfoSectionYoutubeTimestampGenerator from "./info-section"
 
 // ... (keep existing interfaces: Timestamp, VideoDetails)
 interface Timestamp {
@@ -58,57 +55,57 @@ interface VideoDetails {
 
 // ... (keep existing constants and helper functions: COLORS, parseYouTubeUrl, convertTimeToSeconds, convertSecondsToTimeFormat, formatTimestamp)
 const COLORS = [
-    "primary",
-    "secondary",
-    "success",
-    "warning",
-    "danger",
+  "primary",
+  "secondary",
+  "success",
+  "warning",
+  "danger",
 ];
 
 const parseYouTubeUrl = (url: string) => {
-    const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/
-    const match = url.match(regExp)
+  const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/
+  const match = url.match(regExp)
 
-    const videoId = match && match[2].length === 11 ? match[2] : null
+  const videoId = match && match[2].length === 11 ? match[2] : null
 
-    // Check for timestamp in URL
-    let timestamp = null
-    if (url.includes('t=')) {
-        const timeMatch = url.match(/[?&]t=([0-9hms]+)/)
-        if (timeMatch && timeMatch[1]) {
-            timestamp = timeMatch[1]
-        }
+  // Check for timestamp in URL
+  let timestamp = null
+  if (url.includes('t=')) {
+    const timeMatch = url.match(/[?&]t=([0-9hms]+)/)
+    if (timeMatch && timeMatch[1]) {
+      timestamp = timeMatch[1]
     }
+  }
 
-    return { videoId, timestamp }
+  return { videoId, timestamp }
 }
 
 const convertTimeToSeconds = (hours: string, minutes: string, seconds: string): number => {
-    return (
-        parseInt(hours || "0") * 3600 +
-        parseInt(minutes || "0") * 60 +
-        parseInt(seconds || "0")
-    )
+  return (
+    parseInt(hours || "0") * 3600 +
+    parseInt(minutes || "0") * 60 +
+    parseInt(seconds || "0")
+  )
 }
 
 const convertSecondsToTimeFormat = (totalSeconds: number): { hours: string, minutes: string, seconds: string } => {
-    totalSeconds = Math.floor(totalSeconds); // Ensure whole seconds
-    const hours = Math.floor(totalSeconds / 3600)
-    const minutes = Math.floor((totalSeconds % 3600) / 60)
-    const seconds = totalSeconds % 60
+  totalSeconds = Math.floor(totalSeconds); // Ensure whole seconds
+  const hours = Math.floor(totalSeconds / 3600)
+  const minutes = Math.floor((totalSeconds % 3600) / 60)
+  const seconds = totalSeconds % 60
 
-    return {
-        hours: hours.toString().padStart(2, '0'),
-        minutes: minutes.toString().padStart(2, '0'),
-        seconds: seconds.toString().padStart(2, '0')
-    }
+  return {
+    hours: hours.toString().padStart(2, '0'),
+    minutes: minutes.toString().padStart(2, '0'),
+    seconds: seconds.toString().padStart(2, '0')
+  }
 }
 
 const formatTimestamp = (hours: string, minutes: string, seconds: string, includeHours = true): string => {
-    if (includeHours || parseInt(hours || "0") > 0) {
-        return `${hours.padStart(2, '0')}:${minutes.padStart(2, '0')}:${seconds.padStart(2, '0')}`
-    }
-    return `${minutes.padStart(2, '0')}:${seconds.padStart(2, '0')}`
+  if (includeHours || parseInt(hours || "0") > 0) {
+    return `${hours.padStart(2, '0')}:${minutes.padStart(2, '0')}:${seconds.padStart(2, '0')}`
+  }
+  return `${minutes.padStart(2, '0')}:${seconds.padStart(2, '0')}`
 }
 
 
@@ -149,19 +146,19 @@ export default function YouTubeTimestampLinkGenerator() {
     try {
       // Make sure NEXT_PUBLIC_YOUTUBE_API_KEY is set in your .env.local
       if (!process.env.NEXT_PUBLIC_YOUTUBE_API_KEY) {
-          setError("YouTube API Key is not configured.");
-          setLoadingVideo(false);
-          return null;
+        setError("YouTube API Key is not configured.");
+        setLoadingVideo(false);
+        return null;
       }
       const response = await fetch(
         `https://www.googleapis.com/youtube/v3/videos?part=snippet,contentDetails&id=${videoId}&key=${process.env.NEXT_PUBLIC_YOUTUBE_API_KEY}`
       )
       if (!response.ok) {
-         const errorData = await response.json();
-         console.error("API Error:", errorData);
-         setError(`Failed to fetch video details: ${errorData.error?.message || response.statusText}`);
-         setLoadingVideo(false);
-         return null;
+        const errorData = await response.json();
+        console.error("API Error:", errorData);
+        setError(`Failed to fetch video details: ${errorData.error?.message || response.statusText}`);
+        setLoadingVideo(false);
+        return null;
       }
 
       const data = await response.json()
@@ -211,10 +208,10 @@ export default function YouTubeTimestampLinkGenerator() {
 
     // Check if we have saved timestamps for this video *after* fetching details
     if (savedTimestamps[videoId]) {
-        setTimestamps(savedTimestamps[videoId])
-        toast.success("Loaded saved timestamps for this video!")
+      setTimestamps(savedTimestamps[videoId])
+      toast.success("Loaded saved timestamps for this video!")
     } else {
-       setTimestamps([]) // Ensure timestamps are empty if none saved
+      setTimestamps([]) // Ensure timestamps are empty if none saved
     }
 
 
@@ -237,8 +234,8 @@ export default function YouTubeTimestampLinkGenerator() {
         // Format like t=123 (seconds)
         timeInSeconds = parseInt(urlTimestamp)
         if (!isNaN(timeInSeconds)) {
-            const { hours, minutes, seconds } = convertSecondsToTimeFormat(timeInSeconds)
-            addTimestamp(hours, minutes, seconds, "Timestamp from URL")
+          const { hours, minutes, seconds } = convertSecondsToTimeFormat(timeInSeconds)
+          addTimestamp(hours, minutes, seconds, "Timestamp from URL")
         }
       }
     }
@@ -265,12 +262,12 @@ export default function YouTubeTimestampLinkGenerator() {
         addTimestamp(hours, minutes, seconds, `Timestamp at ${formattedTime}`);
         toast.success(`Timestamp added at ${formattedTime}`);
       } else {
-         toast.error("Couldn't get current time from player.");
-         console.warn("player.getCurrentTime() did not return a number:", currentTime);
+        toast.error("Couldn't get current time from player.");
+        console.warn("player.getCurrentTime() did not return a number:", currentTime);
       }
     } else {
       toast.error("Player not available or ready.");
-       console.warn("Player object or getCurrentTime method missing:", player);
+      console.warn("Player object or getCurrentTime method missing:", player);
     }
   };
 
@@ -281,8 +278,8 @@ export default function YouTubeTimestampLinkGenerator() {
     // Optional: Check if a timestamp at this exact second already exists
     const existingTimestamp = timestamps.find(ts => convertTimeToSeconds(ts.hours, ts.minutes, ts.seconds) === totalSeconds);
     if (existingTimestamp) {
-        toast.error(`Timestamp at ${formatTimestamp(hours, minutes, seconds)} already exists.`);
-        return; // Don't add duplicate
+      toast.error(`Timestamp at ${formatTimestamp(hours, minutes, seconds)} already exists.`);
+      return; // Don't add duplicate
     }
 
 
@@ -298,9 +295,9 @@ export default function YouTubeTimestampLinkGenerator() {
     setTimestamps(prev => {
       // Add and sort immediately
       const updated = [...prev, newTimestamp].sort((a, b) => {
-          const aSeconds = convertTimeToSeconds(a.hours, a.minutes, a.seconds);
-          const bSeconds = convertTimeToSeconds(b.hours, b.minutes, b.seconds);
-          return aSeconds - bSeconds;
+        const aSeconds = convertTimeToSeconds(a.hours, a.minutes, a.seconds);
+        const bSeconds = convertTimeToSeconds(b.hours, b.minutes, b.seconds);
+        return aSeconds - bSeconds;
       });
 
       // Save to localStorage if we have a videoId
@@ -317,7 +314,7 @@ export default function YouTubeTimestampLinkGenerator() {
   }
 
   // ... (updateTimestamp, removeTimestamp remain the same)
-   const updateTimestamp = (id: string, field: keyof Timestamp, value: string) => {
+  const updateTimestamp = (id: string, field: keyof Timestamp, value: string) => {
     setTimestamps(prev => {
       const updated = prev.map(ts =>
         ts.id === id ? { ...ts, [field]: field.includes('hours') || field.includes('minutes') || field.includes('seconds') ? value.padStart(2, '0') : value } : ts
@@ -357,7 +354,7 @@ export default function YouTubeTimestampLinkGenerator() {
 
 
   // ... (generateLink remains mostly the same, uses already sorted timestamps)
-   const generateLink = () => {
+  const generateLink = () => {
     if (!videoDetails) return
 
     const baseUrl = `https://www.youtube.com/watch?v=${videoDetails.id}`
@@ -391,7 +388,7 @@ export default function YouTubeTimestampLinkGenerator() {
     // Construct the final output: Link to first timestamp + optional description
     let finalOutput = `${baseUrl}&t=${firstTotalSeconds}`
     if (description) {
-        finalOutput += `\n\n-- Timestamps --\n${description}` // Add header for clarity
+      finalOutput += `\n\n-- Timestamps --\n${description}` // Add header for clarity
     }
 
     setGeneratedLink(finalOutput)
@@ -401,34 +398,34 @@ export default function YouTubeTimestampLinkGenerator() {
 
 
   // ... (updateSearchHistory, clearSearchHistory, handleShare, copyToClipboard remain the same)
-    const updateSearchHistory = (url: string) => {
-        const newHistory = [url, ...searchHistory.filter((item) => item !== url).slice(0, 9)]
-        setSearchHistory(newHistory)
-        localStorage.setItem("timestampSearchHistory", JSON.stringify(newHistory))
-    }
+  const updateSearchHistory = (url: string) => {
+    const newHistory = [url, ...searchHistory.filter((item) => item !== url).slice(0, 9)]
+    setSearchHistory(newHistory)
+    localStorage.setItem("timestampSearchHistory", JSON.stringify(newHistory))
+  }
 
-    const clearSearchHistory = () => {
-        setSearchHistory([])
-        localStorage.removeItem("timestampSearchHistory")
-        toast.success("Search history cleared!")
-    }
+  const clearSearchHistory = () => {
+    setSearchHistory([])
+    localStorage.removeItem("timestampSearchHistory")
+    toast.success("Search history cleared!")
+  }
 
-    const handleShare = () => {
-        if (!generatedLink) {
-            toast.error("Please generate the link first!");
-            return;
-        }
-        navigator.clipboard.writeText(generatedLink)
-        setCopiedLink(true)
-        toast.success("Generated link and description copied to clipboard!")
-        setTimeout(() => setCopiedLink(false), 3000)
-
+  const handleShare = () => {
+    if (!generatedLink) {
+      toast.error("Please generate the link first!");
+      return;
     }
+    navigator.clipboard.writeText(generatedLink)
+    setCopiedLink(true)
+    toast.success("Generated link and description copied to clipboard!")
+    setTimeout(() => setCopiedLink(false), 3000)
 
-    const copyToClipboard = (text: string) => {
-        navigator.clipboard.writeText(text)
-        toast.success("Copied to clipboard!")
-    }
+  }
+
+  const copyToClipboard = (text: string) => {
+    navigator.clipboard.writeText(text)
+    toast.success("Copied to clipboard!")
+  }
 
 
   // --- Modified handleReset to also clear player ---
@@ -458,11 +455,11 @@ export default function YouTubeTimestampLinkGenerator() {
       player.seekTo(totalSeconds, true); // true = allow seek ahead
       player.playVideo(); // Start playing from that point
     } else if (videoDetails) {
-        // Fallback: open in new tab if player isn't ready
-        const url = getTimestampUrl(timestamp)
-        window.open(url, "_blank")
+      // Fallback: open in new tab if player isn't ready
+      const url = getTimestampUrl(timestamp)
+      window.open(url, "_blank")
     } else {
-        toast.error("Player not ready or video not loaded.");
+      toast.error("Player not ready or video not loaded.");
     }
   }
 
@@ -488,7 +485,7 @@ export default function YouTubeTimestampLinkGenerator() {
         {/* Header Card (Form) */}
         <Card className="bg-gradient-to-r from-blue-950 to-purple-900 text-white shadow-lg">
           {/* ... (CardBody with form remains largely the same) ... */}
-           <CardBody className="p-6">
+          <CardBody className="p-6">
             <form onSubmit={handleSubmit} className="space-y-4">
               <div className="flex flex-col md:flex-row gap-4">
                 <Input
@@ -529,7 +526,7 @@ export default function YouTubeTimestampLinkGenerator() {
                 >
                   Reset
                 </Button>
-                 {/* Share button moved below generated link for better flow */}
+                {/* Share button moved below generated link for better flow */}
               </div>
             </form>
 
@@ -561,86 +558,86 @@ export default function YouTubeTimestampLinkGenerator() {
         {videoDetails && (
           <Card className="shadow-md border-none bg-default-50/50 backdrop-blur-sm dark:bg-default-100/50">
             <CardHeader>
-                 <h2 className="text-xl font-bold">{videoDetails.title}</h2>
+              <h2 className="text-xl font-bold">{videoDetails.title}</h2>
             </CardHeader>
-            <Divider/>
+            <Divider />
             <CardBody className="p-4">
               <div className="flex flex-col lg:flex-row gap-6">
-                 {/* Left Column: Player */}
-                 <div className="w-full lg:w-1/2">
-                   <p className="text-default-500 mb-2">Channel: {videoDetails.channelTitle}</p>
-                   <div className="aspect-video bg-black rounded-lg overflow-hidden mb-4">
-                        <YouTube
-                            videoId={videoDetails.id}
-                            opts={playerOptions}
-                            onReady={onPlayerReady}
-                            onError={(err) => { console.error("YT Player Error:", err); toast.error("Error loading YouTube player."); }}
-                            className="w-full h-full" // Ensure iframe fills container
-                        />
-                   </div>
-                   <div className="flex flex-wrap gap-2 items-center">
-                       <Tooltip content="Add a timestamp based on the video's current playback time" className="text-default-700">
-                           <Button
-                                color="warning"
-                                onClick={handlePickCurrentTime}
-                                startContent={<Clock size={18} />}
-                                isDisabled={!player} // Disabled until player is ready
-                                className="bg-gradient-to-r from-orange-500 to-amber-500"
-                           >
-                               Pick Current Time
-                           </Button>
-                       </Tooltip>
-                       <Tooltip content="Manually add a timestamp entry below" className="text-default-700">
-                           <Button
-                                color="primary"
-                                onClick={() => addTimestamp()} // Adds a blank one to fill manually
-                                startContent={<PlusCircle size={18} />}
-                                className="bg-gradient-to-r from-blue-500 to-indigo-500"
-                           >
-                               Add Manual Timestamp
-                           </Button>
-                       </Tooltip>
-                   </div>
-                 </div>
+                {/* Left Column: Player */}
+                <div className="w-full lg:w-1/2">
+                  <p className="text-default-500 mb-2">Channel: {videoDetails.channelTitle}</p>
+                  <div className="aspect-video bg-black rounded-lg overflow-hidden mb-4">
+                    <YouTube
+                      videoId={videoDetails.id}
+                      opts={playerOptions}
+                      onReady={onPlayerReady}
+                      onError={(err) => { console.error("YT Player Error:", err); toast.error("Error loading YouTube player."); }}
+                      className="w-full h-full" // Ensure iframe fills container
+                    />
+                  </div>
+                  <div className="flex flex-wrap gap-2 items-center">
+                    <Tooltip content="Add a timestamp based on the video's current playback time" className="text-default-700">
+                      <Button
+                        color="warning"
+                        onClick={handlePickCurrentTime}
+                        startContent={<Clock size={18} />}
+                        isDisabled={!player} // Disabled until player is ready
+                        className="bg-gradient-to-r from-orange-500 to-amber-500"
+                      >
+                        Pick Current Time
+                      </Button>
+                    </Tooltip>
+                    <Tooltip content="Manually add a timestamp entry below" className="text-default-700">
+                      <Button
+                        color="primary"
+                        onClick={() => addTimestamp()} // Adds a blank one to fill manually
+                        startContent={<PlusCircle size={18} />}
+                        className="bg-gradient-to-r from-blue-500 to-indigo-500"
+                      >
+                        Add Manual Timestamp
+                      </Button>
+                    </Tooltip>
+                  </div>
+                </div>
 
-                 {/* Right Column: Timestamp List Actions & Generation */}
-                 <div className="w-full lg:w-1/2">
-                   <h3 className="text-lg font-semibold mb-3">Timestamp Controls</h3>
-                    <div className="flex flex-col gap-4">
-                        <div className="flex flex-wrap gap-2 justify-between items-center">
-                            <Button
-                              color="secondary"
-                              onClick={generateLink}
-                              startContent={<Link size={18} />}
-                              className="bg-gradient-to-r from-purple-500 to-violet-500"
-                              isDisabled={timestamps.length === 0}
-                            >
-                              Generate Link & Description
-                            </Button>
-                            <Checkbox
-                                isSelected={includeLabels}
-                                onValueChange={setIncludeLabels}
-                                color="secondary"
-                                size="sm"
-                            >
-                                Include labels in description
-                            </Checkbox>
-                        </div>
-
-                         {/* Info about the list */}
-                         {timestamps.length > 0 && (
-                             <p className="text-sm text-default-500 mt-2">
-                                 You have {timestamps.length} timestamp{timestamps.length !== 1 ? 's' : ''}. Use the list below to edit or delete them.
-                             </p>
-                         )}
-                         {timestamps.length === 0 && (
-                             <p className="text-sm text-default-400 mt-2">
-                                 Use the buttons above to add timestamps interactively or manually.
-                             </p>
-                         )}
-
+                {/* Right Column: Timestamp List Actions & Generation */}
+                <div className="w-full lg:w-1/2">
+                  <h3 className="text-lg font-semibold mb-3">Timestamp Controls</h3>
+                  <div className="flex flex-col gap-4">
+                    <div className="flex flex-wrap gap-2 justify-between items-center">
+                      <Button
+                        color="secondary"
+                        onClick={generateLink}
+                        startContent={<Link size={18} />}
+                        className="bg-gradient-to-r from-purple-500 to-violet-500"
+                        isDisabled={timestamps.length === 0}
+                      >
+                        Generate Link & Description
+                      </Button>
+                      <Checkbox
+                        isSelected={includeLabels}
+                        onValueChange={setIncludeLabels}
+                        color="secondary"
+                        size="sm"
+                      >
+                        Include labels in description
+                      </Checkbox>
                     </div>
-                 </div>
+
+                    {/* Info about the list */}
+                    {timestamps.length > 0 && (
+                      <p className="text-sm text-default-500 mt-2">
+                        You have {timestamps.length} timestamp{timestamps.length !== 1 ? 's' : ''}. Use the list below to edit or delete them.
+                      </p>
+                    )}
+                    {timestamps.length === 0 && (
+                      <p className="text-sm text-default-400 mt-2">
+                        Use the buttons above to add timestamps interactively or manually.
+                      </p>
+                    )}
+
+                  </div>
+                </div>
               </div>
             </CardBody>
           </Card>
@@ -654,129 +651,129 @@ export default function YouTubeTimestampLinkGenerator() {
             </CardHeader>
             <Divider />
             <CardBody className="p-4">
-                <div className="space-y-3">
-                  {timestamps.map((timestamp) => (
-                    <Card key={timestamp.id} className="w-full bg-white/70 dark:bg-black/30">
-                      <CardBody className="p-3">
-                        <div className="flex flex-col md:flex-row gap-2 md:gap-4 items-start md:items-center">
-                         {/* Time Display & Input */}
-                         <div className="flex flex-col items-start w-full md:w-auto mb-2 md:mb-0">
-                             <Chip
-                             // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                                color={timestamp.color as any}
-                                variant="shadow"
-                                className="min-w-20 justify-center mb-1"
-                              >
-                                {formatTimestamp(timestamp.hours, timestamp.minutes, timestamp.seconds)}
-                              </Chip>
-                              <div className="flex gap-1 items-center">
-                                <Input
-                                  aria-label="Hours"
-                                  size="sm"
-                                  placeholder="HH"
-                                  value={timestamp.hours}
-                                  onChange={(e) => updateTimestamp(timestamp.id, "hours", e.target.value.replace(/\D/g, ''))} // Allow only digits
-                                  className="w-12"
-                                  type="number"
-                                  min="0"
-                                />
-                                <span className="text-default-500">:</span>
-                                <Input
-                                  aria-label="Minutes"
-                                  size="sm"
-                                  placeholder="MM"
-                                  value={timestamp.minutes}
-                                  onChange={(e) => updateTimestamp(timestamp.id, "minutes", e.target.value.replace(/\D/g, ''))}
-                                  className="w-12"
-                                  type="number"
-                                  min="0"
-                                  max="59"
-                                />
-                                <span className="text-default-500">:</span>
-                                <Input
-                                  aria-label="Seconds"
-                                  size="sm"
-                                  placeholder="SS"
-                                  value={timestamp.seconds}
-                                  onChange={(e) => updateTimestamp(timestamp.id, "seconds", e.target.value.replace(/\D/g, ''))}
-                                  className="w-12"
-                                  type="number"
-                                  min="0"
-                                  max="59"
-                                />
-                              </div>
-                          </div>
-
-                          {/* Label Input */}
-                          <Input
-                            aria-label="Timestamp Label"
-                            size="sm"
-                            placeholder="Label (e.g., Introduction, Key Point)"
-                            value={timestamp.label}
-                            onChange={(e) => updateTimestamp(timestamp.id, "label", e.target.value)}
-                            className="flex-grow" // Takes remaining space
-                          />
-
-                          {/* Action Buttons */}
-                          <div className="flex flex-wrap gap-1 mt-2 md:mt-0 justify-end shrink-0">
-                            <Tooltip content="Play video from this timestamp" className="text-default-700">
-                                <Button
-                                    isIconOnly
-                                    size="sm"
-                                    variant="flat"
-                                    color="success"
-                                    onClick={() => playTimestampInPlayer(timestamp)} // Use new function
-                                    aria-label={`Play from ${formatTimestamp(timestamp.hours, timestamp.minutes, timestamp.seconds)}`}
-                                >
-                                    <PlayCircle size={16} />
-                                </Button>
-                            </Tooltip>
-                            <Tooltip content="Copy link for this timestamp" className="text-default-700">
-                                <Button
-                                    isIconOnly
-                                    size="sm"
-                                    variant="flat"
-                                    color="primary"
-                                    onClick={() => copyToClipboard(getTimestampUrl(timestamp))}
-                                    aria-label={`Copy link for ${formatTimestamp(timestamp.hours, timestamp.minutes, timestamp.seconds)}`}
-                                >
-                                    <Copy size={16} />
-                                </Button>
-                            </Tooltip>
-                             <Tooltip content="Delete this timestamp" className="text-default-700">
-                                <Button
-                                    isIconOnly
-                                    size="sm"
-                                    variant="flat"
-                                    color="danger"
-                                    onClick={() => removeTimestamp(timestamp.id)}
-                                    aria-label={`Delete timestamp ${formatTimestamp(timestamp.hours, timestamp.minutes, timestamp.seconds)}`}
-                                >
-                                    <Trash2 size={16} />
-                                </Button>
-                            </Tooltip>
+              <div className="space-y-3">
+                {timestamps.map((timestamp) => (
+                  <Card key={timestamp.id} className="w-full bg-white/70 dark:bg-black/30">
+                    <CardBody className="p-3">
+                      <div className="flex flex-col md:flex-row gap-2 md:gap-4 items-start md:items-center">
+                        {/* Time Display & Input */}
+                        <div className="flex flex-col items-start w-full md:w-auto mb-2 md:mb-0">
+                          <Chip
+                            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                            color={timestamp.color as any}
+                            variant="shadow"
+                            className="min-w-20 justify-center mb-1"
+                          >
+                            {formatTimestamp(timestamp.hours, timestamp.minutes, timestamp.seconds)}
+                          </Chip>
+                          <div className="flex gap-1 items-center">
+                            <Input
+                              aria-label="Hours"
+                              size="sm"
+                              placeholder="HH"
+                              value={timestamp.hours}
+                              onChange={(e) => updateTimestamp(timestamp.id, "hours", e.target.value.replace(/\D/g, ''))} // Allow only digits
+                              className="w-12"
+                              type="number"
+                              min="0"
+                            />
+                            <span className="text-default-500">:</span>
+                            <Input
+                              aria-label="Minutes"
+                              size="sm"
+                              placeholder="MM"
+                              value={timestamp.minutes}
+                              onChange={(e) => updateTimestamp(timestamp.id, "minutes", e.target.value.replace(/\D/g, ''))}
+                              className="w-12"
+                              type="number"
+                              min="0"
+                              max="59"
+                            />
+                            <span className="text-default-500">:</span>
+                            <Input
+                              aria-label="Seconds"
+                              size="sm"
+                              placeholder="SS"
+                              value={timestamp.seconds}
+                              onChange={(e) => updateTimestamp(timestamp.id, "seconds", e.target.value.replace(/\D/g, ''))}
+                              className="w-12"
+                              type="number"
+                              min="0"
+                              max="59"
+                            />
                           </div>
                         </div>
-                      </CardBody>
-                    </Card>
-                  ))}
-                </div>
+
+                        {/* Label Input */}
+                        <Input
+                          aria-label="Timestamp Label"
+                          size="sm"
+                          placeholder="Label (e.g., Introduction, Key Point)"
+                          value={timestamp.label}
+                          onChange={(e) => updateTimestamp(timestamp.id, "label", e.target.value)}
+                          className="flex-grow" // Takes remaining space
+                        />
+
+                        {/* Action Buttons */}
+                        <div className="flex flex-wrap gap-1 mt-2 md:mt-0 justify-end shrink-0">
+                          <Tooltip content="Play video from this timestamp" className="text-default-700">
+                            <Button
+                              isIconOnly
+                              size="sm"
+                              variant="flat"
+                              color="success"
+                              onClick={() => playTimestampInPlayer(timestamp)} // Use new function
+                              aria-label={`Play from ${formatTimestamp(timestamp.hours, timestamp.minutes, timestamp.seconds)}`}
+                            >
+                              <PlayCircle size={16} />
+                            </Button>
+                          </Tooltip>
+                          <Tooltip content="Copy link for this timestamp" className="text-default-700">
+                            <Button
+                              isIconOnly
+                              size="sm"
+                              variant="flat"
+                              color="primary"
+                              onClick={() => copyToClipboard(getTimestampUrl(timestamp))}
+                              aria-label={`Copy link for ${formatTimestamp(timestamp.hours, timestamp.minutes, timestamp.seconds)}`}
+                            >
+                              <Copy size={16} />
+                            </Button>
+                          </Tooltip>
+                          <Tooltip content="Delete this timestamp" className="text-default-700">
+                            <Button
+                              isIconOnly
+                              size="sm"
+                              variant="flat"
+                              color="danger"
+                              onClick={() => removeTimestamp(timestamp.id)}
+                              aria-label={`Delete timestamp ${formatTimestamp(timestamp.hours, timestamp.minutes, timestamp.seconds)}`}
+                            >
+                              <Trash2 size={16} />
+                            </Button>
+                          </Tooltip>
+                        </div>
+                      </div>
+                    </CardBody>
+                  </Card>
+                ))}
+              </div>
             </CardBody>
           </Card>
         )}
 
         {/* Message when no timestamps exist yet */}
         {videoDetails && timestamps.length === 0 && (
-              <Card className="shadow-md border-none bg-default-50/50 backdrop-blur-sm dark:bg-default-100/50">
-                  <CardBody className="text-center p-10 text-default-400">
-                      <Clock size={48} className="mx-auto mb-4 opacity-50" />
-                      <p>No timestamps added yet.</p> {/* This one is okay as it only contains text */}
-                      {/* 👇 Changed from <p> to <div> */}
-                      <div className="text-sm mt-2"> {/* Added mt-2 for spacing, adjust if needed */}
-                          Use the <Chip color="warning" size="sm" className="mx-1 align-baseline">Pick Current Time</Chip> button while playing the video, or <Chip color="primary" size="sm" className="mx-1 align-baseline">Add Manual Timestamp</Chip> to create your first one.
-                      </div>
-                  </CardBody>
-            </Card>
+          <Card className="shadow-md border-none bg-default-50/50 backdrop-blur-sm dark:bg-default-100/50">
+            <CardBody className="text-center p-10 text-default-400">
+              <Clock size={48} className="mx-auto mb-4 opacity-50" />
+              <p>No timestamps added yet.</p> {/* This one is okay as it only contains text */}
+              {/* 👇 Changed from <p> to <div> */}
+              <div className="text-sm mt-2"> {/* Added mt-2 for spacing, adjust if needed */}
+                Use the <Chip color="warning" size="sm" className="mx-1 align-baseline">Pick Current Time</Chip> button while playing the video, or <Chip color="primary" size="sm" className="mx-1 align-baseline">Add Manual Timestamp</Chip> to create your first one.
+              </div>
+            </CardBody>
+          </Card>
         )}
 
 
@@ -790,7 +787,7 @@ export default function YouTubeTimestampLinkGenerator() {
             <CardBody className="p-4">
               <div className="flex flex-col gap-4">
                 <div className="relative">
-                   <p className="text-sm text-default-500 mb-2">Copy the text below to share the link and timestamp list:</p>
+                  <p className="text-sm text-default-500 mb-2">Copy the text below to share the link and timestamp list:</p>
                   <div className="bg-default-100 p-4 rounded-lg max-h-60 overflow-y-auto whitespace-pre-wrap font-mono text-sm">
                     {generatedLink}
                   </div>
@@ -833,7 +830,7 @@ export default function YouTubeTimestampLinkGenerator() {
         )}
 
         {/* Search History (remains the same) */}
-         {searchHistory.length > 0 && (
+        {searchHistory.length > 0 && (
           <Card className="shadow-md border-none bg-default-50/50 backdrop-blur-sm dark:bg-default-100/50">
             <CardHeader
               className="flex justify-between items-center cursor-pointer"
@@ -852,7 +849,7 @@ export default function YouTubeTimestampLinkGenerator() {
                     e.stopPropagation() // Prevent CardHeader click
                     clearSearchHistory()
                   }}
-                  startContent={<Trash2 size={14}/>}
+                  startContent={<Trash2 size={14} />}
                 >
                   Clear History
                 </Button>
@@ -866,10 +863,10 @@ export default function YouTubeTimestampLinkGenerator() {
                     <Button
                       key={index}
                       onClick={() => {
-                           setVideoUrl(url);
-                           // Optionally trigger submit automatically after setting URL
-                           // handleSubmit(new Event('submit') as any); // You might need to polyfill Event or handle differently
-                           toast("URL loaded. Click 'Load Video' to fetch.", { icon: '➡️'});
+                        setVideoUrl(url);
+                        // Optionally trigger submit automatically after setting URL
+                        // handleSubmit(new Event('submit') as any); // You might need to polyfill Event or handle differently
+                        toast("URL loaded. Click 'Load Video' to fetch.", { icon: '➡️' });
                       }}
                       variant="flat"
                       className="w-full justify-start text-left truncate"
@@ -885,102 +882,9 @@ export default function YouTubeTimestampLinkGenerator() {
         )}
 
 
-        {/* Info Section (remains the same) */}
-         <Card className="bg-default-50 dark:bg-default-100 p-4 md:p-8">
-           <CardBody className="p-6">
-             {/* About the Tool */}
-            <h2 className="text-lg md:text-xl lg:text-2xl font-semibold text-default-700 mb-4 flex items-center">
-              <Info className="w-6 h-6 mr-2 flex-shrink-0" />
-              About YouTube Timestamp Link Generator
-            </h2>
-            <p className="text-sm md:text-base text-default-600 mb-4">
-              Our YouTube Timestamp Link Generator is a powerful tool designed for content creators, educators, researchers, and YouTube enthusiasts who need to reference specific moments in videos. Create timestamped links with custom labels that you can share with your audience, making navigation through long videos seamless and efficient. Now featuring interactive time picking directly from the video player!
-            </p>
 
-            {/* Key Features */}
-            <h2 className="text-lg md:text-xl lg:text-2xl font-semibold text-default-700 mb-4 mt-8 flex items-center">
-              <Lightbulb className="w-6 h-6 mr-2 flex-shrink-0" />
-              Key Features
-            </h2>
-            <ul className="list-disc list-inside space-y-2 text-sm md:text-base text-default-600">
-              <li>Instant video information retrieval from any YouTube URL</li>
-              <li><span className="font-semibold">Interactive timestamp picking</span>: Add timestamps at the current video playback time</li>
-              <li>Manual timestamp entry for precise control</li>
-              <li>Create multiple custom timestamps with descriptive labels</li>
-              <li>Automatic detection of timestamps from pasted URLs</li>
-              <li>Generate shareable links that jump directly to specific moments</li>
-              <li>Create formatted timestamp descriptions for video comments or descriptions</li>
-              <li>Play video directly from specified timestamps within the tool</li>
-              <li>Color-coded timestamps for better organization</li>
-              <li>Save timestamps per video using browser local storage</li>
-              <li>Clean, intuitive, and mobile-responsive interface</li>
-            </ul>
-
-            {/* How to Use */}
-            <h2 className="text-lg md:text-xl lg:text-2xl font-semibold text-default-700 mb-4 mt-8 flex items-center">
-              <BookOpen className="w-6 h-6 mr-2 flex-shrink-0" />
-              How to Use YouTube Timestamp Link Generator?
-            </h2>
-            <ol className="list-decimal list-inside space-y-2 text-sm md:text-base text-default-600">
-              <li>Paste the URL of your YouTube video in the input field</li>
-              <li>Click "Load Video" to retrieve the video details and display the player</li>
-              <li>Play the video within the tool</li>
-              <li>Click the <Chip color="warning" size="sm">Pick Current Time</Chip> button when the video reaches a point you want to timestamp</li>
-              <li>Alternatively, click <Chip color="primary" size="sm">Add Manual Timestamp</Chip> and enter the time (HH:MM:SS) manually</li>
-              <li>Edit the auto-generated or manually added label for each timestamp</li>
-              <li>Click "Generate Link & Description" to create your shareable output</li>
-              <li>Use "Copy All" to copy the generated link and description, or test the link with "Open Link in YouTube"</li>
-              <li>Share the copied text (link + description) wherever needed</li>
-            </ol>
-
-             {/* Tips for Effective Use (updated slightly) */}
-            <h2 className="text-lg md:text-xl lg:text-2xl font-semibold text-default-700 mb-4 mt-8 flex items-center">
-              <Lightbulb className="w-6 h-6 mr-2 flex-shrink-0" />
-              Tips for Effective Use
-            </h2>
-            <ul className="list-disc list-inside space-y-2 text-sm md:text-base text-default-600">
-              <li>Use the interactive "Pick Current Time" for quick timestamping while watching</li>
-              <li>Fine-tune picked timestamps manually if needed for perfect accuracy</li>
-              <li>Use clear, concise labels that accurately describe the content at each timestamp</li>
-              <li>For educational videos, include chapter or topic names in your labels</li>
-              <li>For tutorials, label key steps or techniques demonstrated at each timestamp</li>
-              <li>For long interviews or podcasts, timestamp different discussion topics or questions</li>
-              <li>Use the "Play" button next to a timestamp to verify it within the tool's player</li>
-              <li>When sharing in video descriptions, paste the full generated text (link + timestamps)</li>
-              <li>Save frequently used videos to quickly access their timestamps later (uses browser storage)</li>
-            </ul>
-
-            {/* Use Cases (remains the same) */}
-             <h2 className="text-lg md:text-xl lg:text-2xl font-semibold text-default-700 mb-4 mt-8 flex items-center">
-              <Star className="w-6 h-6 mr-2 flex-shrink-0" />
-              Popular Use Cases
-            </h2>
-            <ul className="list-disc list-inside space-y-2 text-sm md:text-base text-default-600">
-              <li><strong>Educational Content:</strong> Create easy navigation for lectures, tutorials, and course videos</li>
-              <li><strong>Product Reviews:</strong> Timestamp different products or features being reviewed</li>
-              <li><strong>Gaming Walkthroughs:</strong> Mark different levels, boss fights, or key moments</li>
-              <li><strong>Interviews:</strong> Highlight different questions or topics of discussion</li>
-              <li><strong>Music Videos:</strong> Mark verse transitions, solos, or notable performance moments</li>
-              <li><strong>Podcasts:</strong> Reference discussion topics, guest segments, or sponsor sections</li>
-              <li><strong>Sports Highlights:</strong> Timestamp key plays, scoring moments, or match segments</li>
-              <li><strong>Technical Guides:</strong> Mark different steps or procedures in a process</li>
-            </ul>
-
-            {/* Legal and Ethical Considerations (remains the same) */}
-             <h2 className="text-lg md:text-xl lg:text-2xl font-semibold text-default-700 mb-4 mt-8 flex items-center">
-              <Info className="w-6 h-6 mr-2 flex-shrink-0" />
-              Legal and Ethical Considerations
-            </h2>
-            <ul className="list-disc list-inside space-y-2 text-sm md:text-base text-default-600">
-              <li>Always respect copyright laws when sharing timestamp links</li>
-              <li>Include proper attribution to content creators when sharing timestamp links</li>
-              <li>Be aware of YouTube's terms of service regarding content sharing</li>
-              <li>Use timestamps to enhance user experience, not to circumvent creators' intentions</li>
-              <li>Consider asking for permission before extensively timestamping others' content for public sharing</li>
-            </ul>
-           </CardBody>
-         </Card>
       </div>
+      <InfoSectionYoutubeTimestampGenerator />
     </ToolLayout>
   )
 }

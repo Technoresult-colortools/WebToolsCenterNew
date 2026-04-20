@@ -14,10 +14,6 @@ import {
   Radio,
   PlayCircle,
   FileText,
-  Info,
-  Lightbulb,
-  BookOpen,
-  Eye,
 } from "lucide-react"
 import {
   Button,
@@ -32,7 +28,7 @@ import {
   Image,
 } from "@nextui-org/react"
 import { toast, } from "react-hot-toast"
-import NextImage from 'next/image'
+import InfoSectionOpenGraphGenerator from "./info-section"
 import ToolLayout from "@/components/ToolLayout"
 
 const ogTypes = [
@@ -327,58 +323,58 @@ export default function OpenGraphGenerator() {
                     value={metadata.section}
                     onChange={(e) => handleChange("section", e.target.value)}
                     variant="bordered"
-                    />
-                    
-                    <Input
+                  />
+
+                  <Input
                     label="Tags (comma-separated)"
                     value={metadata.tags}
                     onChange={(e) => handleChange("tags", e.target.value)}
                     placeholder="tag1, tag2, tag3"
-                    
+
                     variant="bordered"
-                    />
-                  
+                  />
+
                 </>
               )}
 
               {/* Conditional fields based on type */}
               {type === "article" && (
                 <div className="flex flex-col gap-4">
-                    <Input
+                  <Input
                     label="Author"
                     value={metadata.author}
                     onChange={(e) => handleChange("author", e.target.value)}
                     variant="bordered"
-                    />
-                    
-                    {/* Published & Modified Time - Labels Outside */}
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  />
+
+                  {/* Published & Modified Time - Labels Outside */}
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div className="flex flex-col gap-1">
-                        <label className="text-sm font-medium text-default-700">Published Time</label>
-                        <Input
+                      <label className="text-sm font-medium text-default-700">Published Time</label>
+                      <Input
                         type="datetime-local"
                         value={metadata.publishedTime}
                         onChange={(e) => handleChange("publishedTime", e.target.value)}
                         variant="bordered"
                         size="lg"
-                        />
+                      />
                     </div>
-                    
+
                     <div className="flex flex-col gap-1">
-                        <label className="text-sm font-medium text-default-700">Modified Time</label>
-                        <Input
+                      <label className="text-sm font-medium text-default-700">Modified Time</label>
+                      <Input
                         type="datetime-local"
                         value={metadata.modifiedTime}
                         onChange={(e) => handleChange("modifiedTime", e.target.value)}
                         variant="bordered"
                         size="lg"
-                        />
+                      />
                     </div>
-                    </div>
-                    
-                    
+                  </div>
+
+
                 </div>
-                )}
+              )}
 
 
               {/* Add more conditional fields for other types */}
@@ -417,7 +413,7 @@ export default function OpenGraphGenerator() {
                   src={metadata.image || "/placeholder.svg"}
                   alt="OG Preview"
                   className="w-full max-w-lg mx-auto rounded-lg"
-                
+
                 />
               )}
               <div className="space-y-2">
@@ -431,78 +427,10 @@ export default function OpenGraphGenerator() {
           </CardBody>
         </Card>
 
-        {/* About section */}
-        <Card className="bg-default-50 dark:bg-default-100 p-4 md:p-8">
-        <div className="rounded-xl p-2 md:p-4 max-w-4xl mx-auto">
-            <h2 className="text-lg md:text-xl lg:text-2xl font-semibold text-default-700 mb-4 flex items-center">
-            <Info className="w-6 h-6 mr-2" />
-            About Open Graph Meta Generator
-            </h2>
-            <p className="text-sm md:text-base text-default-600 mb-4">
-            The Open Graph Meta Generator is a powerful tool designed to help create an accurate and comprehensive open graph meta tag for your web content. These meta tags control how your content appears when shared on social media platforms ensures that your links look great and attract more clicks.
-            </p>
 
-            <div className="my-8">
-            <NextImage
-                src="/Images/InfosectionImages/OpengraphMetaPreview.png?height=400&width=600"
-                alt="Screenshot of the Open Graph Meta Generator interface showing input fields and preview"
-                width={600}
-                height={400}
-                className="rounded-lg shadow-lg w-full h-auto"
-            />
-            </div>
-
-            <h2 id="key-features" className="text-lg md:text-xl lg:text-2xl font-semibold text-default-700 mb-4 mt-8 flex items-center">
-            <Lightbulb className="w-6 h-6 mr-2" />
-            Key Features
-            </h2>
-            <ul className="list-disc list-inside space-y-2 text-xs md:text-sm">
-            <li>Support for various content types including websites, articles, books, profiles, music, and videos.</li>
-            <li>Easy-to-use interface for inputting essential Open Graph properties.</li>
-            <li>Optional fields for more detailed meta tags.</li>
-            <li>Real-time preview of how your content will appear when shared.</li>
-            <li>One-click copying of generated meta tags.</li>
-            <li>Responsive design for use on any device.</li>
-            </ul>
-
-            <h2 id="how-to-use" className="text-lg md:text-xl lg:text-2xl font-semibold text-default-700 mb-4 mt-8 flex items-center">
-            <BookOpen className="w-6 h-6 mr-2" />
-            How to Use the Open Graph Meta Generator?
-            </h2>
-            <ol className="list-decimal list-inside space-y-2 text-sm md:text-base">
-            <li>Select the content type that best matches your page from the dropdown menu.</li>
-            <li>Fill in the required fields: Title, URL, and Image URL. These are marked as required.</li>
-            <li>Add a description to provide context for your shared content.</li>
-            <li>Toggle the "Show Optional Fields" switch to access additional properties like Site Name, Locale, and more.</li>
-            <li>Fill in any relevant optional fields based on your content type.</li>
-            <li>Watch the preview update in real-time to see how your content will appear when shared.</li>
-            <li>Review the generated meta tags in the code box below the form.</li>
-            <li>Click the "Copy Meta Tags" button to copy the generated tags to your clipboard.</li>
-            <li>Paste the meta tags into the &lt;head&gt; section of your HTML document.</li>
-            <li>Use the "Reset" button to clear all fields and start over if needed.</li>
-            </ol>
-
-            <h2 className="text-lg md:text-xl lg:text-2xl font-semibold text-default-700 mb-4 mt-8 flex items-center">
-            <Eye className="w-6 h-6 mr-2" />
-            Tips for Effective Open Graph Tags
-            </h2>
-            <ul className="list-disc list-inside space-y-2 text-xs md:text-sm">
-            <li>Use high-quality, relevant images (at least 1200x630 pixels) for best results on social platforms.</li>
-            <li>Keep your title concise and compelling, ideally under 60 characters.</li>
-            <li>Write clear, informative descriptions summarizing your content in 2-4 sentences.</li>
-            <li>Use the appropriate content type for the most relevant meta tags.</li>
-            <li>Include optional fields like site name and locale for better representation.</li>
-            <li>Regularly update your Open Graph tags, especially for dynamic content.</li>
-            <li>Test your tags using social media platform debugging tools.</li>
-            </ul>
-
-            <p className="text-sm md:text-base text-default-600 mt-4">
-            Open graph meta generator is an essential tool for anyone looking to customize your web content for social media sharing. By creating an accurate and comprehensive open graph meta tag, you can significantly improve how your content appears in different platforms, causing engagement and traffic to increase. Start using this tool today to ensure your content in crowded social media scenario!
-            </p>
-        </div>
-        </Card>
 
       </div>
+      <InfoSectionOpenGraphGenerator />
     </ToolLayout>
   )
 }

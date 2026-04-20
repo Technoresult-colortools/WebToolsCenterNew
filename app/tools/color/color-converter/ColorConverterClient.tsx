@@ -3,10 +3,11 @@
 import type React from "react"
 import { useState, useEffect } from "react"
 import { Card, CardBody, Input, Button, Slider, Tabs, Tab, Modal, ModalContent } from "@nextui-org/react"
-import { Copy, Palette, Info, BookOpen, Lightbulb, Maximize2, X } from "lucide-react"
+import { Copy, Palette, Maximize2, X } from "lucide-react"
 import { toast } from "react-hot-toast"
 import ToolLayout from "@/components/ToolLayout"
-import NextImage from "next/image"
+import InfoSectionColorConverter from "./info-section"
+
 
 const ColorConverter: React.FC = () => {
   const [hex, setHex] = useState("#3498db")
@@ -45,10 +46,10 @@ const ColorConverter: React.FC = () => {
     const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex)
     return result
       ? {
-          r: Number.parseInt(result[1], 16),
-          g: Number.parseInt(result[2], 16),
-          b: Number.parseInt(result[3], 16),
-        }
+        r: Number.parseInt(result[1], 16),
+        g: Number.parseInt(result[2], 16),
+        b: Number.parseInt(result[3], 16),
+      }
       : { r: 0, g: 0, b: 0 }
   }
 
@@ -231,13 +232,13 @@ const ColorConverter: React.FC = () => {
               </Button>
               <div
                 className="absolute inset-0 flex items-center justify-center"
-                style={{ 
+                style={{
                   backgroundColor: `rgba(${rgba.r}, ${rgba.g}, ${rgba.b}, ${rgba.a})`,
                   boxShadow: `0 0 40px rgba(${rgba.r}, ${rgba.g}, ${rgba.b}, 0.5)`
                 }}
               >
-                <p 
-                  className="text-6xl font-bold text-center" 
+                <p
+                  className="text-6xl font-bold text-center"
                   style={{ color: contrastColor }}
                 >
                   {hex}
@@ -250,7 +251,7 @@ const ColorConverter: React.FC = () => {
     </Modal>
   );
 
-  
+
 
   return (
     <ToolLayout
@@ -328,10 +329,10 @@ const ColorConverter: React.FC = () => {
                         minValue={0}
                         value={rgb[color as keyof typeof rgb]}
                         onChange={(value) => {
-                            const numericValue = Array.isArray(value) ? value[0] : value;
-                            handleRgbChange(color as "r" | "g" | "b", numericValue)
-                          }}
-                     
+                          const numericValue = Array.isArray(value) ? value[0] : value;
+                          handleRgbChange(color as "r" | "g" | "b", numericValue)
+                        }}
+
                       />
                     </div>
                   ))}
@@ -356,10 +357,10 @@ const ColorConverter: React.FC = () => {
                         minValue={0}
                         value={hsl[color as keyof typeof hsl]}
                         onChange={(value) => {
-                            const numericValue = Array.isArray(value) ? value[0] : value;
-                            handleHslChange(color as "h" | "s" | "l", numericValue)
-                          }}
-                 
+                          const numericValue = Array.isArray(value) ? value[0] : value;
+                          handleHslChange(color as "h" | "s" | "l", numericValue)
+                        }}
+
                       />
                     </div>
                   ))}
@@ -384,10 +385,10 @@ const ColorConverter: React.FC = () => {
                         minValue={0}
                         value={hsv[color as keyof typeof hsv]}
                         onChange={(value) => {
-                            const numericValue = Array.isArray(value) ? value[0] : value;
-                            handleHslChange(color as "h" | "s" | "l", numericValue)
-                          }}
-                       
+                          const numericValue = Array.isArray(value) ? value[0] : value;
+                          handleHslChange(color as "h" | "s" | "l", numericValue)
+                        }}
+
                       />
                     </div>
                   ))}
@@ -412,10 +413,10 @@ const ColorConverter: React.FC = () => {
                         minValue={0}
                         value={rgba[color as keyof typeof rgba]}
                         onChange={(value) => {
-                            const numericValue = Array.isArray(value) ? value[0] : value;
-                            handleRgbaChange(color as "r" | "g" | "b" | "a", numericValue)
-                          }}
-                        
+                          const numericValue = Array.isArray(value) ? value[0] : value;
+                          handleRgbaChange(color as "r" | "g" | "b" | "a", numericValue)
+                        }}
+
                       />
                     </div>
                   ))}
@@ -432,71 +433,9 @@ const ColorConverter: React.FC = () => {
 
         {renderFullscreenPreview()}
 
-        <Card className="bg-default-50 dark:bg-default-100 mt-8">
-          <CardBody className="p-6">
-            <div className="rounded-xl p-2 md:p-4 max-w-4xl mx-auto">
-              <h2 className="text-xl md:text-2xl font-semibold text-default-700 mb-4 flex items-center">
-                <Info className="w-6 h-6 mr-2" />
-                About Color Converter
-              </h2>
-              <p className="text-sm md:text-base text-default-600 mb-4">
-              Color converter is a powerful tool designed for developers, designers and color enthusiasts. This allows you to easily convert colors between formats including Hex, RGB, HSL, HSV and RGBA. This tool ensures accurate and rapid conversion for all your color-related requirements, whether you are working on web development, graphic design or any other color-related project.
-              </p>
-              <p className="text-sm md:text-base text-default-600 mb-4">
-              This tool includes features such as real -time color preview, interactive sliders, fullscreen mode, and support for many color formats, advanced color converter is an invaluable resource for anyone working with digital colors. It is perfect for ensuring color stability in various projects, searching color relationships, or simply converting colors between different formats quickly and accurately.
-              </p>
-              <div className="my-8">
-                <NextImage
-                  src="/Images/InfosectionImages/ColorConverterPreview.png?height=400&width=600"
-                  alt="Screenshot of the Color Converter interface showing color input options and preview"
-                  width={600}
-                  height={400}
-                  className="rounded-lg shadow-lg w-full h-auto"
-                />
-              </div>
 
-              <h2 className="text-xl md:text-2xl font-semibold text-default-700 mb-4 mt-8 flex items-center">
-                <BookOpen className="w-6 h-6 mr-2" />
-                How to Use Color Converter?
-              </h2>
-              <ol className="list-decimal list-inside space-y-2 text-sm md:text-base text-default-600">
-                <li>Select the desired color format tab (HEX, RGB, HSL, HSV, or RGBA).</li>
-                <li>Adjust the color values using either the input field or the interactive sliders.</li>
-                <li>Observe the real-time color preview updating as you modify the values.</li>
-                <li>Use the copy buttons to quickly copy color values in any format.</li>
-                <li>Experiment with the "Random Color" button for inspiration or design exploration.</li>
-                <li>Switch between tabs to view and compare color values in different formats.</li>
-                <li>Use the fullscreen preview option for a detailed view of your selected color.</li>
-                <li>Adjust the alpha channel in the RGBA tab to create transparent colors.</li>
-              </ol>
-
-              <h2 className="text-xl md:text-2xl font-semibold text-default-700 mb-4 mt-8 flex items-center">
-                <Lightbulb className="w-6 h-6 mr-2" />
-                Key Features
-              </h2>
-              <ul className="list-disc list-inside text-default-600 space-y-2 text-sm md:text-base">
-                <li>Support for multiple color formats: HEX, RGB, HSL, HSV, and RGBA</li>
-                <li>Real-time color preview with dynamic text color for optimal readability</li>
-                <li>Interactive sliders for precise color value adjustments</li>
-                <li>Copy functionality for easy color value copying in any format</li>
-                <li>Random color generation for inspiration</li>
-                <li>Fullscreen preview mode for detailed color examination</li>
-                <li>Seamless switching between different color formats</li>
-                <li>Responsive design for optimal use on all devices</li>
-                <li>Intuitive user interface with clear, easy-to-read color information</li>
-                <li>Dynamic background color and shadow effects for enhanced visual feedback</li>
-              </ul>
-
-              <p className="text-sm md:text-base text-default-600 mt-6">
-              Whether you are a professional designer who are working on complex projects or searching for the world of a fond person
-                Digital color, our enhanced color converter provides accuracy, functionality and user friendly
-                You need interface. Start using it today to streamline your workflow, increase your understanding
-                Color spaces, and bring your creative view to life with accurate and ease!
-              </p>
-            </div>
-          </CardBody>
-        </Card>
       </div>
+      <InfoSectionColorConverter />
     </ToolLayout>
   )
 }

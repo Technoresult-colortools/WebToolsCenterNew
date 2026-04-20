@@ -21,13 +21,10 @@ import {
   Shield,
   Settings,
   Layers,
-  Info,
-  BookOpen,
-  Lightbulb,
 } from "lucide-react"
 import { Button, Card, CardBody, CardHeader, Input, Image, Chip, Tooltip, Progress } from "@nextui-org/react"
 import { toast } from "react-hot-toast"
-import NextImage from 'next/image'
+import InfoSectionYoutubeMetadataExtractor from "./info-section"
 import ToolLayout from "@/components/ToolLayout"
 
 interface VideoMetadata {
@@ -534,99 +531,10 @@ export default function YouTubeMetadataExtractor() {
         )}
       </div>
 
+      <InfoSectionYoutubeMetadataExtractor />
 
 
-     {/* Info Section */}
-    <Card className="mt-8 bg-default-50 dark:bg-default-100 p-4 md:p-8">
-    <div className="rounded-xl p-2 md:p-4 max-w-4xl mx-auto">
-        <h2 className="text-lg md:text-xl lg:text-2xl font-semibold text-default-700 mb-4 flex items-center">
-        <Info className="w-6 h-6 mr-2" />
-        What is the YouTube Metadata Extractor?
-        </h2>
-        <p className="text-sm md:text-base text-default-600 mb-4">
-        YouTube metadetta extractor material is a powerful tool designed for creators, abstracts, researchers and youtube enthusiasts. This allows you to extract and analyze valuable metadata from any YouTube video that provides insight that can help customize your content strategy, improve SEO and understand video performance. With a user friendly interface, this device makes it easy to use and analyze video metadata in a few clicks.
-        </p>
-        <p className="text-sm md:text-base text-default-600 mb-4">
-        Whether you are analyzing your own videos or studying contestants, YouTube Matadetta Extractor offers you a comprehensive suit of features to make data-operated decisions and help you increase your YouTube strategy.
-        </p>
-        
-        <div className="my-8">
-        <NextImage
-            src="/Images/InfosectionImages/YoutubeMetadataPreview.png?height=400&width=600" 
-            alt="Screenshot of the YouTube Metadata Extractor interface showing metadata extraction options"
-            width={600}
-            height={400}
-            className="rounded-lg shadow-lg w-full h-auto"
-        />
-        </div>
 
-        <h2 id="how-to-use" className="text-lg md:text-xl lg:text-2xl font-semibold text-default-700 mb-4 mt-8 flex items-center">
-        <BookOpen className="w-6 h-6 mr-2" />
-        How to Use the YouTube Metadata Extractor?
-        </h2>
-        <p className="text-sm md:text-base text-default-600 mb-4">
-        Using the YouTube Metadata Extractor is simple and straightforward. Follow these steps to get started:
-        </p>
-        <ol className="list-decimal list-inside space-y-2 text-sm md:text-base">
-        <li>Enter the URL of the YouTube video you want to analyze in the input field.</li>
-        <li>Click the "Extract" button to fetch the video's metadata.</li>
-        <li>
-            Explore the extracted data in the tabbed interface:
-            <ul className="list-disc pl-6 mt-2 space-y-1">
-            <li><strong>Tags</strong>: View all associated tags for SEO analysis.</li>
-            <li><strong>Description</strong>: Access and analyze the full video description.</li>
-            <li><strong>Details</strong>: Access technical and additional metadata like duration, definition, and privacy status.</li>
-            </ul>
-        </li>
-        <li>Use the additional metadata (views, likes, comments) to gauge video performance.</li>
-        <li>Download the complete metadata set as a JSON file for further analysis or record-keeping.</li>
-        <li>Leverage the search history feature for quick access to previously analyzed videos.</li>
-        </ol>
-
-        <h2 id="key-features" className="text-lg md:text-xl lg:text-2xl font-semibold text-default-700 mb-4 mt-8 flex items-center">
-        <Lightbulb className="w-6 h-6 mr-2" />
-        Key Features
-        </h2>
-        <p className="text-sm md:text-base text-default-600 mb-4">
-        The YouTube Metadata Extractor comes packed with features to help you get the most out of YouTube video metadata:
-        </p>
-        <ul className="list-disc list-inside space-y-2 text-xs md:text-sm">
-        <li><strong>Comprehensive Metadata Extraction</strong>: Extract all available metadata from any YouTube video.</li>
-        <li><strong>Video Statistics Analysis</strong>: Gather crucial information like view count, like count, comment count, and publish date.</li>
-        <li><strong>Tag Extraction</strong>: Access all tags associated with the video for SEO analysis.</li>
-        <li><strong>Description Analysis</strong>: Analyze the full video description for additional context and keywords.</li>
-        <li><strong>Thumbnail Preview</strong>: View the high-quality thumbnail of the analyzed video.</li>
-        <li><strong>Channel Information</strong>: Get details about the video's channel, including title and ID.</li>
-        <li><strong>Technical Details</strong>: Access information like video duration, definition, caption availability, and privacy status.</li>
-        <li><strong>One-Click Download</strong>: Easily download all extracted metadata as a JSON file.</li>
-        <li><strong>Search History</strong>: Keep track of your recently analyzed videos for quick reference.</li>
-        <li><strong>User-Friendly Interface</strong>: Intuitive design with tabs for organized data presentation.</li>
-        </ul>
-
-        <h2 className="text-lg md:text-xl lg:text-2xl font-semibold text-default-700 mb-4 mt-8 flex items-center">
-        <Lightbulb className="w-6 h-6 mr-2" />
-        Tips for Effective Use
-        </h2>
-        <p className="text-sm md:text-base text-default-600 mb-4">
-        Make the most of the YouTube Metadata Extractor with these tips:
-        </p>
-        <ul className="list-disc list-inside space-y-2 text-xs md:text-sm">
-        <li>Regularly analyze top-performing videos in your niche to stay updated on effective metadata strategies.</li>
-        <li>Compare metadata across multiple videos to identify consistent patterns of success.</li>
-        <li>Use the extracted tags to optimize your own video's discoverability.</li>
-        <li>Study the relationship between video titles, descriptions, and tags for comprehensive optimization.</li>
-        <li>Analyze your own videos' metadata to refine your content strategy over time.</li>
-        <li>Pay attention to technical details like duration and definition to understand their impact on performance.</li>
-        <li>Use the search history feature to track changes in metadata for specific videos over time.</li>
-        <li>Combine metadata analysis with viewer engagement metrics for a holistic understanding of video performance.</li>
-        </ul>
-
-        <p className="text-sm md:text-base text-default-600 mt-4">
-        The YouTube Metadata Extractor is a powerful tool that opens up a world of possibilities for understanding and leveraging YouTube content. Whether you're a content creator, marketer, researcher, or just curious about video metrics, this tool provides valuable insights at your fingertips. Start exploring the wealth of information hidden in YouTube videos today!
-        </p>
-    </div>
-    </Card>
- 
     </ToolLayout>
   )
 }

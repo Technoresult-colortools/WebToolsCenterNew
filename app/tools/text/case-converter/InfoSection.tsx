@@ -41,10 +41,10 @@ export default function InfoSection() {
       <div className="rounded-xl p-2 md:p-4 max-w-6xl mx-auto">
         <h2 className="text-2xl font-semibold text-default-700 mb-4 flex items-center">
           <Info className="w-6 h-6 mr-2 text-primary-500" />
-          What is the Case Converter & Text Transformer?
+          What is the Case Converter Online?
         </h2>
         <p className="text-default-600 mb-4">
-          The Case Converter & Text Transformer is a versatile text manipulation tool designed for writers, developers,
+          The Case Converter Online is a versatile text manipulation tool designed for writers, developers,
           content creators, and language enthusiasts. This comprehensive utility goes beyond simple case conversion to
           offer a complete suite of text transformation options, including multiple case formats, language-aware
           conversions, and powerful text manipulation tools. Whether you're formatting code according to naming
@@ -56,13 +56,13 @@ export default function InfoSection() {
           <Link href={imagePath} target="_blank" rel="noopener noreferrer" className="block">
             <div className="relative rounded-lg shadow-lg overflow-hidden cursor-pointer transition-transform hover:scale-[1.02]">
               <div className="aspect-w-16 aspect-h-9 w-full">
-                <img 
-                  src={imagePath} 
-                  alt="Case Converter & Text Transformer Preview" 
-                  className="w-full h-auto object-contain" 
+                <img
+                  src={imagePath}
+                  alt="Case Converter & Text Transformer Preview"
+                  className="w-full h-auto object-contain"
                 />
               </div>
-              
+
             </div>
           </Link>
         </div>

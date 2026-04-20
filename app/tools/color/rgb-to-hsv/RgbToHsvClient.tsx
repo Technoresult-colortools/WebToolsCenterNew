@@ -1,10 +1,10 @@
 "use client"
 
 import { useState, useEffect, useMemo } from "react"
-import { AlertCircle, BookOpen, Copy, Info, Lightbulb, RefreshCw } from "lucide-react"
+import { AlertCircle, Copy, RefreshCw } from "lucide-react"
 import ToolLayout from "@/components/ToolLayout"
 import { toast } from "react-hot-toast"
-import NextImage from "next/image"
+import InfoSectionRgbToHsv from "./info-section"
 import { Button, Card, CardBody, Input, Slider, Divider } from "@nextui-org/react"
 
 // RGB to HSV conversion function
@@ -168,76 +168,9 @@ export default function RGBToHSV() {
           </CardBody>
         </Card>
 
-        {/* About section */}
-        <Card className="mt-8 bg-default-50 dark:bg-default-100">
-          <CardBody className="p-6">
-            <div className="rounded-xl p-2 md:p-4 max-w-4xl mx-auto">
-              <h2 className="text-xl md:text-2xl font-semibold text-default-700 mb-4 flex items-center">
-                <Info className="w-6 h-6 mr-2" />
-                About RGB to HSV Converter
-              </h2>
-              <p className="text-sm md:text-base text-default-600 mb-4">
-              HSV converter from RGB is an advanced tool designed for web developers, designers and digital artists. This allows you to easily convert RGB (red, green, blue) color values ​​into their HSV (hue, saturation, value) equivalent. This tool is particularly useful when working with color selection, image processing, or any project, requiring accurate color management and conversion between different color models.
-              </p>
-              <p className="text-sm md:text-base text-default-600 mb-4">
-              With features such as real -time conversion, interactive sliders and support for both RGB and HSV forms, the HSV converter strengthens your workflow and ensures accurate color representation in various formats. This is perfect for making frequent color schemes, adjusting color properties, or simply searching for relationships between RGB and HSV color representations.
-              </p>
 
-              <div className="my-8">
-                <NextImage
-                   src="/Images/InfosectionImages/RGBToHSVConverter.png?height=400&width=600"
-                  alt="Screenshot of the RGB to HSV Converter interface showing RGB sliders and color preview"
-                  width={600}
-                  height={400}
-                  className="rounded-lg shadow-lg"
-                />
-              </div>
-
-              <h2
-                id="how-to-use"
-                className="text-xl md:text-2xl font-semibold text-default-700 mb-4 mt-8 flex items-center"
-              >
-                <BookOpen className="w-6 h-6 mr-2" />
-                How to Use the RGB to HSV Converter?
-              </h2>
-              <ol className="list-decimal list-inside text-default-600 space-y-2 text-sm md:text-base">
-                <li>Adjust the Red slider (0-255) to set the red component of the color.</li>
-                <li>Use the Green slider (0-255) to adjust the green component of the color.</li>
-                <li>Set the Blue slider (0-255) to control the blue component of the color.</li>
-                <li>Observe the real-time color preview updating as you modify the values.</li>
-                <li>View the converted HSV value in the Color Preview section.</li>
-                <li>Use the copy buttons to quickly copy RGB or HSV values to your clipboard.</li>
-                <li>Experiment with different RGB combinations to see how they translate to HSV values.</li>
-                <li>Use the Reset button to quickly return to default values and start a new conversion.</li>
-              </ol>
-
-              <h2 className="text-xl md:text-2xl font-semibold text-default-700 mb-4 mt-8 flex items-center">
-                <Lightbulb className="w-6 h-6 mr-2" />
-                Key Features
-              </h2>
-              <ul className="list-disc list-inside text-default-600 space-y-2 text-sm md:text-base">
-                <li>Real-time RGB to HSV conversion</li>
-                <li>Interactive sliders for intuitive RGB value adjustments</li>
-                <li>Support for both RGB and HSV color formats</li>
-                <li>Live color preview for immediate visual feedback</li>
-                <li>One-click copying of RGB and HSV values to clipboard</li>
-                <li>Responsive design for seamless use on desktop and mobile devices</li>
-                <li>Reset functionality for quick new color explorations</li>
-                <li>User-friendly interface with clear, easy-to-read color information</li>
-              </ul>
-            
-
-              <p className="text-sm md:text-base text-default-600 mt-4">
-                Ready to enhance your color workflow? Start using our RGB to HSV Converter now and experience the ease
-                of precise color conversion with intuitive controls. Whether you're a professional developer working on
-                complex color manipulation tasks or a designer exploring new color palettes, our tool provides the
-                accuracy and functionality you need. Try it out today and see how it can streamline your color
-                management process and expand your understanding of color spaces!
-              </p>
-            </div>
-          </CardBody>
-        </Card>
       </div>
+      <InfoSectionRgbToHsv />
     </ToolLayout>
   )
 }

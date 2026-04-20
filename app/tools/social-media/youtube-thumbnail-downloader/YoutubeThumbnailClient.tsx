@@ -19,9 +19,6 @@ import {
   RefreshCw,
   AlertCircle,
   Clock,
-  Info,
-  Lightbulb,
-  BookOpen,
   Download,
   Clipboard,
   Check,
@@ -32,6 +29,7 @@ import {
 import { toast } from "react-hot-toast"
 import ToolLayout from "@/components/ToolLayout"
 import Image from "next/image"
+import InfoSectionYoutubeThumbnailDownloader from "./info-section"
 
 interface ThumbnailQuality {
   url: string
@@ -298,7 +296,7 @@ export default function YouTubeThumbnailDownloader() {
                 >
                   Reset
                 </Button>
-               
+
               </div>
             </form>
 
@@ -347,8 +345,8 @@ export default function YouTubeThumbnailDownloader() {
 
         {!thumbnails.length && !error && !loading && (
           <div className="text-center text-default-500 py-12">
-          <div className="w-24 h-24 mx-auto mb-6 rounded-full bg-default-100 flex items-center justify-center">
-            <Youtube size={48} className="text-red-500" />
+            <div className="w-24 h-24 mx-auto mb-6 rounded-full bg-default-100 flex items-center justify-center">
+              <Youtube size={48} className="text-red-500" />
             </div>
             <p className="text-lg">Enter a YouTube video URL to fetch thumbnails</p>
             <p className="text-sm mt-2 max-w-md mx-auto">
@@ -401,95 +399,8 @@ export default function YouTubeThumbnailDownloader() {
             )}
           </Card>
         )}
+        <InfoSectionYoutubeThumbnailDownloader />
 
-        {/* Info Section */}
-        <Card className="bg-default-50 dark:bg-default-100 p-4 md:p-8">
-          <div className="rounded-xl p-2 md:p-4 max-w-4xl mx-auto">
-            {/* About YouTube Thumbnail Downloader */}
-            <h2 className="text-lg md:text-xl lg:text-2xl font-semibold text-default-700 mb-4 flex items-center">
-              <Info className="w-6 h-6 mr-2" />
-              About YouTube Thumbnail Downloader
-            </h2>
-            <p className="text-sm md:text-base text-default-600 mb-4">
-              Our YouTube Thumbnail Downloader is a powerful and user-friendly device designed to help creators,
-              marketers, researchers and YouTube enthusiasts easily access and download high-quality thumbnails from any
-              YouTube video. This versatile tool goes beyond simple thumbnail extraction, offering several features to
-              enhance your YouTube-related projects and workflows.
-            </p>
-
-            {/* Image Preview */}
-            <div className="my-8">
-              <Image
-                src="/Images/InfosectionImages/YoutubeThumbnailPreview.png?height=400&width=600"
-                alt="Screenshot of the YouTube Thumbnail Downloader interface showing thumbnail extraction options"
-                width={600}
-                height={400}
-                className="rounded-lg shadow-lg w-full h-auto"
-              />
-            </div>
-
-            {/* Key Features */}
-            <h2 className="text-lg md:text-xl lg:text-2xl font-semibold text-default-700 mb-4 mt-8 flex items-center">
-              <Lightbulb className="w-6 h-6 mr-2" />
-              Key Features
-            </h2>
-            <ul className="list-disc list-inside space-y-2 text-sm md:text-base">
-              <li>Instant thumbnail extraction from any YouTube video URL.</li>
-              <li>Support for multiple thumbnail resolutions (HD, max resolution).</li>
-              <li>One-click download for easy saving of thumbnails.</li>
-              <li>Copy thumbnail URL functionality for quick sharing or embedding.</li>
-              <li>Preview of all available thumbnail qualities.</li>
-              <li>Recent search history for convenient access to previously fetched videos.</li>
-              <li>Clean and intuitive user interface.</li>
-              <li>Mobile-responsive design for on-the-go use.</li>
-              <li>No login required - use the tool directly in your browser.</li>
-              <li>Fast and efficient API-based thumbnail fetching.</li>
-            </ul>
-
-            {/* How to Use YouTube Thumbnail Downloader */}
-            <h2 className="text-lg md:text-xl lg:text-2xl font-semibold text-default-700 mb-4 mt-8 flex items-center">
-              <BookOpen className="w-6 h-6 mr-2" />
-              How to Use YouTube Thumbnail Downloader?
-            </h2>
-            <ol className="list-decimal list-inside space-y-2 text-sm md:text-base">
-              <li>Copy the URL of the YouTube video whose thumbnail you want to download.</li>
-              <li>Paste the URL into the input field of the YouTube Thumbnail Downloader.</li>
-              <li>Click the "Fetch Thumbnails" button to retrieve available thumbnails.</li>
-              <li>Browse through the different thumbnail qualities displayed.</li>
-              <li>Click "Download" to save the desired thumbnail to your device.</li>
-              <li>Alternatively, use "Copy URL" to get the direct link to the thumbnail.</li>
-              <li>Use the recent search history for quick access to previously fetched videos.</li>
-            </ol>
-
-            {/* Tips for Effective Use */}
-            <h2 className="text-lg md:text-xl lg:text-2xl font-semibold text-default-700 mb-4 mt-8 flex items-center">
-              <Lightbulb className="w-6 h-6 mr-2" />
-              Tips for Effective Use
-            </h2>
-            <ul className="list-disc list-inside space-y-2 text-sm md:text-base">
-              <li>Always download the highest resolution thumbnail available for best quality.</li>
-              <li>Use the copy URL feature to quickly embed thumbnails in your projects.</li>
-              <li>Analyze thumbnails of popular videos in your niche for design inspiration.</li>
-              <li>Experiment with different thumbnail styles to see what works best for your audience.</li>
-              <li>Regularly update your thumbnails to keep your content fresh and engaging.</li>
-              <li>Use the search history feature to track changes in thumbnails over time.</li>
-              <li>Combine thumbnail analysis with other YouTube metrics for comprehensive content strategy.</li>
-            </ul>
-
-            {/* Legal and Ethical Considerations */}
-            <h2 className="text-lg md:text-xl lg:text-2xl font-semibold text-default-700 mb-4 mt-8 flex items-center">
-              <Info className="w-6 h-6 mr-2" />
-              Legal and Ethical Considerations
-            </h2>
-            <ul className="list-disc list-inside space-y-2 text-sm md:text-base">
-              <li>Respect copyright laws when using downloaded thumbnails.</li>
-              <li>Always credit the original content creator when using thumbnails for reference or analysis.</li>
-              <li>Be aware of YouTube's terms of service regarding the use of their content.</li>
-              <li>Use thumbnails ethically and avoid misleading practices.</li>
-              <li>Consider seeking permission for commercial use of downloaded thumbnails.</li>
-            </ul>
-          </div>
-        </Card>
       </div>
     </ToolLayout>
   )

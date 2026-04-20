@@ -1,10 +1,11 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { AlertCircle, BookOpen, Info, Lightbulb, RefreshCw, Copy, Eye, Code } from "lucide-react"
+import { AlertCircle, RefreshCw, Copy } from "lucide-react"
 import { toast } from "react-hot-toast"
 import ToolLayout from "@/components/ToolLayout"
 import { Button, Card, CardBody, Input, Slider, Tabs, Tab } from "@nextui-org/react"
+import InfoSectionRgbToCmyk from "./info-section"
 
 function rgbToCmyk(r: number, g: number, b: number) {
   let c = 1 - r / 255
@@ -141,82 +142,9 @@ export default function RgbToCmyk() {
           </div>
         )}
 
-        <Card className="mt-6 bg-default-50 dark:bg-default-100 p-4 md:p-8">
-          <div className="rounded-xl p-2 md:p-4 max-w-4xl mx-auto">
-            <h2 className="text-xl md:text-2xl font-semibold text-default-700 mb-4 flex items-center">
-              <Info className="w-6 h-6 mr-2" />
-              About RGB to CMYK Converter
-            </h2>
-            <p className="text-sm md:text-base text-default-600 mb-4">
-            The CMYK converter from RGB is an advanced tool designed for graphic designers, print professionals and digital artists. This allows you to easily convert RGB (red, green, blue) color values ​​to their cmk (cyan, magenta, yellow, key/black). This tool is particularly useful when preparing a digital design for print, as most printing processes use the cmyk color model.
-            </p>
 
-
-            <h2 className="text-xl md:text-2xl font-semibold text-default-700 mb-4 mt-8 flex items-center">
-              <BookOpen className="w-6 h-6 mr-2" />
-              How to Use RGB to CMYK Converter?
-            </h2>
-            <ol className="list-decimal list-inside space-y-2 text-sm md:text-base text-default-600">
-              <li>Adjust the Red slider (0-255) to set the red component of the color.</li>
-              <li>Use the Green slider (0-255) to adjust the green component of the color.</li>
-              <li>Set the Blue slider (0-255) to control the blue component of the color.</li>
-              <li>Observe the real-time color preview updating as you modify the values.</li>
-              <li>View the converted CMYK value in the Color Preview section.</li>
-              <li>Use the copy buttons to quickly copy RGB or CMYK values to your clipboard.</li>
-              <li>Experiment with different RGB combinations to see how they translate to CMYK values.</li>
-              <li>Use the Reset button to quickly return to default values and start a new conversion.</li>
-            </ol>
-
-            <h2 className="text-xl md:text-2xl font-semibold text-default-700 mb-4 mt-8 flex items-center">
-              <Lightbulb className="w-6 h-6 mr-2" />
-              Key Features
-            </h2>
-            <ul className="list-disc list-inside space-y-2 text-sm md:text-base text-default-600">
-              <li>Real-time RGB to CMYK conversion</li>
-              <li>Interactive sliders for intuitive RGB value adjustments</li>
-              <li>Support for both RGB and CMYK color formats</li>
-              <li>Live color preview for immediate visual feedback</li>
-              <li>One-click copying of RGB and CMYK values to clipboard</li>
-              <li>Responsive design for seamless use on desktop and mobile devices</li>
-              <li>Reset functionality for quick new color explorations</li>
-              <li>User-friendly interface with clear, easy-to-read color information</li>
-            </ul>
-
-            <h2 className="text-xl md:text-2xl font-semibold text-default-700 mb-4 mt-8 flex items-center">
-              <Eye className="w-6 h-6 mr-2" />
-              Tips for Effective Use
-            </h2>
-            <ul className="list-disc list-inside space-y-2 text-sm md:text-base text-default-600">
-              <li>Use the sliders for fine-tuning RGB values and observe real-time CMYK conversion.</li>
-              <li>Experiment with different RGB combinations to understand their CMYK equivalents.</li>
-              <li>Remember that some RGB colors may not have exact CMYK equivalents due to different color gamuts.</li>
-              <li>Always test your converted colors in actual print scenarios for the most accurate results.</li>
-              <li>Use the copy feature to easily transfer color values to your design software.</li>
-              <li>
-                Consider the intended print medium when converting colors, as different papers may affect color
-                appearance.
-              </li>
-            </ul>
-
-            <h2 className="text-xl md:text-2xl font-semibold text-default-700 mb-4 mt-8 flex items-center">
-              <Code className="w-6 h-6 mr-2" />
-              Integration Tips
-            </h2>
-            <p className="text-sm md:text-base text-default-600">
-              To make the most of your RGB to CMYK conversions in your projects:
-            </p>
-            <ul className="list-disc list-inside space-y-2 text-sm md:text-base text-default-600 mt-2">
-              <li>
-                Use CSS variables for RGB colors in web projects, making it easier to update if CMYK equivalents change
-              </li>
-              <li>Create a color palette document that includes both RGB and CMYK values for all project colors</li>
-              <li>Implement color profiles in your design software to ensure accurate color representation</li>
-              <li>Use the CMYK values when setting up your document color swatches in print design software</li>
-              <li>Consider creating a custom color conversion table for frequently used colors in your projects</li>
-            </ul>
-          </div>
-        </Card>
       </div>
+      <InfoSectionRgbToCmyk />
     </ToolLayout>
   )
 }

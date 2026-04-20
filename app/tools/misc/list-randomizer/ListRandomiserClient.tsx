@@ -15,10 +15,10 @@ import {
   Tabs,
   Tab,
 } from "@nextui-org/react"
-import { Shuffle, Copy, Upload, Download, Info, BookOpen, Lightbulb, Settings,  RefreshCcw } from "lucide-react"
+import { Shuffle, Copy, Upload, Download, Settings, RefreshCcw } from "lucide-react"
 import { toast } from "react-hot-toast"
 import ToolLayout from "@/components/ToolLayout"
-import Image from "next/image"
+import InfoSectionListRandomizer from "./info-section"
 import seedrandom from "seedrandom"
 
 export default function ListRandomizer() {
@@ -118,7 +118,7 @@ export default function ListRandomizer() {
   const fisherYatesShuffle = (array: string[]): string[] => {
     for (let i = array.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1))
-      ;[array[i], array[j]] = [array[j], array[i]]
+        ;[array[i], array[j]] = [array[j], array[i]]
     }
     return array
   }
@@ -423,63 +423,9 @@ export default function ListRandomizer() {
           </CardBody>
         </Card>
 
-        {/* Info Section */}
-        <Card className="bg-default-50 dark:bg-default-100">
-          <CardBody className="p-6">
-            <div className="rounded-xl p-2 md:p-4 max-w-4xl mx-auto">
-              <h2 className="text-xl md:text-2xl font-semibold text-gray-800 dark:text-gray-200 mb-4 flex items-center">
-                <Info className="w-6 h-6 mr-2" />
-                About List Randomizer
-              </h2>
-              <p className="text-sm md:text-base text-gray-600 dark:text-gray-300 mb-4">
-              The list is designed for the item and designed for items and designed for items and the item input listing the input listeryu lincomicolontebuster upload listrandomisation settingsbasic advanced listrandrandomized output to the clipboard The listing is designed to manipulate the list of flexible. Whether you are a researcher doing a random sampling, a teacher who is assigning random groups, is allocating a project manager work, or just a person wants to present an element of chance in your decision, this tool offers a comprehensive suit of features to meet your randomization needs.
-              </p>
 
-              <div className="my-8">
-                <Image
-                  src="/Images/InfosectionImages/ListRandomizerPreview.webp?height=400&width=600"
-                  alt="Screenshot of the List Randomizer interface showing input area, randomization options, and output"
-                  width={600}
-                  height={400}
-                  className="rounded-lg shadow-lg w-full h-auto"
-                />
-              </div>
-
-              <h2 className="text-xl font-semibold text-gray-800 dark:text-gray-200 mt-6 mb-3 flex items-center">
-                <BookOpen className="w-5 h-5 mr-2" />
-                How to Use a List Randomizer?
-              </h2>
-              <ol className="list-decimal pl-6 space-y-2 text-gray-600 dark:text-gray-300">
-                <li>Enter your list items in the input textarea or upload a text file.</li>
-                <li>Choose a suitable divider for your list items (newline, comma, semicolon, tab, or custom).</li>
-                <li>Click the "Randomize List" button to generate a randomized version of your list.</li>
-                <li>View the randomized output in the result text area.</li>
-                <li>Copy the result to your clipboard or download it as a text file.</li>
-                <li>Use the "Reset" button to return all settings to their default values.</li>
-              </ol>
-
-
-              <h2 className="text-xl font-semibold text-gray-800 dark:text-gray-200 mt-6 mb-3 flex items-center">
-                <Lightbulb className="w-5 h-5 mr-2" />
-                Key Features
-              </h2>
-              <ul className="list-disc pl-6 space-y-2 text-gray-600 dark:text-gray-300">
-                <li>Multiple input methods: You can enter the text directly or upload files which contains List</li>
-                <li>Flexible separators: Choose the seperators from the Select option or use a custom one</li>
-                <li>Advanced randomization options: Fisher-Yates shuffle or JavaScript sort</li>
-                <li>List preprocessing: Trim items, remove duplicates, and sort before randomization</li>
-                <li>Subset selection: Choose a specific number of items from the randomized list</li>
-                <li>Weighted randomization: Prioritize items based on their original position</li>
-                <li>Grouping: Organize randomized items into groups of a specified size</li>
-                <li>Reversible output: Option to reverse the final randomized list</li>
-                <li>Reproducible results: Use a seed for consistent randomization across sessions</li>
-                <li>Easy reset: Quickly return all settings to their default values</li>
-                <li>Export options: Copy to clipboard or download as a text file</li>
-              </ul>
-            </div>
-          </CardBody>
-        </Card>
       </div>
+      <InfoSectionListRandomizer />
     </ToolLayout>
   )
 }

@@ -23,9 +23,6 @@ import {
   Minus,
   RotateCcw,
   Shuffle,
-  Info,
-  BookOpen,
-  Lightbulb,
   Palette,
   Code,
   Maximize2,
@@ -33,7 +30,7 @@ import {
 } from "lucide-react"
 import { toast } from "react-hot-toast"
 import ToolLayout from "@/components/ToolLayout"
-import Image from "next/image"
+import InfoSectionColorGradientGenerator from "./info-section"
 
 type GradientType = "linear" | "radial" | "conic"
 type ColorStop = { color: string; position: number }
@@ -165,10 +162,10 @@ export default function GradientGeneratorPage() {
     setShape(Math.random() > 0.5 ? "circle" : "ellipse")
     setSize(
       ["closest-side", "farthest-side", "closest-corner", "farthest-corner"][Math.floor(Math.random() * 4)] as
-        | "closest-side"
-        | "farthest-side"
-        | "closest-corner"
-        | "farthest-corner",
+      | "closest-side"
+      | "farthest-side"
+      | "closest-corner"
+      | "farthest-corner",
     )
   }
 
@@ -345,10 +342,10 @@ export default function GradientGeneratorPage() {
                           onSelectionChange={(keys) =>
                             setSize(
                               Array.from(keys)[0] as
-                                | "closest-side"
-                                | "farthest-side"
-                                | "closest-corner"
-                                | "farthest-corner",
+                              | "closest-side"
+                              | "farthest-side"
+                              | "closest-corner"
+                              | "farthest-corner",
                             )
                           }
                         >
@@ -432,7 +429,7 @@ export default function GradientGeneratorPage() {
               </Tab>
             </Tabs>
             <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-2 mt-4">
-              <Button onPress={handleDownloadImage}  color="primary" >
+              <Button onPress={handleDownloadImage} color="primary" >
                 <Download className="h-4 w-4 mr-2" />
                 Download PNG
               </Button>
@@ -440,7 +437,7 @@ export default function GradientGeneratorPage() {
                 <RotateCcw className="h-4 w-4 mr-2" />
                 Reset
               </Button>
-              <Button onPress={generateRandomGradient}  color="primary">
+              <Button onPress={generateRandomGradient} color="primary">
                 <Shuffle className="h-4 w-4 mr-2" />
                 Random
               </Button>
@@ -448,93 +445,12 @@ export default function GradientGeneratorPage() {
           </CardBody>
         </Card>
 
-          {/* Fullscreen Modal */}
-    {renderFullscreenPreview()}
+        {/* Fullscreen Modal */}
+        {renderFullscreenPreview()}
 
-        <Card className="bg-default-50 dark:bg-default-100 p-4 md:p-8">
-          <CardBody>
-            <h2 className="text-xl md:text-2xl font-semibold text-default-900 mb-4 flex items-center">
-              <Info className="w-6 h-6 mr-2" />
-              About Color Gradient Generator
-            </h2>
-            <p className="text-default-600 mb-4">
-            The color gradient generator is a powerful and intuitive tool designed for web developers, designers and creative professionals. This allows you to create stunning CSS gradients with advanced adaptation options, providing a spontaneous experience for both beginners and experts.
-            </p>
-            <div className="my-8">
-              <Image
-                src="/Images/InfosectionImages/ColorGradientGeneratorPreview.png?height=400&width=600"
-                alt="Screenshot of the Color Gradient Generator interface showing gradient preview and controls"
-                width={600}
-                height={400}
-                className="rounded-lg shadow-lg w-full h-auto"
-              />
-            </div>
 
-            <h2 className="text-xl md:text-2xl font-semibold text-default-900 mb-4 mt-8 flex items-center">
-              <BookOpen className="w-6 h-6 mr-2" />
-              How to Use Color Gradient Generator?
-            </h2>
-            <ol className="list-decimal list-inside space-y-2 text-sm md:text-base text-default-600">
-              <li>Choose a gradient type: linear, radial, or conic.</li>
-              <li>Adjust the angle for linear and conic gradients using the slider.</li>
-              <li>For radial and conic gradients, set the center point using the X and Y sliders.</li>
-              <li>Customize radial gradients further by selecting the shape and size.</li>
-              <li>Toggle the "Repeating Gradient" switch for a repeating pattern.</li>
-              <li>Add or remove color stops (minimum 2, maximum 5) using the "+" and "-" buttons.</li>
-              <li>Adjust each color stop's color using the color picker or by entering a hex code.</li>
-              <li>Fine-tune the position of each color stop using the sliders.</li>
-              <li>Preview your gradient in fullscreen mode for a better view.</li>
-              <li>Copy the generated CSS code or download the gradient as a PNG image.</li>
-              <li>Use the Reset button to start over with default settings.</li>
-              <li>Try the Random button to generate unexpected color combinations and gradient types.</li>
-            </ol>
-
-            <h2 className="text-xl md:text-2xl font-semibold text-default-900 mb-4 mt-8 flex items-center">
-              <Lightbulb className="w-6 h-6 mr-2" />
-              Key Features
-            </h2>
-            <ul className="list-disc list-inside space-y-2 text-sm md:text-base text-default-600">
-              <li>Support for linear, radial, and conic gradients with advanced customization.</li>
-              <li>Up to 5 color stops for complex gradients.</li>
-              <li>Angle adjustment for linear and conic gradients.</li>
-              <li>Center point control for radial and conic gradients.</li>
-              <li>Shape and size options for radial gradients.</li>
-              <li>Repeating gradient option.</li>
-              <li>Real-time CSS code generation.</li>
-              <li>One-click CSS code copying.</li>
-              <li>PNG export functionality with high resolution.</li>
-              <li>Random gradient generation for inspiration.</li>
-              <li>Fullscreen preview mode.</li>
-              <li>Modern, responsive design for use on various devices.</li>
-            </ul>
-
-            <h2 className="text-xl md:text-2xl font-semibold text-default-900 mb-4 mt-8 flex items-center">
-              <Palette className="w-6 h-6 mr-2" />
-              Tips and Tricks
-            </h2>
-            <ul className="list-disc list-inside space-y-2 text-sm md:text-base text-default-600">
-              <li>Experiment with different gradient types to achieve unique effects.</li>
-              <li>Use the repeating gradient option to create patterns and textures.</li>
-              <li>Combine multiple gradients in your CSS for more complex backgrounds.</li>
-              <li>
-                Try the random button for inspiration when you're stuck or want to explore new color combinations.
-              </li>
-              <li>Adjust color stop positions to create smooth or abrupt color transitions.</li>
-              <li>Use the fullscreen preview to see how your gradient looks on larger screens.</li>
-              <li>For web design, copy the CSS code directly into your stylesheet.</li>
-              <li>Download PNG images for use in graphic design projects or presentations.</li>
-              <li>Use conic gradients for creating pie charts or circular progress indicators.</li>
-              <li>Explore color theory to create harmonious color combinations.</li>
-              <li>Experiment with radial gradient shapes and sizes for unique focal points in your designs.</li>
-              <li>Use the center point controls to create off-center or asymmetrical gradients.</li>
-            </ul>
-
-            <p className="text-default-600 mt-6">
-            Whether you are creating eye -catching backgrounds for websites, user interfaces are designing, or generating property for print materials, the color shield generator provides flexibility and strength that needs you to bring your creative view to life. Start discovering possibilities and elevate your designs with amazing gradients today!
-            </p>
-          </CardBody>
-        </Card>
       </div>
+      <InfoSectionColorGradientGenerator />
     </ToolLayout>
   )
 }

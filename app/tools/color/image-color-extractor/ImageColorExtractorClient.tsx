@@ -13,10 +13,10 @@ import {
   Tabs,
   Tab,
 } from "@nextui-org/react"
-import { Upload, X, Copy, Info, BookOpen, Lightbulb } from "lucide-react"
+import { Upload, X, Copy } from "lucide-react"
 import { toast, Toaster } from "react-hot-toast"
 import ToolLayout from "@/components/ToolLayout"
-import Image from "next/image"
+import InfoSectionImageColorExtractor from "./info-section"
 
 interface Color {
   hex: string
@@ -31,7 +31,7 @@ interface ColorThief {
 declare global {
   interface Window {
     ColorThief: {
-      new (): ColorThief
+      new(): ColorThief
     }
   }
 }
@@ -186,17 +186,16 @@ export default function ColorExtractor() {
       description="Effortlessly extract dominant colors from images and create stunning color palettes for your projects"
       toolId="678f382c26f06f912191bca3"
     >
-     <Toaster position="top-right" />
+      <Toaster position="top-right" />
       <div className="flex flex-col gap-8">
         <Card>
           <CardBody className="p-6 bg-default-50 dark:bg-default-100">
-            <h2 className="text-xl sm:text-1xl md:text-2xl font-bold text-default-700 mb-4">Upload an Image</h2>
+            <h2 className="text-xl sm:text-1xl md:text-2xl font-bold text-primary-600 dark:text-primary-400 text-default-700 mb-4">Upload an Image</h2>
             {!image ? (
               <label
                 ref={dropZoneRef}
-                className={`flex flex-col items-center justify-center h-64 px-4 py-6 bg-default-100 text-primary rounded-lg shadow-lg tracking-wide uppercase border-2 ${
-                  isDragging ? "border-primary bg-primary-100" : "border-primary border-dashed"
-                } cursor-pointer hover:bg-primary-100 hover:text-primary-600 transition duration-300`}
+                className={`flex flex-col items-center justify-center h-64 px-4 py-6 bg-default-100 text-primary rounded-lg shadow-lg tracking-wide uppercase border-2 ${isDragging ? "border-primary bg-primary-100" : "border-primary border-dashed"
+                  } cursor-pointer hover:bg-primary-100 hover:text-primary-600 transition duration-300`}
                 onDragEnter={handleDragEnter}
                 onDragLeave={handleDragLeave}
                 onDragOver={handleDragOver}
@@ -235,10 +234,10 @@ export default function ColorExtractor() {
                   <Button variant="bordered">Number of Colors: {colorCount}</Button>
                 </DropdownTrigger>
                 <DropdownMenu aria-label="Color count selection" onAction={(key) => setColorCount(Number(key))}>
-                  <DropdownItem key="6"  className="text-default-700">6</DropdownItem>
-                  <DropdownItem key="12"  className="text-default-700">12</DropdownItem>
-                  <DropdownItem key="16"  className="text-default-700">16</DropdownItem>
-                  <DropdownItem key="21"  className="text-default-700">21</DropdownItem>
+                  <DropdownItem key="6" className="text-default-700">6</DropdownItem>
+                  <DropdownItem key="12" className="text-default-700">12</DropdownItem>
+                  <DropdownItem key="16" className="text-default-700">16</DropdownItem>
+                  <DropdownItem key="21" className="text-default-700">21</DropdownItem>
                 </DropdownMenu>
               </Dropdown>
             </div>
@@ -250,10 +249,10 @@ export default function ColorExtractor() {
                   aria-label="Color format options"
                   selectedKey={activeTab}
                   onSelectionChange={(key) => setActiveTab(key as "hex" | "rgb" | "hsl")}
-                  
+
                 >
                   <Tab key="hex" title="HEX">
-                    <ColorGrid colors={colors} format="hex" onCopy={copyToClipboard}  />
+                    <ColorGrid colors={colors} format="hex" onCopy={copyToClipboard} />
                   </Tab>
                   <Tab key="rgb" title="RGB">
                     <ColorGrid colors={colors} format="rgb" onCopy={copyToClipboard} />
@@ -267,61 +266,8 @@ export default function ColorExtractor() {
           </CardBody>
         </Card>
 
-        <Card className="mt-8 bg-default-50 dark:bg-default-100 p-4 md:p-8">
-            <div className="rounded-xl p-2 md:p-4 max-w-4xl mx-auto">
-                <h2 className="text-lg md:text-xl lg:text-2xl font-semibold text-default-700 mb-4 flex items-center">
-                <Info className="w-6 h-6 mr-2" />
-                What is the Image Color Extractor?
-                </h2>
-                <p className="text-sm md:text-base text-default-600 mb-4">
-                The image color is a powerful tool designed to analyze the color tongs and remove their color information. It identifies the major colors present in the image and provides a broad color palette. This tool is invaluable to designers, artists and anyone working with color straps in their projects.
-                </p>
-
-                <div className="my-8">
-                <Image
-                    src="/Images/InfosectionImages/ImageColorExtractorPreview.png?height=400&width=600"
-                    alt="Screenshot of the Image Color Extractor interface showing image upload area and color analysis results"
-                    width={600}
-                    height={400}
-                    className="rounded-lg shadow-lg w-full h-auto"
-                />
-                </div>
-
-                <h2 id="how-to-use" className="text-lg md:text-xl lg:text-2xl font-semibold text-default-700 mb-4 mt-8 flex items-center">
-                <BookOpen className="w-6 h-6 mr-2" />
-                How to Use the Image Color Extractor?
-                </h2>
-                <ol className="list-decimal list-inside space-y-2 text-sm md:text-base text-default-600">
-                <li>Upload an image by dragging and dropping it into the designated area or by clicking to browse your files.</li>
-                <li>Once your image is uploaded, the tool will automatically extract the dominant colors.</li>
-                <li>Choose the number of colors you want to extract using the dropdown menu.</li>
-                <li>View the extracted colors displayed as color swatches with their corresponding values.</li>
-                <li>Switch between HEX, RGB, and HSL color formats using the tabs.</li>
-                <li>Click the copy icon next to each color to copy its value to your clipboard.</li>
-                <li>To analyze a different image, simply upload a new one or use the reset button.</li>
-                </ol>
-
-                <h2 className="text-lg md:text-xl lg:text-2xl font-semibold text-default-700 mb-4 mt-8 flex items-center">
-                <Lightbulb className="w-6 h-6 mr-2" />
-                Key Features
-                </h2>
-                <ul className="list-disc list-inside space-y-2 text-sm md:text-base text-default-600">
-                <li>Extract up to 21 dominant colors from any image</li>
-                <li>View colors in HEX, RGB, and HSL formats</li>
-                <li>One-click color copying to clipboard</li>
-                <li>Adjustable number of colors for detailed analysis</li>
-                <li>Responsive design for seamless use on desktop and mobile devices</li>
-                <li>Real-time color extraction and display</li>
-                <li>User-friendly interface with drag-and-drop functionality</li>
-                </ul>
-
-                <p className="text-sm md:text-base text-default-600 mt-4">
-                Are you ready to detect colors in your images? Now start using our image color tongs tool and unlock the power of color analysis for your projects. Whether you are working on a professional design or eager about colors in your favorite photos, our tool provides the required insight for you. Try it and see how it can increase your color selection process and inspire your creative work!
-                </p>
-            </div>
-            </Card>
-
       </div>
+      <InfoSectionImageColorExtractor />
     </ToolLayout>
   )
 }

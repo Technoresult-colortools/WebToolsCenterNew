@@ -14,7 +14,7 @@ import { ShapeTab } from "./ShapeTab"
 import { ColorTab } from "./ColorTab"
 import { LogoTab } from "./LogoTab"
 import { QRCodePreview } from "./QRCodePreview"
-import { InfoSection } from "./InfoSection"
+import InfoSectionQrCodeGenerator from "./info-section"
 
 // Define types
 export type QRCodeType = "url" | "text" | "email" | "phone" | "sms" | "wifi" | "vcard" | "location" | "event"
@@ -58,10 +58,10 @@ export default function QRCodeGenerator() {
   const [logoSize, setLogoSize] = useState(40);
 
   // === Container/Border Options ===
-  const [borderSize, ] = useState<number>(0)
-  const [borderColor, ] = useState<string>("#000000")
-  const [borderStyle, ] = useState<BorderStyle>("solid")
-  const [backgroundColor, ] = useState<string>("#ffffff")
+  const [borderSize,] = useState<number>(0)
+  const [borderColor,] = useState<string>("#000000")
+  const [borderStyle,] = useState<BorderStyle>("solid")
+  const [backgroundColor,] = useState<string>("#ffffff")
 
 
   // === Content Type Specific Fields ===
@@ -277,37 +277,37 @@ END:VEVENT`
             handleSaveTemplate={handleSaveTemplate}
           />
         )
-        case "shape":
-          return (
-            <ShapeTab
-              bodyShape={bodyShape}
-              setBodyShape={setBodyShape}
-              eyeFrameShape={eyeFrameShape}
-              setEyeFrameShape={setEyeFrameShape}
-              eyeBallShape={eyeBallShape}
-              setEyeBallShape={setEyeBallShape}
-            />
-          )
-        case "color":
-          return (
-            <ColorTab
-              qrFgColor={qrFgColor}
-              setQrFgColor={setQrFgColor}
-              qrBgColor={qrBgColor}
-              setQrBgColor={setQrBgColor}
-              isGradient={isGradient}
-              setIsGradient={setIsGradient}
-              gradientColors={gradientColors}
-              setGradientColors={setGradientColors}
-              gradientType={gradientType}
-              setGradientType={setGradientType}
-              gradientRotation={gradientRotation}
-              setGradientRotation={setGradientRotation}
-              useCustomEyeColor={useCustomEyeColor}
-              setUseCustomEyeColor={setUseCustomEyeColor}
-              eyeColor={eyeColor}
-              setEyeColor={setEyeColor}
-            />
+      case "shape":
+        return (
+          <ShapeTab
+            bodyShape={bodyShape}
+            setBodyShape={setBodyShape}
+            eyeFrameShape={eyeFrameShape}
+            setEyeFrameShape={setEyeFrameShape}
+            eyeBallShape={eyeBallShape}
+            setEyeBallShape={setEyeBallShape}
+          />
+        )
+      case "color":
+        return (
+          <ColorTab
+            qrFgColor={qrFgColor}
+            setQrFgColor={setQrFgColor}
+            qrBgColor={qrBgColor}
+            setQrBgColor={setQrBgColor}
+            isGradient={isGradient}
+            setIsGradient={setIsGradient}
+            gradientColors={gradientColors}
+            setGradientColors={setGradientColors}
+            gradientType={gradientType}
+            setGradientType={setGradientType}
+            gradientRotation={gradientRotation}
+            setGradientRotation={setGradientRotation}
+            useCustomEyeColor={useCustomEyeColor}
+            setUseCustomEyeColor={setUseCustomEyeColor}
+            eyeColor={eyeColor}
+            setEyeColor={setEyeColor}
+          />
         )
       case "logo":
         return <LogoTab logoUrl={logoUrl} setLogoUrl={setLogoUrl} logoSize={logoSize} setLogoSize={setLogoSize} />
@@ -404,7 +404,7 @@ END:VEVENT`
         </Card>
 
         {/* Info Section */}
-        <InfoSection />
+        <InfoSectionQrCodeGenerator />
       </div>
     </ToolLayout>
   )

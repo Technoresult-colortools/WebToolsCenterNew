@@ -1,10 +1,10 @@
 "use client"
 
 import { useState, useEffect, useMemo } from "react"
-import { AlertCircle, BookOpen, Copy, Info, Lightbulb, RefreshCw } from "lucide-react"
+import { AlertCircle, Copy, RefreshCw } from "lucide-react"
 import ToolLayout from "@/components/ToolLayout"
 import { toast } from "react-hot-toast"
-import NextImage from "next/image"
+import InfoSectionCmykToRgb from "./info-section"
 import { Button, Card, CardBody, Input, Slider, Divider } from "@nextui-org/react"
 
 // CMYK to RGB conversion function
@@ -160,75 +160,9 @@ export default function CMYKToRGB() {
           </CardBody>
         </Card>
 
-        {/* About section */}
-        <Card className="mt-8 bg-default-50 dark:bg-default-100">
-          <CardBody className="p-6">
-            <div className="rounded-xl p-2 md:p-4 max-w-4xl mx-auto">
-              <h2 className="text-xl md:text-2xl font-semibold text-default-700 mb-4 flex items-center">
-                <Info className="w-6 h-6 mr-2" />
-                About CMYK to RGB Converter
-              </h2>
-              <p className="text-sm md:text-base text-default-600 mb-4">
-              The CMYK to RGB converter is a refined tool designed for graphic designers, print professionals and digital artists. This allows you to correctly convert the colors from RGB color model (used in digital display) from CMYK color model (used in prints). Whether you are preparing artwork for both print and digital media or just searching for color spaces, our equipment provides accurate and easy-to-use color conversion.
-              </p>
-              <p className="text-sm md:text-base text-default-600 mb-4">
-              With features such as real-time conversion, interactive sliders, and support for many color formats (CMYK, RGB, Hex), RGB converter is an invaluable resource for any person working in rGB converter prints and digital mediums. It is perfect for ensuring color stability between various projects, adopting print designs for digital use or understanding the relationship between CMYK and RGB color spaces only.
-              </p>
 
-              <div className="my-8">
-                <NextImage
-                  src="/Images/InfosectionImages/CMYKToRGBPreview.png?height=400&width=600"
-                  alt="Screenshot of the CMYK to RGB Converter interface showing CMYK input sliders, RGB output, and color preview"
-                  width={600}
-                  height={400}
-                  className="rounded-lg shadow-lg w-full h-auto"
-                />
-              </div>
-
-              <h2
-                id="how-to-use"
-                className="text-xl md:text-2xl font-semibold text-default-700 mb-4 mt-8 flex items-center"
-              >
-                <BookOpen className="w-6 h-6 mr-2" />
-                How to Use the CMYK to RGB Converter?
-              </h2>
-              <ol className="list-decimal list-inside space-y-2 text-sm md:text-base text-default-600">
-                <li>Adjust the CMYK values using the sliders or input fields (range: 0-100 for each component).</li>
-                <li>Observe the real-time color preview updating as you modify the values.</li>
-                <li>View the converted RGB values and HEX code in the Color Preview section.</li>
-                <li>Use the copy buttons to quickly copy CMYK, RGB, or HEX values to your clipboard.</li>
-                <li>Experiment with different CMYK combinations to see how they translate to RGB.</li>
-                <li>Use the Reset button to quickly return to default values and start a new conversion.</li>
-                <li>Refer to the color preview to visually confirm the converted color.</li>
-              </ol>
-
-              <h2 className="text-xl md:text-2xl font-semibold text-default-700 mb-4 mt-8 flex items-center">
-                <Lightbulb className="w-6 h-6 mr-2" />
-                Key Features
-              </h2>
-              <ul className="list-disc list-inside text-default-600 space-y-2 text-sm md:text-base">
-                <li>Real-time CMYK to RGB conversion</li>
-                <li>Interactive sliders and input fields for precise CMYK value adjustments</li>
-                <li>Support for multiple color formats: CMYK, RGB, and HEX</li>
-                <li>Live color preview for immediate visual feedback</li>
-                <li>One-click copying of color values to clipboard</li>
-                <li>Responsive design for seamless use on desktop and mobile devices</li>
-                <li>Reset functionality for quick new color explorations</li>
-                <li>User-friendly interface with clear, easy-to-read color information</li>
-                <li>Accurate conversion algorithms ensuring color fidelity</li>
-              </ul>
-
-              <p className="text-sm md:text-base text-default-600 mt-4">
-                Ready to bridge the gap between print and digital color spaces? Start using our CMYK to RGB Converter
-                now and experience the power of precise color conversion and analysis. Whether you're a professional
-                designer working on cross-media projects or a curious artist exploring color relationships, our tool
-                provides the accuracy and functionality you need. Try it out today and see how it can streamline your
-                workflow and enhance your understanding of color spaces!
-              </p>
-            </div>
-          </CardBody>
-        </Card>
       </div>
+      <InfoSectionCmykToRgb />
     </ToolLayout>
   )
 }

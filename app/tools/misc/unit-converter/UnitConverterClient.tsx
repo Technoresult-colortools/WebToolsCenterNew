@@ -23,7 +23,7 @@ import { toast } from "react-hot-toast"
 import { ArrowLeftRight, Copy, Check, RefreshCw, Info, History, Trash2, Calculator, Sparkles, Zap } from "lucide-react"
 import ToolLayout from "@/components/ToolLayout"
 import { categories } from "./unitCategories"
-import InfoSection from "./InfoSection"
+import InfoSectionUnitConverter from "./info-section"
 
 // Find the index of the Currency category
 const currencyIndex = categories.findIndex((cat) => cat.name === "Currency")
@@ -699,7 +699,7 @@ export default function UnitConverter() {
           </CardBody>
         </Card>
 
-        <InfoSection />
+        <InfoSectionUnitConverter />
       </div>
     </ToolLayout>
   )

@@ -1,10 +1,10 @@
 "use client"
 
 import { useState, useEffect, useMemo } from "react"
-import { AlertCircle, BookOpen, Copy, Info, Lightbulb, RefreshCw } from "lucide-react"
+import { AlertCircle, Copy, RefreshCw } from "lucide-react"
 import ToolLayout from "@/components/ToolLayout"
 import { toast } from "react-hot-toast"
-import NextImage from "next/image"
+import InfoSectionHexToRgba from "./info-section"
 import { Button, Card, CardBody, Input, Slider, Divider } from "@nextui-org/react"
 
 // Move hexToRgba function outside of the component
@@ -130,7 +130,7 @@ export default function HexToRgba() {
                 <Button
                   onClick={handleReset}
                   color="danger"
-             
+
                   startContent={<RefreshCw className="w-4 h-4" />}
                   className="w-full"
                 >
@@ -193,74 +193,9 @@ export default function HexToRgba() {
           </CardBody>
         </Card>
 
-        <Card className="mt-8 bg-default-50 dark:bg-default-100">
-          <CardBody className="p-6">
-            <div className="rounded-xl p-2 md:p-4 max-w-6xl mx-auto">
-              <h2 className="text-xl md:text-2xl font-semibold text-default-700 mb-4 flex items-center">
-                <Info className="w-6 h-6 mr-2" />
-                What is the Hex to RGBA Converter?
-              </h2>
-              <p className="text-sm md:text-base text-default-600 mb-4">
-              Hex to RGBA converter is a powerful tool designed for web developers, designers and digital artists. This allows you to easily convert the hexadecimal color code to their RGBA (red, green, blue, alpha). This device is particularly useful when working with web design, CSS styling, or any project, which requires accurate color management with transparency.
-              </p>
-              <p className="text-sm md:text-base text-default-600 mb-4">
-              With features such as real-time conversion, interactive alpha slider, and support for both 3-numeric and 6-conductive hex code, the hex to RGBA converter streamlines your workflow and ensures accurate color representation in various formats. This is perfect for making consistent color schemes, adjusting the level of transparency, or the discovery of relationships between hex and RGBA color representations.
-              </p>
 
-              <div className="my-8">
-                <NextImage
-                  src="/Images/InfosectionImages/HexToRgbaConverterPreview.png?height=400&width=600"
-                  alt="Screenshot of the Hex to RGBA Converter interface showing hex input, alpha slider, and color preview"
-                  width={600}
-                  height={400}
-                  className="rounded-lg shadow-lg w-full h-auto"
-                />
-              </div>
-
-              <h2
-                id="how-to-use"
-                className="text-xl md:text-2xl font-semibold text-default-700 mb-4 mt-8 flex items-center"
-              >
-                <BookOpen className="w-6 h-6 mr-2" />
-                How to Use the Hex to RGBA Converter?
-              </h2>
-              <ol className="list-decimal list-inside space-y-2 text-sm md:text-base text-default-600">
-                <li>Enter a valid hex color code in the input field (with or without the # symbol).</li>
-                <li>Adjust the alpha value using the slider or input field (range: 0 to 1).</li>
-                <li>Observe the real-time color preview updating as you modify the values.</li>
-                <li>View the converted RGBA values in the Color Preview section.</li>
-                <li>Use the copy buttons to quickly copy Hex or RGBA values to your clipboard.</li>
-                <li>Experiment with different hex codes and alpha values to see how they affect the final color.</li>
-                <li>Use the Reset button to quickly return to default values and start a new conversion.</li>
-              </ol>
-
-              <h2 className="text-xl md:text-2xl font-semibold text-default-700 mb-4 mt-8 flex items-center">
-                <Lightbulb className="w-6 h-6 mr-2" />
-                Key Features
-              </h2>
-              <ul className="list-disc list-inside text-default-600 space-y-2 text-sm md:text-base">
-                <li>Real-time Hex to RGBA conversion</li>
-                <li>Support for both 3-digit and 6-digit hex color codes</li>
-                <li>Interactive alpha value slider for precise transparency adjustments</li>
-                <li>Live color preview for immediate visual feedback</li>
-                <li>One-click copying of Hex and RGBA values to clipboard</li>
-                <li>Responsive design for seamless use on desktop and mobile devices</li>
-                <li>Reset functionality for quick new color explorations</li>
-                <li>User-friendly interface with clear, easy-to-read color information</li>
-                <li>Error handling for invalid hex codes</li>
-              </ul>
-
-              <p className="text-sm md:text-base text-default-600 mt-6">
-                Ready to simplify your color workflow? Start using our Hex to RGBA Converter now and experience the ease
-                of precise color conversion with transparency control. Whether you're a professional web developer
-                working on complex projects or a hobbyist exploring color theory, our tool provides the accuracy and
-                functionality you need. Try it out today and see how it can streamline your design process and enhance
-                your understanding of color spaces!
-              </p>
-            </div>
-          </CardBody>
-        </Card>
       </div>
+      <InfoSectionHexToRgba />
     </ToolLayout>
   )
 }

@@ -3,9 +3,9 @@ import CaseConverterClient from './CaseConverterClient';
 
 export const metadata: Metadata = {
   // --- Core Metadata ---
-  title: "Case Converter & Text Transformer | Multi-Language Text Formatting | WebToolsCenter",
+  title: "Case Converter Online – Uppercase, Lowercase & Text Case Changer | WebToolsCenter",
   description:
-    "Transform text with our powerful Case Converter & Text Transformer. Convert between camelCase, PascalCase, snake_case and more with multi-language support, advanced text manipulation, and detailed statistics.",
+    "Free online case converter tool. Convert text to uppercase, lowercase, sentence case, title case, camelCase and more instantly. Fast & easy text case changer.",
   keywords: [
     "case converter",
     "text transformer",
@@ -77,5 +77,5 @@ export const metadata: Metadata = {
   },
 }
 export default function CaseConverter() {
-    return <CaseConverterClient />;
+  return <CaseConverterClient />;
 }

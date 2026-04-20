@@ -1,10 +1,10 @@
 "use client"
 
 import { useState, useEffect, useMemo } from "react"
-import { AlertCircle, BookOpen, Copy, Info, Lightbulb, RefreshCw } from "lucide-react"
+import { AlertCircle, Copy, RefreshCw } from "lucide-react"
 import ToolLayout from "@/components/ToolLayout"
 import { toast } from "react-hot-toast"
-import NextImage from "next/image"
+import InfoSectionHsvToHex from "./info-section"
 import { Button, Card, CardBody, Input, Slider, Divider } from "@nextui-org/react"
 
 // Move hsvToRgb and rgbToHex functions outside of the component
@@ -213,75 +213,9 @@ export default function HsvToHex() {
           </CardBody>
         </Card>
 
-        <Card className="mt-8 bg-default-50 dark:bg-default-100">
-          <CardBody className="p-6">
-            <div className="rounded-xl p-2 md:p-4 max-w-4xl mx-auto">
-              <h2 className="text-xl md:text-2xl font-semibold text-default-700 mb-4 flex items-center">
-                <Info className="w-6 h-6 mr-2" />
-                About HSV to Hex Converter
-              </h2>
-              <p className="text-sm md:text-base text-default-600 mb-4">
-              Hex converter from HSV is an advanced tool designed for web developers, designers and color enthusiasts. This allows you to easily convert HSV (hue, saturation, value) color values ​​to their hexadecimal counterparts. This device is particularly useful when working with web design, CSS styling, or any project, requiring accurate color management and conversion between different color models.
-              </p>
-              <p className="text-sm md:text-base text-default-600 mb-4">
-              With features such as real -time conversion, interactive sliders, and support for both HSV and hex formats, the HSV to Hex converter strengthens your workflow and ensures accurate color representation in various formats. This is perfect for making frequent color schemes, adjusting color properties, or only searching for relationships between HSV and hex color representations.
-              </p>
 
-              <div className="my-8">
-                <NextImage
-                  src="/Images/InfosectionImages/HsvToHexConverterPreview.png?height=400&width=600"
-                  alt="Screenshot of the HSV to Hex Converter interface showing HSV sliders and color preview"
-                  width={600}
-                  height={400}
-                  className="rounded-lg shadow-lg w-full h-auto"
-                />
-              </div>
-
-              <h2
-                id="how-to-use"
-                className="text-xl md:text-2xl font-semibold text-default-700 mb-4 mt-8 flex items-center"
-              >
-                <BookOpen className="w-6 h-6 mr-2" />
-                How to Use the HSV to Hex Converter?
-              </h2>
-              <ol className="list-decimal list-inside space-y-2 text-sm md:text-base text-default-600">
-                <li>Adjust the Hue slider (0-359) to set the base color.</li>
-                <li>Use the Saturation slider (0-100) to adjust the color intensity.</li>
-                <li>Set the Value slider (0-100) to control the brightness of the color.</li>
-                <li>Observe the real-time color preview updating as you modify the values.</li>
-                <li>View the converted Hex value in the Color Preview section.</li>
-                <li>Use the copy buttons to quickly copy HSV or Hex values to your clipboard.</li>
-                <li>Experiment with different HSV combinations to see how they translate to Hex codes.</li>
-                <li>Use the Reset button to quickly return to default values and start a new conversion.</li>
-              </ol>
-
-              <h2 className="text-xl md:text-2xl font-semibold text-default-700 mb-4 mt-8 flex items-center">
-                <Lightbulb className="w-6 h-6 mr-2" />
-                Key Features
-              </h2>
-              <ul className="list-disc list-inside text-default-600 space-y-2 text-sm md:text-base">
-                <li>Real-time HSV to Hex conversion</li>
-                <li>Interactive sliders for intuitive HSV value adjustments</li>
-                <li>Support for both HSV and Hex color formats</li>
-                <li>Live color preview for immediate visual feedback</li>
-                <li>One-click copying of HSV and Hex values to clipboard</li>
-                <li>Responsive design for seamless use on desktop and mobile devices</li>
-                <li>Reset functionality for quick new color explorations</li>
-                <li>User-friendly interface with clear, easy-to-read color information</li>
-              </ul>
-
-
-              <p className="text-sm md:text-base text-default-600 mt-6">
-                Ready to simplify your color workflow? Start using our HSV to Hex Converter now and experience the ease
-                of precise color conversion with intuitive controls. Whether you're a professional web developer working
-                on complex projects or a hobbyist exploring color theory, our tool provides the accuracy and
-                functionality you need. Try it out today and see how it can streamline your design process and enhance
-                your understanding of color spaces!
-              </p>
-            </div>
-          </CardBody>
-        </Card>
       </div>
+      <InfoSectionHsvToHex />
     </ToolLayout>
   )
 }

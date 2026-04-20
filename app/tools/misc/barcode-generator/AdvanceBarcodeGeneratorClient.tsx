@@ -14,10 +14,10 @@ import {
 
 } from "@nextui-org/react"
 import { toast } from "react-hot-toast"
-import { Download, Copy, RefreshCw, Info, Lightbulb, BookOpen } from "lucide-react"
+import { Download, Copy, RefreshCw } from "lucide-react"
 import JsBarcode from "jsbarcode"
 import ToolLayout from "@/components/ToolLayout"
-import Image from "next/image"
+import InfoSectionBarcodeGenerator from "./info-section"
 
 const barcodeTypes = ["CODE128", "EAN13", "EAN8", "UPC", "CODE39", "ITF14", "MSI", "pharmacode", "codabar"]
 
@@ -89,27 +89,27 @@ export default function BarCodeGenerator() {
             <div className="flex flex-col md:flex-row justify-between items-stretch md:items-center gap-4 mb-4">
               {/* Barcode Data Input */}
               <div className="w-full md:w-2/5">
-                <Input 
-                  label="Barcode Data" 
-                  value={barcodeData} 
-                  onChange={(e) => setBarcodeData(e.target.value)} 
-                  variant="bordered" 
+                <Input
+                  label="Barcode Data"
+                  value={barcodeData}
+                  onChange={(e) => setBarcodeData(e.target.value)}
+                  variant="bordered"
                   classNames={{
                     inputWrapper: [
-                      "border-2", 
-                      "border-default-300", 
-                      "dark:border-default-600", 
-                      "bg-default-100", 
-                      "dark:bg-default-200/50", 
-                      "hover:border-primary-500", 
+                      "border-2",
+                      "border-default-300",
+                      "dark:border-default-600",
+                      "bg-default-100",
+                      "dark:bg-default-200/50",
+                      "hover:border-primary-500",
                       "dark:hover:border-primary-400",
                       "overflow-y-auto"
                     ],
                     input: "overflow-y-auto"
-                  }} 
+                  }}
                 />
               </div>
-  
+
               {/* Barcode Type Selector */}
               <div className="w-full md:w-1/4">
                 <Select
@@ -128,13 +128,13 @@ export default function BarCodeGenerator() {
                   ))}
                 </Select>
               </div>
-  
+
               {/* Show Text Toggle */}
               <div className="self-end md:self-center w-full md:w-auto flex justify-between md:justify-start items-center">
                 <span className="mr-2">Show Text</span>
                 <Switch checked={showText} onChange={(e) => setShowText(e.target.checked)} />
               </div>
-  
+
               {/* Generate Button */}
               <div className="self-end md:self-center w-full md:w-auto">
                 <Button color="primary" onClick={generateBarcode} className="w-full md:w-auto">
@@ -145,49 +145,49 @@ export default function BarCodeGenerator() {
             </div>
 
             {/* Preview Card */}
-        <Card className="bg-default-50 dark:bg-default-100 overflow-hidden">
-          <CardHeader className="px-6 py-4">
-            <h2 className="text-xl font-bold">Barcode Preview</h2>
-          </CardHeader>
-          <CardBody className="flex flex-col justify-center items-center p-4 md:p-8">
-            <div className="bg-white p-4 rounded-md mb-4 w-full max-w-md overflow-hidden">
-              {svgData ? (
-                <img 
-                  src={svgData} 
-                  alt="Generated Barcode" 
-                  className="mx-auto max-w-full h-auto"
-                />
-              ) : (
-                <div className="flex justify-center items-center h-24 text-default-400">
-                  Generate a barcode to preview
+            <Card className="bg-default-50 dark:bg-default-100 overflow-hidden">
+              <CardHeader className="px-6 py-4">
+                <h2 className="text-xl font-bold">Barcode Preview</h2>
+              </CardHeader>
+              <CardBody className="flex flex-col justify-center items-center p-4 md:p-8">
+                <div className="bg-white p-4 rounded-md mb-4 w-full max-w-md overflow-hidden">
+                  {svgData ? (
+                    <img
+                      src={svgData}
+                      alt="Generated Barcode"
+                      className="mx-auto max-w-full h-auto"
+                    />
+                  ) : (
+                    <div className="flex justify-center items-center h-24 text-default-400">
+                      Generate a barcode to preview
+                    </div>
+                  )}
                 </div>
-              )}
-            </div>
-            <div className="flex flex-wrap justify-center gap-2 w-full">
-              <Button 
-                color="primary" 
-                size="sm" 
-                onClick={handleDownload} 
-                className="flex-1 min-w-0 max-w-xs"
-                isDisabled={!svgData}
-              >
-                <Download className="w-4 h-4 mr-1" />
-                <span className="truncate">Download</span>
-              </Button>
-              <Button 
-                color="primary" 
-                size="sm" 
-                onClick={handleCopyToClipboard} 
-                className="flex-1 min-w-0 max-w-xs"
-                isDisabled={!svgData}
-              >
-                <Copy className="w-4 h-4 mr-1" />
-                <span className="truncate">Copy SVG</span>
-              </Button>
-            </div>
-          </CardBody>
-        </Card>
-            
+                <div className="flex flex-wrap justify-center gap-2 w-full">
+                  <Button
+                    color="primary"
+                    size="sm"
+                    onClick={handleDownload}
+                    className="flex-1 min-w-0 max-w-xs"
+                    isDisabled={!svgData}
+                  >
+                    <Download className="w-4 h-4 mr-1" />
+                    <span className="truncate">Download</span>
+                  </Button>
+                  <Button
+                    color="primary"
+                    size="sm"
+                    onClick={handleCopyToClipboard}
+                    className="flex-1 min-w-0 max-w-xs"
+                    isDisabled={!svgData}
+                  >
+                    <Copy className="w-4 h-4 mr-1" />
+                    <span className="truncate">Copy SVG</span>
+                  </Button>
+                </div>
+              </CardBody>
+            </Card>
+
             {/* Appearance Controls - Sliders side by side */}
             <div className="mt-6">
               <p className="text-medium font-medium mb-2">Appearance</p>
@@ -234,7 +234,7 @@ export default function BarCodeGenerator() {
                     />
                   </div>
                 </div>
-                
+
                 {/* Color Pickers */}
                 <div className="space-y-4">
                   <div>
@@ -280,63 +280,9 @@ export default function BarCodeGenerator() {
             </div>
           </CardBody>
         </Card>
-        {/* Info Section */}
-        <Card className="bg-default-50 dark:bg-default-100">
-        <CardBody className="p-6">
-            <div className="rounded-xl p-2 md:p-4 max-w-4xl mx-auto">
-            <h2 className="text-xl md:text-2xl font-semibold text-gray-800 dark:text-gray-200 mb-4 flex items-center">
-                <Info className="w-6 h-6 mr-2" />
-                About Barcode Generator
-            </h2>
-            <p className="text-sm md:text-base text-gray-600 dark:text-gray-300 mb-4">
-            Our Barcode generator is a powerful tool designed to create adaptable barcodes for various purposes. Whether you need a barcode for inventory management, product labeling, or any other application, this generator offers a wide range of options to make barcodes that meet your specific requirements.
-            </p>
 
-            <div className="my-8">
-                <Image
-                src="/Images/InfosectionImages/BarcodeGeneratorPreview.webp?height=400&width=600"
-                alt="Screenshot of the Bar Code Generator interface showing barcode options and generated barcode"
-                width={600}
-                height={400}
-                className="rounded-lg shadow-lg w-full h-auto"
-                />
-            </div>
-
-            <h2 className="text-xl font-semibold text-gray-800 dark:text-gray-200 mt-6 mb-3 flex items-center">
-                <Lightbulb className="w-5 h-5 mr-2" />
-                Key Features
-            </h2>
-            <ul className="list-disc pl-6 space-y-2 text-gray-600 dark:text-gray-300">
-                <li>Multiple Barcode Types: THis tool Supports for various barcode formats including CODE128, EAN13, UPC, CODE39, and more.</li>
-                <li>Customizable Appearance: Adjust width, height, colors, and font size based on your requirement.</li>
-                <li>Flexible Sizing: Create barcodes of different sizes to fit various applications.</li>
-                <li>Background Color: Customize the background color to match your design requirements.</li>
-                <li>Text Display Options: Option to display the barcode text or hide it.</li>
-                <li>Easy Download: Download your generated barcode as a PNG image.</li>
-                <li>Copy SVG: Copy the barcode as SVG for easy integration into digital designs.</li>
-                <li>Instant Regeneration: Quickly regenerate barcodes with new settings.</li>
-            </ul>
-
-            <h2 className="text-xl font-semibold text-gray-800 dark:text-gray-200 mt-6 mb-3 flex items-center">
-                <BookOpen className="w-5 h-5 mr-2" />
-                How to Use Barcode Generator?
-            </h2>
-            <ol className="list-decimal pl-6 space-y-2 text-gray-600 dark:text-gray-300">
-                <li>Enter the data you want to encode in the "Barcode Data" field.</li>
-                <li>Select the appropriate barcode type from the dropdown menu.</li>
-                <li>Adjust the width, height, and font size using the sliders.</li>
-                <li>Choose background and line colors using the color pickers.</li>
-                <li>Toggle the "Show Text" switch to display or hide the barcode text.</li>
-                <li>The barcode will automatically generate based on your settings.</li>
-                <li>Use the "Download" button to save the barcode as a PNG image.</li>
-                <li>Use the "Copy SVG" button to copy the barcode as an SVG for digital use.</li>
-                <li>Click "Regenerate" if you want to refresh the barcode with the same settings.</li>
-            </ol>
-
-            </div>
-        </CardBody>
-        </Card>
       </div>
+      <InfoSectionBarcodeGenerator />
     </ToolLayout>
   )
 }

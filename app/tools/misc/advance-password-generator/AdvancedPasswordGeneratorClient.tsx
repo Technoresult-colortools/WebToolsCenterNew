@@ -18,18 +18,16 @@ import {
   RefreshCw,
   Copy,
   Shield,
-  Info,
   Key,
   Sliders,
   Settings,
   Zap,
   CheckCircle,
-  BookOpen,
-  Lightbulb,
+
 } from "lucide-react"
 import { toast } from "react-hot-toast"
 import ToolLayout from "@/components/ToolLayout"
-import Image from 'next/image';
+import InfoSectionPasswordGenerator from "./info-section"
 
 const CHAR_SETS = {
   lowercase: "abcdefghijklmnopqrstuvwxyz",
@@ -61,7 +59,7 @@ export default function FuturisticPasswordGenerator() {
   const generatePassword = useCallback(() => {
     try {
       setIsGenerating(true)
-      
+
       // Simulate generation time for the animation to be visible
       setTimeout(() => {
         let charset = ""
@@ -215,7 +213,7 @@ export default function FuturisticPasswordGenerator() {
       await navigator.clipboard.writeText(password)
       setCopied(true)
       toast.success("Password copied to clipboard!")
-      
+
       // Reset copy state after animation
       setTimeout(() => {
         setCopied(false)
@@ -249,7 +247,7 @@ export default function FuturisticPasswordGenerator() {
       case "Very Strong":
         return "text-success"
       case "Strong":
-        return "text-success-400" 
+        return "text-success-400"
       case "Moderate":
         return "text-warning"
       case "Weak":
@@ -273,18 +271,18 @@ export default function FuturisticPasswordGenerator() {
           <CardBody className="p-0">
             {/* Top status bar */}
             <div className="w-full h-2">
-              <div 
+              <div
                 className={`h-full ${getStrengthColor()} transition-all duration-500 ease-in-out`}
-                style={{ 
-                  width: passwordStrength === "N/A" ? "0%" : 
-                        passwordStrength === "Very Weak" ? "20%" :
-                        passwordStrength === "Weak" ? "40%" :
+                style={{
+                  width: passwordStrength === "N/A" ? "0%" :
+                    passwordStrength === "Very Weak" ? "20%" :
+                      passwordStrength === "Weak" ? "40%" :
                         passwordStrength === "Moderate" ? "60%" :
-                        passwordStrength === "Strong" ? "80%" : "100%" 
+                          passwordStrength === "Strong" ? "80%" : "100%"
                 }}
               />
             </div>
-            
+
             {/* Main content */}
             <div className="p-8 flex flex-col items-center justify-center min-h-64">
               {/* Security status indicator */}
@@ -292,7 +290,7 @@ export default function FuturisticPasswordGenerator() {
                 <Shield className={`${getStrengthTextColor()} h-5 w-5`} />
                 <span className={`${getStrengthTextColor()} font-bold text-lg`}>{passwordStrength}</span>
               </div>
-              
+
               {/* Futuristic password display */}
               <div className="w-full relative flex justify-center items-center">
                 {isGenerating ? (
@@ -304,7 +302,7 @@ export default function FuturisticPasswordGenerator() {
                   <>
                     {/* Glowing effect behind the password */}
                     <div className="absolute inset-0 bg-primary/5 blur-xl rounded-full"></div>
-                    
+
                     {/* Password display */}
                     <div className="relative z-10 w-full overflow-hidden">
                       {passwordCount === 1 ? (
@@ -322,7 +320,7 @@ export default function FuturisticPasswordGenerator() {
                   </>
                 )}
               </div>
-              
+
               {/* Action buttons */}
               <div className="flex gap-4 mt-8">
                 <Button
@@ -480,9 +478,9 @@ export default function FuturisticPasswordGenerator() {
                         }}
                       >
                         {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((num) => (
-                          <SelectItem 
-                            key={num.toString()} 
-                            value={num.toString()} 
+                          <SelectItem
+                            key={num.toString()}
+                            value={num.toString()}
                             textValue={num.toString()}
                             className="text-default-700 dark:text-default-600 hover:bg-default-100 dark:hover:bg-default-200"
                           >
@@ -530,99 +528,9 @@ export default function FuturisticPasswordGenerator() {
           </CardBody>
         </Card>
 
-        {/* Info Section */}
-        <Card className="bg-default-50 dark:bg-default-100">
-          <CardBody className="p-6">
-            <div className="rounded-xl p-2 md:p-4 max-w-5xl mx-auto">
-              <h2 className="text-lg md:text-xl lg:text-2xl font-semibold text-default-700 mb-4 flex items-center">
-                <Info className="w-6 h-6 mr-2" />
-                What is Advanced Password Generator?
-              </h2>
-              <p className="text-sm md:text-base text-default-600 mb-4">
-              A Password Generator is a tool which is used to create a strong and random passwords for online accounts, this tool createa a random password combingation of numbers, letters, and symbols to be used as a Password. This tools allows you to generate Password fast and convenient way, you can fully customize your password, also this tool Operates entirely on Client side, so we won't store, tansmit and process any of the generated password. All Password generation happens securely on your browser, keeping your data private and protected.
-              </p>
 
-
-              <div className="my-8">
-                <Image
-                  src="/Images/InfosectionImages/PasswordGeneratorPreview.png?height=200&width=400"
-                  alt="Screenshot of the Advanced Password Generator interface showing various password generation options"
-                  width={400}
-                  height={200}
-                  className="rounded-lg shadow-lg w-full h-auto"
-                />
-              </div>
-
-              <h2
-                id="how-to-use"
-                className="text-lg md:text-xl lg:text-2xl font-semibold text-default-700 mb-4 mt-8 flex items-center"
-              >
-                <BookOpen className="w-6 h-6 mr-2" />
-                How to Use the Advanced Password Generator
-              </h2>
-              <ol className="list-decimal list-inside space-y-2 text-sm md:text-base text-default-600">
-                <li>Under the Basic tab, you can set your desired password length using the slider.</li>
-                <li>
-                  You can choose which character types to include (lowercase, uppercase, numbers, symbols) in the Original tab.
-                </li>
-                <li>
-                  Under the Advanced tab, you can check Require Every Type to include all type of characters, Lettes to Begin with, and No Consecutive Characters.
-                </li>
-                <li>Use the Security tab to exclude similar or ambiguous characters for easier reading.</li>
-                <li>
-                  For more control, use the Custom tab to set a custom character set or exclude specific characters.
-                </li>
-                <li>Select the number of passwords you want to generate.</li>
-                <li>Click the "Generate" button to create new password(s).</li>
-                <li>Use the "Copy" button to copy the generated password(s) to your clipboard.</li>
-                <li>Adjust settings and regenerate as needed until you're satisfied with the result.</li>
-              </ol>
-
-              <h2 className="text-lg md:text-xl lg:text-2xl font-semibold text-default-700 mb-4 mt-8 flex items-center">
-                <Lightbulb className="w-6 h-6 mr-2" />
-                Features That Make Us Stand Out
-              </h2>
-              <ul className="list-disc list-inside space-y-2 text-xs md:text-sm text-default-600">
-                <li>
-                  <strong>Customizable Length:</strong> Generate passwords from 8 to 64 characters long.
-                </li>
-                <li>
-                  <strong>Character Set Options:</strong> Include or exclude lowercase, uppercase, numbers, and symbols.
-                </li>
-                <li>
-                  <strong>Advanced Settings:</strong> Require every character type, begin with a letter, or avoid
-                  consecutive characters.
-                </li>
-                <li>
-                  <strong>Security Features:</strong> Exclude similar-looking or ambiguous characters to prevent
-                  confusion.
-                </li>
-                <li>
-                  <strong>Custom Character Sets:</strong> Define your own character set or exclude specific characters.
-                </li>
-                <li>
-                  <strong>Multiple Password Generation:</strong> Create up to 10 passwords at once.
-                </li>
-                <li>
-                  <strong>Password Strength Indicator:</strong> Get instant feedback on the strength of your generated
-                  password.
-                </li>
-                <li>
-                  <strong>One-Click Copy:</strong> Easily copy your new password(s) to the clipboard.
-                </li>
-                <li>
-                  <strong>Secure Generation:</strong> Passwords are generated client-side for maximum security.
-                </li>
-              </ul>
-
-              <p className="text-sm md:text-base text-default-600 mt-4">
-                Start using our Advanced Password Generator today to create strong, unique passwords for all your
-                accounts. Enhance your online security and protect your digital identity with ease!
-              </p>
-            </div>
-          </CardBody>
-        </Card>
       </div>
+      <InfoSectionPasswordGenerator />
     </ToolLayout>
   )
 }

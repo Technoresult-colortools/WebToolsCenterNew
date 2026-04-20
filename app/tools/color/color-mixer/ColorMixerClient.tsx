@@ -4,9 +4,6 @@ import { useState, useEffect, useCallback, useRef } from "react"
 import {
   Copy,
   Shuffle,
-  Info,
-  BookOpen,
-  Lightbulb,
   AlertCircle,
   Star,
   RotateCcw,
@@ -15,7 +12,6 @@ import {
   X,
   Sliders,
 } from "lucide-react"
-import NextImage from "next/image"
 import { toast } from "react-hot-toast"
 import ToolLayout from "@/components/ToolLayout"
 import {
@@ -31,6 +27,7 @@ import {
   Modal,
   ModalContent,
 } from "@nextui-org/react"
+import InfoSectionColorMixer from "./info-section"
 
 // Color conversion functions
 function mixColors(color1: string, color2: string, weight = 0.5) {
@@ -275,7 +272,7 @@ export default function ColorMixer() {
       <div className="max-w-6xl mx-auto">
         <Card className="bg-default-50 dark:bg-default-100 shadow-md">
           <CardBody className="gap-6 p-6">
-            
+
 
             <div className="relative">
               <div
@@ -501,87 +498,9 @@ export default function ColorMixer() {
 
         {renderFullscreenPreview()}
 
-        <Card className="mt-8 bg-default-50 dark:bg-default-100">
-          <CardBody className="p-6">
-            <div className="rounded-xl p-2 md:p-4 max-w-4xl mx-auto">
-              <h2 className="text-xl md:text-2xl font-semibold text-default-900 mb-4 flex items-center">
-                <Info className="w-6 h-6 mr-2" />
-                About Color Mixer
-              </h2>
-              <p className="text-sm md:text-base text-default-600 mb-4">
-              The color mixer is a powerful tool designed for designers, developers and color enthusiasts. This allows you to make custom color blend, generate palettes and detect various color formats with ease. Whether you are working on web design, graphic design, or any project related to color, this tool offers an intuitive interface to experiment and correct with your color options.
-              </p>
-              <p className="text-sm md:text-base text-default-600 mb-4">
-              The enhanced color mixer provides both versatility and accurate in the enhanced color mixer color manipulation, with features such as linear and radial combination, multiple color format support, and a fullscreen preview mode. It is perfect to create united color schemes, search for color relationships or simply find inspiration for your next project.
-              </p>
 
-              <div className="my-8">
-                <NextImage
-                  src="/Images/InfosectionImages/ColorMixerPreview.png?height=400&width=600"
-                  alt="Screenshot of the Enhanced Color Mixer interface showing color inputs, gradient preview, and generated palette"
-                  width={600}
-                  height={400}
-                  className="rounded-lg shadow-lg w-full h-auto"
-                />
-              </div>
-
-              <h2 className="text-xl md:text-2xl font-semibold text-default-900 mb-4 mt-8 flex items-center">
-                <BookOpen className="w-6 h-6 mr-2" />
-                How to Use Color Mixer?
-              </h2>
-              <ol className="list-decimal list-inside text-default-600 space-y-2 text-sm md:text-base">
-                <li>Select start and end colors using the color pickers or hex inputs.</li>
-                <li>Adjust the number of steps to control the blend granularity.</li>
-                <li>Choose between linear and radial blending modes.</li>
-                <li>Click "Mix Colors" to generate your custom palette.</li>
-                <li>Switch to the "Palette" tab to view and copy generated colors.</li>
-                <li>Use the color format dropdown to view colors in different formats.</li>
-                <li>Click on any color swatch to copy its value.</li>
-                <li>Use the fullscreen button for a detailed gradient view.</li>
-                <li>Experiment with "Random Colors" or "Popular Mix" for inspiration.</li>
-                <li>Use the Reset button to return to default settings.</li>
-              </ol>
-
-              <h2 className="text-xl md:text-2xl font-semibold text-default-900 mb-4 mt-8 flex items-center">
-                <Lightbulb className="w-6 h-6 mr-2" />
-                Key Features
-              </h2>
-              <ul className="list-disc list-inside text-default-600 space-y-2 text-sm md:text-base">
-                <li>Dynamic color mixing with real-time updates</li>
-                <li>Linear and radial blending modes</li>
-                <li>Support for multiple color formats (HEX, RGB, HSL, CMYK)</li>
-                <li>Adjustable number of steps for precise control</li>
-                <li>Random color generation and popular color mix options</li>
-                <li>Fullscreen gradient preview</li>
-                <li>Easy color copying with format selection</li>
-                <li>Responsive design for various devices</li>
-                <li>Intuitive tabbed interface</li>
-              </ul>
-
-              <h2 className="text-xl md:text-2xl font-semibold text-default-900 mb-4 mt-8 flex items-center">
-                <Lightbulb className="w-6 h-6 mr-2" />
-                Tips and Tricks
-              </h2>
-              <ul className="list-disc list-inside text-default-600 space-y-2 text-sm md:text-base">
-                <li>Experiment with different step counts to achieve various gradient effects.</li>
-                <li>Use the radial blend mode for creating circular or elliptical gradients.</li>
-                <li>Copy colors in different formats for use in various design tools and programming languages.</li>
-                <li>Utilize the fullscreen preview to visualize how your gradient might look as a background.</li>
-                <li>Combine the Enhanced Color Mixer with other design tools for comprehensive color management.</li>
-                <li>Save your favorite color combinations for future reference.</li>
-                <li>Use the generated palettes as a starting point for creating color schemes in your projects.</li>
-              </ul>
-
-              <p className="text-sm md:text-base text-default-600 mt-6">
-              Color Mixer is more than just one tool - it is a playground for color exploration and a valuable property
-                Any creative workflow. Whether you are a professional designer working on complex projects or one
-                Enthusiastic to discover the color world, our equipment provides the required insight and functionality for you
-                Bring your color ideas to life. Start discovering new color possibilities, combining and searching today!
-              </p>
-            </div>
-          </CardBody>
-        </Card>
       </div>
+      <InfoSectionColorMixer />
     </ToolLayout>
   )
 }

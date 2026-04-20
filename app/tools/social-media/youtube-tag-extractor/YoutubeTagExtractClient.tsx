@@ -8,14 +8,11 @@ import {
   AlertCircle,
   Youtube,
   Tag,
-  Info,
   Eye,
   ThumbsUp,
   MessageSquare,
   History,
   Download,
-  Lightbulb,
-  BookOpen,
   ChevronDown,
   ChevronUp,
   Share2,
@@ -24,7 +21,7 @@ import {
 } from "lucide-react"
 import { Button, Card, CardBody, CardHeader, Input, Image, Chip, Tooltip, Progress } from "@nextui-org/react"
 import { toast } from "react-hot-toast"
-import NextImage from "next/image"
+import InfoSectionYoutubeTagExtractor from "./info-section"
 import ToolLayout from "@/components/ToolLayout"
 
 interface VideoData {
@@ -368,8 +365,8 @@ export default function YouTubeKeywordTagExtractor() {
                           <Chip color="primary" variant="flat" size="sm">
                             {videoData.tags.length > 0
                               ? Math.round(
-                                  videoData.tags.reduce((sum, tag) => sum + tag.length, 0) / videoData.tags.length,
-                                )
+                                videoData.tags.reduce((sum, tag) => sum + tag.length, 0) / videoData.tags.length,
+                              )
                               : 0}{" "}
                             chars
                           </Chip>
@@ -492,74 +489,9 @@ export default function YouTubeKeywordTagExtractor() {
           </Card>
         )}
 
-        <Card className="bg-default-50 dark:bg-default-100 p-4 md:p-8">
-          <div className="rounded-xl p-2 md:p-4 max-w-4xl mx-auto">
-            {/* About YouTube Keyword Tag Extractor */}
-            <h2 className="text-lg md:text-xl lg:text-2xl font-semibold text-default-700 mb-4 flex items-center">
-              <Info className="w-6 h-6 mr-2" />
-              About YouTube Keyword Tag Extractor
-            </h2>
-            <p className="text-sm md:text-base text-default-600 mb-4">
-              Our YouTube Keyword Tag Extractor is a powerful tool designed to help creators, marketers, researchers,
-              and YouTube enthusiasts uncover and analyze valuable metadata from YouTube videos. This tool goes beyond
-              simple tag extraction by offering a comprehensive suite of features to enhance understanding and optimize
-              YouTube strategies.
-            </p>
 
-            {/* Image Preview */}
-            <div className="my-8">
-              <NextImage
-                src="/Images/InfosectionImages/YoutubeKewordTagPreview.png?height=400&width=600"
-                alt="Screenshot of the YouTube Keyword Tag Extractor interface showing keyword extraction options"
-                width={600}
-                height={400}
-                className="rounded-lg shadow-lg w-full h-auto"
-              />
-            </div>
-
-            {/* Key Features */}
-            <h2 className="text-lg md:text-xl lg:text-2xl font-semibold text-default-700 mb-4 mt-8 flex items-center">
-              <Lightbulb className="w-6 h-6 mr-2" />
-              Key Features
-            </h2>
-            <ul className="list-disc list-inside space-y-2 text-sm md:text-base">
-              <li>Keyword Tag Extraction: Instantly extract all tags associated with any YouTube video.</li>
-              <li>
-                Video Metadata Analysis: Gather crucial information such as view count, like count, comment count, and
-                publish date.
-              </li>
-              <li>Visual Tag Cloud: Generate an interactive tag cloud for easy visualization of keyword prominence.</li>
-              <li>
-                Description Analysis: Access and analyze the full video description for additional context and keywords.
-              </li>
-              <li>Thumbnail Preview: View the high-quality thumbnail of the analyzed video.</li>
-              <li>One-Click Copy and Download: Easily copy tags to clipboard or download them as a text file.</li>
-              <li>Search History: Keep track of your recently analyzed videos for quick reference.</li>
-              <li>User-Friendly Interface: Intuitive design with tabs for organized data presentation.</li>
-            </ul>
-
-            {/* How to Use YouTube Keyword Tag Extractor */}
-            <h2 className="text-lg md:text-xl lg:text-2xl font-semibold text-default-700 mb-4 mt-8 flex items-center">
-              <BookOpen className="w-6 h-6 mr-2" />
-              How to Use YouTube Keyword Tag Extractor?
-            </h2>
-            <ol className="list-decimal list-inside space-y-2 text-sm md:text-base">
-              <li>Enter the URL of the YouTube video which you want to analyze in the input field.</li>
-              <li>Click the "Extract Tags" button to fetch the video's metadata and tags.</li>
-              <li>
-                Explore the extracted data in the tabbed interface:
-                <ul className="list-disc pl-6 mt-2 space-y-1">
-                  <li>Tags: View all associated tags and copy or download them.</li>
-                  <li>Description: Read the full video description.</li>
-                  <li>Tag Cloud: Visualize tag prominence in an interactive cloud.</li>
-                </ul>
-              </li>
-              <li>Use the additional metadata (views, likes, comments) to gauge video performance.</li>
-              <li>You can access Previously accessed Videos using the Search History feature.</li>
-            </ol>
-          </div>
-        </Card>
       </div>
+      <InfoSectionYoutubeTagExtractor />
     </ToolLayout>
   )
 }
