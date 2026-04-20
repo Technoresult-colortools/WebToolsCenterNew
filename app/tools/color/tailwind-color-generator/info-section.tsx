@@ -23,7 +23,6 @@ import Link from "next/link"
 
 export default function InfoSectionTailwindColorGenerator() {
     // Image path
-    const imagePath = "/Images/InfosectionImages/TailwindColorGeneratorPreview.png"
 
     return (
         <Card className="bg-default-50 dark:bg-default-100 p-4 md:p-8 mt-8">

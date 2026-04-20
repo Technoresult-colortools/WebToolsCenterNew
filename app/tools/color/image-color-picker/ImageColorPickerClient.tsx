@@ -236,7 +236,6 @@ export default function ImageColorPicker() {
     const canvas = canvasRef.current
     const ctx = canvas.getContext("2d", { willReadFrequently: true })!
     const image = imageRef.current
-    const container = imageContainerRef.current
 
     // Get container and image dimensions
 
