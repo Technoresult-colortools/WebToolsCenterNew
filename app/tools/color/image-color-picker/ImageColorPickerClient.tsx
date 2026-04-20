@@ -17,7 +17,7 @@ import {
   Tabs,
   Tab,
 } from "@nextui-org/react"
-import { Upload, X, RefreshCw, Pipette, Copy, Palette, Download, Maximize2, ZoomIn, ZoomOut, FileText } from "lucide-react"
+import { Upload, X, RefreshCw, Pipette, Copy, Palette, Download, ZoomIn, ZoomOut, FileText } from "lucide-react"
 import { toast } from "react-hot-toast"
 import ToolLayout from "@/components/ToolLayout"
 import InfoSectionImageColorPicker from "./info-section"
@@ -50,7 +50,7 @@ export default function ImageColorPicker() {
   const imageRef = useRef<HTMLImageElement>(null)
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const imageContainerRef = useRef<HTMLDivElement>(null)
-  const previewCanvasRef = useRef<HTMLCanvasElement>(null)
+
 
   // Color conversion utilities
   const rgbToHex = (r: number, g: number, b: number): string => {
@@ -239,7 +239,7 @@ export default function ImageColorPicker() {
     const container = imageContainerRef.current
 
     // Get container and image dimensions
-    const rect = container.getBoundingClientRect()
+
     const imageRect = image.getBoundingClientRect()
 
     // Calculate click position relative to the displayed image
@@ -290,7 +290,7 @@ export default function ImageColorPicker() {
           toast.success("Color picked successfully!")
         }
         setIsPickerActive(false)
-      } catch (error) {
+      } catch {
         setIsPickerActive(false)
         console.log("EyeDropper cancelled or failed")
       }

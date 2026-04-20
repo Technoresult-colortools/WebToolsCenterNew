@@ -5,7 +5,6 @@ import {
     Info,
     BookOpen,
     Lightbulb,
-    Palette,
     Search,
     Zap,
     Copy,
@@ -17,11 +16,9 @@ import {
     Layers,
     RefreshCw,
     Code,
-    Eye,
     Target,
     Layout
 } from "lucide-react"
-import Image from "next/image"
 import Link from "next/link"
 
 export default function InfoSectionTailwindColorGenerator() {

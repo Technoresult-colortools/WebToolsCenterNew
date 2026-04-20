@@ -16,7 +16,6 @@ import {
     Brush,
     Layers,
     RefreshCw,
-    Target,
     Search,
     Hash,
     Eye,

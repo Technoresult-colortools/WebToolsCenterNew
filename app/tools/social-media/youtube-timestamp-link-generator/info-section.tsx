@@ -5,7 +5,6 @@ import {
     Info,
     BookOpen,
     Lightbulb,
-    Youtube,
     Clock,
     Zap,
     Copy,

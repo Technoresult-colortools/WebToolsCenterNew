@@ -376,7 +376,13 @@ export default function InstagramFilters() {
   const toggleCategory = (label: string) => {
     setOpenCategories((prev) => {
       const next = new Set(prev)
-      next.has(label) ? next.delete(label) : next.add(label)
+
+      if (next.has(label)) {
+        next.delete(label)
+      } else {
+        next.add(label)
+      }
+
       return next
     })
   }
